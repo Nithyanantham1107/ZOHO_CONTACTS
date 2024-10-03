@@ -6,6 +6,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="dbmodel.UserData,javax.servlet.http.HttpSession"%>
+
+
+<%
+
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+
+
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -239,9 +249,12 @@ textarea {
 
 	<div>
 		<%
+		
+		
 		HttpSession session_dash = request.getSession(false);
 		UserData ud = (UserData) session_dash.getAttribute("user");
 		UserGroup ugu = (UserGroup) request.getAttribute("usergroupupdate");
+		
 		if (ud == null) {
 
 			response.sendRedirect("index.jsp");

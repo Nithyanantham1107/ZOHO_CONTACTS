@@ -1,4 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
+
+<%
+
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -97,10 +106,10 @@
         <h2>Login</h2>
         <form action="/login" method="post">
             <label for="username">Username</label>
-            <input type="text" id="user" name="username" required />
+            <input type="text" id="user" name="username"  autocomplete="off"   required />
       <span id="prompt1">  do not use special character for username</span>
             <label for="password">Password</label>
-            <input type="password" id="pass" name="password" required />
+            <input type="password" id="pass" name="password" autocomplete="off" required />
             <span id="prompt"> Password must be 8 - 72 characters </span>
           <div  class="login_button"> <input type="submit" value="Login" />
           

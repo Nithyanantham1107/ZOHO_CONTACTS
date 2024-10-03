@@ -87,6 +87,9 @@ public class SignupServlet extends HttpServlet {
 						ArrayList<UserGroup> ug=ugo.viewAllGroup(ud.getUserId());
 						session.setAttribute("usercontact", uc);
 						session.setAttribute("usergroup", ug);
+						response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+				        response.setHeader("Pragma", "no-cache"); 
+				        response.setDateHeader("Expires", 0);
 
 						request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
 					} else {

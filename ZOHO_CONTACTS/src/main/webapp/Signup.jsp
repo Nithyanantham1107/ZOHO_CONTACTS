@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+   
+    
+ 
+  <%
+  
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+  
+  %>
+    
+   
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,22 +113,22 @@
         <h2>Signup</h2>
         <form action="/signup" method="post">
             <label for="name">Name</label>
-            <input type="text" name="Name" required />
+            <input type="text" name="Name"  autocomplete="off" required />
 
             <label for="phoneno">Phone No</label>
-            <input type="text" name="phone" required />
+            <input type="text" name="phone"  autocomplete="off" required />
 
             <label for="email">Email</label>
-            <input type="email" name="email" required />
+            <input type="email" name="email"   autocomplete="off" required />
 
             <label for="address">Address</label>
-            <textarea rows="3" cols="20" name="Address" required></textarea>
+            <textarea rows="3" cols="20" name="Address"   autocomplete="off" required></textarea>
 
             <label for="username">Username</label>
-            <input type="text" name="username" required />
+            <input type="text" name="username"  autocomplete="off" required />
 
             <label for="password">Password</label>
-            <input type="password" id="pass" name="password" required />
+            <input type="password" id="pass" name="password"  autocomplete="off" required />
               <span id="prompt"> Password must be 8 - 72 characters</span>
 
             <input type="submit" value="Signup" />

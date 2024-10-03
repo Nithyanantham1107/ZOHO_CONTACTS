@@ -3,6 +3,15 @@
     
     
  <%@ page import="dbmodel.UserData,javax.servlet.http.HttpSession"%>
+ 
+ 
+<%
+
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+
+
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
