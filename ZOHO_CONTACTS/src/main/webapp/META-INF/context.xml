@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+    <Resource   auth="Container" 
+    driverClassName="com.mysql.cj.jdbc.Driver"
+     maxIdle="10" maxTotal="20" 
+     maxWaitmillis="10000" 
+     name="jdbc/test" 
+     type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/ZOHO_CONTACTS" 
+    username="root"
+    password="root" 
+    
+    />
+</Context>
