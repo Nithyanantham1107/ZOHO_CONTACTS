@@ -12,7 +12,7 @@
 
 
 <style>
-        body {
+        b {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             display: flex;
