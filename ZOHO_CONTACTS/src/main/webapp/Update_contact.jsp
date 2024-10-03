@@ -116,6 +116,10 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		}
         
         UserContacts uc=(UserContacts) request.getAttribute("user_spec_contact");
+        if(uc==null){
+        	response.sendRedirect("Dashboard.jsp");
+        	return;
+        }
         System.out.println("hey"+uc.getFname());
        
         %>

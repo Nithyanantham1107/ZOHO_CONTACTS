@@ -96,7 +96,7 @@ input[type="submit"]:hover {
 	cursor: pointer;
 }
 
-#profileButton, .profileButton, #groupbutton, #submitGroup {
+#profileButton, .profileButton, #groupbutton, #submitGroup ,#updateGroup{
 	padding: 10px;
 	background-color: black;
 	color: white;
@@ -108,7 +108,7 @@ input[type="submit"]:hover {
 }
 
 #profileButton:hover, .prifileButton:hover, #groupbutton:hover,
-	#submitGroup:hover {
+	#submitGroup:hover,#updateGroup:hover {
 	background-color: white;
 	color: black;
 }
@@ -292,9 +292,10 @@ textarea {
 								<td>
 									<div class="emailstyle">
 										<input type="email" name="email"
-											value="<%=ud.getPrimaryMail()%>" required />
+											value="<%=ud.getPrimaryMail()%>"
+											onchange="addEmailToDropdown()" required />
 										<button type="button" onclick="Addemail()">Add</button>
-										<button type="button" onclick="addEmailToDropdown()">submit</button>
+
 
 										<input type="hidden" name="method" value="update" />
 									</div>
@@ -310,7 +311,8 @@ textarea {
 								<td></td>
 								<td>
 									<div class="emailstyle">
-										<input type="email" name="email" value="<%=email%>" required />
+										<input type="email" name="email" value="<%=email%>"
+											onchange="addEmailToDropdown()" required />
 										<button type="button" onclick="removeEmail(this)">Remove</button>
 									</div>
 								</td>
@@ -323,10 +325,9 @@ textarea {
 							%>
 
 							<tr>
-								<td><label for="emailDropdown">Choose primary
-										email:</label></td>
+								<td><label for="emailDropdown"> primary email:</label></td>
 								<td><select id="emailDropdown" name="primaryemail" required>
-										<option value="">-- Select an email --</option>
+										
 
 								</select></td>
 							</tr>
@@ -389,44 +390,54 @@ textarea {
 
 
 			<div class="header">
-				<button id="profileButton">Open Profile</button>
-				<%
-				if (ugu != null) {
-				%>
+				<button id="profileButton" >Open Profile</button>
 
 
 
 				<div id="groupContaineru"
-					style="display: block; flex-direction: row;">
-					<input type="text" id="groupNameu" value="<%=ugu.getGroupName()%>"
+					style="display: none; flex-direction: row;">
+					<input type="text" id="groupNameu" value=""
 						required /> <input type="hidden" id="groupidu"
-						value="<%=ugu.getGroupid()%>" required /> <input type="hidden"
+						value="" required /> <input type="hidden"
 						id="methodu" value="update" />
-					<form action="Dashboard.jsp">
+					<button id="updateGroup">Update Group</button>
 
-						<input type="submit" value="Update Group" />
-
-					</form>
 
 				</div>
 
-				<%
-				} else {
-				%>
 
-				<button id="groupbutton">Create group</button>
+
+				<button id="groupbutton" style="display:block;">Create group</button>
 
 
 				<div id="groupContainer" style="display: none; flex-direction: row;">
-					<input type="text" id="groupName" placeholder="Enter group name"
-						required /> <input type="hidden" id="groupidupdate" required />
-					<input type="hidden" value="create" id="methodupdate" />
+					<input type="text" id="groupNamecreate"
+						placeholder="Enter group name" required /> <input type="hidden"
+						id="groupidcreate" required /> <input type="hidden"
+						value="create" id="methodcreate" />
 					<button id="submitGroup">Submit Group</button>
 
 				</div>
 
 
-
+				<%
+				if (ugu != null) {
+				%>
+				<script>
+				
+				   const groupContaineru= document.getElementById('groupContaineru');
+				   const groupbutton = document.getElementById('groupbutton');
+				   
+				   groupContaineru.style.display = groupContaineru.style.display === 'none' ? 'block' : 'none';
+		   	    	 groupbutton.style.display = groupbutton.style.display =='none';
+				   
+				   
+				   document.getElementById("groupNameu").value = "<%=ugu.getGroupName()%>";
+		            
+		        
+		            document.getElementById("groupidu").value = "<%=ugu.getGroupid()%>";
+				
+				</script>
 				<%
 				}
 				%>
@@ -585,6 +596,8 @@ textarea {
 
 		profileButton.onclick = function() {
 			modal.style.display = "block";
+			addEmailToDropdown();
+			
 		}
 
 		closeButton.onclick = function() {
@@ -607,7 +620,7 @@ textarea {
 			const cell2 = newRow.insertCell(1);
 
 			cell1.innerHTML = `<span></span>`;
-			cell2.innerHTML = `<div class="emailstyle"><input type="email" name="email" required /> <button type="button" onclick="removeEmail(this)">Remove</button>
+			cell2.innerHTML = `<div class="emailstyle"><input type="email" name="email"  onchange="addEmailToDropdown()" required /> <button type="button" onclick="removeEmail(this)">Remove</button>
 			
 		</div>`;
 		}
@@ -615,6 +628,7 @@ textarea {
 		function removeEmail(button) {
 			const emailRow = button.closest('tr');
 			emailRow.remove();
+			addEmailToDropdown();
 		}
 		
 		
@@ -624,11 +638,12 @@ textarea {
 
             const dropdown = document.getElementById('emailDropdown');
             dropdown.innerHTML = '';
-            dropdown.innerHTML += '<option value="">-- Select an email --</option>';
+            dropdown.innerHTML += '<option value="<%=ud.getPrimaryMail()%>"><%=ud.getPrimaryMail()%></option>';
 
             inputs.forEach(input => {
                 const email = input.value.trim();
-                if (email && validateEmail(email) && !emailList.includes(email)) {
+                console.log("<%=ud.getPrimaryMail() %>" === email);
+                if (email && validateEmail(email) && !emailList.includes(email) && !("<%=ud.getPrimaryMail() %>" === email) ) {
                     emailList.push(email);
                     const option = document.createElement('option');
                     option.value = email;
@@ -664,122 +679,188 @@ textarea {
    	    }
    	    
    	    
-   	
+   	 document.getElementById('submitGroup').onclick = function() {
+	        const groupName = document.getElementById('groupNamecreate').value.trim();
+	        const method = document.getElementById('methodcreate').value.trim();
+	        const groupid = document.getElementById('groupidcreate').value.trim();
+	        
+	        if (!groupName) {
+	            alert("Please enter a group name.");
+	            return;
+	        }
+
+	        const selectedIds = Array.from(checkboxes)
+	            .filter(checkbox => checkbox.checked)
+	            .map(checkbox => checkbox.value);
+
+	        if (selectedIds.length === 0) {
+	            alert("Please select at least one contact.");
+	            return;
+	        }
+
+	      
+	        const form = document.createElement('form');
+	        form.method = 'post';
+	        form.action = '/creategroup';
+
+	        
+	        const groupNameInput = document.createElement('input');
+	        groupNameInput.type = 'hidden';
+	        groupNameInput.name = 'groupName';
+	        groupNameInput.value = groupName;
+	        form.appendChild(groupNameInput);
+	        
+	        
+	        const methoddata = document.createElement('input');
+	        methoddata.type = 'hidden';
+	        methoddata.name = 'methodtype';
+	        methoddata.value = method;
+	        form.appendChild(methoddata);
+	        
+	        
+	        const group = document.createElement('input');
+	        group.type = 'hidden';
+	        group.name = 'groupdata';
+	        group.value = groupid;
+	        form.appendChild(group);
+	        
+	      
+	        
+	        
+
+	        
+	        selectedIds.forEach(id => {
+	            const idInput = document.createElement('input');
+	            idInput.type = 'hidden';
+	            idInput.name = 'contact_ids'; 
+	            idInput.value = id;
+	            form.appendChild(idInput);
+	        });
+
+	        document.body.appendChild(form);
+	        form.submit();
+	    }
    	 
    	 
-   	    document.getElementById('submitGroup').onclick = function() {
-   	        const groupName = document.getElementById('groupName').value.trim();
-   	        const method = document.getElementById('methodupdate').value.trim();
-   	        const groupid = document.getElementById('groupidupdate').value.trim();
-   	        
-   	        if (!groupName) {
-   	            alert("Please enter a group name.");
-   	            return;
-   	        }
+   	 
+   	 
+   	 
+   	document.getElementById('updateGroup').onclick = function() {
+  		 const groupName = document.getElementById('groupNameu').value.trim();
+           const method = document.getElementById('methodu').value.trim();
+           const groupid = document.getElementById('groupidu').value.trim();
+	        
+	        if (!groupName) {
+	            alert("Please enter a group name.");
+	            return;
+	        }
 
-   	        const selectedIds = Array.from(checkboxes)
-   	            .filter(checkbox => checkbox.checked)
-   	            .map(checkbox => checkbox.value);
+	        const selectedIds = Array.from(checkboxes)
+	            .filter(checkbox => checkbox.checked)
+	            .map(checkbox => checkbox.value);
 
-   	        if (selectedIds.length === 0) {
-   	            alert("Please select at least one contact.");
-   	            return;
-   	        }
+	        if (selectedIds.length === 0) {
+	            alert("Please select at least one contact.");
+	            return;
+	        }
 
-   	      
-   	        const form = document.createElement('form');
-   	        form.method = 'post';
-   	        form.action = '/creategroup';
+	      
+	        const form = document.createElement('form');
+	        form.method = 'post';
+	        form.action = '/creategroup';
 
-   	        
-   	        const groupNameInput = document.createElement('input');
-   	        groupNameInput.type = 'hidden';
-   	        groupNameInput.name = 'groupName';
-   	        groupNameInput.value = groupName;
-   	        form.appendChild(groupNameInput);
-   	        
-   	        
-   	        const methoddata = document.createElement('input');
-   	        methoddata.type = 'hidden';
-   	        methoddata.name = 'methodtype';
-   	        methoddata.value = method;
-   	        form.appendChild(methoddata);
-   	        
-   	        
-   	        const group = document.createElement('input');
-   	        group.type = 'hidden';
-   	        group.name = 'groupdata';
-   	        group.value = groupid;
-   	        form.appendChild(group);
-   	        
-   	      
-   	        
-   	        
+	        
+	        const groupNameInput = document.createElement('input');
+	        groupNameInput.type = 'hidden';
+	        groupNameInput.name = 'groupName';
+	        groupNameInput.value = groupName;
+	        form.appendChild(groupNameInput);
+	        
+	        
+	        const methoddata = document.createElement('input');
+	        methoddata.type = 'hidden';
+	        methoddata.name = 'methodtype';
+	        methoddata.value = method;
+	        form.appendChild(methoddata);
+	        
+	        
+	        const group = document.createElement('input');
+	        group.type = 'hidden';
+	        group.name = 'groupdata';
+	        group.value = groupid;
+	        form.appendChild(group);
+	        
+	      
+	        
+	        
 
-   	        
-   	        selectedIds.forEach(id => {
-   	            const idInput = document.createElement('input');
-   	            idInput.type = 'hidden';
-   	            idInput.name = 'contact_ids'; 
-   	            idInput.value = id;
-   	            form.appendChild(idInput);
-   	        });
+	        
+	        selectedIds.forEach(id => {
+	            const idInput = document.createElement('input');
+	            idInput.type = 'hidden';
+	            idInput.name = 'contact_ids'; 
+	            idInput.value = id;
+	            form.appendChild(idInput);
+	        });
 
-   	        document.body.appendChild(form);
-   	        form.submit();
-   	    }
-   	    
-   	    
-   	    
-   	 document.addEventListener("DOMContentLoaded", function() {
-   	    const updateGroupButton = document.getElementById('updategroup1');
-
-   	    if (updateGroupButton) {
-   	        updateGroupButton.onclick = function() {
-   	            console.log("hello im update data");
-
-   	            const groupName = document.getElementById('groupNameu').value.trim();
-   	            const method = document.getElementById('methodu').value.trim();
-   	            const groupid = document.getElementById('groupidu').value.trim();
-
-   	            if (!groupName) {
-   	                alert("Please enter a group name.");
-   	                return;
-   	            }
-
-   	       
-   	            const form = document.createElement('form');
-   	            form.method = 'post';
-   	            form.action = '/creategroup'; 
-
+	        document.body.appendChild(form);
+	        form.submit();
+	    }
+  	    
+  	    
+	    
+	    
+   	 
+   	 
    	   
-   	            const groupNameInput = document.createElement('input');
-   	            groupNameInput.type = 'hidden';
-   	            groupNameInput.name = 'groupName';
-   	            groupNameInput.value = groupName;
-   	            form.appendChild(groupNameInput);
-
-
-   	            const methodInput = document.createElement('input');
-   	            methodInput.type = 'hidden';
-   	            methodInput.name = 'method';
-   	            methodInput.value = method;
-   	            form.appendChild(methodInput);
-
-   	           
-   	            const groupInput = document.createElement('input');
-   	            groupInput.type = 'hidden';
-   	            groupInput.name = 'groupid';
-   	            groupInput.value = groupid;
-   	            form.appendChild(groupInput);
-
-   	            document.body.appendChild(form);
-   	            form.submit();
-   	        };
-   	    } else {
-   	        console.error("Update group button not found");
-   	    }
-   	});
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	 
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	    
+   	
 	</script>
 
 </body>

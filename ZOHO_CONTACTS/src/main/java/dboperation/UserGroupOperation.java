@@ -181,10 +181,11 @@ public class UserGroupOperation {
 		Connection con =DBconnection.getConnection();
 		try {
 			con.setAutoCommit(false);
-			PreparedStatement ps = con.prepareStatement("update Category set Category_name=?,  where Category_id=?;");
+			PreparedStatement ps = con.prepareStatement("update Category set Category_name=? where Category_id=?;");
 			ps.setString(1, ug.getGroupName());
-			ps.setInt(2, ug.getUserid());
+			ps.setInt(2, ug.getGroupid());
 			int val = ps.executeUpdate();
+			System.out.println("check 1");
 			if (val == 0) {
 				con.rollback();
 				con.commit();
@@ -200,6 +201,7 @@ public class UserGroupOperation {
 			ps=con.prepareStatement("delete from Category_relation where Category_id=?;");
 			ps.setInt(1, ug.getGroupid());
 			val=ps.executeUpdate();
+			System.out.println("check 2");
 			if(val==0) {
 				con.rollback();
 				con.commit();
