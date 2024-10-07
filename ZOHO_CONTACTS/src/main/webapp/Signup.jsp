@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+   <%@page import="dboperation.SessionOperation"%> 
    
     
  
@@ -110,6 +110,21 @@
 </head>
 <body>
  <div class="container">
+ 
+   <%
+  SessionOperation so=new SessionOperation();
+  String sessionid=so.getCustomSessionId(request.getCookies());
+  if(sessionid !=null ){
+	  
+	  response.sendRedirect("Dashboard.jsp");
+  }
+  
+  
+  
+  %>
+ 
+ 
+ 
         <h2>Signup</h2>
         <form action="/signup" method="post">
             <label for="name">Name</label>

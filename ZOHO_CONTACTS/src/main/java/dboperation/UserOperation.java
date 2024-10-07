@@ -333,4 +333,75 @@ public class UserOperation {
 
 	}
 
+	
+	
+	
+	public UserData getUserData(int user_id) throws SQLException {
+		String[] email = new String[5];
+		Connection con = DBconnection.getConnection();
+		try {
+
+		
+				
+
+				PreparedStatement ps = con.prepareStatement(
+						"select * from  user_data ud left join Login_credentials lg on ud.user_id=lg.id   where user_id=?  ;");
+				ps.setInt(1, user_id);
+
+				ResultSet val = ps.executeQuery();
+				UserData ud=new UserData();
+				if (val.next()) {
+					
+
+						ud.setUserId(val.getInt(1));
+						ud.setName(val.getString(2));
+						ud.setPhoneno(val.getString(4));
+						ud.setAddress(val.getString(5));
+						
+						ud.setUserName(val.getString(7));
+						
+						ps = con.prepareStatement("select email,is_primary from Email_user where em_id=?");
+						ps.setInt(1, ud.getUserId());
+						val = ps.executeQuery();
+						int i = 0;
+						while (val.next()) {
+							if (i < 5) {
+								email[i] = val.getString(1);
+								if (val.getBoolean(2)) {
+									
+									ud.setCurrentEmail(val.getString(1));
+									ud.setPrimaryMail(val.getString(1));
+								}
+							} else {
+								System.out.println("there is more than 5 email in database");
+								return null;
+
+							}
+
+							i++;
+						}
+
+						ud.setEmail(email);
+
+					
+					return ud;
+				} else {
+					return null;
+				}
+
+			
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			con.close();
+		}
+		return null;
+
+	}
+	
+	
+	
+	
 }

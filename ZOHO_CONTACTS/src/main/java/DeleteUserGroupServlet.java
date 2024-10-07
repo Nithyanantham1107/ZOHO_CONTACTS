@@ -12,7 +12,10 @@ import javax.servlet.http.HttpSession;
 import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
+import dboperation.SessionOperation;
+import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
+import dboperation.UserOperation;
 
 /**
  * Servlet implementation class DeleteUserGroup
@@ -22,13 +25,19 @@ public class DeleteUserGroupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	UserGroupOperation ugo;
 	HttpSession session;
-
+	SessionOperation so;
+	UserOperation user_op;
+	UserContactOperation uco;
+	UserData ud;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public DeleteUserGroupServlet() {
 		super();
 		ugo = new UserGroupOperation();
+		so = new SessionOperation();
+		user_op = new UserOperation();
+		uco = new UserContactOperation();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -50,12 +59,61 @@ public class DeleteUserGroupServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
+			
+			
+			session = request.getSession(false);
+			UserData ud = (UserData) session.getAttribute("user");
+			String sessionid = so.getCustomSessionId(request.getCookies());
+			int userid = so.checkSessionAlive(sessionid);
+			if (userid != 0) {
+				if (ud == null) {
+
+					session = request.getSession();
+					ud = user_op.getUserData(userid);
+
+					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
+					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
+
+					session.setAttribute("user", ud);
+					session.setAttribute("usercontact", uc);
+					session.setAttribute("usergroup", ug);
+				}
+
+			} else {
+
+				so.DeleteSessionData(sessionid);
+				if (session != null) {
+
+					session.invalidate();
+				}
+
+				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				response.setHeader("Pragma", "no-cache");
+				response.setDateHeader("Expires", 0);
+				response.sendRedirect("index.jsp");
+				return;
+
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			if ((request.getParameter("groupid") != null  && ! request.getParameter("groupid").isBlank())) {
 				int groupid = Integer.parseInt(request.getParameter("groupid"));
 				if (ugo.deleteUserGroup(groupid)) {
 
-					session = request.getSession(false);
-					UserData ud = (UserData) session.getAttribute("user");
+					
+					ud = (UserData) session.getAttribute("user");
 
 					ArrayList<UserGroup> ug = ugo.viewAllGroup(ud.getUserId());
 

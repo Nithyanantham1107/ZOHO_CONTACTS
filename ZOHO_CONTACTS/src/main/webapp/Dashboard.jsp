@@ -1,3 +1,6 @@
+<%@page import="dboperation.UserGroupOperation"%>
+<%@page import="dboperation.UserOperation"%>
+<%@page import="dboperation.SessionOperation"%>
 <%@page import="dbmodel.UserGroup"%>
 <%@page import="java.util.UUID"%>
 <%@page import="dboperation.UserContactOperation"%>
@@ -96,7 +99,8 @@ input[type="submit"]:hover {
 	cursor: pointer;
 }
 
-#profileButton, .profileButton, #groupbutton, #submitGroup ,#updateGroup{
+#profileButton, .profileButton, #groupbutton, #submitGroup, #updateGroup
+	{
 	padding: 10px;
 	background-color: black;
 	color: white;
@@ -108,7 +112,7 @@ input[type="submit"]:hover {
 }
 
 #profileButton:hover, .prifileButton:hover, #groupbutton:hover,
-	#submitGroup:hover,#updateGroup:hover {
+	#submitGroup:hover, #updateGroup:hover {
 	background-color: white;
 	color: black;
 }
@@ -251,8 +255,61 @@ textarea {
 		<%
 		
 		
-		HttpSession session_dash = request.getSession(false);
-		UserData ud = (UserData) session_dash.getAttribute("user");
+		
+		
+		session = request.getSession(false);
+		SessionOperation so=new SessionOperation();
+		UserData ud = (UserData) session.getAttribute("user");
+		String sessionid = so.getCustomSessionId(request.getCookies());
+		int userid = so.checkSessionAlive(sessionid);
+		if (userid != 0) {
+			if (ud == null) {
+
+				session = request.getSession();
+				UserOperation user_op = new UserOperation();
+				UserContactOperation uco = new UserContactOperation();
+				UserGroupOperation ugo = new UserGroupOperation();
+				
+				ud = user_op.getUserData(userid);
+				
+
+				ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
+				ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
+
+				session.setAttribute("user", ud);
+				session.setAttribute("usercontact", uc);
+				session.setAttribute("usergroup", ug);
+			}
+
+		} else {
+			System.out.println("hello hi man");
+
+			so.DeleteSessionData(sessionid);
+			if (session != null) {
+
+				session.invalidate();
+			}
+			Cookie sessionCookie = new Cookie("SESSIONID", null);
+	        
+		       
+	        sessionCookie.setMaxAge(0);
+	        
+	        
+	        sessionCookie.setPath("/");
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			
+			response.sendRedirect("index.jsp");
+			return;
+
+		}
+
+		// upto this session check is implemented
+
+		
+		
+		
+		
+		ud = (UserData) session.getAttribute("user");
 		UserGroup ugu = (UserGroup) request.getAttribute("usergroupupdate");
 		
 		if (ud == null) {
@@ -327,7 +384,7 @@ textarea {
 							<tr>
 								<td><label for="emailDropdown"> primary email:</label></td>
 								<td><select id="emailDropdown" name="primaryemail" required>
-										
+
 
 								</select></td>
 							</tr>
@@ -390,16 +447,15 @@ textarea {
 
 
 			<div class="header">
-				<button id="profileButton" >Open Profile</button>
+				<button id="profileButton">Open Profile</button>
 
 
 
 				<div id="groupContaineru"
 					style="display: none; flex-direction: row;">
-					<input type="text" id="groupNameu" value=""
-						required /> <input type="hidden" id="groupidu"
-						value="" required /> <input type="hidden"
-						id="methodu" value="update" />
+					<input type="text" id="groupNameu" value="" required /> <input
+						type="hidden" id="groupidu" value="" required /> <input
+						type="hidden" id="methodu" value="update" />
 					<button id="updateGroup">Update Group</button>
 
 
@@ -407,7 +463,8 @@ textarea {
 
 
 
-				<button id="groupbutton" style="display:block;">Create group</button>
+				<button id="groupbutton" style="display: block;">Create
+					group</button>
 
 
 				<div id="groupContainer" style="display: none; flex-direction: row;">
@@ -642,8 +699,8 @@ textarea {
 
             inputs.forEach(input => {
                 const email = input.value.trim();
-                console.log("<%=ud.getPrimaryMail() %>" === email);
-                if (email && validateEmail(email) && !emailList.includes(email) && !("<%=ud.getPrimaryMail() %>" === email) ) {
+                console.log("<%=ud.getPrimaryMail()%>" === email);
+                if (email && validateEmail(email) && !emailList.includes(email) && !("<%=ud.getPrimaryMail()%>" === email) ) {
                     emailList.push(email);
                     const option = document.createElement('option');
                     option.value = email;

@@ -12,7 +12,10 @@ import javax.servlet.http.HttpSession;
 import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
+import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
+import dboperation.UserGroupOperation;
+import dboperation.UserOperation;
 
 /**
  * Servlet implementation class Update_user_contact
@@ -22,8 +25,13 @@ public class UpdateUserContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	UserContactOperation co;
 	UserContacts uc;
-	
+	SessionOperation so;
+	UserOperation user_op;
+	UserContactOperation uco;
+	UserGroupOperation ugo;
 	HttpSession session;
+	UserData ud;
+	
 
 	// TODO Auto-generated method stub
 
@@ -34,6 +42,10 @@ public class UpdateUserContactServlet extends HttpServlet {
 		super();
 		co = new UserContactOperation();
 		uc = new UserContacts();
+		so=new SessionOperation();
+		user_op = new UserOperation();
+		uco = new UserContactOperation();
+		ugo = new UserGroupOperation();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -57,6 +69,61 @@ public class UpdateUserContactServlet extends HttpServlet {
 		// TODO Auto-generated method stub System.out.println("1");
 		try {
            
+			session = request.getSession(false);
+			UserData ud = (UserData) session.getAttribute("user");
+			String sessionid = so.getCustomSessionId(request.getCookies());
+			int userid = so.checkSessionAlive(sessionid);
+			if (userid != 0) {
+				if (ud == null) {
+
+					session = request.getSession();
+					ud = user_op.getUserData(userid);
+
+					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
+					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
+
+					session.setAttribute("user", ud);
+					session.setAttribute("usercontact", uc);
+					session.setAttribute("usergroup", ug);
+				}
+
+			} else {
+
+				so.DeleteSessionData(sessionid);
+				if (session != null) {
+
+					session.invalidate();
+				}
+
+				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				response.setHeader("Pragma", "no-cache");
+				response.setDateHeader("Expires", 0);
+				response.sendRedirect("index.jsp");
+				return;
+
+			}
+
+			// upto this session check is implemented
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
             	System.out.println(request.getParameter("method"));
 			System.out.println("hello this is post of update servlet" +request.getParameter("contactid"));
         
@@ -65,14 +132,15 @@ public class UpdateUserContactServlet extends HttpServlet {
 					(request.getParameter("phone") != null && ! request.getParameter("phone").isBlank()) && 
 					(request.getParameter("Address") != null && ! request.getParameter("Address").isBlank()) && 
 					(request.getParameter("email") != null && ! request.getParameter("email").isBlank())) {
-
-				session = request.getSession(false);
-				UserData ud = (UserData) session.getAttribute("user");
+                System.out.println("here see hey"+so.getCustomSessionId(request.getCookies()));
+			
+			
+				
+				ud = (UserData) session.getAttribute("user");
 				uc.setContactid(Integer.parseInt(request.getParameter("contactid")));
 				uc.setFname(request.getParameter("f_name"));
 				uc.setMname(request.getParameter("m_name"));
 				uc.setLname(request.getParameter("l_name"));
-				// Get close button
 				uc.setAddress(request.getParameter("Address"));
 				uc.setGender(request.getParameter("gender"));
 				uc.setPhoneno(request.getParameter("phone"));

@@ -1,3 +1,4 @@
+<%@page import="dboperation.SessionOperation"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
   <%
@@ -67,6 +68,20 @@
 </head>
 <body>
   <div class="container">
+  
+  <%
+  SessionOperation so=new SessionOperation();
+  String sessionid=so.getCustomSessionId(request.getCookies());
+  if(sessionid !=null ){
+	  
+	  response.sendRedirect("Dashboard.jsp");
+  }
+  
+  
+  
+  %>
+  
+  
         <h2>ZOHO CONTACTS</h2>
         <form action="Login.jsp">
             <input type="submit" value="Login"/>

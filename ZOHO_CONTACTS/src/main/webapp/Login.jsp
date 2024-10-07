@@ -1,3 +1,4 @@
+<%@page import="dboperation.SessionOperation"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
@@ -102,6 +103,17 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     </script>
 </head>
 <body>
+ <%
+  SessionOperation so=new SessionOperation();
+  String sessionid=so.getCustomSessionId(request.getCookies());
+  if(sessionid !=null ){
+	  
+	  response.sendRedirect("Dashboard.jsp");
+  }
+  
+  
+  
+  %>
     <div class="container">
         <h2>Login </h2>
         <form action="/login" method="post">
@@ -113,7 +125,7 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
             <span id="prompt"> Password must be 8 - 72 characters </span>
           <div  class="login_button"> <input type="submit" value="Login" />
           
-          </div> 
+          </div>
         </form>
         <form action="/index.jsp" method="get">
             <input type="submit" value="Back" class="back-btn" />

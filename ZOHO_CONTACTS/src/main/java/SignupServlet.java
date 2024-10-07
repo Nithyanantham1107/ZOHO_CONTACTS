@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
+import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
@@ -29,6 +31,7 @@ public class SignupServlet extends HttpServlet {
 	UserContactOperation uco;
 	UserValidation uservalidate;
 	HttpSession session;
+	SessionOperation so;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -80,6 +83,14 @@ public class SignupServlet extends HttpServlet {
 
 					ud = user_op.createUser(ud);
 					if (ud != null) {
+						
+						  so=new SessionOperation();
+	                        String sessionid=so.generateSessionId(ud.getUserId());	
+	                        Cookie sessionCookie = new Cookie("SESSIONID", sessionid);
+	                        sessionCookie.setHttpOnly(true); 
+	                       
+	                  
+	                        response.addCookie(sessionCookie);
 
 						session = request.getSession();
 						session.setAttribute("user", ud);
@@ -91,7 +102,7 @@ public class SignupServlet extends HttpServlet {
 				        response.setHeader("Pragma", "no-cache"); 
 				        response.setDateHeader("Expires", 0);
 
-						request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+						response.sendRedirect("Dashboard.jsp");
 					} else {
 						request.setAttribute("errorMessage", "An error occured while creating user");
 			            request.getRequestDispatcher("Signup.jsp").forward(request, response);

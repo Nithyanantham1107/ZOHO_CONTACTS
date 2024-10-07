@@ -13,7 +13,11 @@ import javax.servlet.http.HttpSession;
 import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
+import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
+import dboperation.UserGroupOperation;
+import dboperation.UserOperation;
+import validation.UserValidation;
 
 /**
  * Servlet implementation class Add_contact_servlet
@@ -24,6 +28,11 @@ public class AddContactServlet extends HttpServlet {
      UserContactOperation co;
      UserContacts uc;
      HttpSession session;
+     SessionOperation so;
+     
+     UserOperation user_op;
+ 	UserGroupOperation ugo;
+ 	UserContactOperation uco;
     
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,6 +41,10 @@ public class AddContactServlet extends HttpServlet {
         super();
         
         co =new UserContactOperation();
+        so=new SessionOperation();
+    	user_op = new UserOperation();
+	    uco=new UserContactOperation();
+	    ugo=new UserGroupOperation();
        
         // TODO Auto-generated constructor stub
     }
@@ -50,6 +63,45 @@ public class AddContactServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			session=request.getSession(false);
+			UserData ud=(UserData) session.getAttribute("user");
+			String sessionid=so.getCustomSessionId(request.getCookies());
+			int userid=so.checkSessionAlive(sessionid);
+			if(userid !=0) {
+				if(ud==null) {
+					
+					session = request.getSession();
+					ud = user_op.getUserData(userid);
+					session.setAttribute("user", ud);
+					ArrayList<UserContacts> uc=uco.viewAllUserContacts(userid);
+					ArrayList<UserGroup> ug=ugo.viewAllGroup(userid);
+					session.setAttribute("usercontact", uc);
+					session.setAttribute("usergroup", ug);
+				}
+				
+				
+				
+			}else {
+				
+				
+				 so.DeleteSessionData(sessionid);
+				if(session != null ) {
+					
+					session.invalidate();
+				}
+				
+				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+		        response.setHeader("Pragma", "no-cache"); 
+		        response.setDateHeader("Expires", 0);
+				response.sendRedirect("index.jsp");
+				return;
+				
+				
+				
+				
+			}
+			
+			
 			
 			if( (request.getParameter("f_name") !=null && ! request.getParameter("f_name").isBlank()) && 
 				(request.getParameter("gender") !=null &&  ! request.getParameter("gender").isBlank()) &&
@@ -58,7 +110,7 @@ public class AddContactServlet extends HttpServlet {
 				(request.getParameter("email") !=null && ! request.getParameter("email").isBlank()) ){
 					uc=new UserContacts();
 					session=request.getSession(false);
-					UserData ud=(UserData) session.getAttribute("user");
+					
 					
 					uc.setFname(request.getParameter("f_name"));
 					uc.setMname(request.getParameter("m_name"));

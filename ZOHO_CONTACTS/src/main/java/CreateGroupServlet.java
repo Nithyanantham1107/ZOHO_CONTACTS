@@ -9,9 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
+import dboperation.SessionOperation;
+import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
+import dboperation.UserOperation;
 
 /**
  * Servlet implementation class CreateGroupServlet
@@ -22,12 +26,20 @@ public class CreateGroupServlet extends HttpServlet {
 	UserGroup ug;
 	UserGroupOperation ugo;
 	HttpSession session;
+	SessionOperation so;
+	UserOperation user_op;
+
+	UserContactOperation uco;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public CreateGroupServlet() {
 		super();
+		ugo = new UserGroupOperation();
+		so = new SessionOperation();
+		user_op = new UserOperation();
+		uco = new UserContactOperation();
 		ugo = new UserGroupOperation();
 
 		// TODO Auto-generated constructor stub
@@ -51,15 +63,50 @@ public class CreateGroupServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		System.out.println("hello this post of cre" + "ate group" + request.getParameter("groupName"));
-		System.out.println("here method of call is" + request.getParameter("methodtype"));
-
-		System.out.println("here method of data is" + request.getParameter("groupdata"));
-		for (String i : request.getParameterValues("contact_ids")) {
-
-			System.out.println("hello this contact id is" + i);
-		}
 		try {
+
+			session = request.getSession(false);
+			UserData ud = (UserData) session.getAttribute("user");
+			String sessionid = so.getCustomSessionId(request.getCookies());
+			int userid = so.checkSessionAlive(sessionid);
+			if (userid != 0) {
+				if (ud == null) {
+
+					session = request.getSession();
+					ud = user_op.getUserData(userid);
+
+					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
+					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
+
+					session.setAttribute("user", ud);
+					session.setAttribute("usercontact", uc);
+					session.setAttribute("usergroup", ug);
+				}
+
+			} else {
+
+				so.DeleteSessionData(sessionid);
+				if (session != null) {
+
+					session.invalidate();
+				}
+
+				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				response.setHeader("Pragma", "no-cache");
+				response.setDateHeader("Expires", 0);
+				response.sendRedirect("index.jsp");
+				return;
+
+			}
+
+			
+			
+			// upto this session check is implemented
+			
+			
+			
+			
+			
 			if (request.getParameter("methodtype") != null && request.getParameter("methodtype").equals("create")) {
 				System.out.println("1St check");
 				if ((request.getParameter("groupName") != null && !request.getParameter("groupName").isBlank())
@@ -67,8 +114,8 @@ public class CreateGroupServlet extends HttpServlet {
 
 					int j = 0;
 					ug = new UserGroup();
-					session = request.getSession(false);
-					UserData ud = (UserData) session.getAttribute("user");
+
+					ud = (UserData) session.getAttribute("user");
 					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 					ug.setGroupName(request.getParameter("groupName"));
 
@@ -125,7 +172,7 @@ public class CreateGroupServlet extends HttpServlet {
 							+ "then" + request.getParameter("methodtype") + "then" + request.getParameter("groupdata"));
 
 					session = request.getSession(false);
-					UserData ud = (UserData) session.getAttribute("user");
+					ud = (UserData) session.getAttribute("user");
 					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 
 					ug.setGroupName(request.getParameter("groupName"));

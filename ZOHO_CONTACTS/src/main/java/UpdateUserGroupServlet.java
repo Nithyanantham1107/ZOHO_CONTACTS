@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,9 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
+import dboperation.SessionOperation;
+import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
+import dboperation.UserOperation;
 
 /**
  * Servlet implementation class UpdateUserGroupServlet
@@ -22,6 +27,9 @@ public class UpdateUserGroupServlet extends HttpServlet {
 	UserGroupOperation ugo;
 	UserGroup ug;
 	HttpSession session;
+	SessionOperation so;
+	UserOperation user_op;
+	UserContactOperation uco;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -30,6 +38,10 @@ public class UpdateUserGroupServlet extends HttpServlet {
 		super();
 		ugo = new UserGroupOperation();
 		ug = new UserGroup();
+		so = new SessionOperation();
+		uco = new UserContactOperation();
+		user_op = new UserOperation();
+		
 		// TODO Auto-generated constructor stub
 	}
 
@@ -51,16 +63,73 @@ public class UpdateUserGroupServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		System.out
-				.println("hello this is the post of update user group servlet see!!" + request.getParameter("groupid"));
+		
 
 		try {
+			
+			
+
+			session = request.getSession(false);
+			UserData ud = (UserData) session.getAttribute("user");
+			String sessionid = so.getCustomSessionId(request.getCookies());
+			int userid = so.checkSessionAlive(sessionid);
+			if (userid != 0) {
+				if (ud == null) {
+
+					session = request.getSession();
+					ud = user_op.getUserData(userid);
+
+					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
+					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
+
+					session.setAttribute("user", ud);
+					session.setAttribute("usercontact", uc);
+					session.setAttribute("usergroup", ug);
+				}
+
+			} else {
+
+				so.DeleteSessionData(sessionid);
+				if (session != null) {
+
+					session.invalidate();
+				}
+
+				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+				response.setHeader("Pragma", "no-cache");
+				response.setDateHeader("Expires", 0);
+				response.sendRedirect("index.jsp");
+				return;
+
+			}
+
+			
+			
+			// upto this session check is implemented
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			if ((request.getParameter("groupid") != null && ! request.getParameter("groupid").isBlank()) &&
 				(request.getParameter("groupName") != null && ! request.getParameter("groupName").isBlank()) 	
 					
 					) {
-				session = request.getSession(false);
-				UserData ud = (UserData) session.getAttribute("user");
+			
+			    ud = (UserData) session.getAttribute("user");
 				ug.setUserid(ud.getUserId());
 				ug.setGroupid(Integer.parseInt(request.getParameter("groupid")));
 				ug.setGroupName(request.getParameter("groupName"));
