@@ -84,6 +84,7 @@ public class UserProfileServlet extends HttpServlet {
 				}
 
 			} else {
+				
 
 				so.DeleteSessionData(sessionid);
 				if (session != null) {

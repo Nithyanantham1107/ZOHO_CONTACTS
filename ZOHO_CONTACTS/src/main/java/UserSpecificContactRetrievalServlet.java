@@ -66,49 +66,16 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 
 		try {
-			session = request.getSession(false);
-			UserData ud = (UserData) session.getAttribute("user");
-			String sessionid = so.getCustomSessionId(request.getCookies());
-			int userid = so.checkSessionAlive(sessionid);
-			if (userid != 0) {
-				if (ud == null) {
-
-					session = request.getSession();
-					ud = user_op.getUserData(userid);
-
-					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-
-					session.setAttribute("user", ud);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
-
-			} else {
-
-				so.DeleteSessionData(sessionid);
-				if (session != null) {
-
-					session.invalidate();
-				}
-
-				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-				response.setHeader("Pragma", "no-cache");
-				response.setDateHeader("Expires", 0);
-				response.sendRedirect("index.jsp");
-				return;
-
-			}
-
+			
 			// upto this session check is implemented
-
+			session=request.getSession(false);
 			UserData user = (UserData) session.getAttribute("user");
 			System.out.println("hello this is post of update user specific servlet servlet");
 			if (request.getParameter("contact_id") != null) {
 				int user_id = user.getUserId();
 				int contact_id = Integer.parseInt(request.getParameter("contact_id"));
 				UserContacts uc = co.viewSpecificUserContact(user_id, contact_id);
-				System.out.println(uc.getFname() + uc.getMname());
+
 				if (uc != null) {
 
 					System.out.println("hello this is the data of user updation");

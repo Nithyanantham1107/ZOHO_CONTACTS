@@ -29,6 +29,7 @@ public class DeleteUserGroupServlet extends HttpServlet {
 	UserOperation user_op;
 	UserContactOperation uco;
 	UserData ud;
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -59,60 +60,11 @@ public class DeleteUserGroupServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			
-			
-			session = request.getSession(false);
-			UserData ud = (UserData) session.getAttribute("user");
-			String sessionid = so.getCustomSessionId(request.getCookies());
-			int userid = so.checkSessionAlive(sessionid);
-			if (userid != 0) {
-				if (ud == null) {
 
-					session = request.getSession();
-					ud = user_op.getUserData(userid);
-
-					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-
-					session.setAttribute("user", ud);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
-
-			} else {
-
-				so.DeleteSessionData(sessionid);
-				if (session != null) {
-
-					session.invalidate();
-				}
-
-				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-				response.setHeader("Pragma", "no-cache");
-				response.setDateHeader("Expires", 0);
-				response.sendRedirect("index.jsp");
-				return;
-
-			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			if ((request.getParameter("groupid") != null  && ! request.getParameter("groupid").isBlank())) {
+			if ((request.getParameter("groupid") != null && !request.getParameter("groupid").isBlank())) {
 				int groupid = Integer.parseInt(request.getParameter("groupid"));
 				if (ugo.deleteUserGroup(groupid)) {
-
-					
+                    session=request.getSession(false);
 					ud = (UserData) session.getAttribute("user");
 
 					ArrayList<UserGroup> ug = ugo.viewAllGroup(ud.getUserId());
@@ -123,8 +75,8 @@ public class DeleteUserGroupServlet extends HttpServlet {
 				} else {
 					System.out.println("error in deleting the groups ");
 					request.setAttribute("errorMessage", "error in deleting the groups");
-	                request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
-				
+					request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+
 				}
 				System.out
 						.println("hello this is the post of delete user group here" + request.getParameter("groupid"));
@@ -132,12 +84,12 @@ public class DeleteUserGroupServlet extends HttpServlet {
 
 				System.out.println("group id is null in delete post request");
 				request.setAttribute("errorMessage", "group id is null in delete post request");
-                request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+				request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 			request.setAttribute("errorMessage", e);
-            request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+			request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
 		}
 	}
 

@@ -74,44 +74,11 @@ public class DeleteUserContactServlet extends HttpServlet {
 
 		try {
 
-			session = request.getSession(false);
-			UserData ud = (UserData) session.getAttribute("user");
-			String sessionid = so.getCustomSessionId(request.getCookies());
-			int userid = so.checkSessionAlive(sessionid);
-			if (userid != 0) {
-				if (ud == null) {
-
-					session = request.getSession();
-					ud = user_op.getUserData(userid);
-
-					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-
-					session.setAttribute("user", ud);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
-
-			} else {
-
-				so.DeleteSessionData(sessionid);
-				if (session != null) {
-
-					session.invalidate();
-				}
-
-				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-				response.setHeader("Pragma", "no-cache");
-				response.setDateHeader("Expires", 0);
-				response.sendRedirect("index.jsp");
-				return;
-
-			}
-
+			
 			// upto this session check is implemented
 
 			if ((request.getParameter("contact_id") != null && !request.getParameter("contact_id").isBlank())) {
-
+				session=request.getSession(false);
 				ud = (UserData) session.getAttribute("user");
 
 				int user_id = ud.getUserId();

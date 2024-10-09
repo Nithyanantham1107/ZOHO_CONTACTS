@@ -56,6 +56,7 @@ public class AddContactServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		System.out.println("hello im called at get  method!!");
+		response.sendRedirect("Dashboard.jsp");
 	}
 
 	/**
@@ -63,44 +64,6 @@ public class AddContactServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			session=request.getSession(false);
-			UserData ud=(UserData) session.getAttribute("user");
-			String sessionid=so.getCustomSessionId(request.getCookies());
-			int userid=so.checkSessionAlive(sessionid);
-			if(userid !=0) {
-				if(ud==null) {
-					
-					session = request.getSession();
-					ud = user_op.getUserData(userid);
-					session.setAttribute("user", ud);
-					ArrayList<UserContacts> uc=uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug=ugo.viewAllGroup(userid);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
-				
-				
-				
-			}else {
-				
-				
-				 so.DeleteSessionData(sessionid);
-				if(session != null ) {
-					
-					session.invalidate();
-				}
-				
-				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
-		        response.setHeader("Pragma", "no-cache"); 
-		        response.setDateHeader("Expires", 0);
-				response.sendRedirect("index.jsp");
-				return;
-				
-				
-				
-				
-			}
-			
 			
 			
 			if( (request.getParameter("f_name") !=null && ! request.getParameter("f_name").isBlank()) && 
@@ -110,7 +73,7 @@ public class AddContactServlet extends HttpServlet {
 				(request.getParameter("email") !=null && ! request.getParameter("email").isBlank()) ){
 					uc=new UserContacts();
 					session=request.getSession(false);
-					
+					UserData ud = (UserData) session.getAttribute("user");
 					
 					uc.setFname(request.getParameter("f_name"));
 					uc.setMname(request.getParameter("m_name"));

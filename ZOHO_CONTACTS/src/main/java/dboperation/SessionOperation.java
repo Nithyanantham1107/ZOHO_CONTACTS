@@ -133,13 +133,14 @@ public class SessionOperation {
 	    }
 	    con.setAutoCommit(false);
 	    currenttime=new Timestamp(System.currentTimeMillis()+(30*60*1000));
+	    System.out.println("here the time is"+currenttime);
 	    ps=con.prepareStatement("update Session set session_expire=? where Session_id=?");
 	 
 	    ps.setTimestamp(1, currenttime);
 	    ps.setString(2, sessionid);
 	    int result=ps.executeUpdate();
 	    if(result==0) {
-	    	System.out.println("updating the session table");
+	    	System.out.println("Error updating the session table" +sessionid);
 	    	
 	    	con.rollback();
 			con.commit();

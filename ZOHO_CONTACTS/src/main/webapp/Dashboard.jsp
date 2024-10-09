@@ -257,60 +257,19 @@ textarea {
 		
 		
 		
-		session = request.getSession(false);
-		SessionOperation so=new SessionOperation();
-		UserData ud = (UserData) session.getAttribute("user");
-		String sessionid = so.getCustomSessionId(request.getCookies());
-		int userid = so.checkSessionAlive(sessionid);
-		if (userid != 0) {
-			if (ud == null) {
-
-				session = request.getSession();
-				UserOperation user_op = new UserOperation();
-				UserContactOperation uco = new UserContactOperation();
-				UserGroupOperation ugo = new UserGroupOperation();
-				
-				ud = user_op.getUserData(userid);
-				
-
-				ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-				ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-
-				session.setAttribute("user", ud);
-				session.setAttribute("usercontact", uc);
-				session.setAttribute("usergroup", ug);
-			}
-
-		} else {
-			System.out.println("hello hi man");
-
-			so.DeleteSessionData(sessionid);
-			if (session != null) {
-
-				session.invalidate();
-			}
-			Cookie sessionCookie = new Cookie("SESSIONID", null);
-	        
-		       
-	        sessionCookie.setMaxAge(0);
-	        
-	        
-	        sessionCookie.setPath("/");
-			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-			
-			response.sendRedirect("index.jsp");
-			return;
-
-		}
 
 		// upto this session check is implemented
 
 		
+	
+
 		
 		
-		
-		ud = (UserData) session.getAttribute("user");
+		session=request.getSession(false);
+		UserData ud = (UserData) session.getAttribute("user");
 		UserGroup ugu = (UserGroup) request.getAttribute("usergroupupdate");
+		
+		
 		
 		if (ud == null) {
 
@@ -319,7 +278,7 @@ textarea {
 			return;
 
 		}
-
+		
 		ArrayList<UserContacts> user_contacts = (ArrayList<UserContacts>) session.getAttribute("usercontact");
 		ArrayList<UserGroup> usergroup = (ArrayList<UserGroup>) session.getAttribute("usergroup");
 		%>
@@ -653,6 +612,11 @@ textarea {
 
 		profileButton.onclick = function() {
 			modal.style.display = "block";
+			var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/addcontact', true); 
+            xhr.send(); 
+            
+           
 			addEmailToDropdown();
 			
 		}
@@ -729,6 +693,14 @@ textarea {
 
    	    createGroupButton.onclick = function() {
    	    	console.log("hello");
+   	    
+             var xhr = new XMLHttpRequest();
+             xhr.open('GET', '/addcontact', true); 
+             xhr.send(); 
+             
+            
+   	    	
+   	    	
    	    	 groupContainer.style.display = groupContainer.style.display === 'none' ? 'block' : 'none';
    	        checkboxes.forEach(checkbox => {
    	            checkbox.style.display = checkbox.style.display === 'none' ? 'inline' : 'none';

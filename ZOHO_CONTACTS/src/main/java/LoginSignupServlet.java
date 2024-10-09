@@ -46,6 +46,7 @@ public class LoginSignupServlet extends HttpServlet {
 		uservalidate = new UserValidation();
 		uco = new UserContactOperation();
 		ugo = new UserGroupOperation();
+		so=new SessionOperation();
 
 		// TODO Auto-generated constructor stub
 	}

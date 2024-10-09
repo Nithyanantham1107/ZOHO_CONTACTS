@@ -111,52 +111,8 @@ input[type="submit"]:hover {
 		<h2>Update Contacts</h2>
 		<form action="/updatecontact" method="post">
 			<%
-			session = request.getSession(false);
-
-			SessionOperation so = new SessionOperation();
-			UserData ud = (UserData) session.getAttribute("user");
-			String sessionid = so.getCustomSessionId(request.getCookies());
-			int userid = so.checkSessionAlive(sessionid);
-			if (userid != 0) {
-				if (ud == null) {
-
-					session = request.getSession();
-					UserOperation user_op = new UserOperation();
-					UserContactOperation uco = new UserContactOperation();
-					UserGroupOperation ugo = new UserGroupOperation();
-
-					ud = user_op.getUserData(userid);
-
-					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-
-					session.setAttribute("user", ud);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
-
-			} else {
-
-				so.DeleteSessionData(sessionid);
-				if (session != null) {
-
-					session.invalidate();
-				}
-
-				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-				response.setHeader("Pragma", "no-cache");
-				response.setDateHeader("Expires", 0);
-				response.sendRedirect("index.jsp");
-				return;
-
-			}
-
+			
 			// upto this session check is implemented
-
-			if (ud == null) {
-				response.sendRedirect("index.jsp");
-				return;
-			}
 
 			UserContacts uc = (UserContacts) request.getAttribute("user_spec_contact");
 			if (uc == null) {

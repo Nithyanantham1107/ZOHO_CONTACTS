@@ -65,41 +65,8 @@ public class CreateGroupServlet extends HttpServlet {
 
 		try {
 
-			session = request.getSession(false);
-			UserData ud = (UserData) session.getAttribute("user");
-			String sessionid = so.getCustomSessionId(request.getCookies());
-			int userid = so.checkSessionAlive(sessionid);
-			if (userid != 0) {
-				if (ud == null) {
-
-					session = request.getSession();
-					ud = user_op.getUserData(userid);
-
-					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-
-					session.setAttribute("user", ud);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
-
-			} else {
-
-				so.DeleteSessionData(sessionid);
-				if (session != null) {
-
-					session.invalidate();
-				}
-
-				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-				response.setHeader("Pragma", "no-cache");
-				response.setDateHeader("Expires", 0);
-				response.sendRedirect("index.jsp");
-				return;
-
-			}
-
 			
+			  session=request.getSession(false);
 			
 			// upto this session check is implemented
 			
@@ -115,7 +82,7 @@ public class CreateGroupServlet extends HttpServlet {
 					int j = 0;
 					ug = new UserGroup();
 
-					ud = (UserData) session.getAttribute("user");
+					UserData ud = (UserData) session.getAttribute("user");
 					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 					ug.setGroupName(request.getParameter("groupName"));
 
@@ -171,8 +138,8 @@ public class CreateGroupServlet extends HttpServlet {
 					System.out.println("here updation of group is performed" + request.getParameter("groupName")
 							+ "then" + request.getParameter("methodtype") + "then" + request.getParameter("groupdata"));
 
-					session = request.getSession(false);
-					ud = (UserData) session.getAttribute("user");
+
+					UserData ud = (UserData) session.getAttribute("user");
 					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 
 					ug.setGroupName(request.getParameter("groupName"));

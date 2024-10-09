@@ -5,7 +5,7 @@
   
   response.addHeader("Cache-Control", " no-cache");
  
-  System.out.println("hello from index.jsp page");
+  
   
   %>
 <!DOCTYPE html>
@@ -67,9 +67,7 @@
     </style>
 </head>
 <body>
-  <div class="container">
-  
-  <%
+ <%
   SessionOperation so=new SessionOperation();
   String sessionid=so.getCustomSessionId(request.getCookies());
   if(sessionid !=null ){
@@ -80,8 +78,8 @@
   
   
   %>
-  
-  
+
+  <div class="container">
         <h2>ZOHO CONTACTS</h2>
         <form action="Login.jsp">
             <input type="submit" value="Login"/>
