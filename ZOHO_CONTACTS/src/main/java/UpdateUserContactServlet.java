@@ -59,10 +59,14 @@ public class UpdateUserContactServlet extends HttpServlet {
 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	  /**
+     * Handles POST requests for updating a user's contact information.
+     *
+     * @param request the HttpServletRequest object that contains the request data
+     * @param response the HttpServletResponse object used to send a response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an input or output error occurs
+     */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub System.out.println("1");

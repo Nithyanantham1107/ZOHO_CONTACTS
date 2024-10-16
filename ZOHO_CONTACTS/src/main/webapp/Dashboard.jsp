@@ -303,6 +303,46 @@ textarea {
 								<td><input type="text" name="phone"
 									value="<%=ud.getPhoneno()%>" required /></td>
 							</tr>
+
+							<tr>
+								<td><label for="Timezone">Time zone</label></td>
+								<td><select name="timezone" id="timezone" required>
+										<option value="<%= ud.getTimezone() %>" selected><%= ud.getTimezone() %></option>
+										<option value="Asia/Kolkata">Asia/Kolkata (Indian
+											Standard Time)</option>
+										<option value="America/New_York">America/New_York
+											(Eastern Time)</option>
+										<option value="America/Chicago">America/Chicago
+											(Central Time)</option>
+										<option value="America/Denver">America/Denver
+											(Mountain Time)</option>
+										<option value="America/Los_Angeles">America/Los_Angeles
+											(Pacific Time)</option>
+										<option value="Europe/London">Europe/London (GMT/BST)</option>
+										<option value="Europe/Paris">Europe/Paris (CET/CEST)</option>
+										<option value="Asia/Tokyo">Asia/Tokyo (Japan Standard
+											Time)</option>
+										<option value="Asia/Kolkata">Asia/Kolkata (India
+											Standard Time)</option>
+										<option value="Australia/Sydney">Australia/Sydney
+											(Australian Eastern Daylight Time)</option>
+										<option value="America/Sao_Paulo">America/Sao_Paulo
+											(Brasília Time)</option>
+										<option value="Africa/Johannesburg">Africa/Johannesburg
+											(South Africa Standard Time)</option>
+										<option value="Asia/Shanghai">Asia/Shanghai (China
+											Standard Time)</option>
+										<option value="UTC">UTC (Coordinated Universal Time)</option>
+								</select></td>
+							</tr>
+
+
+
+
+
+
+
+
 							<tr>
 								<td><label for="email">Email</label></td>
 								<td>
@@ -697,200 +737,151 @@ textarea {
              var xhr = new XMLHttpRequest();
              xhr.open('GET', '/addcontact', true); 
              xhr.send(); 
+
+
+            
+                	    	
+                	    	 groupContainer.style.display = groupContainer.style.display === 'none' ? 'block' : 'none';
+                	        checkboxes.forEach(checkbox => {
+                	            checkbox.style.display = checkbox.style.display === 'none' ? 'inline' : 'none';
+                	        });
+                	    }
+                	    
+                	    
+                	 document.getElementById('submitGroup').onclick = function() {
+             	        const groupName = document.getElementById('groupNamecreate').value.trim();
+             	        const method = document.getElementById('methodcreate').value.trim();
+             	        const groupid = document.getElementById('groupidcreate').value.trim();
+             	        
+             	        if (!groupName) {
+             	            alert("Please enter a group name.");
+             	            return;
+             	        }
+
+             	        const selectedIds = Array.from(checkboxes)
+             	            .filter(checkbox => checkbox.checked)
+             	            .map(checkbox => checkbox.value);
+
+             	        if (selectedIds.length === 0) {
+             	            alert("Please select at least one contact.");
+             	            return;
+             	        }
+
+             	      
+             	        const form = document.createElement('form');
+             	        form.method = 'post';
+             	        form.action = '/creategroup';
+
+             	        
+             	        const groupNameInput = document.createElement('input');
+             	        groupNameInput.type = 'hidden';
+             	        groupNameInput.name = 'groupName';
+             	        groupNameInput.value = groupName;
+             	        form.appendChild(groupNameInput);
+             	        
+             	        
+             	        const methoddata = document.createElement('input');
+             	        methoddata.type = 'hidden';
+             	        methoddata.name = 'methodtype';
+             	        methoddata.value = method;
+             	        form.appendChild(methoddata);
+             	        
+             	        
+             	        const group = document.createElement('input');
+             	        group.type = 'hidden';
+             	        group.name = 'groupdata';
+             	        group.value = groupid;
+             	        form.appendChild(group);
+             	        
+             	      
+             	        
+             	        
+
+             	        
+             	        selectedIds.forEach(id => {
+             	            const idInput = document.createElement('input');
+             	            idInput.type = 'hidden';
+             	            idInput.name = 'contact_ids'; 
+             	            idInput.value = id;
+             	            form.appendChild(idInput);
+             	        });
+
+             	        document.body.appendChild(form);
+             	        form.submit();
+             	    }
+                	 
+                	 
+                	 
+                	 
+                	 
+                	document.getElementById('updateGroup').onclick = function() {
+               		 const groupName = document.getElementById('groupNameu').value.trim();
+                        const method = document.getElementById('methodu').value.trim();
+                        const groupid = document.getElementById('groupidu').value.trim();
+             	        
+             	        if (!groupName) {
+             	            alert("Please enter a group name.");
+             	            return;
+             	        }
+
+             	        const selectedIds = Array.from(checkboxes)
+             	            .filter(checkbox => checkbox.checked)
+             	            .map(checkbox => checkbox.value);
+
+             	        if (selectedIds.length === 0) {
+             	            alert("Please select at least one contact.");
+             	            return;
+             	        }
+
+             	      
+             	        const form = document.createElement('form');
+             	        form.method = 'post';
+             	        form.action = '/creategroup';
+
+             	        
+             	        const groupNameInput = document.createElement('input');
+             	        groupNameInput.type = 'hidden';
+             	        groupNameInput.name = 'groupName';
+             	        groupNameInput.value = groupName;
+             	        form.appendChild(groupNameInput);
+             	        
+             	        
+             	        const methoddata = document.createElement('input');
+             	        methoddata.type = 'hidden';
+             	        methoddata.name = 'methodtype';
+             	        methoddata.value = method;
+             	        form.appendChild(methoddata);
+             	        
+             	        
+             	        const group = document.createElement('input');
+             	        group.type = 'hidden';
+             	        group.name = 'groupdata';
+             	        group.value = groupid;
+             	        form.appendChild(group);
+             	        
+             	      
+             	        
+             	        
+
+             	        
+             	        selectedIds.forEach(id => {
+             	            const idInput = document.createElement('input');
+             	            idInput.type = 'hidden';
+             	            idInput.name = 'contact_ids'; 
+             	            idInput.value = id;
+             	            form.appendChild(idInput);
+             	        });
+
+             	        document.body.appendChild(form);
+             	        form.submit();
+             	    }
+               	           	
+             	</script>
+
+             </body>
+             </html>
              
             
    	    	
    	    	
-   	    	 groupContainer.style.display = groupContainer.style.display === 'none' ? 'block' : 'none';
-   	        checkboxes.forEach(checkbox => {
-   	            checkbox.style.display = checkbox.style.display === 'none' ? 'inline' : 'none';
-   	        });
-   	    }
    	    
-   	    
-   	 document.getElementById('submitGroup').onclick = function() {
-	        const groupName = document.getElementById('groupNamecreate').value.trim();
-	        const method = document.getElementById('methodcreate').value.trim();
-	        const groupid = document.getElementById('groupidcreate').value.trim();
-	        
-	        if (!groupName) {
-	            alert("Please enter a group name.");
-	            return;
-	        }
-
-	        const selectedIds = Array.from(checkboxes)
-	            .filter(checkbox => checkbox.checked)
-	            .map(checkbox => checkbox.value);
-
-	        if (selectedIds.length === 0) {
-	            alert("Please select at least one contact.");
-	            return;
-	        }
-
-	      
-	        const form = document.createElement('form');
-	        form.method = 'post';
-	        form.action = '/creategroup';
-
-	        
-	        const groupNameInput = document.createElement('input');
-	        groupNameInput.type = 'hidden';
-	        groupNameInput.name = 'groupName';
-	        groupNameInput.value = groupName;
-	        form.appendChild(groupNameInput);
-	        
-	        
-	        const methoddata = document.createElement('input');
-	        methoddata.type = 'hidden';
-	        methoddata.name = 'methodtype';
-	        methoddata.value = method;
-	        form.appendChild(methoddata);
-	        
-	        
-	        const group = document.createElement('input');
-	        group.type = 'hidden';
-	        group.name = 'groupdata';
-	        group.value = groupid;
-	        form.appendChild(group);
-	        
-	      
-	        
-	        
-
-	        
-	        selectedIds.forEach(id => {
-	            const idInput = document.createElement('input');
-	            idInput.type = 'hidden';
-	            idInput.name = 'contact_ids'; 
-	            idInput.value = id;
-	            form.appendChild(idInput);
-	        });
-
-	        document.body.appendChild(form);
-	        form.submit();
-	    }
-   	 
-   	 
-   	 
-   	 
-   	 
-   	document.getElementById('updateGroup').onclick = function() {
-  		 const groupName = document.getElementById('groupNameu').value.trim();
-           const method = document.getElementById('methodu').value.trim();
-           const groupid = document.getElementById('groupidu').value.trim();
-	        
-	        if (!groupName) {
-	            alert("Please enter a group name.");
-	            return;
-	        }
-
-	        const selectedIds = Array.from(checkboxes)
-	            .filter(checkbox => checkbox.checked)
-	            .map(checkbox => checkbox.value);
-
-	        if (selectedIds.length === 0) {
-	            alert("Please select at least one contact.");
-	            return;
-	        }
-
-	      
-	        const form = document.createElement('form');
-	        form.method = 'post';
-	        form.action = '/creategroup';
-
-	        
-	        const groupNameInput = document.createElement('input');
-	        groupNameInput.type = 'hidden';
-	        groupNameInput.name = 'groupName';
-	        groupNameInput.value = groupName;
-	        form.appendChild(groupNameInput);
-	        
-	        
-	        const methoddata = document.createElement('input');
-	        methoddata.type = 'hidden';
-	        methoddata.name = 'methodtype';
-	        methoddata.value = method;
-	        form.appendChild(methoddata);
-	        
-	        
-	        const group = document.createElement('input');
-	        group.type = 'hidden';
-	        group.name = 'groupdata';
-	        group.value = groupid;
-	        form.appendChild(group);
-	        
-	      
-	        
-	        
-
-	        
-	        selectedIds.forEach(id => {
-	            const idInput = document.createElement('input');
-	            idInput.type = 'hidden';
-	            idInput.name = 'contact_ids'; 
-	            idInput.value = id;
-	            form.appendChild(idInput);
-	        });
-
-	        document.body.appendChild(form);
-	        form.submit();
-	    }
-  	    
-  	    
-	    
-	    
-   	 
-   	 
-   	   
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	 
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	    
-   	
-	</script>
-
-</body>
-</html>

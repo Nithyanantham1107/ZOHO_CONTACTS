@@ -56,51 +56,21 @@ public class UserProfileServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	  /**
+     * Handles POST requests for updating user profile information or deleting a user account.
+     *
+     * @param request the HttpServletRequest object that contains the request data
+     * @param response the HttpServletResponse object used to send a response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an input or output error occurs
+     */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
 
 			session = request.getSession(false);
-			UserData ud = (UserData) session.getAttribute("user");
-			String sessionid = so.getCustomSessionId(request.getCookies());
-			int userid = so.checkSessionAlive(sessionid);
-			if (userid != 0) {
-				if (ud == null) {
-
-					session = request.getSession();
-					ud = user_op.getUserData(userid);
-
-					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-
-					session.setAttribute("user", ud);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
-
-			} else {
-				
-
-				so.DeleteSessionData(sessionid);
-				if (session != null) {
-
-					session.invalidate();
-				}
-
-				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-				response.setHeader("Pragma", "no-cache");
-				response.setDateHeader("Expires", 0);
-				response.sendRedirect("index.jsp");
-				return;
-
-			}
-
-			// upto this session check is implemented
+			
 
 			UserData user_session_data = (UserData) session.getAttribute("user");
 
@@ -114,7 +84,10 @@ public class UserProfileServlet extends HttpServlet {
 						&& (request.getParameter("username") != null && !request.getParameter("username").isBlank())
 						&& (request.getParameter("phone") != null && !request.getParameter("phone").isBlank())
 						&& (request.getParameter("Address") != null && !request.getParameter("Address").isBlank())
-						&& (request.getParameterValues("email") != null) && !request.getParameter("email").isBlank()) {
+						&& (request.getParameterValues("email") != null) && !request.getParameter("email").isBlank()
+						
+						&& (request.getParameterValues("timezone") != null) && !request.getParameter("timezone").isBlank()
+						) {
 
 					if ((request.getParameter("Newpassword") != null && !request.getParameter("email").isBlank())
 							&& (!request.getParameter("password").isBlank()
@@ -131,6 +104,7 @@ public class UserProfileServlet extends HttpServlet {
 						ud.setEmail(request.getParameterValues("email"));
 						ud.setCurrentEmail(user_session_data.getCurrentEmail());
 						ud.setPrimaryMail(request.getParameter("primaryemail"));
+						ud.setTimezone(request.getParameter("timezone"));
 						if (uo.userDataUpdate(ud)) {
 
 							session.setAttribute("user", ud);
@@ -154,6 +128,7 @@ public class UserProfileServlet extends HttpServlet {
 
 						ud.setPrimaryMail(request.getParameter("primaryemail"));
 						ud.setCurrentEmail(user_session_data.getCurrentEmail());
+						ud.setTimezone(request.getParameter("timezone"));
 						if (uo.userDataUpdate(ud)) {
 
 							session = request.getSession(false);

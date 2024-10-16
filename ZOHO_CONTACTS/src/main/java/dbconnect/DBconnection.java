@@ -6,11 +6,23 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+/**
+ * This DBconnection class used to perform Database connection related 
+ * operations
+ * 
+ */
+
 public class DBconnection {
+	
 	 private String url = "jdbc:mysql://localhost:3306/your_database_name";
 	 private  String user = "root";
 	 private String password = "root";
 	public Connection con;
+	
+	/**
+	 * the method used to lookup the connection
+	 * @return connection object of DB
+	 */
 	public static Connection getConnection() {
 		try {
 		Context context=new InitialContext();

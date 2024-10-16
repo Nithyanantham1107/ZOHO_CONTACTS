@@ -56,10 +56,14 @@ public class SignupServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	 /**
+     * Handles POST requests for user sign-up.
+     *
+     * @param request the HttpServletRequest object that contains the request data
+     * @param response the HttpServletResponse object used to send a response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an input or output error occurs
+     */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -80,7 +84,7 @@ public class SignupServlet extends HttpServlet {
 					ud.setPrimaryMail(request.getParameter("email"));
 					ud.setPassword(request.getParameter("password"));
 					ud.setCurrentEmail(request.getParameter("email"));
-
+                    ud.setTimezone(request.getParameter("timezone"));
 					ud = user_op.createUser(ud);
 					if (ud != null) {
 						

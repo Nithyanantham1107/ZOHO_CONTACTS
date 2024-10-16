@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="ZOHO_CONTACTS">
+    <tables>
+        <table name="Login_credentials">
+            <column name="id" type="Integer" constraints="Foreign Key">
+                <description>Reference to user ID in user_data</description>
+            </column>
+            <column name="username" type="String" constraints="Primary Key">
+                <description>Unique username for login</description>
+            </column>
+        </table>
+
+        <table name="Email_user">
+            <column name="em_id" type="Integer" constraints="Foreign Key">
+                <description>Reference to user ID in user_data</description>
+            </column>
+            <column name="email" type="String" constraints="Primary Key">
+                <description>Email address of the user</description>
+            </column>
+            <column name="is_primary" type="Boolean">
+                <description>Indicates if this is the primary email</description>
+            </column>
+        </table>
+
+        <table name="user_data">
+            <column name="user_id" type="Integer" constraints="Primary Key">
+                <description>Unique identifier for each user</description>
+            </column>
+            <column name="Name" type="String">
+                <description>User's full name</description>
+            </column>
+            <column name="password" type="String">
+                <description>User's password</description>
+            </column>
+            <column name="phone_no" type="Integer" constraints="Unique">
+                <description>User's phone number</description>
+            </column>
+            <column name="address" type="String">
+                <description>User's address</description>
+            </column>
+        </table>
+
+        <table name="Contact_details">
+            <column name="user_id" type="Integer" constraints="Foreign Key">
+                <description>Reference to user ID in user_data</description>
+            </column>
+            <column name="contact_id" type="Integer" constraints="Primary Key">
+                <description>Unique identifier for each contact</description>
+            </column>
+            <column name="First_name" type="String">
+                <description>First name of the contact</description>
+            </column>
+            <column name="Middle_name" type="String">
+                <description>Middle name of the contact</description>
+            </column>
+            <column name="Last_name" type="String">
+                <description>Last name of the contact</description>
+            </column>
+            <column name="gender" type="String">
+                <description>Gender of the contact (1 character)</description>
+            </column>
+            <column name="Address" type="String">
+                <description>Address of the contact</description>
+            </column>
+        </table>
+
+        <table name="Contacts_mail">
+            <column name="contact_id" type="Integer" constraints="Foreign Key">
+                <description>Reference to contact ID in Contact_details</description>
+            </column>
+            <column name="Contact_email_id" type="String">
+                <description>Email address for the contact</description>
+            </column>
+        </table>
+
+        <table name="Contacts_phone">
+            <column name="contact_id" type="Integer" constraints="Foreign Key">
+                <description>Reference to contact ID in Contact_details</description>
+            </column>
+            <column name="Contact_phone_no" type="Integer">
+                <description>Phone number for the contact</description>
+            </column>
+        </table>
+
+        <table name="Category_relation">
+            <column name="contact_id_to_join" type="Integer" constraints="Foreign Key">
+                <description>Reference to contact ID in Contact_details</description>
+            </column>
+            <column name="Category_id" type="Integer" constraints="Foreign Key">
+                <description>Reference to category ID in Category</description>
+            </column>
+        </table>
+
+        <table name="Category">
+            <column name="Category_id" type="Integer" constraints="Primary Key">
+                <description>Unique identifier for each category</description>
+            </column>
+            <column name="Category_name" type="String">
+                <description>Name of the category</description>
+            </column>
+            <column name="created_by" type="Integer" constraints="Foreign Key">
+                <description>Reference to user ID who created the category</description>
+            </column>
+        </table>
+
+        <table name="Session">
+            <column name="session_id" type="String">
+                <description>Unique identifier for the session</description>
+            </column>
+            <column name="session_expire" type="DateTime">
+                <description>Expiration timestamp of the session</description>
+            </column>
+            <column name="user_id" type="Integer" constraints="Foreign Key">
+                <description>Reference to user ID in user_data</description>
+            </column>
+        </table>
+    </tables>
+
+    <relationships>
+        <relationship>
+            <from table="Login_credentials" column="id" />
+            <to table="user_data" column="user_id" />
+        </relationship>
+        <relationship>
+            <from table="Email_user" column="em_id" />
+            <to table="user_data" column="user_id" />
+        </relationship>
+        <relationship>
+            <from table="Contact_details" column="user_id" />
+            <to table="user_data" column="user_id" />
+        </relationship>
+        <relationship>
+            <from table="Contacts_mail" column="contact_id" />
+            <to table="Contact_details" column="contact_id" />
+        </relationship>
+        <relationship>
+            <from table="Contacts_phone" column="contact_id" />
+            <to table="Contact_details" column="contact_id" />
+        </relationship>
+        <relationship>
+            <from table="Category_relation" column="contact_id_to_join" />
+            <to table="Contact_details" column="contact_id" />
+        </relationship>
+        <relationship>
+            <from table="Category_relation" column="Category_id" />
+            <to table="Category" column="Category_id" />
+        </relationship>
+        <relationship>
+            <from table="Category" column="created_by" />
+            <to table="Contact_details" column="user_id" />
+        </relationship>
+        <relationship>
+            <from table="Session" column="user_id" />
+            <to table="user_data" column="user_id" />
+        </relationship>
+    </relationships>
+</database>

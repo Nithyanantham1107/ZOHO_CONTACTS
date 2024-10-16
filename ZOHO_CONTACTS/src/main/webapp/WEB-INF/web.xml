@@ -10,7 +10,7 @@
   
     <filter>
         <filter-name>Sessionfilter</filter-name>
-        <filter-class>SessionFilter</filter-class>
+        <filter-class>filter.SessionFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Sessionfilter</filter-name>
@@ -18,7 +18,10 @@
     </filter-mapping>
   
   
+  <listener>
   
+  <listener-class>listener.ServerListener</listener-class>
+  </listener>
 
   <servlet>
   <servlet-name>login</servlet-name>

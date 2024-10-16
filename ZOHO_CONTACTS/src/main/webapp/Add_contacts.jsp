@@ -144,17 +144,49 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
      
   
 </div>
+
+
+
+ <input type="hidden" id="localDateTime" name="localDateTime">
+        <input type="hidden" id="timeZoneId" name="timeZoneId">
+        <input type="hidden" id="utcDateTime" name="utcDateTime">
+
+
            <label for="address">Address</label>
             <textarea rows="3" cols="20" name="Address" required></textarea>
          
         
-            <input type="submit" value="Add" />
+            <input type="submit"  onclick="prepareFormData()" value="Add" />
         </form>
         <form action="/Dashboard.jsp" method="get">
             <input type="submit" value="Back" class="back-btn" />
         </form>
     </div>
 
+
+
+<script>
+
+function prepareFormData() {
+    
+    let localDate = new Date();  
+
+
+    let timeZoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+   
+    let utcDate = localDate.toISOString();  
+
+   
+    document.getElementById('localDateTime').value = localDate.toISOString(); 
+    document.getElementById('timeZoneId').value = timeZoneId;   
+     
+    document.getElementById('utcDateTime').value = utcDate;                     
+}
+
+
+
+</script>
 
 </body>
 </html>

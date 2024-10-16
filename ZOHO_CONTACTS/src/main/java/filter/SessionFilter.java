@@ -1,3 +1,4 @@
+package filter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -59,13 +60,13 @@ public class SessionFilter implements Filter {
 			}
 			HttpSession session = httpRequest.getSession(false);
 			UserData ud = (UserData) session.getAttribute("user");
-			System.out.println((ud==null) +"herre see data");
+		
 			String sessionid = so.getCustomSessionId(httpRequest.getCookies());
 			System.out.println("here data is session "+sessionid);
 			if(sessionid==null) {
-				System.out.println("heshdjshvsdjs dude!!");
+				
 				httpResponse.sendRedirect("index.jsp");
-				System.out.println("firs..");
+			
 				return;
 				
 			}
