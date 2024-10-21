@@ -1,7 +1,5 @@
-
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -9,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
@@ -18,45 +15,44 @@ import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import validation.UserValidation;
+import loggerfiles.LoggerSet;
 
 /**
- * Servlet implementation class Signup_servlet
+ * Servlet implementation class SignupServlet
  */
-
 public class SignupServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	UserOperation user_op;
-	UserData ud;
-	UserGroupOperation ugo;
-	UserContactOperation uco;
-	UserValidation uservalidate;
-	HttpSession session;
-	SessionOperation so;
+    private static final long serialVersionUID = 1L;
+    UserOperation user_op;
+    UserData ud;
+    UserGroupOperation ugo;
+    UserContactOperation uco;
+    UserValidation uservalidate;
+    HttpSession session;
+    SessionOperation so;
+    LoggerSet logger; // LoggerSet instance
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public SignupServlet() {
-		super();
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public SignupServlet() {
+        super();
+        user_op = new UserOperation();
+        uservalidate = new UserValidation();
+        uco = new UserContactOperation();
+        ugo = new UserGroupOperation();
+        so = new SessionOperation();
+        logger = new LoggerSet(); // Initialize logger
+    }
 
-		user_op = new UserOperation();
-		uservalidate = new UserValidation();
-	    uco=new UserContactOperation();
-	    ugo=new UserGroupOperation();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.getWriter().append("Served at: ").append(request.getContextPath());
+    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	 /**
+    /**
      * Handles POST requests for user sign-up.
      *
      * @param request the HttpServletRequest object that contains the request data
@@ -64,77 +60,65 @@ public class SignupServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an input or output error occurs
      */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		try {
-			if (    (request.getParameter("password") != null && ! request.getParameter("password").isBlank()) && 
-					(request.getParameter("Name") != null  && ! request.getParameter("Name").isBlank()) &&
-					(request.getParameter("phone") != null  && ! request.getParameter("phone").isBlank())&& 
-					(request.getParameter("Address") != null &&  ! request.getParameter("Address").isBlank()) &&
-					(request.getParameter("email") != null && ! request.getParameter("Name").isBlank())) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if ((request.getParameter("password") != null && !request.getParameter("password").isBlank()) &&
+                (request.getParameter("Name") != null && !request.getParameter("Name").isBlank()) &&
+                (request.getParameter("phone") != null && !request.getParameter("phone").isBlank()) &&
+                (request.getParameter("Address") != null && !request.getParameter("Address").isBlank()) &&
+                (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
 
-				if (uservalidate.validateUserPassword(request.getParameter("password"))) {
-					ud = new UserData();
-					System.out.println(request.getParameter("username") + "and" + request.getParameter("password"));
-					ud.setName(request.getParameter("Name"));
-					ud.setAddress(request.getParameter("Address"));
-					ud.setUserName(request.getParameter("username"));
-					ud.setPhoneno(request.getParameter("phone"));
-					ud.setPrimaryMail(request.getParameter("email"));
-					ud.setPassword(request.getParameter("password"));
-					ud.setCurrentEmail(request.getParameter("email"));
+                if (uservalidate.validateUserPassword(request.getParameter("password"))) {
+                    ud = new UserData();
+                    ud.setName(request.getParameter("Name"));
+                    ud.setAddress(request.getParameter("Address"));
+                    ud.setUserName(request.getParameter("username"));
+                    ud.setPhoneno(request.getParameter("phone"));
+                    ud.setPrimaryMail(request.getParameter("email"));
+                    ud.setPassword(request.getParameter("password"));
+                    ud.setCurrentEmail(request.getParameter("email"));
                     ud.setTimezone(request.getParameter("timezone"));
-					ud = user_op.createUser(ud);
-					if (ud != null) {
-						
-						  so=new SessionOperation();
-	                        String sessionid=so.generateSessionId(ud.getUserId());	
-	                        Cookie sessionCookie = new Cookie("SESSIONID", sessionid);
-	                        sessionCookie.setHttpOnly(true); 
-	                       
-	                  
-	                        response.addCookie(sessionCookie);
+                    ud = user_op.createUser(ud);
+                    
+                    if (ud != null) {
+                        so = new SessionOperation();
+                        String sessionid = so.generateSessionId(ud.getUserId());
+                        Cookie sessionCookie = new Cookie("SESSIONID", sessionid);
+                        sessionCookie.setHttpOnly(true);
+                        response.addCookie(sessionCookie);
 
-						session = request.getSession();
-						session.setAttribute("user", ud);
-						ArrayList<UserContacts> uc=uco.viewAllUserContacts(ud.getUserId());
-						ArrayList<UserGroup> ug=ugo.viewAllGroup(ud.getUserId());
-						session.setAttribute("usercontact", uc);
-						session.setAttribute("usergroup", ug);
-						response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
-				        response.setHeader("Pragma", "no-cache"); 
-				        response.setDateHeader("Expires", 0);
+                        session = request.getSession();
+                        session.setAttribute("user", ud);
+                        ArrayList<UserContacts> uc = uco.viewAllUserContacts(ud.getUserId());
+                        ArrayList<UserGroup> ug = ugo.viewAllGroup(ud.getUserId());
+                        session.setAttribute("usercontact", uc);
+                        session.setAttribute("usergroup", ug);
+                        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                        response.setHeader("Pragma", "no-cache");
+                        response.setDateHeader("Expires", 0);
+                        response.sendRedirect("Dashboard.jsp");
 
-						response.sendRedirect("Dashboard.jsp");
-					} else {
-						request.setAttribute("errorMessage", "An error occured while creating user");
-			            request.getRequestDispatcher("Signup.jsp").forward(request, response);
-						
-					}
-
-				} else {
-					System.out.println("password should contain atleast one Lower case ,one Upper case and numbers");
-					request.setAttribute("errorMessage", "password is too long or cases and number are");
-		            request.getRequestDispatcher("Signup.jsp").forward(request, response);
-					
-				}
-			} else {
-				
-				request.setAttribute("errorMessage", "Parameter should not be empty!!");
-	            request.getRequestDispatcher("Signup.jsp").forward(request, response);
-			
-			}
-
-//			PrintWriter out=response.getWriter();
-//			out.print("<h1> hello hi i  post</h1>");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.setAttribute("errorMessage", e);
+                        logger.logInfo("SignupServlet", "doPost", "User signed up successfully: " + ud.getUserName());
+                    } else {
+                        logger.logWarning("SignupServlet", "doPost", "User creation failed.");
+                        request.setAttribute("errorMessage", "An error occurred while creating user");
+                        request.getRequestDispatcher("Signup.jsp").forward(request, response);
+                    }
+                } else {
+                    logger.logWarning("SignupServlet", "doPost", "Password validation failed for user: " + request.getParameter("username"));
+                    request.setAttribute("errorMessage", "Password should contain at least one lower case, one upper case, and numbers.");
+                    request.getRequestDispatcher("Signup.jsp").forward(request, response);
+                }
+            } else {
+                logger.logWarning("SignupServlet", "doPost", "Required parameters are missing.");
+                request.setAttribute("errorMessage", "Parameters should not be empty!");
+                request.getRequestDispatcher("Signup.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            logger.logError("SignupServlet", "doPost", "Exception occurred during signup", e);
+            request.setAttribute("errorMessage", e);
             request.getRequestDispatcher("Signup.jsp").forward(request, response);
-			
-		}
-	}
-
+        }
+    }
 }

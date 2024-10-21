@@ -1,62 +1,57 @@
 package querybuilder;
 
+import java.io.FileInputStream;
+import java.lang.classfile.TypeAnnotation.ThrowsTarget;
+import java.util.HashMap;
+import java.util.Properties;
 
+public class SqlQueryBuilder {
 
+	private String tableName;
 
-import java.util.ArrayList;
-import java.util.List;
+	private static String getDBType() {
 
-public class  SqlQueryBuilder {
-    private StringBuilder query;
-    private List<Object> parameters; 
+		Properties property = new Properties();
+		System.out.println("check1");
+		try (FileInputStream fis = new FileInputStream(
+				"/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/database.properties")) {
+			property.load(fis);
+			System.out.println("check2");
 
-    public  SqlQueryBuilder() {
-        query = new StringBuilder();
-        parameters = new ArrayList<>();
-    }
+			return property.getProperty("database.type");
 
-    public  SqlQueryBuilder select(String... columns) {
-        query.append("SELECT ");
-        query.append(String.join(", ", columns));
-        query.append(" ");
-        return this;
-    }
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
 
-    public  SqlQueryBuilder from(String table) {
-        query.append("FROM ").append(table).append(" ");
-        return this;
-    }
+		}
 
-    public  SqlQueryBuilder where(String condition, Object... params) {
-        query.append("WHERE ").append(condition).append(" ");
-        addParameters(params);
-        return this;
-    }
+	}
 
-    public  SqlQueryBuilder and(String condition, Object... params) {
-        query.append("AND ").append(condition).append(" ");
-        addParameters(params);
-        return this;
-    }
+	public QueryBuilder createQueryBuilder() {
+		try {
 
-    public  SqlQueryBuilder or(String condition, Object... params) {
-        query.append("OR ").append(condition).append(" ");
-        addParameters(params);
-        return this;
-    }
+			String DBtype = getDBType();
+			if (DBtype == null) {
+				throw new NullPointerException("the DB type is not set");
+			}
+			switch (DBtype.toLowerCase()) {
 
-    public String build() {
-        return query.toString().trim() + ";"; 
-    }
+			case "mysql":
+				return new MysqlBuilder();
 
-    public List<Object> getParameters() {
-        return parameters;
-    }
+			case "postgresql":
+				return new PostgresBuilder();
+			default:
+				throw new Exception("Unsupported Database...");
+			}
 
-    private void addParameters(Object... params) {
-        for (Object param : params) {
-            parameters.add(param);
-        }
-    }
+		} catch (Exception e) {
+			System.out.println(e);
+
+		}
+		return null;
+
+	}
+
 }
-

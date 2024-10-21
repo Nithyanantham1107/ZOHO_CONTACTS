@@ -5,15 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
-
 import dbconnect.DBconnection;
 import dbmodel.UserData;
+import loggerfiles.LoggerSet;
 
-/**
- * This class provides operations for managing user data,
- * including creating, updating, retrieving, and deleting user profiles.
- */
 public class UserOperation {
+
+    private LoggerSet logger = new LoggerSet();
 
     /**
      * Creates a new user in the database.
@@ -41,6 +39,7 @@ public class UserOperation {
 
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserOperation", "createUser", "Failed to insert user data", null);
                 return null;
             }
 
@@ -56,6 +55,7 @@ public class UserOperation {
 
                 if (val == 0) {
                     con.rollback();
+                    logger.logError("UserOperation", "createUser", "Failed to insert login credentials", null);
                     return null;
                 }
 
@@ -68,15 +68,18 @@ public class UserOperation {
 
                 if (val == 0) {
                     con.rollback();
+                    logger.logError("UserOperation", "createUser", "Failed to insert email data", null);
                     return null;
                 }
                 data.setUserId(genUserId);
             }
             con.commit();
+            logger.logInfo("UserOperation", "createUser", "User created successfully: " + data.getUserName());
             return data;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserOperation", "createUser", "Exception occurred: " + e.getMessage(), e);
+            con.rollback(); // Ensure rollback in case of exception
         } finally {
             con.close();
         }
@@ -98,13 +101,11 @@ public class UserOperation {
             ResultSet val;
 
             if (ud.getUserName().contains("@")) {
-                // Verification using Email
                 ps = con.prepareStatement(
                     "SELECT * FROM user_data ud LEFT JOIN Login_credentials lg ON ud.user_id = lg.id " +
                     "LEFT JOIN Email_user eu ON lg.id = eu.em_id WHERE email = ?;");
                 ps.setString(1, ud.getUserName());
             } else {
-                // Verification using Username
                 ps = con.prepareStatement(
                     "SELECT * FROM user_data ud LEFT JOIN Login_credentials lg ON ud.user_id = lg.id " +
                     "LEFT JOIN Email_user eu ON lg.id = eu.em_id WHERE username = ?;");
@@ -133,13 +134,15 @@ public class UserOperation {
                     i++;
                 }
                 ud.setEmail(email);
+                logger.logInfo("UserOperation", "isUser", "User verified successfully: " + ud.getUserName());
                 return ud;
             } else {
+                logger.logError("UserOperation", "isUser", "Invalid credentials for user: " + ud.getUserName(), null);
                 return null;
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserOperation", "isUser", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -159,7 +162,6 @@ public class UserOperation {
             String password = BCrypt.hashpw(ud.getPassword(), BCrypt.gensalt());
             con.setAutoCommit(false);
 
-            // Update user data
             PreparedStatement ps = con.prepareStatement(
                 "UPDATE user_data SET Name = ?, phone_no = ?, address = ?, password = ?, timezone = ? WHERE user_id = ?;");
             ps.setString(1, ud.getName());
@@ -172,10 +174,10 @@ public class UserOperation {
 
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserOperation", "userDataUpdate", "Failed to update user data", null);
                 return false;
             }
 
-            // Update login credentials
             ps = con.prepareStatement("UPDATE Login_credentials SET username = ? WHERE id = ?;");
             ps.setString(1, ud.getUserName());
             ps.setInt(2, ud.getUserId());
@@ -183,20 +185,20 @@ public class UserOperation {
 
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserOperation", "userDataUpdate", "Failed to update login credentials", null);
                 return false;
             }
 
-            // Delete existing emails
             ps = con.prepareStatement("DELETE FROM Email_user WHERE em_id = ?;");
             ps.setInt(1, ud.getUserId());
             val = ps.executeUpdate();
 
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserOperation", "userDataUpdate", "Failed to delete existing emails", null);
                 return false;
             }
 
-            // Insert new emails
             for (String email : ud.getEmail()) {
                 if (email != null) {
                     ps = con.prepareStatement("INSERT INTO Email_user VALUES (?, ?, ?);");
@@ -206,15 +208,18 @@ public class UserOperation {
                     val = ps.executeUpdate();
                     if (val == 0) {
                         con.rollback();
+                        logger.logError("UserOperation", "userDataUpdate", "Failed to insert new email: " + email, null);
                         return false;
                     }
                 }
             }
             con.commit();
+            logger.logInfo("UserOperation", "userDataUpdate", "User data updated successfully for: " + ud.getUserName());
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserOperation", "userDataUpdate", "Exception occurred: " + e.getMessage(), e);
+            con.rollback(); // Ensure rollback in case of exception
         } finally {
             con.close();
         }
@@ -234,9 +239,15 @@ public class UserOperation {
             PreparedStatement ps = con.prepareStatement("DELETE FROM user_data WHERE user_id = ?;");
             ps.setInt(1, userId);
             int val = ps.executeUpdate();
-            return val != 0;
+            if (val != 0) {
+                logger.logInfo("UserOperation", "deleteUserProfile", "User profile deleted successfully for userId: " + userId);
+                return true;
+            } else {
+                logger.logError("UserOperation", "deleteUserProfile", "Failed to delete user profile for userId: " + userId, null);
+                return false;
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserOperation", "deleteUserProfile", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -246,8 +257,8 @@ public class UserOperation {
     /**
      * Retrieves user data by user ID.
      *
-     * @param userId the ID of the user
-     * @return the UserData object or null if not found
+     * @param userId the ID of the user to retrieve
+     * @return the UserData object containing user details or null if not found
      * @throws SQLException if a database access error occurs
      */
     public UserData getUserData(int userId) throws SQLException {
@@ -267,9 +278,10 @@ public class UserOperation {
                 ud.setAddress(val.getString(5));
                 ud.setTimezone(val.getString(6));
                 ud.setUserName(val.getString(8));
+               
 
                 ps = con.prepareStatement("SELECT email, is_primary FROM Email_user WHERE em_id = ?;");
-                ps.setInt(1, ud.getUserId());
+                ps.setInt(1, userId);
                 val = ps.executeQuery();
                 int i = 0;
                 while (val.next() && i < 5) {
@@ -280,10 +292,13 @@ public class UserOperation {
                     i++;
                 }
                 ud.setEmail(email);
+                logger.logInfo("UserOperation", "getUserData", "User data retrieved successfully for userId: " + userId);
                 return ud;
+            } else {
+                logger.logError("UserOperation", "getUserData", "No user found for userId: " + userId, null);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserOperation", "getUserData", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }

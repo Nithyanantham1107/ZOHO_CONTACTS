@@ -1,108 +1,80 @@
-
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dbmodel.UserGroup;
 import dboperation.SessionOperation;
-import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
-import dboperation.UserOperation;
+import loggerfiles.LoggerSet;
 
 /**
  * Servlet implementation class UpdateUserGroupServlet
  */
-
 public class UpdateUserGroupServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	UserGroupOperation ugo;
-	UserGroup ug;
-	HttpSession session;
-	SessionOperation so;
-	UserOperation user_op;
-	UserContactOperation uco;
+    private static final long serialVersionUID = 1L;
+    UserGroupOperation ugo;
+    UserGroup ug;
+    HttpSession session;
+    SessionOperation so;
+    LoggerSet logger; // LoggerSet instance
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public UpdateUserGroupServlet() {
-		super();
-		ugo = new UserGroupOperation();
-		ug = new UserGroup();
-		so = new SessionOperation();
-		uco = new UserContactOperation();
-		user_op = new UserOperation();
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public UpdateUserGroupServlet() {
+        super();
+        ugo = new UserGroupOperation();
+        ug = new UserGroup();
+        so = new SessionOperation();
+        logger = new LoggerSet(); // Initialize logger
+    }
 
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	 /**
-     * Handles POST requests for updating user contact information.
+    /**
+     * Handles POST requests for updating user group information.
      *
      * @param request the HttpServletRequest object that contains the request data
      * @param response the HttpServletResponse object used to send a response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an input or output error occurs
      */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            if ((request.getParameter("groupid") != null && !request.getParameter("groupid").isBlank())
+                    && (request.getParameter("groupName") != null && !request.getParameter("groupName").isBlank())) {
 
-		try {
+                session = request.getSession(false);
+                UserData ud = (UserData) session.getAttribute("user");
+                ug.setUserid(ud.getUserId());
+                ug.setGroupid(Integer.parseInt(request.getParameter("groupid")));
+                ug.setGroupName(request.getParameter("groupName"));
 
-			// upto this session check is implemented
+                int[] value = ugo.viewUserGroupContact(ug.getGroupid(), ug.getUserid());
+                if (value != null) {
+                    ug.setcontactid(value);
+                } else {
+                    logger.logWarning("UpdateUserGroupServlet", "doPost", "Group contact is null for Group ID: " + ug.getGroupid());
+                }
 
-			if ((request.getParameter("groupid") != null && !request.getParameter("groupid").isBlank())
-					&& (request.getParameter("groupName") != null && !request.getParameter("groupName").isBlank())
+                request.setAttribute("usergroupupdate", ug);
+                request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+                logger.logInfo("UpdateUserGroupServlet", "doPost", "User group updated successfully: " + ug.getGroupName());
 
-			) {
-				session = request.getSession(false);
-				UserData ud = (UserData) session.getAttribute("user");
-				ug.setUserid(ud.getUserId());
-				ug.setGroupid(Integer.parseInt(request.getParameter("groupid")));
-				ug.setGroupName(request.getParameter("groupName"));
-				int[] value = ugo.viewUserGroupContact(ug.getGroupid(), ug.getUserid());
-				if (value != null) {
-					ug.setcontactid(value);
-				} else {
-					System.out.println("group contact is null");
-//					request.setAttribute("errorMessage", "group contact is null");
-//		            request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
-				}
+            } else {
+                logger.logWarning("UpdateUserGroupServlet", "doPost", "Group name should not be empty.");
+                request.setAttribute("errorMessage", "Group name should not be empty.");
+                request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+            }
 
-				request.setAttribute("usergroupupdate", ug);
-				request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
-
-			} else {
-				System.out.println("group should not empty ");
-				request.setAttribute("errorMessage", "groupname should not be empty");
-				request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
-			}
-
-		} catch (Exception e) {
-			System.out.println(e);
-			request.setAttribute("errorMessage", e);
-			request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
-		}
-	}
-
+        } catch (Exception e) {
+            logger.logError("UpdateUserGroupServlet", "doPost", "Exception occurred while updating user group.", e);
+            request.setAttribute("errorMessage", "An error occurred while processing your request.");
+            request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+        }
+    }
 }

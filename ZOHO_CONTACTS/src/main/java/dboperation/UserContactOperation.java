@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import dbconnect.DBconnection;
 import dbmodel.UserContacts;
+import loggerfiles.LoggerSet;
 
 /**
  * This class provides operations for managing user contacts,
@@ -14,7 +15,7 @@ import dbmodel.UserContacts;
  */
 public class UserContactOperation {
     UserContacts uc;
-    Connection con;
+    private LoggerSet logger = new LoggerSet();
 
     /**
      * Adds a new user contact to the database.
@@ -41,6 +42,7 @@ public class UserContactOperation {
             int val = ps.executeUpdate();
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserContactOperation", "addUserContact", "Failed to insert contact: " + uc.getFname(), null);
                 return null;
             }
             ResultSet id = ps.getGeneratedKeys();
@@ -54,6 +56,7 @@ public class UserContactOperation {
                 val = ps.executeUpdate();
                 if (val == 0) {
                     con.rollback();
+                    logger.logError("UserContactOperation", "addUserContact", "Failed to insert email for contact ID: " + gen_contact_id, null);
                     return null;
                 }
 
@@ -63,13 +66,16 @@ public class UserContactOperation {
                 val = ps.executeUpdate();
                 if (val == 0) {
                     con.rollback();
+                    logger.logError("UserContactOperation", "addUserContact", "Failed to insert phone number for contact ID: " + gen_contact_id, null);
                     return null;
                 }
             }
             con.commit();
+            logger.logInfo("UserContactOperation", "addUserContact", "Contact added successfully: " + uc.getFname());
             return uc;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserContactOperation", "addUserContact", "Exception occurred: " + e.getMessage(), e);
+            con.rollback(); // Ensure rollback in case of exception
         } finally {
             con.close();
         }
@@ -107,9 +113,10 @@ public class UserContactOperation {
 
                 user_contacts.add(uc);
             }
+            logger.logInfo("UserContactOperation", "viewAllUserContacts", "Contacts retrieved for user ID: " + user_id);
             return user_contacts;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserContactOperation", "viewAllUserContacts", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -131,9 +138,14 @@ public class UserContactOperation {
             ps.setInt(1, user_id);
             ps.setInt(2, contact_id);
             int result = ps.executeUpdate();
+            if (result > 0) {
+                logger.logInfo("UserContactOperation", "deleteContact", "Contact deleted successfully: " + contact_id);
+            } else {
+                logger.logError("UserContactOperation", "deleteContact", "Failed to delete contact ID: " + contact_id, null);
+            }
             return result > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserContactOperation", "deleteContact", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -168,13 +180,14 @@ public class UserContactOperation {
                 uc.setAddress(contact.getString(7));
                 uc.setEmail(contact.getString(10));
                 uc.setPhoneno(contact.getString(12));
+                logger.logInfo("UserContactOperation", "viewSpecificUserContact", "Contact retrieved successfully for contact ID: " + contact_id);
                 return uc;
             } else {
-                System.out.println("No contact data available for this user_id");
+                logger.logWarning("UserContactOperation", "viewSpecificUserContact", "No contact data available for user ID: " + user_id + ", contact ID: " + contact_id);
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserContactOperation", "viewSpecificUserContact", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -205,6 +218,7 @@ public class UserContactOperation {
             int val = ps.executeUpdate();
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserContactOperation", "updateSpecificUserContact", "Failed to update contact ID: " + uc.getContactid(), null);
                 return false;
             }
 
@@ -215,6 +229,7 @@ public class UserContactOperation {
             val = ps.executeUpdate();
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserContactOperation", "updateSpecificUserContact", "Failed to update email for contact ID: " + uc.getContactid(), null);
                 return false;
             }
 
@@ -225,12 +240,15 @@ public class UserContactOperation {
             val = ps.executeUpdate();
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserContactOperation", "updateSpecificUserContact", "Failed to update phone number for contact ID: " + uc.getContactid(), null);
                 return false;
             }
             con.commit();
+            logger.logInfo("UserContactOperation", "updateSpecificUserContact", "Contact updated successfully: " + uc.getContactid());
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserContactOperation", "updateSpecificUserContact", "Exception occurred: " + e.getMessage(), e);
+            con.rollback(); // Ensure rollback in case of exception
         } finally {
             con.close();
         }

@@ -22,6 +22,7 @@ import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import loggerfiles.LoggerSet;
 
 public class SessionFilter implements Filter {
 
@@ -29,6 +30,7 @@ public class SessionFilter implements Filter {
 	UserOperation uo;
 	UserContactOperation uco;
 	UserGroupOperation ugo;
+	LoggerSet logger;
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -36,6 +38,7 @@ public class SessionFilter implements Filter {
 		uo = new UserOperation();
 		uco = new UserContactOperation();
 		ugo = new UserGroupOperation();
+		logger=new LoggerSet();
 
 	}
 
@@ -110,7 +113,18 @@ public class SessionFilter implements Filter {
 				httpResponse.sendRedirect("index.jsp");
 
 			}
-			
+			  String clientIp = httpRequest.getRemoteAddr();
+		        String resource = httpRequest.getRequestURI();
+		        String httpMethod = "GET";
+		        int responseStatus = HttpServletResponse.SC_OK; 
+		        String userAgent = httpRequest.getHeader("User-Agent");
+
+		        
+
+		        
+
+		        
+		       logger.logAccessSet(clientIp, resource, httpMethod, responseStatus, userAgent);
 			
 			System.out.println("hello im filter");
 			chain.doFilter(request, response);

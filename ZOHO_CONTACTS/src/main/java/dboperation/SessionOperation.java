@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import javax.servlet.http.Cookie;
 import org.mindrot.jbcrypt.BCrypt;
 import dbconnect.DBconnection;
+import loggerfiles.LoggerSet;
 
 /**
  * This class handles session operations such as generating session IDs,
@@ -16,6 +17,11 @@ import dbconnect.DBconnection;
  * the status of a session.
  */
 public class SessionOperation {
+    private LoggerSet logger; // LoggerSet instance
+
+    public SessionOperation() {
+        logger = new LoggerSet(); // Initialize logger
+    }
 
     /**
      * Generates a unique session ID for a user and stores it in the database.
@@ -31,7 +37,7 @@ public class SessionOperation {
         String sessionplaintext = uuid + timestamp + user_id;
         String sessionid = BCrypt.hashpw(sessionplaintext, BCrypt.gensalt());
         Timestamp sessionexpire = new Timestamp(timestamp + sessiontimeout);
-        System.out.println("Created session ID: " + sessionid);
+        logger.logInfo("SessionOperation", "generateSessionId", "Created session ID: " + sessionid);
         Connection con = DBconnection.getConnection();
         
         try {
@@ -42,7 +48,7 @@ public class SessionOperation {
             ps.setInt(3, user_id);
             int val = ps.executeUpdate();
             if (val == 0) {
-                System.out.println("Error inserting into Session table");
+                logger.logWarning("SessionOperation", "generateSessionId", "Error inserting into Session table");
                 con.rollback();
                 return null;
             }
@@ -50,7 +56,7 @@ public class SessionOperation {
             con.commit();
             return sessionid;
         } catch (Exception e) {
-            System.out.println(e);
+            logger.logError("SessionOperation", "generateSessionId", "Exception occurred", e);
         } finally {
             con.close();
         }
@@ -68,7 +74,7 @@ public class SessionOperation {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("SESSIONID".equals(cookie.getName())) {
-                    System.out.println(cookie.getValue() + " - Cookie value found");
+                    logger.logInfo("SessionOperation", "getCustomSessionId", "Cookie value found: " + cookie.getValue());
                     return cookie.getValue();
                 }
             }
@@ -91,16 +97,16 @@ public class SessionOperation {
                 ps.setString(1, sessionid);
                 int val = ps.executeUpdate();
                 if (val == 0) {
-                    System.out.println("Error deleting the session");
+                    logger.logWarning("SessionOperation", "DeleteSessionData", "Error deleting the session");
                     return false;
                 }
             } else {
-                System.out.println("Session ID is null");
+                logger.logWarning("SessionOperation", "DeleteSessionData", "Session ID is null");
                 return false;
             }
             return true;
         } catch (Exception e) {
-            System.out.println(e);
+            logger.logError("SessionOperation", "DeleteSessionData", "Exception occurred", e);
         } finally {
             con.close();
         }
@@ -131,21 +137,21 @@ public class SessionOperation {
             }
 
             con.setAutoCommit(false);
-            currenttime = new Timestamp(System.currentTimeMillis() + (30 * 60 * 1000)); // Extend session by 30 minutes
-            System.out.println("Updated session expiration time: " + currenttime);
+            currenttime = new Timestamp(System.currentTimeMillis() + (30 * 60 * 1000)); 
+            logger.logInfo("SessionOperation", "checkSessionAlive", "Updated session expiration time: " + currenttime);
             ps = con.prepareStatement("UPDATE Session SET session_expire = ? WHERE session_id = ?");
             ps.setTimestamp(1, currenttime);
             ps.setString(2, sessionid);
             int result = ps.executeUpdate();
             if (result == 0) {
-                System.out.println("Error updating the session table: " + sessionid);
+                logger.logWarning("SessionOperation", "checkSessionAlive", "Error updating the session table: " + sessionid);
                 con.rollback();
                 return 0;
             }
 
             return userid;
         } catch (Exception e) {
-            System.out.println(e);
+            logger.logError("SessionOperation", "checkSessionAlive", "Exception occurred", e);
         } finally {
             con.close();
         }

@@ -5,16 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import dbconnect.DBconnection;
 import dbmodel.UserGroup;
+import loggerfiles.LoggerSet;
 
-/**
- * This class provides operations for managing user groups,
- * including creating, viewing, updating, and deleting groups.
- */
 public class UserGroupOperation {
     UserGroup ug;
+    private LoggerSet logger = new LoggerSet();
 
     /**
      * Creates a new user group in the database.
@@ -33,6 +30,7 @@ public class UserGroupOperation {
             int val = ps.executeUpdate();
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserGroupOperation", "createGroup", "Failed to insert group: " + ug.getGroupName(), null);
                 return false;
             }
             ResultSet groups = ps.getGeneratedKeys();
@@ -40,6 +38,7 @@ public class UserGroupOperation {
             if (groups.next()) {
                 groupid = groups.getInt(1);
             } else {
+                logger.logError("UserGroupOperation", "createGroup", "Failed to retrieve generated group ID", null);
                 return false;
             }
 
@@ -50,14 +49,17 @@ public class UserGroupOperation {
                 val = ps.executeUpdate();
                 if (val == 0) {
                     con.rollback();
+                    logger.logError("UserGroupOperation", "createGroup", "Failed to insert contact ID: " + i + " for group: " + ug.getGroupName(), null);
                     return false;
                 }
             }
 
             con.commit();
+            logger.logInfo("UserGroupOperation", "createGroup", "Group created successfully: " + ug.getGroupName());
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserGroupOperation", "createGroup", "Exception occurred: " + e.getMessage(), e);
+            con.rollback(); // Ensure rollback in case of exception
         } finally {
             con.close();
         }
@@ -87,9 +89,10 @@ public class UserGroupOperation {
                 ug.setUserid(val.getInt(3));
                 usergroups.add(ug);
             }
+            logger.logInfo("UserGroupOperation", "viewAllGroup", "Groups retrieved for user ID: " + userid);
             return usergroups;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserGroupOperation", "viewAllGroup", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -110,12 +113,13 @@ public class UserGroupOperation {
             ps.setInt(1, groupid);
             int val = ps.executeUpdate();
             if (val == 0) {
-                System.out.println("Error in deleting the group data in Category table");
+                logger.logError("UserGroupOperation", "deleteUserGroup", "Failed to delete group with ID: " + groupid, null);
                 return false;
             }
+            logger.logInfo("UserGroupOperation", "deleteUserGroup", "Group deleted successfully: " + groupid);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserGroupOperation", "deleteUserGroup", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -146,9 +150,10 @@ public class UserGroupOperation {
             for (int i = 0; i < data.size(); i++) {
                 contactid[i] = data.get(i);
             }
+            logger.logInfo("UserGroupOperation", "viewUserGroupContact", "Contacts retrieved for group ID: " + groupid);
             return contactid;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(), e);
         } finally {
             con.close();
         }
@@ -172,6 +177,7 @@ public class UserGroupOperation {
             int val = ps.executeUpdate();
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserGroupOperation", "updateUserGroup", "Failed to update group ID: " + ug.getGroupid(), null);
                 return false;
             }
 
@@ -180,6 +186,7 @@ public class UserGroupOperation {
             val = ps.executeUpdate();
             if (val == 0) {
                 con.rollback();
+                logger.logError("UserGroupOperation", "updateUserGroup", "Failed to delete existing relations for group ID: " + ug.getGroupid(), null);
                 return false;
             }
 
@@ -190,14 +197,17 @@ public class UserGroupOperation {
                 val = ps.executeUpdate();
                 if (val == 0) {
                     con.rollback();
+                    logger.logError("UserGroupOperation", "updateUserGroup", "Failed to insert contact ID: " + i + " for group ID: " + ug.getGroupid(), null);
                     return false;
                 }
             }
 
             con.commit();
+            logger.logInfo("UserGroupOperation", "updateUserGroup", "Group updated successfully: " + ug.getGroupid());
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.logError("UserGroupOperation", "updateUserGroup", "Exception occurred: " + e.getMessage(), e);
+            con.rollback(); // Ensure rollback in case of exception
         } finally {
             con.close();
         }

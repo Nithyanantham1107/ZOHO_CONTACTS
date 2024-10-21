@@ -1,0 +1,176 @@
+Oct 18, 2024 11:10:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:12 | UserOperation | isUser | User verified successfully: anand1107 
+Oct 18, 2024 11:10:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:12 | SessionOperation | generateSessionId | Created session ID: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:10:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:12 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 24 
+Oct 18, 2024 11:10:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:12 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 24 
+Oct 18, 2024 11:10:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:12 | LoginSignupServlet | doPost | User logged in successfully: anand1107 
+Oct 18, 2024 11:10:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:12 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:10:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:12 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:40:12.485 
+Oct 18, 2024 11:10:33 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:33 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:10:33 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:33 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:40:33.039 
+Oct 18, 2024 11:10:33 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:33 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:10:33 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:33 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:40:33.071 
+Oct 18, 2024 11:10:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:38 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:10:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:38 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:40:38.873 
+Oct 18, 2024 11:10:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:38 | UserGroupOperation | createGroup | Group created successfully: dummy 
+Oct 18, 2024 11:10:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:38 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 24 
+Oct 18, 2024 11:10:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:38 | CreateGroupServlet | doPost | Group created successfully: dummy 
+Oct 18, 2024 11:10:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:38 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:10:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:38 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:40:38.929 
+Oct 18, 2024 11:10:42 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:42 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:10:42 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:10:42 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:40:42.753 
+Oct 18, 2024 11:11:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:12 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:12 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:12.051 
+Oct 18, 2024 11:11:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:12 | UserContactOperation | addUserContact | Contact added successfully: flash 
+Oct 18, 2024 11:11:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:12 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 24 
+Oct 18, 2024 11:11:12 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:12 | AddContactServlet | doPost | Contact added successfully for user ID: 24 
+Oct 18, 2024 11:11:14 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:14 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:14 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:14 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:14.234 
+Oct 18, 2024 11:11:14 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:14 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:14 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:14 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:14.257 
+Oct 18, 2024 11:11:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:24 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:24.136 
+Oct 18, 2024 11:11:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:24 | UserGroupOperation | createGroup | Group created successfully: speedster 
+Oct 18, 2024 11:11:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 24 
+Oct 18, 2024 11:11:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:24 | CreateGroupServlet | doPost | Group created successfully: speedster 
+Oct 18, 2024 11:11:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:24 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:24.194 
+Oct 18, 2024 11:11:27 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:27 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:27 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:27 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:27.095 
+Oct 18, 2024 11:11:27 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:27 | UserGroupOperation | viewUserGroupContact | Contacts retrieved for group ID: 40 
+Oct 18, 2024 11:11:27 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:27 | UpdateUserGroupServlet | doPost | User group updated successfully: speedster 
+Oct 18, 2024 11:11:30 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:30 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:30 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:30 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:30.876 
+Oct 18, 2024 11:11:30 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:30 | UserGroupOperation | updateUserGroup | Group updated successfully: 40 
+Oct 18, 2024 11:11:30 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:30 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 24 
+Oct 18, 2024 11:11:30 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:30 | CreateGroupServlet | doPost | Group updated successfully: speedster 123 
+Oct 18, 2024 11:11:30 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:30 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:30 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:30 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:30.943 
+Oct 18, 2024 11:11:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:31 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:31 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:31.947 
+Oct 18, 2024 11:11:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:31 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:31 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:31.973 
+Oct 18, 2024 11:11:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:37 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:37 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:37.861 
+Oct 18, 2024 11:11:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:38 | UserOperation | userDataUpdate | User data updated successfully for: anand1107 
+Oct 18, 2024 11:11:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:38 | UserProfileServlet | doPost | User profile updated successfully for User ID: 24 
+Oct 18, 2024 11:11:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:38 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:11:38 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:11:38 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 11:41:38.092 
+Oct 18, 2024 11:36:42 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:36:42 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:36:42 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:36:42 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 18, 2024 11:36:42 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:36:42 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-18 12:06:42.802 
+Oct 18, 2024 11:36:53 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-18 11:36:53 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$C9RgN3sOtad1xJN31vLH/OGfKaubkW2tw69S1J5563EDlVssuaqWC 
+Oct 21, 2024 11:29:25 AM loggerfiles.LoggerSet logError
+SEVERE: 2024-10-21 11:29:25 | UserOperation | isUser | Invalid credentials for user: anand1107 
+Oct 21, 2024 11:29:25 AM loggerfiles.LoggerSet logWarning
+WARNING: 2024-10-21 11:29:25 | LoginSignupServlet | doPost | Invalid username or password for user: anand1107 
+Oct 21, 2024 11:29:38 AM loggerfiles.LoggerSet logError
+SEVERE: 2024-10-21 11:29:38 | UserOperation | isUser | Invalid credentials for user: anand1107 
+Oct 21, 2024 11:29:38 AM loggerfiles.LoggerSet logWarning
+WARNING: 2024-10-21 11:29:38 | LoginSignupServlet | doPost | Invalid username or password for user: anand1107 
+Oct 21, 2024 11:33:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:24 | UserOperation | isUser | User verified successfully: ram12345 
+Oct 21, 2024 11:33:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:24 | SessionOperation | generateSessionId | Created session ID: $2a$10$emC7KBPmewpYsKYAnzWbBuXJw9ES4e4JlkczNqbjDs5eJlwlwfy2G 
+Oct 21, 2024 11:33:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:24 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 13 
+Oct 21, 2024 11:33:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 13 
+Oct 21, 2024 11:33:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:24 | LoginSignupServlet | doPost | User logged in successfully: ram12345 
+Oct 21, 2024 11:33:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$emC7KBPmewpYsKYAnzWbBuXJw9ES4e4JlkczNqbjDs5eJlwlwfy2G 
+Oct 21, 2024 11:33:24 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:24 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-21 12:03:24.379 
+Oct 21, 2024 11:33:27 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:33:27 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$emC7KBPmewpYsKYAnzWbBuXJw9ES4e4JlkczNqbjDs5eJlwlwfy2G 
+Oct 21, 2024 11:36:47 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:47 | UserOperation | createUser | User created successfully: anand1107 
+Oct 21, 2024 11:36:47 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:47 | SessionOperation | generateSessionId | Created session ID: $2a$10$RrBz.H9KLMlS2OTamz6HueaYhDNtez4X8MCatAhWXe4Ye1sCStEJm 
+Oct 21, 2024 11:36:47 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:47 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 25 
+Oct 21, 2024 11:36:47 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:47 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 25 
+Oct 21, 2024 11:36:47 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:47 | SignupServlet | doPost | User signed up successfully: anand1107 
+Oct 21, 2024 11:36:47 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:47 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$RrBz.H9KLMlS2OTamz6HueaYhDNtez4X8MCatAhWXe4Ye1sCStEJm 
+Oct 21, 2024 11:36:47 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:47 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-21 12:06:47.523 
+Oct 21, 2024 11:36:50 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:36:50 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$RrBz.H9KLMlS2OTamz6HueaYhDNtez4X8MCatAhWXe4Ye1sCStEJm 
+Oct 21, 2024 11:43:43 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:43:43 | UserOperation | isUser | User verified successfully: anand1107 
+Oct 21, 2024 11:43:43 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:43:43 | SessionOperation | generateSessionId | Created session ID: $2a$10$y9XH515E9Em1dW/6J7wEPuXQMdkHl.S3TbbYlqGubokFs9RvNQHBq 
+Oct 21, 2024 11:43:43 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:43:43 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 25 
+Oct 21, 2024 11:43:43 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:43:43 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 25 
+Oct 21, 2024 11:43:43 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:43:43 | LoginSignupServlet | doPost | User logged in successfully: anand1107 
+Oct 21, 2024 11:43:43 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:43:43 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$y9XH515E9Em1dW/6J7wEPuXQMdkHl.S3TbbYlqGubokFs9RvNQHBq 
+Oct 21, 2024 11:43:43 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-10-21 11:43:43 | SessionOperation | checkSessionAlive | Updated session expiration time: 2024-10-21 12:13:43.291 
