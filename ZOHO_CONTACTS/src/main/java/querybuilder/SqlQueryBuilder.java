@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class SqlQueryBuilder {
 
-	private String tableName;
+	
 
 	private static String getDBType() {
 

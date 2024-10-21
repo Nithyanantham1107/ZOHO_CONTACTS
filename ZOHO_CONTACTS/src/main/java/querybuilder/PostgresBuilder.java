@@ -38,6 +38,17 @@ public class PostgresBuilder implements QueryBuilder {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public QueryBuilder insert(String tablename, String... columns) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public QueryBuilder values(String ...values) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public QueryBuilder update(String tableName, String... column) {

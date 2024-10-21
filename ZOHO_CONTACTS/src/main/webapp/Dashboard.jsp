@@ -261,7 +261,13 @@ textarea {
 		// upto this session check is implemented
 
 		
-	
+	if (session== null) {
+
+			response.sendRedirect("index.jsp");
+
+			return;
+
+		}
 
 		
 		
@@ -271,13 +277,7 @@ textarea {
 		
 		
 		
-		if (ud == null) {
-
-			response.sendRedirect("index.jsp");
-
-			return;
-
-		}
+		
 		
 		ArrayList<UserContacts> user_contacts = (ArrayList<UserContacts>) session.getAttribute("usercontact");
 		ArrayList<UserGroup> usergroup = (ArrayList<UserGroup>) session.getAttribute("usergroup");

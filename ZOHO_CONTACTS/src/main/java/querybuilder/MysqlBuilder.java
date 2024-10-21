@@ -40,6 +40,32 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
+	public QueryBuilder insert(String tablename, String... columns) {
+		this.query.append("INSERT INTO " + tablename + " ");
+		if (columns.length != 0) {
+			this.query.append("(" + " ");
+			for (int i = 0; i < columns.length; i++) {
+				this.query.append(columns[i] + ",");
+
+			}
+			this.query.append(")"+" ");
+		}
+
+		return this;
+	}
+
+	@Override
+	public QueryBuilder values(String ...values) {
+		this.query.append("VALUES(" + " ");
+		for (int i = 0; i < values.length; i++) {
+			this.query.append(values[i] + ",");
+
+		}
+		this.query.append(")"+" ");
+		return this;
+	}
+
+	@Override
 	public QueryBuilder update(String tablename, String... condition) {
 		this.TableName = tablename;
 		this.query.append("UPDATE " + this.TableName + " " + "SET" + " ");
@@ -128,4 +154,11 @@ public class MysqlBuilder implements QueryBuilder {
 		return this.query.toString();
 	}
 
+}
+
+class SelectQuery {
+
+	public SelectQuery() {
+
+	}
 }

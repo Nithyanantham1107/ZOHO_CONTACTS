@@ -112,6 +112,13 @@ input[type="submit"]:hover {
 		<form action="/updatecontact" method="post">
 			<%
 			
+			if (session== null) {
+
+				response.sendRedirect("index.jsp");
+
+				return;
+
+			}
 			// upto this session check is implemented
 
 			UserContacts uc = (UserContacts) request.getAttribute("user_spec_contact");

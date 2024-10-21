@@ -10,6 +10,7 @@ public class UserData {
     private String address;
     private String username;
     private String password;
+    private String newpassword;
     private String[] email = new String[5];
     private String currentemail;
     private String primarymail;
@@ -25,6 +26,26 @@ public class UserData {
     }
 
     /**
+     * Gets the user's New Password.
+     *
+     * @return the user's NewPassword
+     */
+    public String getNewPassword() {
+        return this.newpassword;
+    }
+
+    
+    
+    /**
+     * Sets the user's NewPassword.
+     *
+     * @param newPassword the New password to set
+     */
+    public void setNewPassword(String newPassword) {
+        this.newpassword = newPassword;
+    }
+
+    /**
      * Gets the user's name.
      *
      * @return the user's name
@@ -32,7 +53,8 @@ public class UserData {
     public String getName() {
         return this.name;
     }
-
+    
+    
     /**
      * Sets the user ID.
      *

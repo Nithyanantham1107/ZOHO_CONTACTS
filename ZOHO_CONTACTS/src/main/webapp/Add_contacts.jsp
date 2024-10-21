@@ -108,7 +108,18 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     
 </head>
 <body>
+<%
 
+
+if (session== null) {
+
+	response.sendRedirect("index.jsp");
+
+	return;
+
+}
+
+%>
 
 
 <div class="container">

@@ -75,7 +75,16 @@ public class UserProfileServlet extends HttpServlet {
                     ud.setEmail(request.getParameterValues("email"));
                     ud.setPrimaryMail(request.getParameter("primaryemail"));
                     ud.setTimezone(request.getParameter("timezone"));
-
+                    if(request.getParameter("password")==null  || request.getParameter("password").isBlank() ||
+                       request.getParameter("Newpassword")==null || request.getParameter("Newpassword").isBlank())  {
+                    		
+                    	ud.setPassword(null);
+                    	ud.setNewPassword(null);
+                    	
+                    }else {
+                    	ud.setPassword(request.getParameter("password"));
+                    	ud.setNewPassword(request.getParameter("Newpassword"));
+                    }
                     if (uo.userDataUpdate(ud)) {
                         session.setAttribute("user", ud);
                         response.sendRedirect("Dashboard.jsp");
