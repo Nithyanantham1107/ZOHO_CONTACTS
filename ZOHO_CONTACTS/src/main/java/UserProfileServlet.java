@@ -9,6 +9,8 @@ import dbmodel.UserData;
 import dboperation.SessionOperation;
 import dboperation.UserOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class UserProfileServlet
@@ -55,8 +57,11 @@ public class UserProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            session = request.getSession(false);
-            UserData user_session_data = (UserData) session.getAttribute("user");
+        	  String sessionid=(String) request.getAttribute("sessionid");
+              CacheModel cachemodel=CacheData.getCache(sessionid);
+              
+              
+              UserData userSessionData = cachemodel.getUserData();
 
             if (request.getParameter("method").equals("update")) {
                 if ((request.getParameter("Name") != null && !request.getParameter("Name").isBlank())
@@ -67,7 +72,7 @@ public class UserProfileServlet extends HttpServlet {
                         && (request.getParameterValues("timezone") != null) && !request.getParameter("timezone").isBlank()) {
 
                     ud = new UserData();
-                    ud.setUserId(user_session_data.getUserId());
+                    ud.setUserId(userSessionData.getUserId());
                     ud.setName(request.getParameter("Name"));
                     ud.setAddress(request.getParameter("Address"));
                     ud.setUserName(request.getParameter("username"));
@@ -86,7 +91,8 @@ public class UserProfileServlet extends HttpServlet {
                     	ud.setNewPassword(request.getParameter("Newpassword"));
                     }
                     if (uo.userDataUpdate(ud)) {
-                        session.setAttribute("user", ud);
+                    	cachemodel.setUserData(ud);
+                       
                         response.sendRedirect("Dashboard.jsp");
                         logger.logInfo("UserProfileServlet", "doPost", "User profile updated successfully for User ID: " + ud.getUserId());
                     } else {
@@ -100,12 +106,15 @@ public class UserProfileServlet extends HttpServlet {
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }
             } else {
-                if (uo.deleteUserProfile(user_session_data.getUserId())) {
-                    logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + user_session_data.getUserId());
-                    session.invalidate();
+                if (uo.deleteUserProfile(userSessionData.getUserId())) {
+                    logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + userSessionData.getUserId());
+                    
+                    SessionOperation so=new SessionOperation();
+                    so.DeleteSessionData(sessionid);
+                   
                     response.sendRedirect("index.jsp");
                 } else {
-                    logger.logWarning("UserProfileServlet", "doPost", "Error in deleting user profile for User ID: " + user_session_data.getUserId());
+                    logger.logWarning("UserProfileServlet", "doPost", "Error in deleting user profile for User ID: " + userSessionData.getUserId());
                     request.setAttribute("errorMessage", "Unable to delete user profile data");
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }

@@ -1,3 +1,4 @@
+<%@page import="sessionstorage.CacheModel"%>
 <%@page import="dbmodel.UserGroup"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="dboperation.UserGroupOperation"%>
@@ -112,13 +113,18 @@ input[type="submit"]:hover {
 		<form action="/updatecontact" method="post">
 			<%
 			
-			if (session== null) {
+			 SessionOperation so=new SessionOperation();
+			
+			   CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
 
-				response.sendRedirect("index.jsp");
+				if (alive == null) {
 
-				return;
+						response.sendRedirect("index.jsp");
 
-			}
+						return;
+
+					}
+
 			// upto this session check is implemented
 
 			UserContacts uc = (UserContacts) request.getAttribute("user_spec_contact");

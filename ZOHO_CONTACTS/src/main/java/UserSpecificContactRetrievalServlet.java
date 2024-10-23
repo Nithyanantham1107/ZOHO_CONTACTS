@@ -12,6 +12,8 @@ import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class UserSpecificContactRetrievalServlet
@@ -57,11 +59,14 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            session = request.getSession(false);
-            UserData user = (UserData) session.getAttribute("user");
+        	  String sessionid=(String) request.getAttribute("sessionid");
+              CacheModel cachemodel=CacheData.getCache(sessionid);
+              
+              
+              UserData ud = cachemodel.getUserData();
 
             if (request.getParameter("contact_id") != null) {
-                int user_id = user.getUserId();
+                int user_id = ud.getUserId();
                 int contact_id = Integer.parseInt(request.getParameter("contact_id"));
                 UserContacts uc = co.viewSpecificUserContact(user_id, contact_id);
 

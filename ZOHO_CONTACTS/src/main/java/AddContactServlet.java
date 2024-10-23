@@ -13,6 +13,8 @@ import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class Add_contact_servlet
@@ -68,8 +70,12 @@ public class AddContactServlet extends HttpServlet {
                     && (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
                 
                 uc = new UserContacts();
-                session = request.getSession(false);
-                UserData ud = (UserData) session.getAttribute("user");
+                
+                String sessionid=(String) request.getAttribute("sessionid");
+                CacheModel cachemodel=CacheData.getCache(sessionid);
+                
+                
+                UserData ud = cachemodel.getUserData();
 
                 uc.setFname(request.getParameter("f_name"));
                 uc.setMname(request.getParameter("m_name"));
@@ -84,7 +90,8 @@ public class AddContactServlet extends HttpServlet {
                 uc = co.addUserContact(uc);
                 if (uc != null) {
                     ArrayList<UserContacts> userContacts = co.viewAllUserContacts(ud.getUserId());
-                    session.setAttribute("usercontact", userContacts);
+                    cachemodel.setUserContact(userContacts);
+       
                     logger.logInfo("AddContactServlet", "doPost", "Contact added successfully for user ID: " + ud.getUserId());
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 } else {

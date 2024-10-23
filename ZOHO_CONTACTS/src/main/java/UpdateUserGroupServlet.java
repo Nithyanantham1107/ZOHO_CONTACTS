@@ -11,6 +11,8 @@ import dbmodel.UserGroup;
 import dboperation.SessionOperation;
 import dboperation.UserGroupOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class UpdateUserGroupServlet
@@ -48,8 +50,11 @@ public class UpdateUserGroupServlet extends HttpServlet {
             if ((request.getParameter("groupid") != null && !request.getParameter("groupid").isBlank())
                     && (request.getParameter("groupName") != null && !request.getParameter("groupName").isBlank())) {
 
-                session = request.getSession(false);
-                UserData ud = (UserData) session.getAttribute("user");
+            	  String sessionid=(String) request.getAttribute("sessionid");
+                  CacheModel cachemodel=CacheData.getCache(sessionid);
+                  
+                  
+                  UserData ud = cachemodel.getUserData();
                 ug.setUserid(ud.getUserId());
                 ug.setGroupid(Integer.parseInt(request.getParameter("groupid")));
                 ug.setGroupName(request.getParameter("groupName"));
@@ -60,7 +65,7 @@ public class UpdateUserGroupServlet extends HttpServlet {
                 } else {
                     logger.logWarning("UpdateUserGroupServlet", "doPost", "Group contact is null for Group ID: " + ug.getGroupid());
                 }
-
+             
                 request.setAttribute("usergroupupdate", ug);
                 request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 logger.logInfo("UpdateUserGroupServlet", "doPost", "User group updated successfully: " + ug.getGroupName());

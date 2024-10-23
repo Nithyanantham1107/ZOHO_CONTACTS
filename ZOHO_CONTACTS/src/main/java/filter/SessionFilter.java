@@ -3,6 +3,7 @@ package filter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -23,6 +24,8 @@ import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 public class SessionFilter implements Filter {
 
@@ -38,7 +41,7 @@ public class SessionFilter implements Filter {
 		uo = new UserOperation();
 		uco = new UserContactOperation();
 		ugo = new UserGroupOperation();
-		logger=new LoggerSet();
+		logger = new LoggerSet();
 
 	}
 
@@ -61,43 +64,37 @@ public class SessionFilter implements Filter {
 				chain.doFilter(request, response);
 				return;
 			}
-			HttpSession session = httpRequest.getSession(false);
-			UserData ud = (UserData) session.getAttribute("user");
-		
+
 			String sessionid = so.getCustomSessionId(httpRequest.getCookies());
-			System.out.println("here data is session "+sessionid);
-			if(sessionid==null) {
-				
+			System.out.println("here data is session " + sessionid);
+			if (sessionid == null) {
+
 				httpResponse.sendRedirect("index.jsp");
-			
+
 				return;
-				
+
 			}
-			int userid = so.checkSessionAlive(sessionid);
-			if (userid != 0) {
-
+			CacheModel cachemodel = so.checkSessionAlive(sessionid);
+			if (cachemodel != null) {
+                int userid=cachemodel.getUserData().getUserId();
+				UserData ud = uo.getUserData(userid);
+	
+				ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
+				ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
+				cachemodel.setUserContact(uc);
+				cachemodel.setUserData(ud);
+				cachemodel.setUserGroup(ug);
+				so.addSessionCacheData(sessionid, cachemodel);
 				
-				if (ud == null) {
-
-					session = httpRequest.getSession();
-					ud = uo.getUserData(userid);
-					session.setAttribute("user", ud);
-					ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-					ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-					session.setAttribute("usercontact", uc);
-					session.setAttribute("usergroup", ug);
-				}
 
 			} else {
 
-				so.DeleteSessionData(sessionid);
-
-				if (session != null) {
-
-					session.invalidate();
+				if( ! so.DeleteSessionData(sessionid)) {
+					System.out.println("Error in deleting session data");
 				}
+
 				
-				
+
 				System.out.println("hello im exiting dude!!");
 
 				Cookie sessionCookie = new Cookie("SESSIONID", null);
@@ -113,26 +110,21 @@ public class SessionFilter implements Filter {
 				httpResponse.sendRedirect("index.jsp");
 
 			}
-			  String clientIp = httpRequest.getRemoteAddr();
-		        String resource = httpRequest.getRequestURI();
-		        String httpMethod = "GET";
-		        int responseStatus = HttpServletResponse.SC_OK; 
-		        String userAgent = httpRequest.getHeader("User-Agent");
+			String clientIp = httpRequest.getRemoteAddr();
+			String resource = httpRequest.getRequestURI();
+			String httpMethod = "GET";
+			int responseStatus = HttpServletResponse.SC_OK;
+			String userAgent = httpRequest.getHeader("User-Agent");
 
-		        
+			logger.logAccessSet(clientIp, resource, httpMethod, responseStatus, userAgent);
 
-		        
-
-		        
-		       logger.logAccessSet(clientIp, resource, httpMethod, responseStatus, userAgent);
-			
 			System.out.println("hello im filter");
+			
+			httpRequest.setAttribute("sessionid", sessionid);
 			chain.doFilter(request, response);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-
-		
 
 	}
 

@@ -22,7 +22,7 @@ public class CacheModel {
 		return this.sessionExpireTime;
 	}
 
-	public void setastAccessed(long lastAccessed) {
+	public void setLastAccessed(long lastAccessed) {
 
 		this.lastAccessed = lastAccessed;
 	}
@@ -54,7 +54,7 @@ public class CacheModel {
 		this.uc = uc;
 	}
 
-	public ArrayList<UserContacts> get() {
+	public ArrayList<UserContacts> getUserContact() {
 		return this.uc;
 	}
 

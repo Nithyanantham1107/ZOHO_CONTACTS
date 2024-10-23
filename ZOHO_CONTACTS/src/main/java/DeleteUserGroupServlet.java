@@ -13,6 +13,8 @@ import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class DeleteUserGroupServlet
@@ -63,11 +65,14 @@ public class DeleteUserGroupServlet extends HttpServlet {
 
                 // Attempt to delete the user group
                 if (ugo.deleteUserGroup(groupid)) {
-                    session = request.getSession(false);
-                    ud = (UserData) session.getAttribute("user");
+                	  String sessionid=(String) request.getAttribute("sessionid");
+                      CacheModel cachemodel=CacheData.getCache(sessionid);
+                      
+                      
+                      UserData ud = cachemodel.getUserData();
                     ArrayList<UserGroup> userGroups = ugo.viewAllGroup(ud.getUserId());
 
-                    session.setAttribute("usergroup", userGroups);
+                    cachemodel.setUserGroup(userGroups);
                     logger.logInfo("DeleteUserGroupServlet", "doPost", "User group deleted successfully: " + groupid);
                     response.sendRedirect("Dashboard.jsp");
                 } else {

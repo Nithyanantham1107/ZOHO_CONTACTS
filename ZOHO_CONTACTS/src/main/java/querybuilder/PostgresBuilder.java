@@ -8,7 +8,26 @@ public class PostgresBuilder implements QueryBuilder {
 
 		System.out.println("Query is in postgresql  ");
 	}
-
+ @Override
+public void openConnection() {
+	// TODO Auto-generated method stub
+	
+}
+ @Override
+public void closeConnection() {
+	// TODO Auto-generated method stub
+	
+}
+ @Override
+public void rollBackConnectio() {
+	// TODO Auto-generated method stub
+	
+}
+ @Override
+public void commit() {
+	// TODO Auto-generated method stub
+	
+}
 	@Override
 	public QueryBuilder select(String tableName, String... columns) {
 		// TODO Auto-generated method stub

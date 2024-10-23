@@ -11,6 +11,8 @@ import dboperation.SessionOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class CreateGroupServlet
@@ -54,7 +56,7 @@ public class CreateGroupServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            session = request.getSession(false);
+           
             
             if (request.getParameter("methodtype") != null && request.getParameter("methodtype").equals("create")) {
                 if ((request.getParameter("groupName") != null && !request.getParameter("groupName").isBlank())
@@ -62,7 +64,14 @@ public class CreateGroupServlet extends HttpServlet {
 
                     int j = 0;
                     ug = new UserGroup();
-                    UserData ud = (UserData) session.getAttribute("user");
+                    String sessionid=(String) request.getAttribute("sessionid");
+                    CacheModel cachemodel=CacheData.getCache(sessionid);
+                    
+                    
+                    UserData ud = cachemodel.getUserData();
+
+                    
+                    
                     int[] contactid = new int[request.getParameterValues("contact_ids").length];
                     ug.setGroupName(request.getParameter("groupName"));
 
@@ -78,7 +87,8 @@ public class CreateGroupServlet extends HttpServlet {
                     if (ugo.createGroup(ug)) {
                         ArrayList<UserGroup> usergroup = ugo.viewAllGroup(ud.getUserId());
                         if (usergroup != null) {
-                            session.setAttribute("usergroup", usergroup);
+                        	cachemodel.setUserGroup(usergroup);
+                           
                             logger.logInfo("CreateGroupServlet", "doPost", "Group created successfully: " + ug.getGroupName());
                             response.sendRedirect("Dashboard.jsp");
                         } else {
@@ -100,7 +110,14 @@ public class CreateGroupServlet extends HttpServlet {
                 if (request.getParameter("groupName") != null && request.getParameterValues("contact_ids") != null) {
                     int j = 0;
                     ug = new UserGroup();
-                    UserData ud = (UserData) session.getAttribute("user");
+                   
+                    
+                    String sessionid=(String) request.getAttribute("sessionid");
+                    CacheModel cachemodel=CacheData.getCache(sessionid);
+                    
+                    
+                    UserData ud = cachemodel.getUserData();
+
                     int[] contactid = new int[request.getParameterValues("contact_ids").length];
                     ug.setGroupName(request.getParameter("groupName"));
 
@@ -117,7 +134,8 @@ public class CreateGroupServlet extends HttpServlet {
                     if (ugo.updateUserGroup(ug)) {
                         ArrayList<UserGroup> usergroup = ugo.viewAllGroup(ud.getUserId());
                         if (usergroup != null) {
-                            session.setAttribute("usergroup", usergroup);
+                        	cachemodel.setUserGroup(usergroup);
+                            
                             logger.logInfo("CreateGroupServlet", "doPost", "Group updated successfully: " + ug.getGroupName());
                             response.sendRedirect("Dashboard.jsp");
                         } else {

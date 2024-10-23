@@ -1,6 +1,7 @@
 package loggerfiles;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -13,27 +14,28 @@ public class LoggerSet {
 	
 
 	public static void appLog() {
-		try {
+		 try {
+	            String logFilePath = "/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/application.log";
+	            File logFile = new File(logFilePath);
 
-			String logFilePath = "/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/application.log";
-			File logFile = new File(logFilePath);
+	            
+	            FileHandler fileHandler;
+	            if (logFile.exists()) {
+	                fileHandler = new FileHandler(logFilePath, true); // Append mode
+	            } else {
+	                
+	                fileHandler = new FileHandler(logFilePath);
+	                System.out.println("Application log file created: " + logFilePath);
+	            }
 
-			FileHandler fileHandler;
-			if (logFile.exists()) {
+	            
+	            fileHandler.setFormatter(new SimpleFormatter());
+	            applog.addHandler(fileHandler);
+	            applog.setLevel(Level.ALL);
 
-				fileHandler = new FileHandler(logFilePath, true); // true for append mode
-			} else {
-
-				fileHandler = new FileHandler(logFilePath);
-			}
-
-			fileHandler.setFormatter(new SimpleFormatter());
-			applog.addHandler(fileHandler);
-			applog.setLevel(Level.ALL);
-
-		} catch (IOException e) {
-			applog.log(Level.SEVERE, "Failed to initialize file handler.", e);
-		}
+	        } catch (IOException e) {
+	            applog.log(Level.SEVERE, "Failed to initialize file handler.", e);
+	        }
 
 	}
 	private static final Logger accesslog = Logger.getLogger("AccessLogger");
@@ -48,8 +50,9 @@ public class LoggerSet {
 
 				fileHandler = new FileHandler(logFilePath, true);
 			} else {
-
-				fileHandler = new FileHandler(logFilePath);
+				 fileHandler = new FileHandler(logFilePath);
+	                System.out.println("Access log file created: " + logFilePath);
+				
 			}
 
 			fileHandler.setFormatter(new SimpleFormatter());

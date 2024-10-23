@@ -1,3 +1,5 @@
+<%@page import="sessionstorage.CacheData"%>
+<%@page import="sessionstorage.CacheModel"%>
 <%@page import="dboperation.UserGroupOperation"%>
 <%@page import="dboperation.UserOperation"%>
 <%@page import="dboperation.SessionOperation"%>
@@ -259,28 +261,34 @@ textarea {
 		
 
 		// upto this session check is implemented
-
+   SessionOperation so=new SessionOperation();
 		
-	if (session== null) {
+   CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
 
+	if (alive == null) {
+            System.out.println("hello hi");
 			response.sendRedirect("index.jsp");
-
-			return;
+            return;
+			
 
 		}
 
 		
 		
-		session=request.getSession(false);
-		UserData ud = (UserData) session.getAttribute("user");
+		  String sessionid=(String) request.getAttribute("sessionid");
+          CacheModel cachemodel=CacheData.getCache(sessionid);
+          
+          
+          UserData ud = cachemodel.getUserData();
+		
 		UserGroup ugu = (UserGroup) request.getAttribute("usergroupupdate");
 		
 		
 		
 		
 		
-		ArrayList<UserContacts> user_contacts = (ArrayList<UserContacts>) session.getAttribute("usercontact");
-		ArrayList<UserGroup> usergroup = (ArrayList<UserGroup>) session.getAttribute("usergroup");
+		ArrayList<UserContacts> user_contacts = cachemodel.getUserContact();
+		ArrayList<UserGroup> usergroup = cachemodel.getUserGroup();
 		%>
 
 		<div id="profileModal" class="modal">

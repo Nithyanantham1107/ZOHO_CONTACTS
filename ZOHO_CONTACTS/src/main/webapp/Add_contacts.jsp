@@ -1,3 +1,4 @@
+<%@page import="sessionstorage.CacheModel"%>
 <%@page import="dbmodel.UserGroup"%>
 <%@page import="dbmodel.UserContacts"%>
 <%@page import="java.util.ArrayList"%>
@@ -111,13 +112,18 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 <%
 
 
-if (session== null) {
+SessionOperation so=new SessionOperation();
 
-	response.sendRedirect("index.jsp");
+CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
 
-	return;
+	if (alive == null) {
 
-}
+			response.sendRedirect("index.jsp");
+
+			return;
+
+		}
+
 
 %>
 

@@ -13,6 +13,8 @@ import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class DeleteUserContactServlet
@@ -57,18 +59,25 @@ public class DeleteUserContactServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Check if contact ID is provided
+            
             if (request.getParameter("contact_id") != null && !request.getParameter("contact_id").isBlank()) {
-                HttpSession session = request.getSession(false);
-                UserData ud = (UserData) session.getAttribute("user");
+            	 String sessionid=(String) request.getAttribute("sessionid");
+                 CacheModel cachemodel=CacheData.getCache(sessionid);
+                 
+                 
+                 UserData ud = cachemodel.getUserData();
+               
 
                 int user_id = ud.getUserId();
                 int contact_id = Integer.parseInt(request.getParameter("contact_id"));
 
-                // Attempt to delete the contact
+               
                 if (uco.deleteContact(user_id, contact_id)) {
                     ArrayList<UserContacts> userContacts = uco.viewAllUserContacts(ud.getUserId());
-                    session.setAttribute("usercontact", userContacts);
+                  
+                    cachemodel.setUserContact(userContacts);
+                    
+                    
                     logger.logInfo("DeleteUserContactServlet", "doPost", "Contact deleted successfully: " + contact_id);
                     response.sendRedirect("Dashboard.jsp");
                 } else {

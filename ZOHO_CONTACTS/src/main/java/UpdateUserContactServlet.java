@@ -11,6 +11,8 @@ import dbmodel.UserData;
 import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import loggerfiles.LoggerSet;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 /**
  * Servlet implementation class UpdateUserContactServlet
@@ -46,8 +48,11 @@ public class UpdateUserContactServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            session = request.getSession(false);
-            ud = (UserData) session.getAttribute("user");
+        	  String sessionid=(String) request.getAttribute("sessionid");
+              CacheModel cachemodel=CacheData.getCache(sessionid);
+              
+              
+              UserData ud = cachemodel.getUserData();
 
             if ((request.getParameter("f_name") != null && !request.getParameter("f_name").isBlank())
                     && (request.getParameter("gender") != null && !request.getParameter("gender").isBlank())
@@ -69,7 +74,7 @@ public class UpdateUserContactServlet extends HttpServlet {
 
                 if (co.updateSpecificUserContact(uc)) {
                     ArrayList<UserContacts> userContacts = co.viewAllUserContacts(ud.getUserId());
-                    session.setAttribute("usercontact", userContacts);
+                    cachemodel.setUserContact(userContacts);
                     response.sendRedirect("Dashboard.jsp");
                     logger.logInfo("UpdateUserContactServlet", "doPost", "Contact updated successfully.");
                 } else {

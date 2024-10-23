@@ -1,6 +1,10 @@
 package querybuilder;
 
 public interface QueryBuilder{
+	void openConnection();
+	void closeConnection();
+	void rollBackConnectio();
+	void commit();
 	QueryBuilder select(String tablename,String ...columns);
 	QueryBuilder insert(String tablename,String ...columns);
 	QueryBuilder values(String ...values);

@@ -1,3 +1,4 @@
+<%@page import="sessionstorage.CacheModel"%>
 <%@page import="dboperation.SessionOperation"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -72,7 +73,20 @@
   String sessionid=so.getCustomSessionId(request.getCookies());
   if(sessionid !=null ){
 	  
-	  response.sendRedirect("Dashboard.jsp");
+		
+	   CacheModel alive = so.checkSessionAlive(sessionid);
+
+		if (alive != null) {
+	            System.out.println("hello hi");
+	            response.sendRedirect("Dashboard.jsp");
+	            return;
+
+				
+
+			}
+
+	  
+	  
   }
   
   

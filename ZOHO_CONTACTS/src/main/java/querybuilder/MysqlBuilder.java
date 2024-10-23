@@ -1,13 +1,66 @@
 package querybuilder;
 
+import java.net.ConnectException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import dbconnect.DBconnection;
+
 public class MysqlBuilder implements QueryBuilder {
 	private StringBuilder query = new StringBuilder();
 	private String TableName;
+	private Connection con;
 
 	public MysqlBuilder() {
-
+		this.con = DBconnection.getConnection();
 		System.out.println("Query is  in mysql ");
+		
 
+	}
+	
+	@Override
+	public void openConnection() {
+		try {
+			this.con.setAutoCommit(false);
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	@Override
+	public void closeConnection() {
+		try {
+			this.con.close();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	@Override
+	public void rollBackConnectio() {
+		try {
+			this.con.rollback();
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
+	public void commit() {
+		try {
+			this.con.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
@@ -56,7 +109,7 @@ public class MysqlBuilder implements QueryBuilder {
 
 	@Override
 	public QueryBuilder values(String ...values) {
-		this.query.append("VALUES(" + " ");
+		this.query.append(" VALUES(" + " ");
 		for (int i = 0; i < values.length; i++) {
 			this.query.append(values[i] + ",");
 
@@ -122,7 +175,7 @@ public class MysqlBuilder implements QueryBuilder {
 	@Override
 	public QueryBuilder where(String condition) {
 
-		this.query.append("WHERE");
+		this.query.append(" WHERE");
 		this.query.append(" " + condition + " ");
 
 		return this;
@@ -131,7 +184,7 @@ public class MysqlBuilder implements QueryBuilder {
 	@Override
 	public QueryBuilder and(String condition) {
 
-		this.query.append("and");
+		this.query.append(" and");
 		this.query.append(" " + condition + " ");
 
 		return this;
@@ -150,15 +203,20 @@ public class MysqlBuilder implements QueryBuilder {
 	public String build() {
 		this.query.append(";");
 		System.out.println("generated query upto select is :" + this.query);
+		
+		try {
+			PreparedStatement ps=con.prepareStatement(this.query.toString());
+			ps.executeQuery();
+			
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		
+		
 		this.TableName = null;
 		return this.query.toString();
 	}
 
 }
 
-class SelectQuery {
 
-	public SelectQuery() {
-
-	}
-}
