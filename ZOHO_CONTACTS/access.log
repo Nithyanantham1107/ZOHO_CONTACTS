@@ -388,3 +388,315 @@ Oct 23, 2024 10:22:52 AM loggerfiles.LoggerSet logAccessSet
 INFO: 2024-10-23T10:22:52.914369276 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
 Oct 23, 2024 10:23:08 AM loggerfiles.LoggerSet logAccessSet
 INFO: 2024-10-23T10:23:08.279991812 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:40:22 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:40:22.022367832 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:40:49 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:40:49.032068404 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:40:52 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:40:52.930769937 | Client IP: 127.0.0.1 | Resource: /updatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:40:52 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:40:52.987970868 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:40:55 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:40:55.083788178 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:40:55 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:40:55.107856514 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:06 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:06.970279309 | Client IP: 127.0.0.1 | Resource: /updateprofile | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:07 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:07.017908463 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:09 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:09.344293218 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:09 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:09.365079028 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:16 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:16.246683771 | Client IP: 127.0.0.1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:16 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:16.294806419 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:21 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:21.736184971 | Client IP: 127.0.0.1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:28 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:28.184361268 | Client IP: 127.0.0.1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:28 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:28.235692128 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:30 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:30.443775807 | Client IP: 127.0.0.1 | Resource: /deletegroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:30 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:30.481035611 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:41:33 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:41:33.159098726 | Client IP: 127.0.0.1 | Resource: /Add_contacts.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:42:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:42:01.335054637 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:42:06 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:42:06.259571139 | Client IP: 127.0.0.1 | Resource: /deletecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:42:06 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:42:06.297691113 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:42:26 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:42:26.994046012 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:42:32 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:42:32.011741154 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:43:28 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:43:28.193684064 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:43:32 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:43:32.148337969 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:43:32 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:43:32.164250836 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 9:43:34 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T09:43:34.225877339 | Client IP: 127.0.0.1 | Resource: /updateprofile | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 10:17:47 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T10:17:47.205256523 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 10:18:06 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T10:18:06.148791267 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 10:38:47 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T10:38:47.976341558 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 10:45:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T10:45:01.137836329 | Client IP: 127.0.0.1 | Resource: /updatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 10:45:28 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T10:45:28.596193532 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 11:31:02 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T11:31:02.380614234 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 11:31:22 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T11:31:22.915851043 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 1:11:32 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T13:11:32.491458089 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 1:11:46 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T13:11:46.867333305 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 6:00:38 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T18:00:38.609392116 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Oct 24, 2024 6:00:53 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-10-24T18:00:53.069228616 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:31:05 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:31:05.231076495 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:32:48 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:32:48.567433728 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:36:48 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:36:48.287802897 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:36:49 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:36:49.723526619 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:36:50 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:36:50.582844080 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:36:59 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:36:59.607296008 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:37:00 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:37:00.516629731 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:37:00 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:37:00.695608075 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:37:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:37:01.278291264 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:37:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:37:01.462377445 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:37:21 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:37:21.238172211 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:37:21 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:37:21.350964408 | Client IP: 127.0.0.1 | Resource: /styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:40:55 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:40:55.548816970 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:40:55 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:40:55.672359108 | Client IP: 127.0.0.1 | Resource: /styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:43:24 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:43:24.373901064 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:43:24 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:43:24.489170032 | Client IP: 127.0.0.1 | Resource: /styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:46:11 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:46:11.066521549 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:46:11 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:46:11.170055975 | Client IP: 127.0.0.1 | Resource: /styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:48:39 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:48:39.471357010 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:48:39 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:48:39.568195718 | Client IP: 127.0.0.1 | Resource: /styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:55:11 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:55:11.460170497 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:55:11 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:55:11.557242370 | Client IP: 127.0.0.1 | Resource: /styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 9:57:58 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T09:57:58.958474954 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:07:39 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:07:39.347205414 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:07:51 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:07:51.508484485 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:07:51 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:07:51.576835631 | Client IP: 127.0.0.1 | Resource: /styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:08:26 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:08:26.166630084 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:09:11 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:09:11.980472341 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:09:30 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:09:30.866617157 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:09:30 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:09:30.900687209 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:10:16 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:10:16.353530961 | Client IP: 127.0.0.1 | Resource: /Add_contacts.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:10:20 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:10:20.253896371 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:10:20 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:10:20.321655232 | Client IP: 127.0.0.1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:10:22 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:10:22.733642772 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:10:25 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:10:25.266519808 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:10:55 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:10:55.008354924 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:10:55 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:10:55.025728560 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:01.085719921 | Client IP: 127.0.0.1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:01.125590335 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:01.173992758 | Client IP: 127.0.0.1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:02 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:02.951184057 | Client IP: 127.0.0.1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:03 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:03.013854458 | Client IP: 127.0.0.1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:04 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:04.877712003 | Client IP: 127.0.0.1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:04 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:04.913278037 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:08 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:08.095306247 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:08 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:08.109553826 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:10 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:10.678045529 | Client IP: 127.0.0.1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:13 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:13.555950573 | Client IP: 127.0.0.1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:11:13 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:11:13.591554891 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:25:41 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:25:41.308419351 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:30:08 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:30:08.432855968 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:30:13 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:30:13.198772973 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:30:13 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:30:13.216489573 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:31:17 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:31:17.660425213 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:31:26 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:31:26.437560085 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:31:26 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:31:26.451134124 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:31:34 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:31:34.135949536 | Client IP: 127.0.0.1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:31:34 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:31:34.178699819 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:32:25 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:32:25.136192059 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:32:25 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:32:25.278842211 | Client IP: 127.0.0.1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:32:44 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:32:44.546491560 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:33:37 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:33:37.151435413 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:33:46 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:33:46.350083406 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:33:50 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:33:50.936550024 | Client IP: 127.0.0.1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:33:50 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:33:50.951123011 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:34:07 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:34:07.765566747 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:34:10 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:34:10.233792227 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:34:10 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:34:10.511164126 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:34:10 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:34:10.833093017 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 02, 2024 10:34:11 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-02T10:34:11.011616996 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 08, 2024 9:31:20 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-08T09:31:20.863639804 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 08, 2024 9:32:23 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-08T09:32:23.197273645 | Client IP: 127.0.0.1 | Resource: /Add_contacts.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 08, 2024 9:32:26 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-08T09:32:26.049146554 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 08, 2024 9:32:27 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-08T09:32:27.908492512 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 08, 2024 9:32:29 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-08T09:32:29.487702808 | Client IP: 127.0.0.1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Nov 08, 2024 11:47:46 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-11-08T11:47:46.030942908 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0 
+Dec 04, 2024 12:34:55 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:34:55.556575871 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:34:55 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:34:55.656918858 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:07 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:07.811097455 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:07 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:07.839197705 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:20 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:20.828031720 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /updateprofile | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:21 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:21.270109418 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:26 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:26.663497933 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Add_contacts.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:51 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:51.599623623 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:54 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:54.833826550 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /GetAndUpdatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:58 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:58.619883984 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /updatecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:35:58 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:35:58.679258697 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:01 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:01.134426569 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /deletecontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:01 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:01.183749906 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:03 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:03.919489852 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:13 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:13.535539456 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:15 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:15.587824130 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /deletegroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:15 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:15.636132893 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:17 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:17.319558928 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:36:21 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:36:21.071422387 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:39:47 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:39:47.397048420 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:39:47 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:39:47.415364362 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:39:56 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:39:56.855055699 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:41 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:41.675522871 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:43 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:43.497619580 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:43 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:43.512668227 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:47 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:47.064170749 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:47 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:47.118372812 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:49 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:49.490702904 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /deletegroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:49 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:49.528889853 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:40:56 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:40:56.427653691 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:02 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:02.874626281 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:02 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:02.913412535 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:05 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:05.087302115 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /deletegroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:05 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:05.130461284 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:06 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:06.764737212 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:06 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:06.781636190 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:14 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:14.268188397 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:41:14 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:41:14.306311228 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:42:01 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:42:01.967926963 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 04, 2024 12:42:11 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-04T12:42:11.861442416 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 06, 2024 11:55:24 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-06T11:55:24.765694747 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 06, 2024 11:55:24 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-06T11:55:24.851771399 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 

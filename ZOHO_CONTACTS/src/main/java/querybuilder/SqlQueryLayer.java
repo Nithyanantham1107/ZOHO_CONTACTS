@@ -5,7 +5,7 @@ import java.lang.classfile.TypeAnnotation.ThrowsTarget;
 import java.util.HashMap;
 import java.util.Properties;
 
-public class SqlQueryBuilder {
+public class SqlQueryLayer {
 
 	
 
@@ -16,7 +16,7 @@ public class SqlQueryBuilder {
 		try (FileInputStream fis = new FileInputStream(
 				"/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/database.properties")) {
 			property.load(fis);
-			System.out.println("check2");
+			
 
 			return property.getProperty("database.type");
 

@@ -94,7 +94,7 @@ public class UserGroup {
      * @param usercontactid  the contact ID to find
      * @return true if the contact ID exists, false otherwise
      */
-    public boolean checkcontact(int[] contactid, int usercontactid) {
+    public boolean checkcontact(int [] contactid, int usercontactid) {
         for (int i : contactid) {
             if (i == usercontactid) {
                 return true;

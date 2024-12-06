@@ -1,7 +1,7 @@
 package querybuilder;
 
-
-
+import java.util.ArrayList;
+import java.util.Map;
 
 public class PostgresBuilder implements QueryBuilder {
 	public PostgresBuilder() {
@@ -93,10 +93,16 @@ public void commit() {
 		return null;
 	}
 
-	@Override
-	public String build() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+@Override
+public int build() {
+	// TODO Auto-generated method stub
+	return 0;
+}
+
+@Override
+public ArrayList<Map<String, Object>> buildQuery() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

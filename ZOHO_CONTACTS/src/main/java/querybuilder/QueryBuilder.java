@@ -1,21 +1,24 @@
 package querybuilder;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public interface QueryBuilder{
 	void openConnection();
 	void closeConnection();
 	void rollBackConnectio();
 	void commit();
-	QueryBuilder select(String tablename,String ...columns);
-	QueryBuilder insert(String tablename,String ...columns);
-	QueryBuilder values(String ...values);
-	QueryBuilder update(String tablename,String ...valueSetter);
-	QueryBuilder Delete(String tablename);
-	QueryBuilder create(String tablename,String ...column);
-	String column(String colName,String dataType);
-	String column(String colName,String dataType,String constraints);
-	QueryBuilder where(String condition);
-	QueryBuilder and(String condition);
-	QueryBuilder or(String condition);
-	String build();
+	QueryBuilder select(Table tablename,Table ...columns) ;
+	QueryBuilder insert(Table tablename,Table  ...columns);
+	QueryBuilder valuesInsert(Object ...values);
+	QueryBuilder valuesUpdate(Object ...values);
+	QueryBuilder update(Table tablename,Table ...columns);
+	QueryBuilder Delete(Table tablename);
+	QueryBuilder where(Table columns,String operation,Object data);
+	QueryBuilder and(Table columns,String operation,Object data);
+	QueryBuilder or(Table columns,String operation,Object data);
+	public ArrayList<Map<String,Object>> buildQuery();
+    int build();
+    String make();
 	
 }

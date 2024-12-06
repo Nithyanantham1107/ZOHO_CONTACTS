@@ -10,7 +10,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import loggerfiles.LoggerSet;
-import querybuilder.SqlQueryBuilder;
+import querybuilder.SqlQueryLayer;
 import schedulers.SessionTableCleaner;
 import schedulers.UpdateQueueSchedule;
 import querybuilder.QueryBuilder;

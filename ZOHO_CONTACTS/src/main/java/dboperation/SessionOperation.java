@@ -137,9 +137,17 @@ public class SessionOperation {
 	public CacheModel checkSessionAlive(String sessionid) throws SQLException {
 		int userid = 0;
 		Connection con = DBconnection.getConnection();
+		long currenttime = System.currentTimeMillis() / 1000;
 		try {
 			CacheModel cachemodel = CacheData.getCache(sessionid);
 			if (cachemodel != null) {
+				
+				if(cachemodel.getSessionExpire()<currenttime) {
+					
+					CacheData.deleteAllCache(sessionid);
+					return null;
+				}
+				
 				cachemodel.setLastAccessed(System.currentTimeMillis() / 1000);
 				if (!CacheData.checkCacheQueue(sessionid)) {
 
@@ -153,7 +161,7 @@ public class SessionOperation {
 				PreparedStatement ps = con.prepareStatement("SELECT * FROM Session WHERE session_id = ?");
 				ps.setString(1, sessionid);
 				ResultSet val = ps.executeQuery();
-				long currenttime = System.currentTimeMillis() / 1000;
+				
 				cachemodel.setLastAccessed(currenttime);
 				if (val.next()) {
 					userid = val.getInt(3);

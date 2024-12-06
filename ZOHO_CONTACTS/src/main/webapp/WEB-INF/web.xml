@@ -25,7 +25,7 @@
 
   <servlet>
   <servlet-name>login</servlet-name>
-  <servlet-class>LoginSignupServlet</servlet-class>
+  <servlet-class>servlets.LoginSignupServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -35,7 +35,7 @@
   
   <servlet>
   <servlet-name>creategroup</servlet-name>
-  <servlet-class>CreateGroupServlet</servlet-class>
+  <servlet-class>servlets.CreateGroupServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -47,7 +47,7 @@
   
      <servlet>
   <servlet-name>deletegroup</servlet-name>
-  <servlet-class>DeleteUserGroupServlet</servlet-class>
+  <servlet-class>servlets.DeleteUserGroupServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -58,7 +58,7 @@
   
     <servlet>
   <servlet-name>signup</servlet-name>
-  <servlet-class>SignupServlet</servlet-class>
+  <servlet-class>servlets.SignupServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -70,7 +70,7 @@
   
   <servlet>
   <servlet-name>updategroup</servlet-name>
-  <servlet-class>UpdateUserGroupServlet</servlet-class>
+  <servlet-class>servlets.UpdateUserGroupServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -83,7 +83,7 @@
   
   <servlet>
    <servlet-name>addcontacts</servlet-name>
-  <servlet-class>AddContactServlet</servlet-class>
+  <servlet-class>servlets.AddContactServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -94,7 +94,7 @@
   
     <servlet>
    <servlet-name>updateprofile</servlet-name>
-  <servlet-class>UserProfileServlet</servlet-class>
+  <servlet-class>servlets.UserProfileServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -105,7 +105,7 @@
   
   <servlet>
    <servlet-name>deletecontacts</servlet-name>
-  <servlet-class>DeleteUserContactServlet</servlet-class>
+  <servlet-class>servlets.DeleteUserContactServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -115,7 +115,7 @@
   
   <servlet>
    <servlet-name>updatecontacts</servlet-name>
-  <servlet-class>UpdateUserContactServlet</servlet-class>
+  <servlet-class>servlets.UpdateUserContactServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>
@@ -127,7 +127,7 @@
   
   <servlet>
    <servlet-name>getusercontact</servlet-name>
-  <servlet-class>UserSpecificContactRetrievalServlet</servlet-class>
+  <servlet-class>servlets.UserSpecificContactRetrievalServlet</servlet-class>
   
   </servlet>
   <servlet-mapping>

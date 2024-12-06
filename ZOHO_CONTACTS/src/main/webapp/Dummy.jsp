@@ -178,11 +178,10 @@ th, td {
 tbody tr {
 	border: none;
 	background-color: white;
-	}
+}
 
 tbody tr:hover {
 	background-color: white;
-	
 }
 
 }
@@ -208,14 +207,10 @@ th, td {
 tbody tr {
 	border: none;
 	background-color: #f4db7d;
-	 transition: transform 0.2s ease, box-shadow 0.2s ease;
-
 }
 
 tbody tr:hover {
 	background-color: white;
-	   transform: translateY(-5px); /* Move the row up */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 }
@@ -608,7 +603,6 @@ textarea {
 							<tr>
 
 								<th>Group Name</th>
-								
 								<th>Update</th>
 								<th>Delete</th>
 							</tr>

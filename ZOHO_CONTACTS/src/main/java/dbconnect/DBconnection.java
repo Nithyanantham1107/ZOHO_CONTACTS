@@ -14,9 +14,7 @@ import javax.sql.DataSource;
 
 public class DBconnection {
 	
-	 private String url = "jdbc:mysql://localhost:3306/your_database_name";
-	 private  String user = "root";
-	 private String password = "root";
+
 	public Connection con;
 	
 	/**

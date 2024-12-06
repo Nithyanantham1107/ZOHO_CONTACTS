@@ -4,7 +4,7 @@ package dbmodel;
  * Represents a user's data including personal information and contact details.
  */
 public class UserData {
-    private int user_id;
+    private Integer user_id;
     private String name;
     private String phoneno;
     private String address;

@@ -4,10 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+
 import org.mindrot.jbcrypt.BCrypt;
 import dbconnect.DBconnection;
 import dbmodel.UserData;
 import loggerfiles.LoggerSet;
+import querybuilder.QueryBuilder;
+import querybuilder.SqlQueryLayer;
 
 public class UserOperation {
 
@@ -99,6 +104,8 @@ public class UserOperation {
 		try {
 			PreparedStatement ps;
 			ResultSet val;
+			
+			
 
 			if (ud.getUserName().contains("@")) {
 				ps = con.prepareStatement(

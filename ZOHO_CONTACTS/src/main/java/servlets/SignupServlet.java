@@ -1,3 +1,4 @@
+package servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -14,30 +15,31 @@ import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import validation.UserValidation;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
-import validation.UserValidation;
 
 /**
- * Servlet implementation class LoginSignupServlet
+ * Servlet implementation class SignupServlet
  */
-public class LoginSignupServlet extends HttpServlet {
+public class SignupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	UserOperation user_op;
+	UserData ud;
 	UserGroupOperation ugo;
 	UserContactOperation uco;
-	UserData ud;
-	SessionOperation so;
 	UserValidation uservalidate;
 	HttpSession session;
-	LoggerSet logger;
+	SessionOperation so;
 	
+	
+	LoggerSet logger; // LoggerSet instance
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public LoginSignupServlet() {
+	public SignupServlet() {
 		super();
 		user_op = new UserOperation();
 		uservalidate = new UserValidation();
@@ -46,6 +48,8 @@ public class LoginSignupServlet extends HttpServlet {
 		so = new SessionOperation();
 		logger = new LoggerSet();
 		
+		
+		// Initialize logger
 	}
 
 	/**
@@ -54,27 +58,11 @@ public class LoginSignupServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		try {
-			session = request.getSession(false);
-			String sessionid = so.getCustomSessionId(request.getCookies());
-
-			if (session != null) {
-				session.invalidate();
-			}
-			so.DeleteSessionData(sessionid);
-			Cookie sessionCookie = new Cookie("SESSIONID", null);
-			sessionCookie.setMaxAge(0);
-			sessionCookie.setPath("/");
-			response.addCookie(sessionCookie);
-			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-			response.sendRedirect("index.jsp");
-		} catch (Exception e) {
-			logger.logError("LoginSignupServlet", "doGet", "Error during logout", e);
-		}
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
-	 * Handles POST requests for user login.
+	 * Handles POST requests for user sign-up.
 	 *
 	 * @param request  the HttpServletRequest object that contains the request data
 	 * @param response the HttpServletResponse object used to send a response
@@ -84,54 +72,65 @@ public class LoginSignupServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			if ((request.getParameter("username") != null && !request.getParameter("username").isBlank())
-					&& (request.getParameter("password") != null && !request.getParameter("password").isBlank())) {
+			if ((request.getParameter("password") != null && !request.getParameter("password").isBlank())
+					&& (request.getParameter("Name") != null && !request.getParameter("Name").isBlank())
+					&& (request.getParameter("phone") != null && !request.getParameter("phone").isBlank())
+					&& (request.getParameter("Address") != null && !request.getParameter("Address").isBlank())
+					&& (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
 
 				if (uservalidate.validateUserPassword(request.getParameter("password"))) {
 					ud = new UserData();
+					ud.setName(request.getParameter("Name"));
+					ud.setAddress(request.getParameter("Address"));
 					ud.setUserName(request.getParameter("username"));
+					ud.setPhoneno(request.getParameter("phone"));
+					ud.setPrimaryMail(request.getParameter("email"));
 					ud.setPassword(request.getParameter("password"));
+					ud.setCurrentEmail(request.getParameter("email"));
+					ud.setTimezone(request.getParameter("timezone"));
+					ud = user_op.createUser(ud);
 
-					ud = user_op.isUser(ud);
 					if (ud != null) {
+						so = new SessionOperation();
 						String sessionid = so.generateSessionId(ud.getUserId());
 						Cookie sessionCookie = new Cookie("SESSIONID", sessionid);
 						sessionCookie.setHttpOnly(true);
 						response.addCookie(sessionCookie);
-						CacheModel cachemodel=CacheData.getCache(sessionid);
+                        CacheModel cachemodel=CacheData.getCache(sessionid);
 						ArrayList<UserContacts> uc = uco.viewAllUserContacts(ud.getUserId());
 						ArrayList<UserGroup> ug = ugo.viewAllGroup(ud.getUserId());
 						cachemodel.setUserData(ud);
 						cachemodel.setUserContact(uc);
 						cachemodel.setUserGroup(ug);
-                        
-				
 						
-						
-						logger.logInfo("LoginSignupServlet", "doPost",
-								"User logged in successfully: " + ud.getUserName());
+
+						response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+						response.setHeader("Pragma", "no-cache");
+						response.setDateHeader("Expires", 0);
 						response.sendRedirect("Dashboard.jsp");
+
+						logger.logInfo("SignupServlet", "doPost", "User signed up successfully: " + ud.getUserName());
 					} else {
-						logger.logWarning("LoginSignupServlet", "doPost",
-								"Invalid username or password for user: " + request.getParameter("username"));
-						request.setAttribute("errorMessage", "Invalid username and password");
-						request.getRequestDispatcher("Login.jsp").forward(request, response);
+						logger.logWarning("SignupServlet", "doPost", "User creation failed.");
+						request.setAttribute("errorMessage", "An error occurred while creating user");
+						request.getRequestDispatcher("Signup.jsp").forward(request, response);
 					}
 				} else {
-					logger.logWarning("LoginSignupServlet", "doPost",
+					logger.logWarning("SignupServlet", "doPost",
 							"Password validation failed for user: " + request.getParameter("username"));
-					request.setAttribute("errorMessage", "Password is too long or missing cases and numbers");
-					request.getRequestDispatcher("Login.jsp").forward(request, response);
+					request.setAttribute("errorMessage",
+							"Password should contain at least one lower case, one upper case, and numbers.");
+					request.getRequestDispatcher("Signup.jsp").forward(request, response);
 				}
 			} else {
-				logger.logWarning("LoginSignupServlet", "doPost", "Username or password is empty");
-				request.setAttribute("errorMessage", "Username and password should not be empty");
-				request.getRequestDispatcher("Login.jsp").forward(request, response);
+				logger.logWarning("SignupServlet", "doPost", "Required parameters are missing.");
+				request.setAttribute("errorMessage", "Parameters should not be empty!");
+				request.getRequestDispatcher("Signup.jsp").forward(request, response);
 			}
 		} catch (Exception e) {
-			logger.logError("LoginSignupServlet", "doPost", "Exception occurred during login", e);
+			logger.logError("SignupServlet", "doPost", "Exception occurred during signup", e);
 			request.setAttribute("errorMessage", e);
-			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			request.getRequestDispatcher("Signup.jsp").forward(request, response);
 		}
 	}
 }

@@ -23,11 +23,13 @@ public class SessionTableCleaner implements Runnable {
 			ResultSet val = ps.executeQuery();
 			while (val.next()) {
 				sessionExpire = val.getLong(2);
-				if (currentTime - sessionExpire < (5 * 60)) {
-
+//				currentTime - sessionExpire < (5 * 60)
+				if (currentTime - sessionExpire >0) {
 					ps = con.prepareStatement("delete from Session where Session_id=?");
 					ps.setString(1, val.getString(1));
 					ps.executeUpdate();
+					
+					
 					
 
 				}

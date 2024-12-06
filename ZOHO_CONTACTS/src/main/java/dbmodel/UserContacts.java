@@ -8,8 +8,8 @@ import java.time.Instant;
  */
 public class UserContacts {
 
-    private int user_id;
-    private int contact_id;
+    private Integer user_id;
+    private Integer contact_id;
     private String f_name;
     private String m_name;
     private String l_name;
@@ -17,7 +17,7 @@ public class UserContacts {
     private String address;
     private String gender;
     private String email;
-    private long createdAt;
+    private Long createdAt;
     private String timezone;
 
     /**
