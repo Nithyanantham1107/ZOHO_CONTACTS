@@ -66,7 +66,7 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
-	public void rollBackConnectio() {
+	public void rollBackConnection() {
 		try {
 			this.con.rollback();
 		} catch (SQLException e) {
@@ -87,16 +87,16 @@ public class MysqlBuilder implements QueryBuilder {
 
 	}
 
-//	public QueryBuilder join(Table table1, String operation, Table table2) {
-//
-//		this.query.append(" join  " + " " + table2.getTableName() + "  on  " + table1 + " = " + table2);
-//
-//		return this;
-//
-//	}
+	public QueryBuilder join( TableSchema.JoinType jointype,   Table table1, TableSchema.Operation op, Table table2) {
+
+		this.query.append(" "+jointype.getType() + " " + table2.getTableName() + "  on  " + table1.getTableName()+"."+table1 + "  "+op.getOperation()+" " + table2.getTableName()+"."+table2 +" ");
+
+		return this;
+
+	}
 
 	@Override
-	public QueryBuilder select(Table tablename, Table... columns) {
+	public QueryBuilder select(Table tablename,Table... columns) {
 
 		this.TableName = tablename.getTableName();
 
@@ -106,16 +106,13 @@ public class MysqlBuilder implements QueryBuilder {
 			this.query.append("FROM");
 		} else {
 			for (int i = 0; i < columns.length; i++) {
-				if (this.TableName.equals(columns[i].getTableName())) {
+				
 					query.append(" " + columns[i] + " ");
 					if (i < columns.length - 1) {
 						this.query.append(",");
 					}
 
-				} else {
-					System.out.println("Invalid columnName for table:" + this.TableName);
-					return null;
-				}
+				
 
 			}
 			query.append(" FROM ");
@@ -220,41 +217,41 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder where(Table columns, String operation, Object data) {
+	public QueryBuilder where(Table columns,TableSchema.Operation operation, Object data) {
 
 		this.query.append(" WHERE");
 
 		if (!this.TableName.equals(columns.getTableName())) {
 			return null;
 		}
-		this.query.append(" " + columns + " " + operation + "?");
+		this.query.append(" " + columns + " " + operation.getOperation() + "?");
 		this.parameters.offer(data);
 
 		return this;
 	}
 
 	@Override
-	public QueryBuilder and(Table columns, String operation, Object data) {
+	public QueryBuilder and(Table columns, TableSchema.Operation operation, Object data) {
 
 		this.query.append(" and");
 
 		if (!this.TableName.equals(columns.getTableName())) {
 			return null;
 		}
-		this.query.append(" " + columns + " " + operation + "?");
+		this.query.append(" " + columns + " " + operation.getOperation() + "?");
 		this.parameters.offer(data);
 
 		return this;
 	}
 
 	@Override
-	public QueryBuilder or(Table columns, String operation, Object data) {
+	public QueryBuilder or(Table columns, TableSchema.Operation  operation, Object data) {
 
 		this.query.append("or");
 		if (!this.TableName.equals(columns.getTableName())) {
 			return null;
 		}
-		this.query.append(" " + columns + " " + operation + "?");
+		this.query.append(" " + columns + " " + operation.getOperation() + "?");
 		this.parameters.offer(data);
 
 		return this;

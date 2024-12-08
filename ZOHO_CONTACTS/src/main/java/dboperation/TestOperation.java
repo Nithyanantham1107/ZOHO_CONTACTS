@@ -10,6 +10,8 @@ import dbmodel.UserData;
 import querybuilder.QueryBuilder;
 import querybuilder.SqlQueryLayer;
 import querybuilder.TableSchema;
+import querybuilder.TableSchema.JoinType;
+import querybuilder.TableSchema.Operation;
 
 public class TestOperation {
 
@@ -28,13 +30,13 @@ public class TestOperation {
 //		qg.update(TableSchema.tables.Category, TableSchema.Category.CATEGORY_NAME).valuesUpdate("arunkk").where(TableSchema.Category.CATEGORY_ID, "=", 2).make();
 //		qg.Delete(TableSchema.tables.Category_relation).where(TableSchema.Category_relation.CATEGORY_ID, ">",2).make();
 	
-		qg.select(TableSchema.tables.Contact_details,TableSchema.Contact_details.user_id).make();
-//		ArrayList<Map<String,Object>> result=	qg.select(TableSchema.tables.user_data).where(TableSchema.user_data.user_id, ">", 20).buildQuery();
+//		qg.select(TableSchema.tables.Contact_details,TableSchema.Contact_details.user_id,TableSchema.Contact_mail.contact_id).join(JoinType.left,TableSchema.Contact_details.contact_id, Operation.Equal, TableSchema.Contact_mail.contact_id).make();
+		ArrayList<Map<String,Object>> result=	qg.select(TableSchema.tables.user_data).where(TableSchema.user_data.user_id, Operation.GreaterEqual, 20).buildQuery();
 		
-//		for(Map<String,Object> data: result) {
-//			System.out.println(ty)
-//			System.out.println(data.get("Name")+"  "+data.get("password"));
-//		}
+		for(Map<String,Object> data: result) {
+		
+			System.out.println(data.get("Name")+"  "+data.get("password"));
+		}
 		
 		
 		qg.closeConnection();

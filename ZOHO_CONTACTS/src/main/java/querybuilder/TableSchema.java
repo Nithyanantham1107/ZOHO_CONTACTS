@@ -4,10 +4,41 @@ import java.lang.classfile.Interfaces;
 
 public class TableSchema {
 	public void care() {
-		
+
 		System.out.print("hjgdcu");
 	}
 
+	public enum Operation {
+		Equal("="), Notequal("!="), GreaterThan(">"), LesserThan("<"), GreaterEqual(">="), LesserEqual("<=");
+
+		String value;
+
+		Operation(String val) {
+
+			this.value = val;
+		}
+
+		String getOperation() {
+			return this.value;
+		}
+	}
+	
+	
+	
+	public enum JoinType {
+		left("LEFT JOIN"), right("RIGHT JOIN"), inner("INNER JOIN"), outer("OUTER JOIN");
+
+		String value;
+
+		JoinType(String val) {
+
+			this.value = val;
+		}
+
+		String getType() {
+			return this.value;
+		}
+	}
 
 	public enum Category_relation implements Table {
 		contact_id_to_join, Category_id;

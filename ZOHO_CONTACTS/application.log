@@ -1984,3 +1984,37 @@ Dec 06, 2024 11:55:24 AM loggerfiles.LoggerSet logInfo
 INFO: 2024-12-06 11:55:24 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
 Dec 06, 2024 11:55:24 AM loggerfiles.LoggerSet logInfo
 INFO: 2024-12-06 11:55:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 06, 2024 4:12:04 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:04 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yV9fFf5yx2pDFUje4BkrWOReJ6gvFXEQeCOM1A92xuDjYpandJZLu 
+Dec 06, 2024 4:12:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:05 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yV9fFf5yx2pDFUje4BkrWOReJ6gvFXEQeCOM1A92xuDjYpandJZLu 
+Dec 06, 2024 4:12:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:05 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yV9fFf5yx2pDFUje4BkrWOReJ6gvFXEQeCOM1A92xuDjYpandJZLu 
+Dec 06, 2024 4:12:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:07 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yV9fFf5yx2pDFUje4BkrWOReJ6gvFXEQeCOM1A92xuDjYpandJZLu 
+Dec 06, 2024 4:12:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:07 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yV9fFf5yx2pDFUje4BkrWOReJ6gvFXEQeCOM1A92xuDjYpandJZLu 
+Dec 06, 2024 4:12:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:07 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yV9fFf5yx2pDFUje4BkrWOReJ6gvFXEQeCOM1A92xuDjYpandJZLu 
+Dec 06, 2024 4:12:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:07 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yV9fFf5yx2pDFUje4BkrWOReJ6gvFXEQeCOM1A92xuDjYpandJZLu 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | UserOperation | isUser | User verified successfully: anand1107 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | SessionOperation | generateSessionId | Created session ID: $2a$10$lg8FytzdLccpWXH5.qE03.Qqp5HJ8zszqnsTsfOc.7KOH.ZC4Fv.S 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | LoginSignupServlet | doPost | User logged in successfully: anand1107 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$lg8FytzdLccpWXH5.qE03.Qqp5HJ8zszqnsTsfOc.7KOH.ZC4Fv.S 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-06 16:12:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$lg8FytzdLccpWXH5.qE03.Qqp5HJ8zszqnsTsfOc.7KOH.ZC4Fv.S 
