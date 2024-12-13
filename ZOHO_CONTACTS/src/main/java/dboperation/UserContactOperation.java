@@ -24,6 +24,10 @@ public class UserContactOperation {
      * @return the UserContacts object with the assigned contact ID or null if an error occurs
      * @throws SQLException if a database access error occurs
      */
+
+    
+    
+    
     public UserContacts addUserContact(UserContacts uc) throws SQLException {
         Connection con = DBconnection.getConnection();
         try {

@@ -1,29 +1,23 @@
 package querybuilder;
 
-import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
-
 import dbconnect.DBconnection;
+import dbpojo.PojoMapper;
 
 public class MysqlBuilder implements QueryBuilder {
 	private StringBuilder query = new StringBuilder();
-	private String TableName;
+	private ArrayList<String> TableName = new ArrayList<String>();
 	private Connection con = null;
+	private String primarykey;
 	private Queue<Object> parameters = new LinkedList<Object>();
-	private Map<String, Set<String>> tableColumn = new HashMap<>();
 	String url = "jdbc:mysql://localhost:3306/ZOHO_CONTACTS";
 	String username = "root";
 	String password = "root";
@@ -87,38 +81,52 @@ public class MysqlBuilder implements QueryBuilder {
 
 	}
 
-	public QueryBuilder join( TableSchema.JoinType jointype,   Table table1, TableSchema.Operation op, Table table2) {
+	public QueryBuilder join(TableSchema.JoinType jointype, Table table1, TableSchema.Operation op, Table table2) {
 
-		this.query.append(" "+jointype.getType() + " " + table2.getTableName() + "  on  " + table1.getTableName()+"."+table1 + "  "+op.getOperation()+" " + table2.getTableName()+"."+table2 +" ");
+		this.query.append(" " + jointype.getType() + " " + table2.getTableName() + "  on  " + table1.getTableName()
+				+ "." + table1 + "  " + op.getOperation() + " " + table2.getTableName() + "." + table2 + " ");
+		this.TableName.add(table2.getTableName());
 
 		return this;
 
 	}
 
 	@Override
-	public QueryBuilder select(Table tablename,Table... columns) {
+	public QueryBuilder select(Table tablename, Table... columns) {
 
-		this.TableName = tablename.getTableName();
+		this.TableName.add(tablename.getTableName());
+		Boolean state = false;
 
 		this.query.append("SELECT");
 		if (columns.length == 0) {
 			this.query.append(" * ");
 			this.query.append("FROM");
 		} else {
-			for (int i = 0; i < columns.length; i++) {
-				
-					query.append(" " + columns[i] + " ");
-					if (i < columns.length - 1) {
-						this.query.append(",");
-					}
+			this.primarykey = tablename.getTableName() + "." + tablename.getPrimaryKey();
 
-				
+			for (int i = 0; i < columns.length; i++) {
+
+				if (this.primarykey.equals(columns[i].getTableName() + "." + columns[i])) {
+					state = true;
+
+				}
+
+				query.append(" " + columns[i].getTableName() + "." + columns[i] + " ");
+
+				if (i < columns.length - 1) {
+					this.query.append(",");
+				}
+
+			}
+			if (!state) {
+
+				this.query.append("," + this.primarykey + " ");
 
 			}
 			query.append(" FROM ");
 
 		}
-		query.append(" " + this.TableName);
+		query.append(" " + this.TableName.getLast());
 
 		return this;
 	}
@@ -126,7 +134,7 @@ public class MysqlBuilder implements QueryBuilder {
 	@Override
 	public QueryBuilder Delete(Table tablename) {
 
-		this.TableName = tablename.getTableName();
+		this.TableName.add(tablename.getTableName());
 
 		this.query.append("DELETE FROM " + this.TableName + " ");
 
@@ -136,13 +144,13 @@ public class MysqlBuilder implements QueryBuilder {
 	@Override
 	public QueryBuilder insert(Table tablename, Table... columns) {
 
-		this.TableName = tablename.getTableName();
+		this.TableName.add(tablename.getTableName());
 		this.query.append("INSERT INTO " + tablename + " ");
 		if (columns.length != 0) {
 			this.query.append("(" + " ");
 
 			for (int i = 0; i < columns.length; i++) {
-				if (TableName.equals(columns[i].getTableName())) {
+				if (TableName.contains(columns[i].getTableName())) {
 					this.query.append(columns[i]);
 
 				} else {
@@ -181,17 +189,17 @@ public class MysqlBuilder implements QueryBuilder {
 	@Override
 	public QueryBuilder update(Table tablename, Table... columns) {
 
-		this.TableName = tablename.getTableName();
+		this.TableName.add(tablename.getTableName());
 
 		this.query.append("UPDATE " + this.TableName + " " + "SET" + " ");
 		for (int i = 0; i < columns.length; i++) {
-			if (this.TableName.equals(columns[i].getTableName())) {
+			if (this.TableName.contains(columns[i].getTableName())) {
 
 				if (i == columns.length - 1) {
-					this.query.append(columns[i] + "=?" + " ");
+					this.query.append(" " + columns[i].getTableName() + "." + columns[i] + "=?" + " ");
 				} else {
 
-					this.query.append(columns[i] + "=?,");
+					this.query.append(" " + columns[i].getTableName() + "." + columns[i] + "=?,");
 				}
 
 			} else {
@@ -217,14 +225,14 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder where(Table columns,TableSchema.Operation operation, Object data) {
+	public QueryBuilder where(Table columns, TableSchema.Operation operation, Object data) {
 
 		this.query.append(" WHERE");
 
-		if (!this.TableName.equals(columns.getTableName())) {
+		if (!this.TableName.contains(columns.getTableName())) {
 			return null;
 		}
-		this.query.append(" " + columns + " " + operation.getOperation() + "?");
+		this.query.append(" " + columns.getTableName() + "." + columns + " " + operation.getOperation() + "?");
 		this.parameters.offer(data);
 
 		return this;
@@ -235,31 +243,32 @@ public class MysqlBuilder implements QueryBuilder {
 
 		this.query.append(" and");
 
-		if (!this.TableName.equals(columns.getTableName())) {
+		if (!this.TableName.contains(columns.getTableName())) {
 			return null;
 		}
-		this.query.append(" " + columns + " " + operation.getOperation() + "?");
+		this.query.append(" " + columns.getTableName() + "." + columns + " " + operation.getOperation() + "?");
 		this.parameters.offer(data);
 
 		return this;
 	}
 
 	@Override
-	public QueryBuilder or(Table columns, TableSchema.Operation  operation, Object data) {
+	public QueryBuilder or(Table columns, TableSchema.Operation operation, Object data) {
 
 		this.query.append("or");
-		if (!this.TableName.equals(columns.getTableName())) {
+		if (!this.TableName.contains(columns.getTableName())) {
 			return null;
 		}
-		this.query.append(" " + columns + " " + operation.getOperation() + "?");
+		this.query.append(" " + columns.getTableName() + "." + columns + " " + operation.getOperation() + "?");
 		this.parameters.offer(data);
 
 		return this;
 	}
 
 	@Override
-	public ArrayList<Map<String, Object>> buildQuery() {
+	public ArrayList<Object> executeQuery() {
 		this.query.append(";");
+
 		System.out.println("generated query upto select is :" + this.query);
 
 		try {
@@ -271,16 +280,14 @@ public class MysqlBuilder implements QueryBuilder {
 				if (this.parameters.peek() instanceof String) {
 
 					ps.setString(i, (String) this.parameters.peek());
-					System.out.println(i);
 
 				} else if (this.parameters.peek() instanceof Integer) {
 
 					ps.setInt(i, (Integer) this.parameters.peek());
-					System.out.println(i);
 
 				} else if (this.parameters.peek() instanceof Long) {
 					ps.setLong(i, (Long) this.parameters.peek());
-					System.out.println(i);
+
 				}
 				this.parameters.poll();
 				i++;
@@ -289,25 +296,29 @@ public class MysqlBuilder implements QueryBuilder {
 
 			ResultSet result = ps.executeQuery();
 			this.parameters.clear();
-			ArrayList<Map<String, Object>> resultList = new ArrayList<>();
+
 			int columnCount = result.getMetaData().getColumnCount();
 
-			while (result.next()) {
-				Map<String, Object> row = new HashMap<>();
-				for (i = 1; i <= columnCount; i++) {
-					String columnName = result.getMetaData().getColumnName(i);
-					Object value = result.getObject(i);
-					row.put(columnName, value);
-				}
-				resultList.add(row);
+			ArrayList<String> columnNames = new ArrayList<>();
+
+			for (int j = 1; j <= columnCount; j++) {
+				String columnName = result.getMetaData().getColumnName(j);
+				String tablename = result.getMetaData().getTableName(j);
+				columnNames.add(tablename + "." + columnName);
+//				System.out.println(tablename + "." + columnName);
+
 			}
-			return resultList;
+
+			PojoMapper pm = new PojoMapper();
+
+			return pm.PojoResultSetter(this.TableName.get(0), columnNames, result);
 
 		} catch (Exception e) {
 			System.out.println(e);
 		} finally {
 
-			this.TableName = null;
+			this.TableName.clear();
+			;
 			this.query.setLength(0);
 
 		}
@@ -326,7 +337,7 @@ public class MysqlBuilder implements QueryBuilder {
 		return this.query.toString();
 	}
 
-	public int build() {
+	public int execute() {
 		try {
 			this.query.append(";");
 			int i = 1;
@@ -359,7 +370,8 @@ public class MysqlBuilder implements QueryBuilder {
 		} catch (Exception e) {
 			System.out.println(e);
 		} finally {
-			this.TableName = null;
+			this.TableName.clear();
+			;
 			this.query.setLength(0);
 
 		}

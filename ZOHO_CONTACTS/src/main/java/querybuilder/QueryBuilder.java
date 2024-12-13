@@ -18,8 +18,8 @@ public interface QueryBuilder{
 	QueryBuilder where(Table columns,TableSchema.Operation op,Object data);
 	QueryBuilder and(Table columns,TableSchema.Operation op,Object data);
 	QueryBuilder or(Table columns,TableSchema.Operation op,Object data);
-	public ArrayList<Map<String,Object>> buildQuery();
-    int build();
+	public ArrayList<Object> executeQuery();
+    int execute();
     String make();
 	
 }

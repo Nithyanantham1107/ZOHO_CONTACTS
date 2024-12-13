@@ -706,3 +706,35 @@ Dec 06, 2024 4:12:07 PM loggerfiles.LoggerSet logAccessSet
 INFO: 2024-12-06T16:12:07.100935256 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
 Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logAccessSet
 INFO: 2024-12-06T16:12:24.372908465 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-09T18:05:24.092738087 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-09T18:05:24.197136901 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:39:26.908216442 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:39:26.991732776 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:39:31 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:39:31.772396990 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Add_contacts.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:02.096630238 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:04.470583259 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /addcontact | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:04.498338356 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:21.673931130 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:21.728244390 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:25.707575564 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:29.931215146 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:29.975267880 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:31.800115814 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /updategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:37.877857654 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /creategroup | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2024-12-12T09:40:37.930890429 | Client IP: 0:0:0:0:0:0:0:1 | Resource: /Dashboard.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 

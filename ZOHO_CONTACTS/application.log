@@ -2018,3 +2018,203 @@ Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
 INFO: 2024-12-06 16:12:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
 Dec 06, 2024 4:12:24 PM loggerfiles.LoggerSet logInfo
 INFO: 2024-12-06 16:12:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$lg8FytzdLccpWXH5.qE03.Qqp5HJ8zszqnsTsfOc.7KOH.ZC4Fv.S 
+Dec 09, 2024 6:05:23 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:23 | UserOperation | isUser | User verified successfully: anand1107 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | SessionOperation | generateSessionId | Created session ID: $2a$10$YjTWo12oG.GVzLrZZfxSXu0YqF9hk66Dn2TMi3bF46AiPhi7.9OKW 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | LoginSignupServlet | doPost | User logged in successfully: anand1107 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$YjTWo12oG.GVzLrZZfxSXu0YqF9hk66Dn2TMi3bF46AiPhi7.9OKW 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$YjTWo12oG.GVzLrZZfxSXu0YqF9hk66Dn2TMi3bF46AiPhi7.9OKW 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$YjTWo12oG.GVzLrZZfxSXu0YqF9hk66Dn2TMi3bF46AiPhi7.9OKW 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 09, 2024 6:05:24 PM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-09 18:05:24 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserOperation | isUser | User verified successfully: anand1107 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | SessionOperation | generateSessionId | Created session ID: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | LoginSignupServlet | doPost | User logged in successfully: anand1107 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:39:26 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:26 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:39:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:31 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:39:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:31 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:39:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:31 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:39:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:31 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:39:32 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:39:32 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | UserContactOperation | addUserContact | Contact added successfully: flash 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | AddContactServlet | doPost | Contact added successfully for user ID: 26 
+Dec 12, 2024 9:40:02 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:02 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:04 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:04 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserGroupOperation | createGroup | Group created successfully: heroes 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | CreateGroupServlet | doPost | Group created successfully: heroes 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:21 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:21 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:25 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:25 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:25 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:25 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:25 | UserGroupOperation | viewUserGroupContact | Contacts retrieved for group ID: 50 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:25 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:25 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:25 | UpdateUserGroupServlet | doPost | User group updated successfully: heroes 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserGroupOperation | updateUserGroup | Group updated successfully: 50 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | CreateGroupServlet | doPost | Group updated successfully: heroes 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:29 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:29 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:31 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:31 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:31 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:31 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:31 | UserGroupOperation | viewUserGroupContact | Contacts retrieved for group ID: 50 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:31 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:31 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:31 | UpdateUserGroupServlet | doPost | User group updated successfully: heroes 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserGroupOperation | updateUserGroup | Group updated successfully: 50 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | CreateGroupServlet | doPost | Group updated successfully: heroes 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Dec 12, 2024 9:40:37 AM loggerfiles.LoggerSet logInfo
+INFO: 2024-12-12 09:40:37 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$s4Hkz9zFeLFwvAO.xmhJn.auxP6ASFWFLPw99veNHaU7PVq0RCYli 
