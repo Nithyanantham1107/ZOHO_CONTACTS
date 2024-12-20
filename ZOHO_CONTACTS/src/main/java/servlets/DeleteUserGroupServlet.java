@@ -13,6 +13,8 @@ import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import dbpojo.Category;
+import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -27,7 +29,7 @@ public class DeleteUserGroupServlet extends HttpServlet {
     SessionOperation so;
     UserOperation user_op;
     UserContactOperation uco;
-    UserData ud;
+   
     LoggerSet logger; // LoggerSet instance
 
     /**
@@ -70,8 +72,8 @@ public class DeleteUserGroupServlet extends HttpServlet {
                       CacheModel cachemodel=CacheData.getCache(sessionid);
                       
                       
-                      UserData ud = cachemodel.getUserData();
-                    ArrayList<UserGroup> userGroups = ugo.viewAllGroup(ud.getUserId());
+                     Userdata ud = cachemodel.getUserData();
+                    ArrayList<Category> userGroups = ugo.viewAllGroup(ud.getUserId());
 
                     cachemodel.setUserGroup(userGroups);
                     logger.logInfo("DeleteUserGroupServlet", "doPost", "User group deleted successfully: " + groupid);

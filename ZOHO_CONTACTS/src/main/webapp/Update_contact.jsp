@@ -1,3 +1,4 @@
+<%@page import="dbpojo.ContactDetails"%>
 <%@page import="sessionstorage.CacheModel"%>
 <%@page import="dbmodel.UserGroup"%>
 <%@page import="java.util.ArrayList"%>
@@ -127,21 +128,21 @@ input[type="submit"]:hover {
 
 			// upto this session check is implemented
 
-			UserContacts uc = (UserContacts) request.getAttribute("user_spec_contact");
+			ContactDetails uc = (ContactDetails) request.getAttribute("user_spec_contact");
 			if (uc == null) {
 				response.sendRedirect("Dashboard.jsp");
 				return;
 			}
-			System.out.println("hey" + uc.getFname());
+			System.out.println("hey" + uc.getFirstName());
 			%>
 			<label for="name">FirstName</label> <input type="text" name="f_name"
-				value="<%=uc.getFname()%>" required /> <label for="name">MiddleName</label>
-			<input type="text" value="<%=uc.getMname()%>" name="m_name" /> <label
+				value="<%=uc.getFirstName()%>" required /> <label for="name">MiddleName</label>
+			<input type="text" value="<%=uc.getMiddleName()%>" name="m_name" /> <label
 				for="name">LastName</label> <input type="text"
-				value="<%=uc.getLname()%>" name="l_name" /> <label for="phoneno">Phone
-				No</label> <input type="text" name="phone" value="<%=uc.getPhoneno()%>"
+				value="<%=uc.getLastName()%>" name="l_name" /> <label for="phoneno">Phone
+				No</label> <input type="text" name="phone" value="<%=uc.getContactphone().getContactPhone()%>"
 				required /> <label for="email">Email</label> <input type="email"
-				name="email" value="<%=uc.getEmail()%>" required />
+				name="email" value="<%=uc.getContactMail().getContactMailID()%>" required />
 
 
 			<div
@@ -168,7 +169,7 @@ input[type="submit"]:hover {
 			</div>
 			<label for="address">Address</label>
 			<textarea rows="3" cols="20" name="Address" required><%=uc.getAddress()%></textarea>
-			<input type="hidden" name="contactid" value="<%=uc.getContactid()%>"
+			<input type="hidden" name="contactid" value="<%=uc.getContactID()%>"
 				required /> <input type="submit" value="Update" />
 		</form>
 		<form action="/Dashboard.jsp" method="get">

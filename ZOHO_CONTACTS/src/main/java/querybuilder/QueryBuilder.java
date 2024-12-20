@@ -3,6 +3,8 @@ package querybuilder;
 import java.util.ArrayList;
 import java.util.Map;
 
+import querybuilder.TableSchema.Statement;
+
 public interface QueryBuilder{
 	void openConnection();
 	void closeConnection();
@@ -19,7 +21,7 @@ public interface QueryBuilder{
 	QueryBuilder and(Table columns,TableSchema.Operation op,Object data);
 	QueryBuilder or(Table columns,TableSchema.Operation op,Object data);
 	public ArrayList<Object> executeQuery();
-    int execute();
+    int[] execute(Statement ...statements );
     String make();
 	
 }

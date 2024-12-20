@@ -2,16 +2,18 @@ package sessionstorage;
 
 import java.util.ArrayList;
 
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import dbmodel.UserGroup;
+
+import dbpojo.Userdata;
+import dbpojo.Category;
+import dbpojo.ContactDetails;
+
 
 public class CacheModel {
 	private long sessionExpireTime;
 	private long lastAccessed;
-	private UserData ud;
-	private ArrayList<UserGroup> ug;
-	private ArrayList<UserContacts> uc;
+	private Userdata ud;
+	private ArrayList<Category> ug;
+	private ArrayList<ContactDetails> uc;
 
 	public void setSessionExpire(long sessionExpireTime) {
 
@@ -31,30 +33,30 @@ public class CacheModel {
 		return this.lastAccessed;
 	}
 
-	public void setUserData(UserData ud) {
+	public void setUserData(Userdata ud) {
 
 		this.ud = ud;
 	}
 
-	public UserData getUserData() {
+	public Userdata getUserData() {
 		return this.ud;
 	}
 
-	public void setUserGroup(ArrayList<UserGroup> ug) {
+	public void setUserGroup(ArrayList<Category> ug) {
 
 		this.ug = ug;
 	}
 
-	public ArrayList<UserGroup> getUserGroup() {
+	public ArrayList<Category> getUserGroup() {
 		return this.ug;
 	}
 
-	public void setUserContact(ArrayList<UserContacts> uc) {
+	public void setUserContact(ArrayList<ContactDetails> uc) {
 
 		this.uc = uc;
 	}
 
-	public ArrayList<UserContacts> getUserContact() {
+	public ArrayList<ContactDetails> getUserContact() {
 		return this.uc;
 	}
 

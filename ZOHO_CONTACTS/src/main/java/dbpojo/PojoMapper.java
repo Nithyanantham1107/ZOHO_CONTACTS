@@ -144,7 +144,7 @@ public class PojoMapper {
 		CategoryRelation catrel = null;
 		String tablename = TableSchema.tables.Category_relation.getTableName();
 
-		catrel = new CategoryRelation(userContactSetter(1),
+		catrel = new CategoryRelation(getInt(tablename + "." + TableSchema.Category_relation.contact_id_to_join),
 				getInt(tablename + "." + TableSchema.Category_relation.Category_id));
 
 		return catrel;

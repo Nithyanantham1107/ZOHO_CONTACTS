@@ -11,6 +11,10 @@ import dbmodel.UserContacts;
 import dbmodel.UserData;
 import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
+import dbpojo.ContactDetails;
+import dbpojo.ContactMail;
+import dbpojo.ContactPhone;
+import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -21,9 +25,9 @@ import sessionstorage.CacheModel;
 public class UpdateUserContactServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     UserContactOperation co;
-    UserContacts uc;
+ 
     SessionOperation so;
-    UserData ud;
+ 
     HttpSession session;
     LoggerSet logger; // LoggerSet instance
 
@@ -33,7 +37,7 @@ public class UpdateUserContactServlet extends HttpServlet {
     public UpdateUserContactServlet() {
         super();
         co = new UserContactOperation();
-        uc = new UserContacts();
+     
         so = new SessionOperation();
         logger = new LoggerSet(); // Initialize logger
     }
@@ -52,34 +56,44 @@ public class UpdateUserContactServlet extends HttpServlet {
         	  String sessionid=(String) request.getAttribute("sessionid");
               CacheModel cachemodel=CacheData.getCache(sessionid);
               
+              ContactDetails uc=new ContactDetails();
               
-              UserData ud = cachemodel.getUserData();
+              Userdata ud = cachemodel.getUserData();
 
             if ((request.getParameter("f_name") != null && !request.getParameter("f_name").isBlank())
                     && (request.getParameter("gender") != null && !request.getParameter("gender").isBlank())
                     && (request.getParameter("phone") != null && !request.getParameter("phone").isBlank())
                     && (request.getParameter("Address") != null && !request.getParameter("Address").isBlank())
                     && (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
-
-                uc.setContactid(Integer.parseInt(request.getParameter("contactid")));
-                uc.setFname(request.getParameter("f_name"));
-                uc.setMname(request.getParameter("m_name"));
-                uc.setLname(request.getParameter("l_name"));
+            	ContactPhone cp = new ContactPhone();
+				ContactMail cm = new ContactMail();
+				
+				cp.setContactPhone(request.getParameter("phone"));
+				cm.setContactMailID(request.getParameter("email"));
+                uc.setContactID(Integer.parseInt(request.getParameter("contactid")));
+                uc.setFirstName(request.getParameter("f_name"));
+                uc.setMiddleName(request.getParameter("m_name"));
+                uc.setLastName(request.getParameter("l_name"));
                 uc.setAddress(request.getParameter("Address"));
+                
+//                System.out.println("gender of contact "+request.getParameter("gender"));
                 uc.setGender(request.getParameter("gender"));
-                uc.setPhoneno(request.getParameter("phone"));
-                uc.setUserid(ud.getUserId());
-                uc.setEmail(request.getParameter("email"));
+               uc.setContactMail(cm);
+               uc.setContactPhone(cp);
+                
+//                uc.setPhoneno(request.getParameter("phone"));
+                uc.setUserID(ud.getUserId());
+//                uc.setEmail(request.getParameter("email"));
 
-                logger.logInfo("UpdateUserContactServlet", "doPost", "Updating contact for user: " + ud.getUserId() + ", Contact ID: " + uc.getContactid());
+                logger.logInfo("UpdateUserContactServlet", "doPost", "Updating contact for user: " + ud.getUserId() + ", Contact ID: " + uc.getContactID());
 
                 if (co.updateSpecificUserContact(uc)) {
-                    ArrayList<UserContacts> userContacts = co.viewAllUserContacts(ud.getUserId());
+                    ArrayList<ContactDetails> userContacts = co.viewAllUserContacts(ud.getUserId());
                     cachemodel.setUserContact(userContacts);
                     response.sendRedirect("Dashboard.jsp");
                     logger.logInfo("UpdateUserContactServlet", "doPost", "Contact updated successfully.");
                 } else {
-                    logger.logWarning("UpdateUserContactServlet", "doPost", "Failed to update contact for Contact ID: " + uc.getContactid());
+                    logger.logWarning("UpdateUserContactServlet", "doPost", "Failed to update contact for Contact ID: " + uc.getContactID());
                     request.setAttribute("errorMessage", "Error while trying to update the contact. Please try again.");
                     request.getRequestDispatcher("update_contact.jsp").forward(request, response);
                 }

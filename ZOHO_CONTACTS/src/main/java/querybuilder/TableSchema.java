@@ -7,7 +7,12 @@ public class TableSchema {
 	
 
 	
-	
+	public enum Statement{
+		
+		
+		
+		RETURN_GENERATED_KEYS;
+	}
 	
 	
 

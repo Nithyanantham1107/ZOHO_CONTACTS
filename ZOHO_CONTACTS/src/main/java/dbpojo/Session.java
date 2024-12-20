@@ -14,6 +14,10 @@ public class Session {
 	}
 	
 	
+	public Session() {
+	
+	}
+	
 	public void setUserID(int UserId) {
 		this.user_id = UserId;
 	}

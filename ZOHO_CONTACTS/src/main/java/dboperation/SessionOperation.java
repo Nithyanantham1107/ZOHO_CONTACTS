@@ -10,7 +10,13 @@ import javax.servlet.http.Cookie;
 import org.mindrot.jbcrypt.BCrypt;
 import dbconnect.DBconnection;
 import dbmodel.UserData;
+import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
+import querybuilder.QueryBuilder;
+import querybuilder.SqlQueryLayer;
+import querybuilder.TableSchema.Operation;
+import querybuilder.TableSchema.Session;
+import querybuilder.TableSchema.tables;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
 
@@ -35,6 +41,7 @@ public class SessionOperation {
 	 */
 	public String generateSessionId(int user_id) throws SQLException {
 		int sessiontimeout = 30 * 60; 
+		int[] val=new int[2];
 		CacheModel cachemodel = new CacheModel();
 		String uuid = UUID.randomUUID().toString();
 
@@ -48,29 +55,39 @@ public class SessionOperation {
 		cachemodel.setSessionExpire(sessionexpire);
 		cachemodel.setLastAccessed(timestamp);
 		logger.logInfo("SessionOperation", "generateSessionId", "Created session ID: " + sessionid);
-		Connection con = DBconnection.getConnection();
+//		Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
 		try {
-			con.setAutoCommit(false);
-			PreparedStatement ps = con.prepareStatement("INSERT INTO Session VALUES (?, ?, ?);");
-			ps.setString(1, sessionid);
-			ps.setLong(2, sessionexpire);
-			ps.setInt(3, user_id);
-			int val = ps.executeUpdate();
-			if (val == 0) {
+//			con.setAutoCommit(false);
+			qg.openConnection();
+//			PreparedStatement ps = con.prepareStatement("INSERT INTO Session VALUES (?, ?, ?);");
+//			ps.setString(1, sessionid);
+//			ps.setLong(2, sessionexpire);
+//			ps.setInt(3, user_id);
+//			int val = ps.executeUpdate();
+			
+			
+			 val=qg.insert(tables.Session)
+					.valuesInsert(sessionid,sessionexpire,user_id)
+					.execute();
+			if (val[0] == 0) {
 				logger.logWarning("SessionOperation", "generateSessionId", "Error inserting into Session table");
-				con.rollback();
+//				con.rollback();
+				qg.rollBackConnection();
 				return null;
 			}
 
-			con.commit();
+//			con.commit();
+			qg.commit();
 			addSessionCacheData(sessionid, cachemodel);
 
 			return sessionid;
 		} catch (Exception e) {
 			logger.logError("SessionOperation", "generateSessionId", "Exception occurred", e);
 		} finally {
-			con.close();
+//			con.close();
+			qg.closeConnection();
 		}
 
 		return null;
@@ -103,16 +120,21 @@ public class SessionOperation {
 	 * @throws SQLException if a database access error occurs
 	 */
 	public boolean DeleteSessionData(String sessionid) throws SQLException {
-		Connection con = DBconnection.getConnection();
+//		Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+		int[] val=new int[2];
 		try {
 			if (sessionid != null) {
-				PreparedStatement ps = con.prepareStatement("DELETE FROM Session WHERE session_id = ?;");
-				ps.setString(1, sessionid);
-				int val = ps.executeUpdate();
+//				PreparedStatement ps = con.prepareStatement("DELETE FROM Session WHERE session_id = ?;");
+//				ps.setString(1, sessionid);
+//				int val = ps.executeUpdate();
 //                if (val == 0) {
 //                    logger.logWarning("SessionOperation", "DeleteSessionData", "Error deleting the session");
 //                    return false;
 //                }
+				 val=qg.Delete(tables.Session)
+						.where(Session.Session_id, Operation.Equal, sessionid)
+						.execute();
 			} else {
 				logger.logWarning("SessionOperation", "DeleteSessionData", "Session ID is null");
 				return false;
@@ -122,7 +144,8 @@ public class SessionOperation {
 		} catch (Exception e) {
 			logger.logError("SessionOperation", "DeleteSessionData", "Exception occurred", e);
 		} finally {
-			con.close();
+//			con.close();
+			qg.closeConnection();
 		}
 		return false;
 	}
@@ -165,7 +188,7 @@ public class SessionOperation {
 				cachemodel.setLastAccessed(currenttime);
 				if (val.next()) {
 					userid = val.getInt(3);
-					UserData ud = new UserData();
+					Userdata ud=new Userdata();
 					ud.setUserId(userid);
 					cachemodel.setUserData(ud);
 
@@ -206,10 +229,12 @@ public class SessionOperation {
 	}
 
 	public void addSessionCacheData(String sessionid, CacheModel cachemodel) throws SQLException {
-
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+		qg.openConnection();
 		if (CacheData.getcache().size() >= 100) {
 			int sessiontimeout = 30 * 60;
-			Connection con = DBconnection.getConnection();
+//			Connection con = DBconnection.getConnection();
+			
 			long maxTime = 0;
 			long currentTime = System.currentTimeMillis() / 1000;
 			String maxSessionid = null;
@@ -220,14 +245,19 @@ public class SessionOperation {
 					maxSessionid = id;
 				}
 			}
-			PreparedStatement ps = con.prepareStatement("UPDATE Session SET session_expire = ? WHERE session_id = ?");
-			ps.setLong(1, cachemodel.getlastAccessed() + sessiontimeout);
-			ps.setString(2, maxSessionid);
-			ps.executeUpdate();
+//			PreparedStatement ps = con.prepareStatement("UPDATE Session SET session_expire = ? WHERE session_id = ?");
+//			ps.setLong(1, cachemodel.getlastAccessed() + sessiontimeout);
+//			ps.setString(2, maxSessionid);
+//			ps.executeUpdate();
+			qg.update(tables.Session, Session.session_expire)
+			.valuesUpdate(cachemodel.getlastAccessed() + sessiontimeout)
+			.where(Session.Session_id, Operation.Equal,maxSessionid )
+			.execute();
 
 			CacheData.deleteAllCache(maxSessionid);
 
 		}
+		qg.closeConnection();
 		CacheData.addViewCache(sessionid, cachemodel);
 
 	}

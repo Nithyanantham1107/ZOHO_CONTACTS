@@ -11,6 +11,9 @@ public class ContactPhone {
 		
 	}
 	
+	public ContactPhone() {
+		
+	}
 	
 	
 	public void setContactID(int Contactid) {

@@ -13,6 +13,11 @@ public class LoginCredentials {
 	}
 	
 	
+	public LoginCredentials() {
+		
+	}
+
+
 	public void setUserID(int UserId) {
 		this.id = UserId;
 	}

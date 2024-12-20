@@ -1,3 +1,7 @@
+<%@page import="dbpojo.EmailUser"%>
+<%@page import="dbpojo.Category"%>
+<%@page import="dbpojo.ContactDetails"%>
+<%@page import="dbpojo.Userdata"%>
 <%@page import="sessionstorage.CacheData"%>
 <%@page import="sessionstorage.CacheModel"%>
 <%@page import="dboperation.UserGroupOperation"%>
@@ -178,11 +182,10 @@ th, td {
 tbody tr {
 	border: none;
 	background-color: white;
-	}
+}
 
 tbody tr:hover {
 	background-color: white;
-	
 }
 
 }
@@ -208,14 +211,13 @@ th, td {
 tbody tr {
 	border: none;
 	background-color: #f4db7d;
-	 transition: transform 0.2s ease, box-shadow 0.2s ease;
-
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 tbody tr:hover {
 	background-color: white;
-	   transform: translateY(-5px); /* Move the row up */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+	transform: translateY(-5px); /* Move the row up */
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 }
@@ -260,7 +262,7 @@ textarea {
 
 	<div>
 		<%
-		
+	 String primary =null;
 		
 		
 		
@@ -284,16 +286,16 @@ textarea {
           CacheModel cachemodel=CacheData.getCache(sessionid);
           
           
-          UserData ud = cachemodel.getUserData();
+          Userdata ud = cachemodel.getUserData();
 		
-		UserGroup ugu = (UserGroup) request.getAttribute("usergroupupdate");
-		
-		
+		Category ugu = (Category) request.getAttribute("usergroupupdate");
 		
 		
 		
-		ArrayList<UserContacts> user_contacts = cachemodel.getUserContact();
-		ArrayList<UserGroup> usergroup = cachemodel.getUserGroup();
+		
+		
+		ArrayList<ContactDetails> user_contacts = cachemodel.getUserContact();
+		ArrayList<Category> usergroup = cachemodel.getUserGroup();
 		%>
 
 		<div id="profileModal" class="modal">
@@ -351,17 +353,22 @@ textarea {
 
 
 
+							<%
+							for (EmailUser email : ud.getallemail()) {
+								if (email != null &&  email.getIsPrimary()) {
+									
+									primary=email.getEmail();
+									
+							%>
 
-
-
+                            
 
 
 							<tr>
 								<td><label for="email">Email</label></td>
 								<td>
 									<div class="emailstyle">
-										<input type="email" name="email"
-											value="<%=ud.getPrimaryMail()%>"
+										<input type="email" name="email" value="<%=email.getEmail()%>"
 											onchange="addEmailToDropdown()" required />
 										<button type="button" onclick="Addemail()">Add</button>
 
@@ -370,11 +377,11 @@ textarea {
 									</div>
 								</td>
 							</tr>
-							<%
-							for (String email : ud.getEmail()) {
-								if (email != null && !email.equals(ud.getPrimaryMail())) {
-							%>
 
+							<%
+								}else{
+							
+							%>
 
 							<tr>
 								<td></td>
@@ -407,7 +414,7 @@ textarea {
 							<tr>
 								<td><label for="username">Username</label></td>
 								<td><input type="text" name="username"
-									value="<%=ud.getUserName()%>" required /></td>
+									value=" <%=ud.getLoginCredentials().getUserName() %>" required /></td>
 							</tr>
 							<tr>
 								<td><label for="password">Enter password</label></td>
@@ -501,10 +508,10 @@ textarea {
 		   	    	 groupbutton.style.display = groupbutton.style.display =='none';
 				   
 				   
-				   document.getElementById("groupNameu").value = "<%=ugu.getGroupName()%>";
+				   document.getElementById("groupNameu").value = "<%=ugu.getCategoryName() %>";
 		            
 		        
-		            document.getElementById("groupidu").value = "<%=ugu.getGroupid()%>";
+		            document.getElementById("groupidu").value = "<%=ugu.getCategoryID()%>";
 				
 				</script>
 				<%
@@ -540,25 +547,25 @@ textarea {
 						</thead>
 						<tbody>
 							<%
-							for (UserContacts uc : user_contacts) {
+							for (ContactDetails uc : user_contacts) {
 							%>
 							<tr>
 								<td>
 									<%
-									if (ugu != null && ugu.getContacId() != null) {
-										if (ugu.checkcontact(ugu.getContacId(), uc.getContactid())) {
+									if (ugu != null && ugu.getCategoryRelation() != null) {
+										if (ugu.isContactExist( uc.getContactID())) {
 									%> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactid()%>" style="display: block;"
+									value="<%=uc.getContactID()%>" style="display: block;"
 									class="contact-checkbox" checked="checked" /> <%
  } else {
  %> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactid()%>" style="display: block;"
+									value="<%=uc.getContactID()%>" style="display: block;"
 									class="contact-checkbox" /> <%
  }
  %> <%
  } else {
  %> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactid()%>" style="display: none;"
+									value="<%=uc.getContactID()%>" style="display: none;"
 									class="contact-checkbox" /> <%
  }
  %>
@@ -568,21 +575,21 @@ textarea {
 
 								</td>
 								<!-- Hidden checkbox -->
-								<td><%=uc.getFname()%></td>
-								<td><%=uc.getMname()%></td>
-								<td><%=uc.getLname()%></td>
-								<td><%=uc.getEmail()%></td>
-								<td><%=uc.getPhoneno()%></td>
+								<td><%=uc.getFirstName()%></td>
+								<td><%=uc.getMiddleName()%></td>
+								<td><%=uc.getLastName()%></td>
+								<td><%=uc.getContactMail().getContactMailID()%></td>
+								<td><%=uc.getContactphone().getContactPhone()%></td>
 								<td><%=uc.getGender()%></td>
 								<td>
 									<form action="/GetAndUpdatecontact" method="post">
-										<input type="hidden" value="<%=uc.getContactid()%>"
+										<input type="hidden" value="<%=uc.getContactID()%>"
 											name="contact_id" /> <input type="submit" value="Update" />
 									</form>
 								</td>
 								<td>
 									<form action="/deletecontact" method="post">
-										<input type="hidden" value="<%=uc.getContactid()%>"
+										<input type="hidden" value="<%=uc.getContactID()%>"
 											name="contact_id" /> <input type="submit" value="Delete" />
 									</form>
 								</td>
@@ -608,32 +615,32 @@ textarea {
 							<tr>
 
 								<th>Group Name</th>
-								
+
 								<th>Update</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-							for (UserGroup ug : usergroup) {
+							for (Category ug : usergroup) {
 							%>
 							<tr>
 
-								<td><%=ug.getGroupName()%></td>
+								<td><%=ug.getCategoryName()%></td>
 
 
 								<td>
 									<form action="/updategroup" method="post">
-										<input type="hidden" value="<%=ug.getGroupid()%>"
+										<input type="hidden" value="<%=ug.getCategoryID()%>"
 											name="groupid" /> <input type="hidden"
-											value="<%=ug.getGroupName()%>" name="groupName" /> <input
+											value="<%=ug.getCategoryName()%>" name="groupName" /> <input
 											type="submit" id="updategrouptable" value="Update" />
 									</form>
 
 								</td>
 								<td>
 									<form action="/deletegroup" method="post">
-										<input type="hidden" value="<%=ug.getGroupid()%>"
+										<input type="hidden" value="<%=ug.getCategoryID()%>"
 											name="groupid" /> <input type="submit" value="Delete" />
 									</form>
 								</td>
@@ -713,12 +720,12 @@ textarea {
 
             const dropdown = document.getElementById('emailDropdown');
             dropdown.innerHTML = '';
-            dropdown.innerHTML += '<option value="<%=ud.getPrimaryMail()%>"><%=ud.getPrimaryMail()%></option>';
+            dropdown.innerHTML += '<option value="<%=primary %>"><%= primary %></option>';
 
             inputs.forEach(input => {
                 const email = input.value.trim();
-                console.log("<%=ud.getPrimaryMail()%>" === email);
-                if (email && validateEmail(email) && !emailList.includes(email) && !("<%=ud.getPrimaryMail()%>" === email) ) {
+                
+                if (email && validateEmail(email) && !emailList.includes(email) && !("<%=primary%>" === email) ) {
                     emailList.push(email);
                     const option = document.createElement('option');
                     option.value = email;
@@ -892,10 +899,9 @@ textarea {
                	           	
              	</script>
 
-             </body>
-             </html>
-             
-            
-   	    	
-   	    	
-   	    
+</body>
+</html>
+
+
+
+

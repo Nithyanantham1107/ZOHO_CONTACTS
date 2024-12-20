@@ -33,7 +33,7 @@ public class TestOperation {
 
 		ArrayList<Object> result = qg.select(TableSchema.tables.Email_user)
 				.join(JoinType.left, TableSchema.Email_user.em_id, Operation.Equal, TableSchema.user_data.user_id)
-				.where(TableSchema.user_data.user_id, Operation.Equal, 26).buildQuery();
+				.where(TableSchema.user_data.user_id, Operation.Equal, 26).executeQuery();
 				//.join(JoinType.left, TableSchema.user_data.user_id, Operation.Equal, TableSchema.Login_credentials.id)
 
 		if (result == null) {
@@ -49,7 +49,7 @@ public class TestOperation {
 				ud = (Userdata) data;
 				System.out.println("User Data :" + ud.getUserId() + "  " + ud.getName() + "  " + ud.getAddress());
 
-				for (EmailUser useremail : ud.getemail()) {
+				for (EmailUser useremail : ud.getallemail()) {
 
 					System.out.println(useremail.getEmail() + "  user id :  " + useremail.getEmailId());
 

@@ -2,12 +2,14 @@ package dbpojo;
 
 public class CategoryRelation {
 
-	ContactDetails contact_id_to_join;
+	int contact_id_to_join;
 	int Category_id;
-
+public CategoryRelation() {
+	
+}
 	
 	
-	public CategoryRelation(ContactDetails contactIdtoJoin,int CategoryID) {
+	public CategoryRelation(int contactIdtoJoin,int CategoryID) {
 		
 		
 		
@@ -23,11 +25,11 @@ public class CategoryRelation {
 		return this.Category_id;
 	}
 
-	public void setContactIDtoJoin(ContactDetails ContactIDtoJoin) {
+	public void setContactIDtoJoin(int ContactIDtoJoin) {
 		this.contact_id_to_join = ContactIDtoJoin;
 	}
 
-	public ContactDetails getContactIDtoJoin() {
+	public int getContactIDtoJoin() {
 		return this.contact_id_to_join;
 	}
 

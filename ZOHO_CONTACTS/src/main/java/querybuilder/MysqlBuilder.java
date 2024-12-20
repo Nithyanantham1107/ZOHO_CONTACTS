@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Queue;
 import dbconnect.DBconnection;
 import dbpojo.PojoMapper;
+import querybuilder.TableSchema.Statement;
 
 public class MysqlBuilder implements QueryBuilder {
 	private StringBuilder query = new StringBuilder();
@@ -145,7 +146,7 @@ public class MysqlBuilder implements QueryBuilder {
 	public QueryBuilder insert(Table tablename, Table... columns) {
 
 		this.TableName.add(tablename.getTableName());
-		this.query.append("INSERT INTO " + tablename + " ");
+		this.query.append("INSERT INTO " + tablename.getTableName() + " ");
 		if (columns.length != 0) {
 			this.query.append("(" + " ");
 
@@ -190,8 +191,11 @@ public class MysqlBuilder implements QueryBuilder {
 	public QueryBuilder update(Table tablename, Table... columns) {
 
 		this.TableName.add(tablename.getTableName());
+		
+		
+//		System.out.println(this.TableName );
 
-		this.query.append("UPDATE " + this.TableName + " " + "SET" + " ");
+		this.query.append("UPDATE " + tablename.getTableName() + " " + "SET" + " ");
 		for (int i = 0; i < columns.length; i++) {
 			if (this.TableName.contains(columns[i].getTableName())) {
 
@@ -336,13 +340,27 @@ public class MysqlBuilder implements QueryBuilder {
 
 		return this.query.toString();
 	}
+	
 
-	public int execute() {
+	public int[] execute(Statement... statements) {
+		
+		int[] data={-1,-1};
 		try {
+			ResultSet result;
 			this.query.append(";");
 			int i = 1;
+			
 			System.out.println("generated query upto select is :" + this.query);
+
 			PreparedStatement ps = this.con.prepareStatement(this.query.toString());
+
+			if (statements.length ==1 ) {
+
+				if (statements[0].toString().equals("RETURN_GENERATED_KEYS")) {
+					ps = this.con.prepareStatement(this.query.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
+				}
+
+			}
 
 			while (!this.parameters.isEmpty()) {
 
@@ -360,12 +378,32 @@ public class MysqlBuilder implements QueryBuilder {
 					ps.setLong(i, (Long) this.parameters.peek());
 					System.out.println(i);
 				}
+				
+				
+//				System.out.println("value"+this.parameters.peek());
 				this.parameters.poll();
 				i++;
 
 			}
 			this.parameters.clear();
-			return ps.executeUpdate();
+			data[0]=ps.executeUpdate();
+			System.out.println("execution of query"+data[0]);
+			
+			if (statements.length == 1) {
+
+				if (statements[1].toString().equals("RETURN_GENERATED_KEYS")) {
+					result=ps.getGeneratedKeys();
+					if(result.next()) {
+						data[1]=result.getInt(1);
+					}else {
+						System.out.println("generated Key are null!!!");
+					}
+				}
+
+			}
+			
+			
+			return data;
 
 		} catch (Exception e) {
 			System.out.println(e);
@@ -375,7 +413,7 @@ public class MysqlBuilder implements QueryBuilder {
 			this.query.setLength(0);
 
 		}
-		return -1;
+		return data;
 	}
 
 }

@@ -15,6 +15,11 @@ import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import dbpojo.Category;
+import dbpojo.ContactDetails;
+import dbpojo.EmailUser;
+import dbpojo.LoginCredentials;
+import dbpojo.Userdata;
 import validation.UserValidation;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
@@ -26,7 +31,7 @@ import sessionstorage.CacheModel;
 public class SignupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	UserOperation user_op;
-	UserData ud;
+	Userdata ud;
 	UserGroupOperation ugo;
 	UserContactOperation uco;
 	UserValidation uservalidate;
@@ -79,12 +84,17 @@ public class SignupServlet extends HttpServlet {
 					&& (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
 
 				if (uservalidate.validateUserPassword(request.getParameter("password"))) {
-					ud = new UserData();
+					ud = new Userdata();
+					LoginCredentials lc=new LoginCredentials();
+					EmailUser eu=new EmailUser();
+					lc.setUserName(request.getParameter("username"));
+					eu.setEmail(request.getParameter("email"));
+					eu.setIsPrimary(true);
 					ud.setName(request.getParameter("Name"));
 					ud.setAddress(request.getParameter("Address"));
-					ud.setUserName(request.getParameter("username"));
+//					ud.setUserName(request.getParameter("username"));
 					ud.setPhoneno(request.getParameter("phone"));
-					ud.setPrimaryMail(request.getParameter("email"));
+//					ud.setPrimaryMail(request.getParameter("email"));
 					ud.setPassword(request.getParameter("password"));
 					ud.setCurrentEmail(request.getParameter("email"));
 					ud.setTimezone(request.getParameter("timezone"));
@@ -97,8 +107,8 @@ public class SignupServlet extends HttpServlet {
 						sessionCookie.setHttpOnly(true);
 						response.addCookie(sessionCookie);
                         CacheModel cachemodel=CacheData.getCache(sessionid);
-						ArrayList<UserContacts> uc = uco.viewAllUserContacts(ud.getUserId());
-						ArrayList<UserGroup> ug = ugo.viewAllGroup(ud.getUserId());
+						ArrayList<ContactDetails> uc = uco.viewAllUserContacts(ud.getUserId());
+						ArrayList<Category> ug = ugo.viewAllGroup(ud.getUserId());
 						cachemodel.setUserData(ud);
 						cachemodel.setUserContact(uc);
 						cachemodel.setUserGroup(ug);
@@ -109,7 +119,7 @@ public class SignupServlet extends HttpServlet {
 						response.setDateHeader("Expires", 0);
 						response.sendRedirect("Dashboard.jsp");
 
-						logger.logInfo("SignupServlet", "doPost", "User signed up successfully: " + ud.getUserName());
+						logger.logInfo("SignupServlet", "doPost", "User signed up successfully: " + lc.getUserName());
 					} else {
 						logger.logWarning("SignupServlet", "doPost", "User creation failed.");
 						request.setAttribute("errorMessage", "An error occurred while creating user");

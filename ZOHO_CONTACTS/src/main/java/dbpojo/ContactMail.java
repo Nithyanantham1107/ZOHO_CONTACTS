@@ -13,6 +13,11 @@ public class ContactMail {
 		
 	}
 	
+	
+	public ContactMail() {
+		
+	}
+	
 	public void setContactID(int Contactid) {
 		this.contact_id = Contactid;
 	}

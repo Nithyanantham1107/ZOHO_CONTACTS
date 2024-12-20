@@ -7,7 +7,7 @@ public class Category {
 	int Category_id;
 	String Category_name;
 	int created_by;
-ArrayList<CategoryRelation> categoryRelation=new ArrayList<CategoryRelation>();
+	ArrayList<CategoryRelation> categoryRelation;
 
 	Category(int CategoryId, String CategoryName, int CreatedBy) {
 		this.Category_id = CategoryId;
@@ -15,10 +15,16 @@ ArrayList<CategoryRelation> categoryRelation=new ArrayList<CategoryRelation>();
 		this.created_by = CategoryId;
 
 	}
-	
-	
-	
-	
+
+	public Category() {
+
+	}
+
+	public void setCategoryRelationAll(ArrayList<CategoryRelation> categoryrelation) {
+
+		this.categoryRelation = categoryrelation;
+	}
+
 	public void setCategoryRelation(CategoryRelation categoryrelation) {
 
 		this.categoryRelation.add(categoryrelation);
@@ -27,7 +33,6 @@ ArrayList<CategoryRelation> categoryRelation=new ArrayList<CategoryRelation>();
 	public ArrayList<CategoryRelation> getCategoryRelation() {
 		return this.categoryRelation;
 	}
-
 
 	public void setCategoryID(int Categoryid) {
 		this.Category_id = Categoryid;
@@ -51,6 +56,23 @@ ArrayList<CategoryRelation> categoryRelation=new ArrayList<CategoryRelation>();
 
 	public int getCreatedBy() {
 		return this.created_by;
+	}
+
+	public boolean isContactExist(int usercontactid) {
+		if (this.categoryRelation != null) {
+
+			for (CategoryRelation cr : this.categoryRelation) {
+
+				if (cr.getContactIDtoJoin() == usercontactid) {
+
+					return true;
+				}
+			}
+
+		}
+
+		return false;
+
 	}
 
 }

@@ -12,6 +12,8 @@ import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import dbpojo.ContactDetails;
+import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -64,12 +66,12 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
               CacheModel cachemodel=CacheData.getCache(sessionid);
               
               
-              UserData ud = cachemodel.getUserData();
+              Userdata ud = cachemodel.getUserData();
 
             if (request.getParameter("contact_id") != null) {
                 int user_id = ud.getUserId();
                 int contact_id = Integer.parseInt(request.getParameter("contact_id"));
-                UserContacts uc = co.viewSpecificUserContact(user_id, contact_id);
+                ContactDetails uc = co.viewSpecificUserContact(user_id, contact_id);
 
                 if (uc != null) {
                     request.setAttribute("user_spec_contact", uc);

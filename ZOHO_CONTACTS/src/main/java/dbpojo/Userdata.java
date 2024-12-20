@@ -9,10 +9,17 @@ public class Userdata {
 	String phone_no;
 	String address;
 	String timezone;
+	String CurrentEmail;
 	ArrayList<Session> session = new ArrayList<Session>();
 	ArrayList<EmailUser> email = new ArrayList<EmailUser>();
 	LoginCredentials LoginCredentials;
 
+	
+	public Userdata() {
+		
+	}
+	
+	
 	Userdata(int userid, String Name, String password, String Phoneno, String address, String timezone) {
 		this.address = address;
 		this.Name = Name;
@@ -21,6 +28,17 @@ public class Userdata {
 		this.phone_no = Phoneno;
 		this.timezone = timezone;
 
+	}
+	
+	
+	
+	public void setCurrentEmail(String current ) {
+
+		this.CurrentEmail=current;
+	}
+
+	public String getCurrentemail() {
+		return this.CurrentEmail;
 	}
 
 	public void setLoginCredentials(LoginCredentials login) {
@@ -37,17 +55,27 @@ public class Userdata {
 		this.session.add(session);
 	}
 
-	public ArrayList<Session> getsession() {
+	public ArrayList<Session> getallsession() {
 		return this.session;
 	}
 
+	
+	
+	public Session getsession(int i) {
+		return this.session.get(i);
+	}
+
+	
 	public void setEmail(EmailUser email) {
 
 		this.email.add(email);
 	}
 
-	public ArrayList<EmailUser> getemail() {
+	public ArrayList<EmailUser> getallemail() {
 		return this.email;
+	}
+	public EmailUser getemail(int i) {
+		return this.email.get(i);
 	}
 
 	public void setUserId(int user_id) {

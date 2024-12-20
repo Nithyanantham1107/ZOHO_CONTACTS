@@ -13,6 +13,8 @@ import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import dbpojo.ContactDetails;
+import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -66,7 +68,7 @@ public class DeleteUserContactServlet extends HttpServlet {
                  CacheModel cachemodel=CacheData.getCache(sessionid);
                  
                  
-                 UserData ud = cachemodel.getUserData();
+                 Userdata ud = cachemodel.getUserData();
                
 
                 int user_id = ud.getUserId();
@@ -74,7 +76,7 @@ public class DeleteUserContactServlet extends HttpServlet {
 
                
                 if (uco.deleteContact(user_id, contact_id)) {
-                    ArrayList<UserContacts> userContacts = uco.viewAllUserContacts(ud.getUserId());
+                    ArrayList<ContactDetails> userContacts = uco.viewAllUserContacts(ud.getUserId());
                   
                     cachemodel.setUserContact(userContacts);
                     

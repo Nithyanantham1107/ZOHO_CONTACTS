@@ -23,6 +23,9 @@ import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import dbpojo.Category;
+import dbpojo.ContactDetails;
+import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -77,10 +80,10 @@ public class SessionFilter implements Filter {
 			CacheModel cachemodel = so.checkSessionAlive(sessionid);
 			if (cachemodel != null) {
                 int userid=cachemodel.getUserData().getUserId();
-				UserData ud = uo.getUserData(userid);
+				Userdata ud = uo.getUserData(userid);
 	
-				ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-				ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
+				ArrayList<ContactDetails> uc = uco.viewAllUserContacts(userid);
+				ArrayList<Category> ug = ugo.viewAllGroup(userid);
 				cachemodel.setUserContact(uc);
 				cachemodel.setUserData(ud);
 				cachemodel.setUserGroup(ug);

@@ -16,6 +16,10 @@ public class ContactDetails {
 	ContactPhone contactPhone;
 
 	long created_At;
+	
+	public ContactDetails() {
+		
+	}
 
 	public ContactDetails(int userid, int contactid, String Firstname, String middleName, String LastName,
 			String gender, String Address, long CreatedAt) {
@@ -90,7 +94,14 @@ public class ContactDetails {
 	}
 
 	public void setGender(String Gender) {
-		this.gender = Gender;
+//		System.out.println("boolean "+("male".equals(gender) || "M".equals(gender)));
+//		
+//		System.out.println(gender);
+		if ("male".equals(Gender) || "M".equals(Gender)) {
+            this.gender = "M";
+        } else  {
+            this.gender = "F";
+        }
 	}
 
 	public String getGender() {
@@ -105,7 +116,7 @@ public class ContactDetails {
 		return this.Address;
 	}
 
-	public void setCreatedAt(int CreatedAt) {
+	public void setCreatedAt(long CreatedAt) {
 		this.created_At = CreatedAt;
 	}
 

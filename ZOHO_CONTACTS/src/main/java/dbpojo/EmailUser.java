@@ -13,6 +13,9 @@ public class EmailUser {
 		this.email=email;
 		this.is_primary=IsPrimary;
 	}
+	public EmailUser() {
+		
+	}
 
 	public void setEmailID(int EmailId) {
 		this.em_id = EmailId;
