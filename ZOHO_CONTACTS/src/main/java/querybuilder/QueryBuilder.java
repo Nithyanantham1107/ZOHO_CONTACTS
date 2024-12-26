@@ -16,7 +16,7 @@ public interface QueryBuilder{
 	QueryBuilder valuesInsert(Object ...values);
 	QueryBuilder valuesUpdate(Object ...values);
 	QueryBuilder update(Table tablename,Table ...columns);
-	QueryBuilder Delete(Table tablename);
+	QueryBuilder delete(Table tablename);
 	QueryBuilder where(Table columns,TableSchema.Operation op,Object data);
 	QueryBuilder and(Table columns,TableSchema.Operation op,Object data);
 	QueryBuilder or(Table columns,TableSchema.Operation op,Object data);

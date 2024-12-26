@@ -270,9 +270,9 @@ textarea {
 		// upto this session check is implemented
    SessionOperation so=new SessionOperation();
 		
-   CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+   CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
 
-	if (alive == null) {
+	if (cachemodel == null) {
             System.out.println("hello hi");
 			response.sendRedirect("index.jsp");
             return;
@@ -280,22 +280,33 @@ textarea {
 
 		}
 
+	
+	
 		
-		
-		  String sessionid=(String) request.getAttribute("sessionid");
-          CacheModel cachemodel=CacheData.getCache(sessionid);
+		 // String sessionid=(String) request.getAttribute("sessionid");
+         // CacheModel cachemodel=CacheData.getCache(sessionid);
           
           
           Userdata ud = cachemodel.getUserData();
 		
 		Category ugu = (Category) request.getAttribute("usergroupupdate");
 		
-		
+		for (EmailUser email : ud.getallemail()) {
+			if (email != null &&  email.getIsPrimary()) {
+			
+				
+				
+				primary=email.getEmail();
+				
+			}}
 		
 		
 		
 		ArrayList<ContactDetails> user_contacts = cachemodel.getUserContact();
 		ArrayList<Category> usergroup = cachemodel.getUserGroup();
+		
+		
+		
 		%>
 
 		<div id="profileModal" class="modal">
@@ -354,10 +365,7 @@ textarea {
 
 
 							<%
-							for (EmailUser email : ud.getallemail()) {
-								if (email != null &&  email.getIsPrimary()) {
-									
-									primary=email.getEmail();
+							
 									
 							%>
 
@@ -368,7 +376,7 @@ textarea {
 								<td><label for="email">Email</label></td>
 								<td>
 									<div class="emailstyle">
-										<input type="email" name="email" value="<%=email.getEmail()%>"
+										<input type="email" name="email" value="<%=primary%>"
 											onchange="addEmailToDropdown()" required />
 										<button type="button" onclick="Addemail()">Add</button>
 
@@ -379,7 +387,12 @@ textarea {
 							</tr>
 
 							<%
-								}else{
+							
+							
+							for (EmailUser email : ud.getallemail()) {
+								if (email != null &&  !email.getIsPrimary()) {
+									
+							
 							
 							%>
 
@@ -387,7 +400,7 @@ textarea {
 								<td></td>
 								<td>
 									<div class="emailstyle">
-										<input type="email" name="email" value="<%=email%>"
+										<input type="email" name="email" value="<%=email.getEmail()%>"
 											onchange="addEmailToDropdown()" required />
 										<button type="button" onclick="removeEmail(this)">Remove</button>
 									</div>
@@ -414,7 +427,7 @@ textarea {
 							<tr>
 								<td><label for="username">Username</label></td>
 								<td><input type="text" name="username"
-									value=" <%=ud.getLoginCredentials().getUserName() %>" required /></td>
+									value="<%=ud.getLoginCredentials().getUserName()%>" required /></td>
 							</tr>
 							<tr>
 								<td><label for="password">Enter password</label></td>

@@ -8,7 +8,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class CacheData {
-	private static HashMap<String, CacheModel> viewcache = new HashMap<String, CacheModel>();
+	
+	
+	private static HashMap<Integer,CacheModel> viewcache = new HashMap<Integer, CacheModel>();
+	
+	
+	private static HashMap<String, Integer> sessionMapper = new HashMap<String, Integer>();
 	private static BlockingQueue<String> primaryUpdateQueue = new ArrayBlockingQueue<String>(100);
 	private static BlockingQueue<String> secondaryUpdateQueue = new ArrayBlockingQueue<String>(100);
 	private static Boolean active = false;
@@ -31,12 +36,18 @@ public class CacheData {
 	}
 
 	public static void addViewCache(String sessionid, CacheModel cachedata) {
-		viewcache.put(sessionid, cachedata);
+//		viewcache.put(sessionid, cachedata);
+		if(viewcache.get(cachedata.getUserData().getUserId())==null) {
+			viewcache.put(cachedata.getUserData().getUserId(), cachedata);
+		}
+		
+		
+		sessionMapper.put(sessionid, cachedata.getUserData().getUserId());
 	}
 
 	public static CacheModel getCache(String sessionid) {
 
-		return viewcache.get(sessionid);
+		return viewcache.get(sessionMapper.get(sessionid));
 
 	}
 
@@ -50,22 +61,49 @@ public class CacheData {
 	}
 
 	public static void deleteAllCache(String sessionid) {
-		CacheModel cachemodel = viewcache.get(sessionid);
-		if (cachemodel != null) {
-			cachemodel = null;
-		}
+//		CacheModel cachemodel = viewcache.get(sessionid);
+//		if (cachemodel != null) {
+//			cachemodel = null;
+//		}
 		if (primaryUpdateQueue.contains(sessionid)) {
 			primaryUpdateQueue.remove(sessionid);
 		}
 		if (secondaryUpdateQueue.contains(sessionid)) {
 			secondaryUpdateQueue.remove(sessionid);
 		}
-		viewcache.remove(sessionid);
+		
+		
+		if(sessionMapper.get(sessionid)!=null) {
+			
+			int userId=sessionMapper.get(sessionid);
+			sessionMapper.remove(sessionid);
+			boolean state=false;
+			for (int i : sessionMapper.values()) {
+				if(i==userId) {
+					state=true;
+					break;
+				}
+				
+			}
+			if(!state) {
+				viewcache.remove(userId);
+			}
+			
+		}
+		
+		
+		
 	}
 
-	public static HashMap<String, CacheModel> getcache() {
-		return viewcache;
+//	public static HashMap<Integer, CacheModel> getcache() {
+//		return viewcache;
+//	}
+	
+	public static HashMap<String, Integer> getsessionMapper() {
+		return sessionMapper;
 	}
+	
+	
 
 	public static BlockingQueue<String> getPrimaryUpdateQueue() {
 		return primaryUpdateQueue;

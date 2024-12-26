@@ -12,41 +12,71 @@ import javax.servlet.ServletContextListener;
 import loggerfiles.LoggerSet;
 import querybuilder.SqlQueryLayer;
 import schedulers.SessionTableCleaner;
-import schedulers.UpdateQueueSchedule;
+import schedulers.UpdateAndDeleteQueue;
 import querybuilder.QueryBuilder;
 
 public class ServerListener implements ServletContextListener {
-
+ QueryBuilder qg;
 	private ScheduledExecutorService updateCacheSchedule;
-	private ScheduledExecutorService sessionDBCleaner;
+//	private ScheduledExecutorService sessionDBCleaner;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		System.out.println("the context here started see !!..");
 		LoggerSet.appLog();
 		LoggerSet.accessLog();
+//		qg=new SqlQueryLayer().createQueryBuilder();
+//		qg.openConnection();
+		
+//		 if(new SqlQueryLayer().createQueryBuilder() ==null) {
+//			 
+//			 System.out.println("connection here in listner is null");
+//		 }
 		updateCacheSchedule = Executors.newScheduledThreadPool(1);
-		updateCacheSchedule.scheduleAtFixedRate(new UpdateQueueSchedule(), 0, 1, TimeUnit.MINUTES);
+		updateCacheSchedule.scheduleAtFixedRate(new UpdateAndDeleteQueue(), 0, 1,
+				TimeUnit.MINUTES);
 
 		System.out.println("Update queue Scheduler started");
-		sessionDBCleaner = Executors.newScheduledThreadPool(1);
-		sessionDBCleaner.scheduleAtFixedRate(new SessionTableCleaner(), 0, 5, TimeUnit.MINUTES);
-		System.out.println("Session DB cleaner Scheduler started");
+//		sessionDBCleaner = Executors.newScheduledThreadPool(1);
+//		sessionDBCleaner.scheduleAtFixedRate(new SessionTableCleaner(qg), 0, 5,
+//				TimeUnit.MINUTES);
+//		System.out.println("Session DB cleaner Scheduler started");
 
+
+	
 	}
+	
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		System.out.println("the context ends here see...!!");
-
+// qg.closeConnection();
+		
 		if (updateCacheSchedule != null) {
 			updateCacheSchedule.shutdown();
-			System.out.println(" Update Cache Queue Scheduler shut down.");
+			try {
+				if (!updateCacheSchedule.awaitTermination(60, TimeUnit.SECONDS)) {
+					updateCacheSchedule.shutdownNow(); 
+				}
+			} catch (InterruptedException e) {
+				updateCacheSchedule.shutdownNow();
+				Thread.currentThread().interrupt();
+			}
 		}
-		if (sessionDBCleaner != null) {
-			sessionDBCleaner.shutdown();
-			System.out.println("session DB cleaner Scheduler shut down.");
-		}
+
+//		if (sessionDBCleaner != null) {
+//			sessionDBCleaner.shutdown(); // Initiates an orderly shutdown
+//			try {
+//				if (!sessionDBCleaner.awaitTermination(60, TimeUnit.SECONDS)) {
+//					sessionDBCleaner.shutdownNow(); 
+//				}
+//			} catch (InterruptedException e) {
+//				sessionDBCleaner.shutdownNow();
+//				Thread.currentThread().interrupt();
+//			}
+//		}
+
+		System.out.println("Scheduled tasks have been shut down successfully.");
 
 	}
 

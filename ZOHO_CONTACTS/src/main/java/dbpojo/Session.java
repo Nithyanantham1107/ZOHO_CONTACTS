@@ -2,15 +2,17 @@ package dbpojo;
 
 public class Session {
 
-	String Session_id;
-	long session_expire;
-	int user_id;
+private	String sessionId;
+private	long lastAccessed;
+private	int userId;
 
 	
-	Session(String SessionId,long sessionExpire,int userId){
-		this.session_expire=sessionExpire;
-		this.Session_id=SessionId;
-		this.user_id=userId;
+	Session(String sessionId,long lastAccessed,int userId){
+
+		this.sessionId=sessionId;
+		this.lastAccessed=lastAccessed;
+		
+		this.userId=userId;
 	}
 	
 	
@@ -18,30 +20,30 @@ public class Session {
 	
 	}
 	
-	public void setUserID(int UserId) {
-		this.user_id = UserId;
+	public void setUserId(int UserId) {
+		this.userId = UserId;
 	}
 
 	public int getUserId() {
-		return this.user_id;
+		return this.userId;
 	}
 	
 	
 	public void setSessionID(String SessionId) {
-		this.Session_id = SessionId;
+		this.sessionId = SessionId;
 	}
 
 	public String getSessionId() {
-		return this.Session_id;
+		return this.sessionId;
 	}
 	
 	
-	public void setSessionExpire(long SessionExpire) {
-		this.session_expire = SessionExpire;
+	public void setLastAccessed(long lastAccessed) {
+		this.lastAccessed = lastAccessed;
 	}
 
-	public long getSessionExpire() {
-		return this.session_expire;
+	public long getLastAccessed() {
+		return this.lastAccessed;
 	}
 	
 }

@@ -125,7 +125,7 @@ public class CreateGroupServlet extends HttpServlet {
 				if (request.getParameter("groupName") != null && request.getParameterValues("contact_ids") != null) {
 					int j = 0;
 //					ug = new UserGroup();
-					Category ug=new Category();
+					Category ug = new Category();
 
 					String sessionid = (String) request.getAttribute("sessionid");
 					CacheModel cachemodel = CacheData.getCache(sessionid);
@@ -133,30 +133,28 @@ public class CreateGroupServlet extends HttpServlet {
 					Userdata ud = cachemodel.getUserData();
 
 //					int[] contactid = new int[request.getParameterValues("contact_ids").length];
-					
+
 					ug.setCategoryName(request.getParameter("groupName"));
-					
+
 //					ug.setGroupName(request.getParameter("groupName"));
 
 					for (String i : request.getParameterValues("contact_ids")) {
 						if (i != null && !i.isBlank()) {
 //							contactid[j] = Integer.parseInt(i);
 //							j++;
-							
-							
+
 							CategoryRelation cr = new CategoryRelation();
 
 							cr.setContactIDtoJoin(Integer.parseInt(i));
 							ug.setCategoryRelation(cr);
 						}
 					}
-					
-					
+
 					ug.setCreatedBY(ud.getUserId());
-				
+
 //					ug.setUserid(ud.getUserId());
 //					ug.setcontactid(contactid);
-					
+
 					ug.setCategoryID(Integer.parseInt(request.getParameter("groupdata")));
 //					ug.set(Integer.parseInt(request.getParameter("groupdata")));
 

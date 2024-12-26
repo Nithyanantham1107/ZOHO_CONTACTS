@@ -98,7 +98,7 @@ public class UserProfileServlet extends HttpServlet {
 					
 					lc.setUserName(request.getParameter("username"));
                 	
-                	
+                	ud.setLoginCredentials(lc);
                     ud.setUserId(userSessionData.getUserId());
                     ud.setName(request.getParameter("Name"));
                     ud.setAddress(request.getParameter("Address"));

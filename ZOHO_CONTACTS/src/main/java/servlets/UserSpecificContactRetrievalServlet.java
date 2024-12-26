@@ -65,15 +65,19 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
         	  String sessionid=(String) request.getAttribute("sessionid");
               CacheModel cachemodel=CacheData.getCache(sessionid);
               
-              
+              System.out.println("hello im update contact");
               Userdata ud = cachemodel.getUserData();
 
             if (request.getParameter("contact_id") != null) {
                 int user_id = ud.getUserId();
                 int contact_id = Integer.parseInt(request.getParameter("contact_id"));
                 ContactDetails uc = co.viewSpecificUserContact(user_id, contact_id);
-
+//                System.out.println("contact mail +" uc.getContactMail().getContactMailID());
+//            	System.out.println("contact Phone +" uc.getContactphone().getContactPhone());
                 if (uc != null) {
+                	
+//                	 System.out.println("contact mail +" uc.getContactMail().getContactMailID());
+//                 	System.out.println("contact Phone +" uc.getContactphone().getContactPhone());
                     request.setAttribute("user_spec_contact", uc);
                     request.getRequestDispatcher("Update_contact.jsp").forward(request, response);
                     logger.logInfo("UserSpecificContactRetrievalServlet", "doPost", "Retrieved specific contact info for Contact ID: " + contact_id);

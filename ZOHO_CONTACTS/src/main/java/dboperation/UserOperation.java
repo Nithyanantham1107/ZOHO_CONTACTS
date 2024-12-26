@@ -1,14 +1,11 @@
 package dboperation;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.mindrot.jbcrypt.BCrypt;
-import dbconnect.DBconnection;
+
 import dbmodel.UserData;
 import dbpojo.EmailUser;
 import dbpojo.Userdata;
@@ -16,13 +13,13 @@ import loggerfiles.LoggerSet;
 import querybuilder.QueryBuilder;
 import querybuilder.SqlQueryLayer;
 import querybuilder.TableSchema;
-import querybuilder.TableSchema.user_data;
 import querybuilder.TableSchema.Email_user;
 import querybuilder.TableSchema.JoinType;
 import querybuilder.TableSchema.Login_credentials;
 import querybuilder.TableSchema.Operation;
 import querybuilder.TableSchema.Statement;
 import querybuilder.TableSchema.tables;
+import querybuilder.TableSchema.user_data;
 
 public class UserOperation {
 
@@ -65,7 +62,7 @@ public class UserOperation {
 			
 			
 			 val=qg.insert(tables.user_data, user_data.Name,user_data.password,user_data.phone_no,user_data.address,user_data.timezone)
-					.valuesUpdate(data.getName(),password,data.getPhoneno(),data.getAddress(),data.getTimezone()).execute(Statement.RETURN_GENERATED_KEYS);
+					.valuesInsert(data.getName(),password,data.getPhoneno(),data.getAddress(),data.getTimezone()).execute(Statement.RETURN_GENERATED_KEYS);
             
 			
 		
@@ -79,7 +76,7 @@ public class UserOperation {
 
 //			ResultSet id = ps.getGeneratedKeys();
 			if (val[1] !=-1){
-//				 genUserId = val[1];
+				 genUserId = val[1];
 
 				// Insert login credentials
 //				ps = con.prepareStatement("INSERT INTO Login_credentials VALUES (?, ?);");
@@ -102,6 +99,9 @@ public class UserOperation {
 //				ps.setBoolean(3, true);
 //				val = ps.executeUpdate();
 				for(EmailUser i :data.getallemail()) {
+					
+					System.out.println("Email data is"+genUserId+"  "+i.getEmail()+" "+i.getIsPrimary());
+					
 					
 					val=qg.insert(tables.Email_user).valuesInsert(genUserId,i.getEmail(),i.getIsPrimary()).execute();
 					
@@ -248,7 +248,7 @@ public class UserOperation {
 				
 				val=qg.update(tables.user_data,user_data.Name,user_data.phone_no,user_data.address,user_data.timezone)
 						.valuesUpdate(ud.getName(),ud.getPhoneno(),ud.getAddress(),ud.getTimezone())
-						.where(tables.user_data,Operation.Equal,ud.getUserId()).execute();
+						.where(user_data.user_id,Operation.Equal,ud.getUserId()).execute();
 
 			} else {
 //				PreparedStatement ps = con.prepareStatement("select password from user_data where user_id=?;");
@@ -317,7 +317,7 @@ public class UserOperation {
 //			ps.setInt(1, ud.getUserId());
 //			val = ps.executeUpdate();
 			
-			val=qg.Delete(tables.Email_user).where(tables.Email_user, Operation.Equal, ud.getUserId()).execute();
+			val=qg.delete(tables.Email_user).where(Email_user.em_id, Operation.Equal, ud.getUserId()).execute();
 
 			if (val[0] == 0) {
 //				con.rollback();
@@ -334,6 +334,8 @@ public class UserOperation {
 //					ps.setString(2, email);
 //					ps.setBoolean(3, ud.getPrimaryMail()));
 //					val = ps.executeUpdate();
+					
+					
 					
 					val=qg.insert(tables.Email_user).valuesInsert(ud.getUserId(),email.getEmail(),email.getIsPrimary()).execute();
 					if (val[0] == 0) {
@@ -381,7 +383,7 @@ public class UserOperation {
 		try {
 			qg.openConnection();
 
-			 val = qg.Delete(tables.user_data)
+			 val = qg.delete(tables.user_data)
 					.where(user_data.user_id, Operation.Equal, userId).execute();
 
 //			PreparedStatement ps = con.prepareStatement("DELETE FROM user_data WHERE user_id = ?;");

@@ -148,7 +148,7 @@ public class TableSchema {
 	}
 
 	public enum Session implements Table {
-		Session_id, session_expire, user_id;
+		Session_id, last_accessed, user_id;
 
 		public String getTableName() {
 			return "Session";

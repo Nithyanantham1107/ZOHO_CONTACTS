@@ -7,7 +7,7 @@ public class Category {
 	int Category_id;
 	String Category_name;
 	int created_by;
-	ArrayList<CategoryRelation> categoryRelation;
+	ArrayList<CategoryRelation> categoryRelation=new ArrayList<CategoryRelation>();
 
 	Category(int CategoryId, String CategoryName, int CreatedBy) {
 		this.Category_id = CategoryId;

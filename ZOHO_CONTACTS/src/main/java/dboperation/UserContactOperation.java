@@ -112,6 +112,13 @@ public class UserContactOperation {
                     logger.logError("UserContactOperation", "addUserContact", "Failed to insert phone number for contact ID: " + gen_contact_id, null);
                     return null;
                 }
+            }else {
+            	
+            	qg.rollBackConnection();
+                logger.logError("UserContactOperation", "addUserContact", "Failed to insert contact for name: " + ud.getFirstName(), null);
+                return null;
+            	
+            	
             }
 //            con.commit();
             qg.commit();
@@ -217,8 +224,9 @@ public class UserContactOperation {
 //            int result = ps.executeUpdate();
         	
         	
-        	 result=qg.Delete(tables.Contact_details)
-        			 .where(TableSchema.Contact_details.user_id, Operation.Equal, TableSchema.Contact_details.contact_id)
+        	 result=qg.delete(tables.Contact_details)
+        			 .where(TableSchema.Contact_details.user_id, Operation.Equal, user_id)
+        			 .and(TableSchema.Contact_details.contact_id, Operation.Equal,contact_id)
         			 .execute();
         	
         	
@@ -246,10 +254,12 @@ public class UserContactOperation {
      * @throws SQLException if a database access error occurs
      */
     public ContactDetails viewSpecificUserContact(int user_id, int contact_id) throws SQLException {
-        Connection con = DBconnection.getConnection();
+//        Connection con = DBconnection.getConnection();
         ContactDetails uc;
         QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
         try {
+        	qg.openConnection();
+        	
 //            PreparedStatement ps = con.prepareStatement(
 //                "SELECT * FROM Contact_details cd LEFT JOIN Contact_mail cm ON cd.contact_id = cm.contact_id LEFT JOIN Contact_phone cp ON cp.contact_id = cd.contact_id WHERE user_id = ? AND cd.contact_id = ?;");
 //            ps.setInt(1, user_id);
@@ -262,6 +272,10 @@ public class UserContactOperation {
         			.where(Contact_details.user_id,Operation.Equal, user_id)
         			.and(Contact_details.contact_id, Operation.Equal, contact_id)
         			.executeQuery().getFirst();
+        	
+        	
+        	
+
         	
         	
             if (uc!=null) {

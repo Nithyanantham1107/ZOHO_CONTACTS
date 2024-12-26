@@ -1,6 +1,7 @@
 package dbpojo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Userdata {
 	int user_id;
@@ -10,7 +11,7 @@ public class Userdata {
 	String address;
 	String timezone;
 	String CurrentEmail;
-	ArrayList<Session> session = new ArrayList<Session>();
+//	HashMap<String,Session> session =new  HashMap<String, Session>();
 	ArrayList<EmailUser> email = new ArrayList<EmailUser>();
 	LoginCredentials LoginCredentials;
 
@@ -50,20 +51,7 @@ public class Userdata {
 		return this.LoginCredentials;
 	}
 
-	public void setSession(Session session) {
-
-		this.session.add(session);
-	}
-
-	public ArrayList<Session> getallsession() {
-		return this.session;
-	}
-
 	
-	
-	public Session getsession(int i) {
-		return this.session.get(i);
-	}
 
 	
 	public void setEmail(EmailUser email) {

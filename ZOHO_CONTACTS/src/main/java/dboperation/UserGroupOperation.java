@@ -1,10 +1,9 @@
 package dboperation;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import dbconnect.DBconnection;
 import dbmodel.UserGroup;
 import dbpojo.CategoryRelation;
@@ -13,7 +12,6 @@ import querybuilder.QueryBuilder;
 import querybuilder.SqlQueryLayer;
 import querybuilder.TableSchema.Category;
 import querybuilder.TableSchema.Category_relation;
-import querybuilder.TableSchema.JoinType;
 import querybuilder.TableSchema.Operation;
 import querybuilder.TableSchema.Statement;
 import querybuilder.TableSchema.tables;
@@ -38,7 +36,7 @@ public class UserGroupOperation {
 //            PreparedStatement ps = con.prepareStatement("INSERT INTO Category (Category_name, created_by) VALUES (?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 //            ps.setString(1, ug.getGroupName());
 //            ps.setInt(2, ug.getUserid());
-//            int val = ps.executeUpdate();
+//            int val = ps.executeUpdate();'p0
         	
         	qg.openConnection();
         	
@@ -109,7 +107,7 @@ public class UserGroupOperation {
 //            PreparedStatement ps = con.prepareStatement("SELECT * FROM Category WHERE created_by = ?;");
 //            ps.setInt(1, userid);
 //            ResultSet val = ps.executeQuery();
-        	data=qg.select(tables.Category).where(Category.Category_id,Operation.Equal, userid).executeQuery();
+        	data=qg.select(tables.Category).where(Category.created_by,Operation.Equal, userid).executeQuery();
         	
 for(Object i :data) {
 	
@@ -155,7 +153,7 @@ for(Object i :data) {
 //            PreparedStatement ps = con.prepareStatement("DELETE FROM Category WHERE Category_id = ?;");
 //            ps.setInt(1, groupid);
 //            int val = ps.executeUpdate();
-          	val=qg.Delete(tables.Category)
+          	val=qg.delete(tables.Category)
         			.where(Category.Category_id, Operation.Equal, groupid)
         			.execute();
             if (val[0] == 0) {
@@ -187,6 +185,9 @@ for(Object i :data) {
     	
 
         try {
+        	
+        	qg.openConnection();
+        	
             ArrayList<Object> result = new ArrayList<>();
             ArrayList<CategoryRelation> data=new ArrayList<>();
 //            PreparedStatement ps = con.prepareStatement("SELECT * FROM Category c LEFT JOIN Category_relation cr ON c.Category_id = cr.Category_id WHERE created_by = ? AND c.Category_id = ?;");
@@ -266,16 +267,16 @@ for(Object i :data) {
 //            val = ps.executeUpdate();
             
             
-            val=qg.Delete(tables.Category_relation)
+            val=qg.delete(tables.Category_relation)
             		.where(Category_relation.Category_id, Operation.Equal,ug.getCategoryID())
             		.execute();
-            if (val[0] == 0) { 
+//            if (val[0] == 0) { 
             	
 //                con.rollback();
-            	qg.rollBackConnection();
-                logger.logError("UserGroupOperation", "updateUserGroup", "Failed to delete existing relations for group ID: " + ug.getCategoryID(), null);
-                return false;
-            }
+//            	qg.rollBackConnection();
+//                logger.logError("UserGroupOperation", "updateUserGroup","Failed to delete existing relations for group ID: " + ug.getCategoryID(), null);
+//                return false;
+//            }
 
             for (CategoryRelation i : ug.getCategoryRelation()) {
 //                ps = con.prepareStatement("INSERT INTO Category_relation VALUES (?, ?);");
@@ -302,7 +303,7 @@ for(Object i :data) {
             return true;
         } catch (Exception e) {
             logger.logError("UserGroupOperation", "updateUserGroup", "Exception occurred: " + e.getMessage(), e);
-//            con.rollback(); // Ensure rollback in case of exception
+//            con.rollback(); 
             qg.rollBackConnection();
         } finally {
 //            con.close();

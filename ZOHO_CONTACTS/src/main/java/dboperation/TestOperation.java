@@ -18,6 +18,8 @@ import querybuilder.TableSchema;
 import querybuilder.TableSchema.Category;
 import querybuilder.TableSchema.Category_relation;
 import querybuilder.TableSchema.Contact_details;
+import querybuilder.TableSchema.Contact_mail;
+import querybuilder.TableSchema.Contact_phone;
 import querybuilder.TableSchema.JoinType;
 import querybuilder.TableSchema.Operation;
 import querybuilder.TableSchema.tables;
@@ -31,45 +33,45 @@ public class TestOperation {
 
 		qg.openConnection();
 
-		ArrayList<Object> result = qg.select(TableSchema.tables.Email_user)
-				.join(JoinType.left, TableSchema.Email_user.em_id, Operation.Equal, TableSchema.user_data.user_id)
-				.where(TableSchema.user_data.user_id, Operation.Equal, 26).executeQuery();
-				//.join(JoinType.left, TableSchema.user_data.user_id, Operation.Equal, TableSchema.Login_credentials.id)
-
-		if (result == null) {
-			System.out.print("result is null");
-		}
-
-		for (Object data : result) {
-
-			Userdata ud = null;
-
-			if (data instanceof Userdata) {
-
-				ud = (Userdata) data;
-				System.out.println("User Data :" + ud.getUserId() + "  " + ud.getName() + "  " + ud.getAddress());
-
-				for (EmailUser useremail : ud.getallemail()) {
-
-					System.out.println(useremail.getEmail() + "  user id :  " + useremail.getEmailId());
-
-				}
-
-				System.out.println("Login info:   " + ud.getLoginCredentials().getUserId() + "   "
-						+ ud.getLoginCredentials().getUserName());
-			}else if (data instanceof EmailUser) {
-				EmailUser ue = (EmailUser) data;
-				System.out.println(ue.toString());
-			}
-
-		}
+//		ArrayList<Object> result = qg.select(TableSchema.tables.Email_user)
+//				.join(JoinType.left, TableSchema.Email_user.em_id, Operation.Equal, TableSchema.user_data.user_id)
+//				.where(TableSchema.user_data.user_id, Operation.Equal, 26).executeQuery();
+//				//.join(JoinType.left, TableSchema.user_data.user_id, Operation.Equal, TableSchema.Login_credentials.id)
 //
-//		ArrayList<Object> result = qg.select(TableSchema.tables.Contact_details)
-//				.join(JoinType.left, TableSchema.Contact_details.contact_id, Operation.Equal,
-//						TableSchema.Contact_mail.contact_id)
-//				.join(JoinType.left, TableSchema.Contact_details.contact_id, Operation.Equal,
-//						TableSchema.Contact_phone.contact_id)
-//				.buildQuery();
+//		if (result == null) {
+//			System.out.print("result is null");
+//		}
+//
+//		for (Object data : result) {
+//
+//			Userdata ud = null;
+//
+//			if (data instanceof Userdata) {
+//
+//				ud = (Userdata) data;
+//				System.out.println("User Data :" + ud.getUserId() + "  " + ud.getName() + "  " + ud.getAddress());
+//
+//				for (EmailUser useremail : ud.getallemail()) {
+//
+//					System.out.println(useremail.getEmail() + "  user id :  " + useremail.getEmailId());
+//
+//				}
+//
+//				System.out.println("Login info:   " + ud.getLoginCredentials().getUserId() + "   "
+//						+ ud.getLoginCredentials().getUserName());
+//			}else if (data instanceof EmailUser) {
+//				EmailUser ue = (EmailUser) data;
+//				System.out.println(ue.toString());
+//			}
+//
+//		}
+
+//		ArrayList<Object> result =  qg.select(tables.Contact_details)
+//    			.join(JoinType.left,Contact_details.contact_id , Operation.Equal, Contact_mail.contact_id)
+//    			.join(JoinType.left, Contact_details.contact_id, Operation.Equal, Contact_phone.contact_id)
+//    			.where(Contact_details.user_id,Operation.Equal, 26)
+//    			.and(Contact_details.contact_id, Operation.Equal, 54)
+//    			.executeQuery();
 //
 //		if (result == null) {
 //			System.out.print("result is null");
@@ -143,6 +145,10 @@ public class TestOperation {
 //
 //
 //			}
+		
+		
+		int[] val= {-1,-1};
+		val=qg.insert(tables.Email_user).valuesInsert(39,"user@gmail.com",true).execute();
 
 		qg.closeConnection();
 	}

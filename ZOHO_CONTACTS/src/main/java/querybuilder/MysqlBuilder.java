@@ -19,19 +19,13 @@ public class MysqlBuilder implements QueryBuilder {
 	private Connection con = null;
 	private String primarykey;
 	private Queue<Object> parameters = new LinkedList<Object>();
-	String url = "jdbc:mysql://localhost:3306/ZOHO_CONTACTS";
-	String username = "root";
-	String password = "root";
+//	String url = "jdbc:mysql://localhost:3306/ZOHO_CONTACTS";
+//	String username = "root";
+//	String password = "root";
 
 	public MysqlBuilder() throws SQLException {
 
-		this.con = DriverManager.getConnection(this.url, this.username, this.password);
-
-//		this.con = DBconnection.getConnection();
-
-		if (this.con == null) {
-			System.out.println("Hello im null ");
-		}
+		this.con = DBconnection.getConnection();
 
 		System.out.println("Query is  in mysql ");
 
@@ -133,11 +127,11 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder Delete(Table tablename) {
+	public QueryBuilder delete(Table tablename) {
 
 		this.TableName.add(tablename.getTableName());
 
-		this.query.append("DELETE FROM " + this.TableName + " ");
+		this.query.append("DELETE FROM " + tablename.getTableName() + " ");
 
 		return this;
 	}
@@ -191,8 +185,7 @@ public class MysqlBuilder implements QueryBuilder {
 	public QueryBuilder update(Table tablename, Table... columns) {
 
 		this.TableName.add(tablename.getTableName());
-		
-		
+
 //		System.out.println(this.TableName );
 
 		this.query.append("UPDATE " + tablename.getTableName() + " " + "SET" + " ");
@@ -272,12 +265,14 @@ public class MysqlBuilder implements QueryBuilder {
 	@Override
 	public ArrayList<Object> executeQuery() {
 		this.query.append(";");
+		PreparedStatement ps;
+		ResultSet result;
 
 		System.out.println("generated query upto select is :" + this.query);
 
 		try {
 			int i = 1;
-			PreparedStatement ps = con.prepareStatement(this.query.toString());
+			ps = con.prepareStatement(this.query.toString());
 
 			while (!this.parameters.isEmpty()) {
 
@@ -292,13 +287,21 @@ public class MysqlBuilder implements QueryBuilder {
 				} else if (this.parameters.peek() instanceof Long) {
 					ps.setLong(i, (Long) this.parameters.peek());
 
+				} else if (this.parameters.peek() instanceof Boolean) {
+					ps.setBoolean(i, (Boolean) this.parameters.peek());
+
+				} else {
+					System.out.println("error in data type!!!");
 				}
+
+				System.out.println("here mysqlbuilsder data is" + this.parameters.peek());
+
 				this.parameters.poll();
 				i++;
 
 			}
 
-			ResultSet result = ps.executeQuery();
+			result = ps.executeQuery();
 			this.parameters.clear();
 
 			int columnCount = result.getMetaData().getColumnCount();
@@ -314,7 +317,7 @@ public class MysqlBuilder implements QueryBuilder {
 			}
 
 			PojoMapper pm = new PojoMapper();
-
+//            ps.close();
 			return pm.PojoResultSetter(this.TableName.get(0), columnNames, result);
 
 		} catch (Exception e) {
@@ -322,7 +325,7 @@ public class MysqlBuilder implements QueryBuilder {
 		} finally {
 
 			this.TableName.clear();
-			;
+
 			this.query.setLength(0);
 
 		}
@@ -340,21 +343,20 @@ public class MysqlBuilder implements QueryBuilder {
 
 		return this.query.toString();
 	}
-	
 
 	public int[] execute(Statement... statements) {
-		
-		int[] data={-1,-1};
+
+		int[] data = { -1, -1 };
 		try {
 			ResultSet result;
 			this.query.append(";");
 			int i = 1;
-			
+
 			System.out.println("generated query upto select is :" + this.query);
 
 			PreparedStatement ps = this.con.prepareStatement(this.query.toString());
 
-			if (statements.length ==1 ) {
+			if (statements.length == 1) {
 
 				if (statements[0].toString().equals("RETURN_GENERATED_KEYS")) {
 					ps = this.con.prepareStatement(this.query.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
@@ -377,32 +379,37 @@ public class MysqlBuilder implements QueryBuilder {
 				} else if (this.parameters.peek() instanceof Long) {
 					ps.setLong(i, (Long) this.parameters.peek());
 					System.out.println(i);
+				} else if (this.parameters.peek() instanceof Boolean) {
+					ps.setBoolean(i, (Boolean) this.parameters.peek());
+
+				} else {
+					System.out.println("error in data type!!!");
 				}
-				
-				
+
 //				System.out.println("value"+this.parameters.peek());
 				this.parameters.poll();
 				i++;
 
 			}
 			this.parameters.clear();
-			data[0]=ps.executeUpdate();
-			System.out.println("execution of query"+data[0]);
-			
+			data[0] = ps.executeUpdate();
+			System.out.println("execution of query" + data[0]);
+
 			if (statements.length == 1) {
 
-				if (statements[1].toString().equals("RETURN_GENERATED_KEYS")) {
-					result=ps.getGeneratedKeys();
-					if(result.next()) {
-						data[1]=result.getInt(1);
-					}else {
+				if (statements[0].toString().equals("RETURN_GENERATED_KEYS")) {
+					result = ps.getGeneratedKeys();
+					if (result.next()) {
+						data[1] = result.getInt(1);
+					} else {
 						System.out.println("generated Key are null!!!");
 					}
 				}
 
 			}
-			
-			
+
+//			ps.close();
+
 			return data;
 
 		} catch (Exception e) {

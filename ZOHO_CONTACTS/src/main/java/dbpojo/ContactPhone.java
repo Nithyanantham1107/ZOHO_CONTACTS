@@ -5,9 +5,11 @@ public class ContactPhone {
 	int contact_id;
 	String Contact_phone_no ;
 
-	public ContactPhone(int contactId,String contactPhoneNo) {
-		this.contact_id=contactId;
-		this.Contact_phone_no=contactPhoneNo;
+	
+	public ContactPhone(int contact_id,String Contact_phone_no) {
+		
+		this.contact_id=contact_id;
+		this.Contact_phone_no=Contact_phone_no;
 		
 	}
 	

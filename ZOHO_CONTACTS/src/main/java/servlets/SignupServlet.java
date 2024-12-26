@@ -98,6 +98,8 @@ public class SignupServlet extends HttpServlet {
 					ud.setPassword(request.getParameter("password"));
 					ud.setCurrentEmail(request.getParameter("email"));
 					ud.setTimezone(request.getParameter("timezone"));
+					ud.setEmail(eu);
+					ud.setLoginCredentials(lc);
 					ud = user_op.createUser(ud);
 
 					if (ud != null) {
@@ -109,6 +111,7 @@ public class SignupServlet extends HttpServlet {
                         CacheModel cachemodel=CacheData.getCache(sessionid);
 						ArrayList<ContactDetails> uc = uco.viewAllUserContacts(ud.getUserId());
 						ArrayList<Category> ug = ugo.viewAllGroup(ud.getUserId());
+						System.out.println("hey" +ud.getName());
 						cachemodel.setUserData(ud);
 						cachemodel.setUserContact(uc);
 						cachemodel.setUserGroup(ug);

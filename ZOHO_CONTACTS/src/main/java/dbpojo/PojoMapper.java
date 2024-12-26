@@ -16,7 +16,7 @@ public class PojoMapper {
 
 	ArrayList<Object> data = new ArrayList<Object>();
 
-	public ArrayList<Object> PojoResultSetter(String tablename, ArrayList<String> columnNames, ResultSet result) {
+	public ArrayList<Object> PojoResultSetter(String tablename, ArrayList<String> columnNames, ResultSet result) throws SQLException {
 
 		this.result = result;
 		this.columnNames = columnNames;
@@ -24,7 +24,7 @@ public class PojoMapper {
 		Category cat = null;
 		ContactDetails cd = null;
 
-		try {
+		try{
 			while (this.result.next()) {
 
 				if (tablename.equals(TableSchema.tables.user_data.getTableName())) {
@@ -64,9 +64,15 @@ public class PojoMapper {
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+		}finally {
+			
+//			this.result.close();
+			
+			this.uniqueList.clear();
+			
 		}
 
-		this.uniqueList.clear();
+			
 
 		return this.data;
 	}
@@ -84,7 +90,7 @@ public class PojoMapper {
 			}
 
 			ud.setEmail(userEmailSetter());
-			ud.setSession(userSessionSetter());
+//			ud.setSession(userSessionSetter());
 			ud.setLoginCredentials(userLoginSetter());
 
 			return null;
@@ -101,7 +107,7 @@ public class PojoMapper {
 			this.uniqueList.put(getInt(tablename + "." + TableSchema.user_data.user_id), ud);
 
 			ud.setEmail(userEmailSetter());
-			ud.setSession(userSessionSetter());
+//			ud.setSession(userSessionSetter());
 			ud.setLoginCredentials(userLoginSetter());
 			return ud;
 
@@ -259,7 +265,7 @@ public class PojoMapper {
 		String tablename = TableSchema.tables.Session.getTableName();
 
 		session = new Session(getString(tablename + "." + TableSchema.Session.Session_id),
-				getLong(tablename + "." + TableSchema.Session.session_expire),
+				getLong(tablename + "." + TableSchema.Session.last_accessed),
 				getInt(tablename + "." + TableSchema.Session.user_id));
 
 		return session;

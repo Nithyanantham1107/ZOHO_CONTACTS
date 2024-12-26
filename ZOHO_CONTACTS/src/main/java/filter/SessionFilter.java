@@ -52,7 +52,7 @@ public class SessionFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		// TODO Auto-generated method stub
+		
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -60,6 +60,7 @@ public class SessionFilter implements Filter {
 		String requesturi = httpRequest.getRequestURI();
 
 		try {
+			
 			if (requesturi.endsWith("/login") || requesturi.endsWith("/signup") || requesturi.endsWith("/")
 					|| requesturi.endsWith("/Login.jsp") || requesturi.endsWith("/Signup.jsp")
 					|| requesturi.endsWith("/index.jsp")) {
@@ -67,16 +68,23 @@ public class SessionFilter implements Filter {
 				chain.doFilter(request, response);
 				return;
 			}
-
+			
 			String sessionid = so.getCustomSessionId(httpRequest.getCookies());
+			
 			System.out.println("here data is session " + sessionid);
 			if (sessionid == null) {
-
+                  
 				httpResponse.sendRedirect("index.jsp");
 
 				return;
 
 			}
+			
+			
+			
+
+			
+			
 			CacheModel cachemodel = so.checkSessionAlive(sessionid);
 			if (cachemodel != null) {
                 int userid=cachemodel.getUserData().getUserId();
@@ -115,7 +123,7 @@ public class SessionFilter implements Filter {
 			}
 			String clientIp = httpRequest.getRemoteAddr();
 			String resource = httpRequest.getRequestURI();
-			String httpMethod = "GET";
+			String httpMethod =httpRequest.getMethod();
 			int responseStatus = HttpServletResponse.SC_OK;
 			String userAgent = httpRequest.getHeader("User-Agent");
 
@@ -126,7 +134,9 @@ public class SessionFilter implements Filter {
 			httpRequest.setAttribute("sessionid", sessionid);
 			chain.doFilter(request, response);
 		} catch (Exception e) {
+			
 			System.out.println(e);
+			e.printStackTrace();
 		}
 
 	}
