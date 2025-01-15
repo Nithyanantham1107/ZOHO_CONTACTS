@@ -1,10 +1,10 @@
-package querybuilder;
+package querybuilderconfig;
 
 import java.io.FileInputStream;
-import java.lang.classfile.TypeAnnotation.ThrowsTarget;
-import java.sql.Connection;
-import java.util.HashMap;
 import java.util.Properties;
+
+import querybuilder.MysqlBuilder;
+import querybuilder.PostgresBuilder;
 
 public class SqlQueryLayer {
 

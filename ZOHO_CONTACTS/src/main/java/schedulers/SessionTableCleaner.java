@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import dbpojo.Session;
 import loggerfiles.LoggerSet;
-import querybuilder.QueryBuilder;
-import querybuilder.SqlQueryLayer;
-import querybuilder.TableSchema.Operation;
-import querybuilder.TableSchema.tables;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.SqlQueryLayer;
+import querybuilderconfig.TableSchema.Operation;
+import querybuilderconfig.TableSchema.tables;
 
 public class SessionTableCleaner implements Runnable {
 	QueryBuilder qg;

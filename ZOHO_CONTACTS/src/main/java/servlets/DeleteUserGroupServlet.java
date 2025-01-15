@@ -64,12 +64,16 @@ public class DeleteUserGroupServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             if (request.getParameter("groupid") != null && !request.getParameter("groupid").isBlank()) {
-                int groupid = Integer.parseInt(request.getParameter("groupid"));
-
+                
+            	 String sessionid=(String) request.getAttribute("sessionid");
+            	int groupid = Integer.parseInt(request.getParameter("groupid"));
+                CacheModel cachemodel=CacheData.getCache(sessionid);
+                
+                Category category =cachemodel.getUserGroup(groupid);
                 // Attempt to delete the user group
-                if (ugo.deleteUserGroup(groupid)) {
-                	  String sessionid=(String) request.getAttribute("sessionid");
-                      CacheModel cachemodel=CacheData.getCache(sessionid);
+                if (ugo.deleteUserGroup(category)) {
+                	 
+//                      CacheModel cachemodel=CacheData.getCache(sessionid);
                       
                       
                      Userdata ud = cachemodel.getUserData();

@@ -62,6 +62,9 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+        	
+        	   
+        	
         	  String sessionid=(String) request.getAttribute("sessionid");
               CacheModel cachemodel=CacheData.getCache(sessionid);
               

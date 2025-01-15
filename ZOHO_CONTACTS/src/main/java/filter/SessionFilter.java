@@ -100,9 +100,9 @@ public class SessionFilter implements Filter {
 
 			} else {
 
-				if( ! so.DeleteSessionData(sessionid)) {
-					System.out.println("Error in deleting session data");
-				}
+//				if( ! so.DeleteSessionData(sessionid)) {
+//					System.out.println("Error in deleting session data");
+//				}
 
 				
 

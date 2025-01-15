@@ -1,23 +1,21 @@
 package dboperation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.UUID;
-import java.sql.Timestamp;
+
 import javax.servlet.http.Cookie;
+
 import org.mindrot.jbcrypt.BCrypt;
-import dbconnect.DBconnection;
-import dbmodel.UserData;
+
 import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
-import querybuilder.QueryBuilder;
-import querybuilder.SqlQueryLayer;
-import querybuilder.TableSchema.Operation;
-import querybuilder.TableSchema.Session;
-import querybuilder.TableSchema.tables;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.SqlQueryLayer;
+import querybuilderconfig.TableSchema.Operation;
+import querybuilderconfig.TableSchema.Session;
+import querybuilderconfig.TableSchema.tables;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
 
@@ -28,7 +26,7 @@ import sessionstorage.CacheModel;
  */
 public class SessionOperation {
 	private LoggerSet logger; // LoggerSet instance
-	final static int SESSIONTIMEOUT=30*60;
+	final static int SESSIONTIMEOUT = 30 * 60;
 
 	public SessionOperation() {
 		logger = new LoggerSet(); // Initialize logger
@@ -43,10 +41,10 @@ public class SessionOperation {
 	 */
 	public String generateSessionId(int user_id) throws SQLException {
 //		int sessiontimeout = 30 * 60; 
-		int[] val=new int[2];
+		int[] val = new int[2];
 		CacheModel cachemodel = new CacheModel();
-		dbpojo.Session session=new dbpojo.Session();
-		Userdata ud=new Userdata();
+		dbpojo.Session session = new dbpojo.Session();
+		Userdata ud = new Userdata();
 		ud.setUserId(user_id);
 		String uuid = UUID.randomUUID().toString();
 
@@ -55,15 +53,17 @@ public class SessionOperation {
 		String sessionplaintext = uuid + currentTime + user_id;
 		String sessionid = BCrypt.hashpw(sessionplaintext, BCrypt.gensalt());
 //		long sessionexpire = timestamp + SESSIONTIMEOUT;
-		System.out.println("here the time data current" + currentTime + "timeoutdata" + SESSIONTIMEOUT + "session expire"
-				+ currentTime+SESSIONTIMEOUT);
+		System.out.println("here the time data current" + currentTime + "timeoutdata" + SESSIONTIMEOUT
+				+ "session expire" + currentTime + SESSIONTIMEOUT);
 //		cachemodel.setSessionExpire(sessionexpire);
 		session.setSessionID(sessionid);
 		session.setUserId(user_id);
 		session.setLastAccessed(currentTime);
+		session.setCreatedAt(currentTime);
+		session.setModifiedAt(currentTime);
 		cachemodel.setSession(session);
 		cachemodel.setUserData(ud);
-		
+
 		logger.logInfo("SessionOperation", "generateSessionId", "Created session ID: " + sessionid);
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -76,11 +76,9 @@ public class SessionOperation {
 //			ps.setLong(2, sessionexpire);
 //			ps.setInt(3, user_id);
 //			int val = ps.executeUpdate();
-			
-			
-			 val=qg.insert(tables.Session)
-					.valuesInsert(sessionid,currentTime,user_id)
-					.execute();
+
+			val = qg.insert(tables.Session).valuesInsert(session.getSessionId(), session.getLastAccessed(),
+					session.getUserId(), session.getCreatedAt(), session.getModifiedAt()).execute();
 			if (val[0] == 0) {
 				logger.logWarning("SessionOperation", "generateSessionId", "Error inserting into Session table");
 //				con.rollback();
@@ -132,10 +130,12 @@ public class SessionOperation {
 	public boolean DeleteSessionData(String sessionid) throws SQLException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-		int[] val=new int[2];
+		int[] val = new int[2];
 		try {
 			qg.openConnection();
 			if (sessionid != null) {
+				CacheModel cachemodel = CacheData.getCache(sessionid);
+				dbpojo.Session session = cachemodel.getsession(sessionid);
 //				PreparedStatement ps = con.prepareStatement("DELETE FROM Session WHERE session_id = ?;");
 //				ps.setString(1, sessionid);
 //				int val = ps.executeUpdate();
@@ -143,9 +143,7 @@ public class SessionOperation {
 //                    logger.logWarning("SessionOperation", "DeleteSessionData", "Error deleting the session");
 //                    return false;
 //                }
-				 val=qg.delete(tables.Session)
-						.where(Session.Session_id, Operation.Equal, sessionid)
-						.execute();
+				val = qg.delete(tables.Session).where(Session.Session_id, Operation.Equal, sessionid).execute();
 			} else {
 				logger.logWarning("SessionOperation", "DeleteSessionData", "Session ID is null");
 				return false;
@@ -170,24 +168,24 @@ public class SessionOperation {
 	 */
 	public CacheModel checkSessionAlive(String sessionid) throws SQLException {
 		int userid = 0;
-		
-		ArrayList<Object> result=new ArrayList<Object>();
+
+		ArrayList<Object> result = new ArrayList<Object>();
 //		Connection con = DBconnection.getConnection();
 		long currenttime = System.currentTimeMillis() / 1000;
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		try {
-			
+
 			qg.openConnection();
-			
+
 			CacheModel cachemodel = CacheData.getCache(sessionid);
 			if (cachemodel != null) {
-				
-				if(cachemodel.getsession(sessionid).getLastAccessed()+SESSIONTIMEOUT<currenttime) {
-					
+
+				if (cachemodel.getsession(sessionid).getLastAccessed() + SESSIONTIMEOUT < currenttime) {
+
 					CacheData.deleteAllCache(sessionid);
 					return null;
 				}
-				System.out.println("last accessed "+cachemodel.getsession(sessionid).getLastAccessed());
+				System.out.println("last accessed " + cachemodel.getsession(sessionid).getLastAccessed());
 				cachemodel.getsession(sessionid).setLastAccessed(System.currentTimeMillis() / 1000);
 				if (!CacheData.checkCacheQueue(sessionid)) {
 
@@ -198,31 +196,26 @@ public class SessionOperation {
 
 			} else {
 				cachemodel = new CacheModel();
-				dbpojo.Session session=new dbpojo.Session();
-				
+				dbpojo.Session session = new dbpojo.Session();
+
 //				PreparedStatement ps = con.prepareStatement("SELECT * FROM Session WHERE session_id = ?");
 //				ps.setString(1, sessionid);
 //				ResultSet val = ps.executeQuery();
-				
-				
-				result= qg.select(tables.Session)
-						.where(Session.Session_id,Operation.Equal, sessionid)
-						.executeQuery();
-				
-				
-				
+
+				result = qg.select(tables.Session).where(Session.Session_id, Operation.Equal, sessionid).executeQuery();
+
 //				cachemodel.setLastAccessed(currenttime);
-				if (result.size() >0) {
-					session=(dbpojo.Session) result.getFirst();
+				if (result.size() > 0) {
+					session = (dbpojo.Session) result.getFirst();
 //					userid = val.getInt(3);
-					Userdata ud=new Userdata();
+					Userdata ud = new Userdata();
 //					ud.setSession(session);
-					
+
 					cachemodel.setSession(session);
 					ud.setUserId(userid);
 					cachemodel.setUserData(ud);
 
-					long timestatus = currenttime - session.getLastAccessed()+SESSIONTIMEOUT;
+					long timestatus = currenttime - session.getLastAccessed() + SESSIONTIMEOUT;
 					if (timestatus > 0) {
 						return null;
 					}
@@ -239,8 +232,7 @@ public class SessionOperation {
 //				ps.setLong(1, currenttime);
 //				ps.setString(2, sessionid);
 //				int result = ps.executeUpdate();
-				
-				
+
 //				result=qg.update(tables.Session,Session.session_expire)
 //						.valuesUpdate(currenttime)
 //						.where(Session.Session_id, Operation.Equal, sessionid)
@@ -261,7 +253,7 @@ public class SessionOperation {
 			logger.logError("SessionOperation", "checkSessionAlive", "Exception occurred", e);
 		} finally {
 //			con.close();
-			
+
 			qg.closeConnection();
 		}
 		return null;
@@ -273,7 +265,7 @@ public class SessionOperation {
 		if (CacheData.getsessionMapper().size() >= 100) {
 //			int sessiontimeout = 30 * 60;
 //			Connection con = DBconnection.getConnection();
-			
+
 			long maxTime = 0;
 			long currentTime = System.currentTimeMillis() / 1000;
 			String maxSessionid = null;
@@ -288,10 +280,10 @@ public class SessionOperation {
 //			ps.setLong(1, cachemodel.getlastAccessed() + sessiontimeout);
 //			ps.setString(2, maxSessionid);
 //			ps.executeUpdate();
+
 			qg.update(tables.Session, Session.last_accessed)
-			.valuesUpdate(cachemodel.getsession(sessionid).getLastAccessed())
-			.where(Session.Session_id, Operation.Equal,maxSessionid )
-			.execute();
+					.valuesUpdate(cachemodel.getsession(maxSessionid).getLastAccessed())
+					.where(Session.Session_id, Operation.Equal, maxSessionid).execute();
 
 			CacheData.deleteAllCache(maxSessionid);
 

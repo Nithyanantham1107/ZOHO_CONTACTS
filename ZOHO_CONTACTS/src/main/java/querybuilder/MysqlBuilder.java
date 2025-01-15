@@ -1,35 +1,42 @@
 package querybuilder;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
+
+import audit.AuditLogOperation;
+import datahelper.PojoDataContainer;
+import datahelper.PojoDataConversion;
+import datahelper.changedStateContainer;
 import dbconnect.DBconnection;
-import dbpojo.PojoMapper;
-import querybuilder.TableSchema.Statement;
+import mysqloperation.SelectJoinerOperation;
+import mysqloperation.DeleteOperation;
+import mysqloperation.insertOperation;
+import mysqloperation.updateOperation;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.TableSchema.OpType;
+import querybuilderconfig.TableSchema.Operation;
+import querybuilderconfig.TableSchema.tables;
 
 public class MysqlBuilder implements QueryBuilder {
 	private StringBuilder query = new StringBuilder();
-	private ArrayList<String> TableName = new ArrayList<String>();
+	private dbpojo.Table newData;
+	private String TableName;
 	private Connection con = null;
-	private String primarykey;
+	private int id = -1;
+
+	private dbpojo.Table oldData;
+	private OpType opType;
 	private Queue<Object> parameters = new LinkedList<Object>();
-//	String url = "jdbc:mysql://localhost:3306/ZOHO_CONTACTS";
-//	String username = "root";
-//	String password = "root";
 
 	public MysqlBuilder() throws SQLException {
-
-		this.con = DBconnection.getConnection();
-
+//		con = DBconnection.getConnection();
+		con = DBconnection.getDriverConnection();
 		System.out.println("Query is  in mysql ");
 
-	}
+	};
 
 	@Override
 	public void openConnection() {
@@ -76,83 +83,57 @@ public class MysqlBuilder implements QueryBuilder {
 
 	}
 
-	public QueryBuilder join(TableSchema.JoinType jointype, Table table1, TableSchema.Operation op, Table table2) {
-
-		this.query.append(" " + jointype.getType() + " " + table2.getTableName() + "  on  " + table1.getTableName()
-				+ "." + table1 + "  " + op.getOperation() + " " + table2.getTableName() + "." + table2 + " ");
-		this.TableName.add(table2.getTableName());
-
-		return this;
-
-	}
-
 	@Override
-	public QueryBuilder select(Table tablename, Table... columns) {
+	public QueryBuilder select(dbpojo.Table table) {
 
-		this.TableName.add(tablename.getTableName());
-		Boolean state = false;
+		this.TableName = table.getTableName();
+		this.newData = table;
 
 		this.query.append("SELECT");
-		if (columns.length == 0) {
-			this.query.append(" * ");
-			this.query.append("FROM");
-		} else {
-			this.primarykey = tablename.getTableName() + "." + tablename.getPrimaryKey();
 
-			for (int i = 0; i < columns.length; i++) {
+		this.query.append(" * ");
+		this.query.append("FROM");
 
-				if (this.primarykey.equals(columns[i].getTableName() + "." + columns[i])) {
-					state = true;
+		query.append(" " + this.TableName);
 
-				}
-
-				query.append(" " + columns[i].getTableName() + "." + columns[i] + " ");
-
-				if (i < columns.length - 1) {
-					this.query.append(",");
-				}
-
-			}
-			if (!state) {
-
-				this.query.append("," + this.primarykey + " ");
-
-			}
-			query.append(" FROM ");
-
-		}
-		query.append(" " + this.TableName.getLast());
+		SelectJoinerOperation.joinTable(query, this.newData);
 
 		return this;
 	}
 
 	@Override
-	public QueryBuilder delete(Table tablename) {
+	public QueryBuilder delete(dbpojo.Table table) {
+		this.opType = OpType.DELETE;
+		this.oldData = table;
+		this.newData = null;
+		this.id = table.getID();
 
-		this.TableName.add(tablename.getTableName());
+		this.TableName = table.getTableName();
 
-		this.query.append("DELETE FROM " + tablename.getTableName() + " ");
+		this.query.append("DELETE FROM " + table.getTableName() + " ");
 
 		return this;
 	}
 
 	@Override
-	public QueryBuilder insert(Table tablename, Table... columns) {
-
-		this.TableName.add(tablename.getTableName());
-		this.query.append("INSERT INTO " + tablename.getTableName() + " ");
-		if (columns.length != 0) {
+	public QueryBuilder insert(dbpojo.Table table) {
+		this.opType = OpType.INSERT;
+		this.newData = table;
+		this.oldData = null;
+		this.TableName = this.newData.getTableName();
+		this.query.append("INSERT INTO " + this.newData.getTableName() + " ");
+		PojoDataContainer pojoDataContainer = PojoDataConversion.convertPojoData(this.newData);
+		Queue<String> columns = pojoDataContainer.getPojoKey();
+		this.parameters = pojoDataContainer.getPojoValue();
+		int length = this.parameters.size();
+		if (columns.size() != 0) {
 			this.query.append("(" + " ");
 
-			for (int i = 0; i < columns.length; i++) {
-				if (TableName.contains(columns[i].getTableName())) {
-					this.query.append(columns[i]);
+			while (columns.size() > 0) {
 
-				} else {
-					System.out.println("Invalid columnName for table:" + this.TableName);
-					return null;
-				}
-				if (i < columns.length - 1) {
+				this.query.append(columns.poll());
+
+				if (columns.size() != 0) {
 					this.query.append(",");
 				}
 
@@ -160,176 +141,200 @@ public class MysqlBuilder implements QueryBuilder {
 			this.query.append(")" + " ");
 		}
 
-		return this;
-	}
-
-	@Override
-	public QueryBuilder valuesInsert(Object... values) {
 		this.query.append(" VALUES(" + " ");
-		for (int i = 0; i < values.length; i++) {
-
-			this.parameters.offer(values[i]);
+		for (int i = 0; i < length; i++) {
 
 			this.query.append("?");
 
-			if (i < values.length - 1) {
+			if (i != length - 1) {
 				this.query.append(",");
 			}
 
 		}
 		this.query.append(")" + " ");
+
 		return this;
 	}
 
-	@Override
-	public QueryBuilder update(Table tablename, Table... columns) {
+	public QueryBuilder update(dbpojo.Table table) {
+		this.opType = OpType.UPDATE;
+		this.newData = table;
 
-		this.TableName.add(tablename.getTableName());
+		this.TableName = this.newData.getTableName();
 
-//		System.out.println(this.TableName );
+		if (newData.getID() == -1) {
 
-		this.query.append("UPDATE " + tablename.getTableName() + " " + "SET" + " ");
-		for (int i = 0; i < columns.length; i++) {
-			if (this.TableName.contains(columns[i].getTableName())) {
+			System.out.println("Need to throw Exception for non id data");
+			return null;
+		}
 
-				if (i == columns.length - 1) {
-					this.query.append(" " + columns[i].getTableName() + "." + columns[i] + "=?" + " ");
-				} else {
+		ArrayList<dbpojo.Table> data = this.select(newData).executeQuery();
 
-					this.query.append(" " + columns[i].getTableName() + "." + columns[i] + "=?,");
-				}
+		if (data.size() == 0) {
 
-			} else {
-				System.out.println("Invalid columnName for table:" + this.TableName);
-				return null;
+			System.out.println("throw Exception for not finding data");
+			return null;
+		} else {
+
+			this.oldData = (dbpojo.Table) data.getFirst();
+		}
+
+		changedStateContainer changedState = PojoDataConversion.getChangedPojoData(this.newData, this.oldData);
+		this.id = changedState.getID();
+		this.newData = changedState.getnewData();
+		this.oldData = changedState.getOldData();
+
+		this.query.append("UPDATE " + this.newData.getTableName() + " " + "SET" + " ");
+
+		PojoDataContainer pojoDataContainer = PojoDataConversion.convertPojoData(this.newData);
+		System.out.println(pojoDataContainer.getJson());
+		Queue<String> columns = pojoDataContainer.getPojoKey();
+		if (columns.size() == 0) {
+
+			System.out.println("here i need to throw error for no data is changed so no updation");
+			return null;
+		}
+		while (columns.size() > 0) {
+
+			this.query.append(columns.poll() + "=?");
+
+			if (columns.size() != 0) {
+				this.query.append(",");
 			}
 
 		}
 
+		this.parameters = pojoDataContainer.getPojoValue();
+
 		return this;
 	}
 
-	@Override
-	public QueryBuilder valuesUpdate(Object... values) {
+	public ArrayList<dbpojo.Table> executeQuery() {
 
-		for (int i = 0; i < values.length; i++) {
+		executeQueryWhereBuilder();
 
-			this.parameters.offer(values[i]);
+		ArrayList<dbpojo.Table> result = QueryExecuter.mySqlExecuteQuery(con, this.query, parameters, TableName);
+
+		return result;
+
+	}
+
+	public int[] execute(int userID) {
+
+		executeWhereBuilder();
+
+		Queue<Object> values = this.parameters;
+
+		dbpojo.Table newData = this.newData;
+		dbpojo.Table oldData = this.oldData;
+		int id = this.id;
+		String query = this.query.toString();
+		OpType opType = this.opType;
+		this.query.setLength(0);
+
+		if (opType.getOpType().equals(OpType.DELETE.getOpType())) {
+
+			DeleteOperation.deleteChildTable(this, oldData, userID);
+		}
+
+		int[] data = QueryExecuter.mySqlExecuter(con, query, values, opType);
+		if (opType.getOpType().equals(OpType.INSERT.getOpType())) {
+
+			newData.setID(data[1]);
+			id = data[1];
+
+		}
+		if (data[0] == -1) {
+			return null;
+		}
+
+		if (opType.getOpType().equals(OpType.INSERT.getOpType()) && data[0] != -1) {
+
+			insertOperation.insertChildTable(this, newData, userID);
 
 		}
 
-		return this;
+		if (opType.getOpType().equals(OpType.UPDATE.getOpType()) && data[0] != -1) {
+
+			updateOperation.updateChildTable(this, newData, userID);
+		}
+
+		if ((newData != null && !newData.getTableName().equals(tables.Audit_log.getTableName())) ||
+
+				(oldData != null && !oldData.getTableName().equals(tables.Audit_log.getTableName()))) {
+
+			if (AuditLogOperation.audit(this, id, oldData, newData, opType, userID) == null) {
+				System.out.println("Table" + newData.getTableName() + "  is not audited");
+			}
+
+		}
+
+		return data;
 	}
 
-	@Override
-	public QueryBuilder where(Table columns, TableSchema.Operation operation, Object data) {
+	private void executeQueryWhereBuilder() {
+		dbpojo.Table newData = this.newData;
 
 		this.query.append(" WHERE");
 
-		if (!this.TableName.contains(columns.getTableName())) {
-			return null;
-		}
-		this.query.append(" " + columns.getTableName() + "." + columns + " " + operation.getOperation() + "?");
-		this.parameters.offer(data);
+		if (newData.getID() != -1) {
+			this.query.append(" " + newData.getTableName() + "." + newData.getPrimaryIDName() + " "
+					+ Operation.Equal.getOperation() + "?");
 
-		return this;
-	}
+			this.parameters.offer(newData.getID());
+		} else {
 
-	@Override
-	public QueryBuilder and(Table columns, TableSchema.Operation operation, Object data) {
+			PojoDataContainer pojoDataContainer = PojoDataConversion.convertPojoData(newData);
 
-		this.query.append(" and");
+			if (pojoDataContainer.getPojoKey().size() != 0) {
 
-		if (!this.TableName.contains(columns.getTableName())) {
-			return null;
-		}
-		this.query.append(" " + columns.getTableName() + "." + columns + " " + operation.getOperation() + "?");
-		this.parameters.offer(data);
+				while (pojoDataContainer.getPojoKey().size() > 0) {
 
-		return this;
-	}
+					this.query.append(
+							" " + pojoDataContainer.getPojoKey().poll() + " " + Operation.Equal.getOperation() + "?");
 
-	@Override
-	public QueryBuilder or(Table columns, TableSchema.Operation operation, Object data) {
+					if (pojoDataContainer.getPojoKey().size() != 0)
+						this.query.append(" and");
 
-		this.query.append("or");
-		if (!this.TableName.contains(columns.getTableName())) {
-			return null;
-		}
-		this.query.append(" " + columns.getTableName() + "." + columns + " " + operation.getOperation() + "?");
-		this.parameters.offer(data);
-
-		return this;
-	}
-
-	@Override
-	public ArrayList<Object> executeQuery() {
-		this.query.append(";");
-		PreparedStatement ps;
-		ResultSet result;
-
-		System.out.println("generated query upto select is :" + this.query);
-
-		try {
-			int i = 1;
-			ps = con.prepareStatement(this.query.toString());
-
-			while (!this.parameters.isEmpty()) {
-
-				if (this.parameters.peek() instanceof String) {
-
-					ps.setString(i, (String) this.parameters.peek());
-
-				} else if (this.parameters.peek() instanceof Integer) {
-
-					ps.setInt(i, (Integer) this.parameters.peek());
-
-				} else if (this.parameters.peek() instanceof Long) {
-					ps.setLong(i, (Long) this.parameters.peek());
-
-				} else if (this.parameters.peek() instanceof Boolean) {
-					ps.setBoolean(i, (Boolean) this.parameters.peek());
-
-				} else {
-					System.out.println("error in data type!!!");
 				}
+				this.parameters = pojoDataContainer.getPojoValue();
 
-				System.out.println("here mysqlbuilsder data is" + this.parameters.peek());
+			} else {
 
-				this.parameters.poll();
-				i++;
-
-			}
-
-			result = ps.executeQuery();
-			this.parameters.clear();
-
-			int columnCount = result.getMetaData().getColumnCount();
-
-			ArrayList<String> columnNames = new ArrayList<>();
-
-			for (int j = 1; j <= columnCount; j++) {
-				String columnName = result.getMetaData().getColumnName(j);
-				String tablename = result.getMetaData().getTableName(j);
-				columnNames.add(tablename + "." + columnName);
-//				System.out.println(tablename + "." + columnName);
+				System.out.println("throw the Exception for empty value to use in where cluse");
 
 			}
-
-			PojoMapper pm = new PojoMapper();
-//            ps.close();
-			return pm.PojoResultSetter(this.TableName.get(0), columnNames, result);
-
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-
-			this.TableName.clear();
-
-			this.query.setLength(0);
 
 		}
-		return null;
+
+		this.query.append(";");
+
+	}
+
+	private void executeWhereBuilder() {
+
+		dbpojo.Table newData = this.newData;
+		dbpojo.Table oldData = this.oldData;
+		int id = this.id;
+		OpType opType = this.opType;
+
+		if (!opType.getOpType().equals(OpType.INSERT.getOpType())) {
+			this.query.append(" WHERE");
+			if (opType.getOpType().equals(OpType.DELETE.getOpType())) {
+				this.query.append(" " + oldData.getTableName() + "." + oldData.getPrimaryIDName() + " "
+						+ Operation.Equal.getOperation() + "?");
+			} else {
+
+				this.query.append(" " + newData.getTableName() + "." + newData.getPrimaryIDName() + " "
+						+ Operation.Equal.getOperation() + "?");
+
+			}
+
+			this.parameters.offer(id);
+
+		}
+
+		this.query.append(";");
 
 	}
 
@@ -342,85 +347,6 @@ public class MysqlBuilder implements QueryBuilder {
 		this.query.setLength(0);
 
 		return this.query.toString();
-	}
-
-	public int[] execute(Statement... statements) {
-
-		int[] data = { -1, -1 };
-		try {
-			ResultSet result;
-			this.query.append(";");
-			int i = 1;
-
-			System.out.println("generated query upto select is :" + this.query);
-
-			PreparedStatement ps = this.con.prepareStatement(this.query.toString());
-
-			if (statements.length == 1) {
-
-				if (statements[0].toString().equals("RETURN_GENERATED_KEYS")) {
-					ps = this.con.prepareStatement(this.query.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
-				}
-
-			}
-
-			while (!this.parameters.isEmpty()) {
-
-				if (this.parameters.peek() instanceof String) {
-
-					ps.setString(i, (String) this.parameters.peek());
-					System.out.println(i);
-
-				} else if (this.parameters.peek() instanceof Integer) {
-
-					ps.setInt(i, (Integer) this.parameters.peek());
-					System.out.println(i);
-
-				} else if (this.parameters.peek() instanceof Long) {
-					ps.setLong(i, (Long) this.parameters.peek());
-					System.out.println(i);
-				} else if (this.parameters.peek() instanceof Boolean) {
-					ps.setBoolean(i, (Boolean) this.parameters.peek());
-
-				} else {
-					System.out.println("error in data type!!!");
-				}
-
-//				System.out.println("value"+this.parameters.peek());
-				this.parameters.poll();
-				i++;
-
-			}
-			this.parameters.clear();
-			data[0] = ps.executeUpdate();
-			System.out.println("execution of query" + data[0]);
-
-			if (statements.length == 1) {
-
-				if (statements[0].toString().equals("RETURN_GENERATED_KEYS")) {
-					result = ps.getGeneratedKeys();
-					if (result.next()) {
-						data[1] = result.getInt(1);
-					} else {
-						System.out.println("generated Key are null!!!");
-					}
-				}
-
-			}
-
-//			ps.close();
-
-			return data;
-
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			this.TableName.clear();
-			;
-			this.query.setLength(0);
-
-		}
-		return data;
 	}
 
 }

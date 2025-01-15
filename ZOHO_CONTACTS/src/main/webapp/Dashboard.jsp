@@ -262,36 +262,36 @@ textarea {
 
 	<div>
 		<%
-	 String primary =null;
-		
-		
-		
+		String primary =null;
+				
+				
+				
 
-		// upto this session check is implemented
-   SessionOperation so=new SessionOperation();
-		
-   CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+				// upto this session check is implemented
+				   SessionOperation so=new SessionOperation();
+				
+				   CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
 
-	if (cachemodel == null) {
-            System.out.println("hello hi");
+			if (cachemodel == null) {
+				            System.out.println("hello hi");
 			response.sendRedirect("index.jsp");
-            return;
+				            return;
 			
 
-		}
+				}
 
-	
-	
-		
-		 // String sessionid=(String) request.getAttribute("sessionid");
-         // CacheModel cachemodel=CacheData.getCache(sessionid);
-          
-          
-          Userdata ud = cachemodel.getUserData();
-		
-		Category ugu = (Category) request.getAttribute("usergroupupdate");
-		
-		for (EmailUser email : ud.getallemail()) {
+			
+			
+				
+				 // String sessionid=(String) request.getAttribute("sessionid");
+				         // CacheModel cachemodel=CacheData.getCache(sessionid);
+				          
+				          
+				          Userdata ud = cachemodel.getUserData();
+				
+				Category ugu = (Category) request.getAttribute("usergroupupdate");
+				
+				for (EmailUser email : ud.getallemail()) {
 			if (email != null &&  email.getIsPrimary()) {
 			
 				
@@ -299,14 +299,11 @@ textarea {
 				primary=email.getEmail();
 				
 			}}
-		
-		
-		
-		ArrayList<ContactDetails> user_contacts = cachemodel.getUserContact();
-		ArrayList<Category> usergroup = cachemodel.getUserGroup();
-		
-		
-		
+				
+				
+				
+				ArrayList<ContactDetails> user_contacts = cachemodel.getAllUserContact();
+				ArrayList<Category> usergroup = cachemodel.getAllUserGroup();
 		%>
 
 		<div id="profileModal" class="modal">

@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.time.Instant;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -80,11 +82,15 @@ public class UserProfileServlet extends HttpServlet {
 //                    ud = new UserData();
                 	Userdata ud= new Userdata();
                 	LoginCredentials lc=new LoginCredentials();
+                	
+                	ud.setModifiedAt(Instant.now().toEpochMilli());
+                	lc.setModifiedAt(ud.getModifiedAt());
 					
 					
 					for(String email : request.getParameterValues("email") ) {
 						EmailUser eu=new EmailUser();
 						eu.setEmail(email);
+						eu.setModifiedAt(ud.getModifiedAt());
 						
 						if(email.equals(request.getParameter("primaryemail"))) {
 							
@@ -99,6 +105,7 @@ public class UserProfileServlet extends HttpServlet {
 					lc.setUserName(request.getParameter("username"));
                 	
                 	ud.setLoginCredentials(lc);
+                	
                     ud.setUserId(userSessionData.getUserId());
                     ud.setName(request.getParameter("Name"));
                     ud.setAddress(request.getParameter("Address"));
@@ -140,7 +147,7 @@ public class UserProfileServlet extends HttpServlet {
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }
             } else {
-                if (uo.deleteUserProfile(userSessionData.getUserId())) {
+                if (uo.deleteUserProfile(userSessionData)) {
                     logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + userSessionData.getUserId());
                     
                     SessionOperation so=new SessionOperation();

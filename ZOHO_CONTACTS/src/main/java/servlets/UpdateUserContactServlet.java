@@ -1,5 +1,6 @@
 package servlets;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -69,12 +70,19 @@ public class UpdateUserContactServlet extends HttpServlet {
 				ContactMail cm = new ContactMail();
 				
 				cp.setContactPhone(request.getParameter("phone"));
+				
+				
 				cm.setContactMailID(request.getParameter("email"));
                 uc.setContactID(Integer.parseInt(request.getParameter("contactid")));
                 uc.setFirstName(request.getParameter("f_name"));
                 uc.setMiddleName(request.getParameter("m_name"));
                 uc.setLastName(request.getParameter("l_name"));
                 uc.setAddress(request.getParameter("Address"));
+                uc.setModifiedAt(Instant.now().toEpochMilli());
+                cp.setModifiedAt(uc.getModifiedAt());
+                cm.setModifiedAt(uc.getModifiedAt());
+                cp.setContactID(uc.getContactID());
+                cm.setContactID(uc.getContactID());
                 
 //                System.out.println("gender of contact "+request.getParameter("gender"));
                 uc.setGender(request.getParameter("gender"));

@@ -1,156 +1,121 @@
 package dboperation;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.time.Instant;
 
-import org.eclipse.jdt.internal.compiler.ast.InstanceOfExpression;
-
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import dbpojo.CategoryRelation;
-import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
-import dbpojo.Session;
+import dbpojo.LoginCredentials;
 import dbpojo.Userdata;
-import querybuilder.QueryBuilder;
-import querybuilder.SqlQueryLayer;
-import querybuilder.TableSchema;
-import querybuilder.TableSchema.Category;
-import querybuilder.TableSchema.Category_relation;
-import querybuilder.TableSchema.Contact_details;
-import querybuilder.TableSchema.Contact_mail;
-import querybuilder.TableSchema.Contact_phone;
-import querybuilder.TableSchema.JoinType;
-import querybuilder.TableSchema.Operation;
-import querybuilder.TableSchema.tables;
-import querybuilder.TableSchema.user_data;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.SqlQueryLayer;
 
 public class TestOperation {
 
 	public static void main(String[] args) {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-
 		qg.openConnection();
+//		EmailUser email = new EmailUser();
+//		email.setEmailID(63);
+//		
+//		email.setEmail("1237890@gmail.com");
+//		email.setID(14);
+//		email.setIsPrimary(true);
+//		email.setModifiedAt(Instant.now().toEpochMilli());
+//		email.setCreatedAt(email.getModifiedAt());
 
-//		ArrayList<Object> result = qg.select(TableSchema.tables.Email_user)
-//				.join(JoinType.left, TableSchema.Email_user.em_id, Operation.Equal, TableSchema.user_data.user_id)
-//				.where(TableSchema.user_data.user_id, Operation.Equal, 26).executeQuery();
-//				//.join(JoinType.left, TableSchema.user_data.user_id, Operation.Equal, TableSchema.Login_credentials.id)
-//
-//		if (result == null) {
-//			System.out.print("result is null");
-//		}
-//
-//		for (Object data : result) {
-//
-//			Userdata ud = null;
-//
-//			if (data instanceof Userdata) {
-//
-//				ud = (Userdata) data;
-//				System.out.println("User Data :" + ud.getUserId() + "  " + ud.getName() + "  " + ud.getAddress());
-//
-//				for (EmailUser useremail : ud.getallemail()) {
-//
-//					System.out.println(useremail.getEmail() + "  user id :  " + useremail.getEmailId());
-//
-//				}
-//
-//				System.out.println("Login info:   " + ud.getLoginCredentials().getUserId() + "   "
-//						+ ud.getLoginCredentials().getUserName());
-//			}else if (data instanceof EmailUser) {
-//				EmailUser ue = (EmailUser) data;
-//				System.out.println(ue.toString());
-//			}
-//
-//		}
+//		Userdata user2=new Userdata();
+//		user2.setID(63);
+//		user2.setName("devil1");
+//		changedStateContainer changed=  PojoDataConversion.getChangedPojoData(user, user2);
+//		PojoDataContainer contain=PojoDataConversion.convertPojoData(user);
+//		PojoDataContainer contain2=PojoDataConversion.convertPojoData(user2);
+//		System.out.println("here new"+ user.getID());
+//		System.out.println("here old"+user2.getID());
 
-//		ArrayList<Object> result =  qg.select(tables.Contact_details)
-//    			.join(JoinType.left,Contact_details.contact_id , Operation.Equal, Contact_mail.contact_id)
-//    			.join(JoinType.left, Contact_details.contact_id, Operation.Equal, Contact_phone.contact_id)
-//    			.where(Contact_details.user_id,Operation.Equal, 26)
-//    			.and(Contact_details.contact_id, Operation.Equal, 54)
-//    			.executeQuery();
+//		user.setPassword("jsfvskc");
+//		user.setPhoneno("113461261");
+//		user.setAddress("gotham");
+//		user.setTimezone("asia");
+//		user.setCreatedAt(Instant.now().toEpochMilli());
+//		user.setModifiedAt(user.getCreatedAt());
 //
-//		if (result == null) {
-//			System.out.print("result is null");
-//		}
+//		LoginCredentials login = new LoginCredentials();
+//		login.setUserID(user.getID());
+//		user.setLoginCredentials(login);
+//		login.setUserName("heloooo");
+//		login.setCreatedAt(user.getCreatedAt());
+//		login.setModifiedAt(user.getModifiedAt());
+//		EmailUser email = new EmailUser();
+//		email.setEmailID(user.getID());
+//		user.setEmail(email);
+//		email.setEmail("123457890@gmail.com");
+//		email.setIsPrimary(false);
+//		email.setCreatedAt(user.getCreatedAt());
+//		email.setModifiedAt(user.getCreatedAt());
 //
-//		ContactDetails cd = null;
-//		for (Object data : result) {
-//
-//			if (data instanceof ContactDetails) {
-//				cd = (ContactDetails) data;
-//				System.out.println("User Data :" + cd.getFirstName() + "  " + cd.getLastName());
-//
-//				System.out.println("mail info" + cd.getContactMail().getContactMailID());
-//
-//				System.out.println("phone info" + cd.getContactphone().getContactPhone());
-//			}
-//
-//		}
+//		user.setEmail(email);
+//		user.setLoginCredentials(login);
+//		qg.insert(user).execute(-1);
 
-//		  ArrayList<Object> result = qg.select(TableSchema.tables.Category).join(JoinType.left,TableSchema.Category.Category_id , Operation.Equal, TableSchema.Category_relation.Category_id).join(JoinType.left, TableSchema.Category_relation.contact_id_to_join, Operation.Equal, TableSchema.Contact_details.contact_id).buildQuery();
-//
-//			
-//			
-//			if(result ==null) {
-//				System.out.print("result is null");
-//			}
-//			
-//			 dbpojo.Category ca = null;
-//			for ( Object data : result) {
-//
-//				
-//			
-//				if (data instanceof dbpojo.Category) {
-//					ca= (dbpojo.Category) data;
-//					
-//					
-//					
-//					System.out.println(" category "  + ca.getCategoryName()+" user"+ ca.getCreatedBy());
-//					
-//					
-//					System.out.println("contact in category");
-//					for(CategoryRelation cr: ca.getCategoryRelation()) {
-//						
-//	                        System.out.println("contact name"+cr.getContactIDtoJoin().getFirstName());
-//					}
-//				}
-//
-//
-//			}
+//		ContactDetails contact=new ContactDetails();
+//		contact.setID(64);
+//		contact.setFirstName("devil12345");
+//		contact.setMiddleName("devil1");
+//		contact.setUserID(63);
+//		contact.setLastName("devil2");
+//		contact.setGender("male");
+//		contact.setAddress("gotham");
+//		contact.setCreatedAt(Instant.now().toEpochMilli());
+//		contact.setModifiedAt(contact.getCreatedAt());
+//		ContactMail cm=new ContactMail(0, 0, "123213@gmail.com", contact.getCreatedAt(), contact.getCreatedAt());
+//		contact.setContactMail(cm);
+//		ContactPhone cp=new ContactPhone(0, 0, "12345586", contact.getCreatedAt(), contact.getCreatedAt());
+//		contact.setContactPhone(cp);
 
-//		 ArrayList<Object> result2 = qg.select(TableSchema.tables.Email_user).buildQuery();
-//			if(result2 ==null) {
-//				System.out.print("result is null");
-//			}
-//			
-//			 EmailUser email  = null;
-//			for ( Object data : result2) {
+//		Category category = new Category();
+//		category.setID(62);
+//		category.setCategoryName("summa");
+//		category.setCreatedAt(Instant.now().toEpochMilli());
+//		category.setModifiedAt(category.getCreatedAt());
+//		category.setCreatedBY(63);
+//		CategoryRelation cat = new CategoryRelation(-1, 66, 62, category.getModifiedAt(), category.getModifiedAt());
 //
-//				
-//			
-//				if (data instanceof EmailUser) {
-//					email=( EmailUser) data;
-//					
-//					
-//					
-//					System.out.println(" Email data "  + email.getEmail()+" user"+ email.getEmailId()+"  is primary"+email.getIsPrimary());
-//					
-//					
-//					
-//				}
-//
-//
-//			}
+//		category.setCategoryRelation(cat);
 		
 		
-		int[] val= {-1,-1};
-		val=qg.insert(tables.Email_user).valuesInsert(39,"user@gmail.com",true).execute();
+		Userdata user=new Userdata();
+		user.setID(65);
+		user.setName("arun11111");
+		user.setPassword("password");
+		user.setPhoneno("12345");
+		user.setAddress("gotham");
+		user.setTimezone("asia/kolkata");
+		user.setCreatedAt(Instant.now().toEpochMilli());
+		user.setModifiedAt(user.getCreatedAt());
+		LoginCredentials login=new LoginCredentials();
+		login.setID(15);
+		login.setUserID(user.getID());
+		login.setUserName("arun117");
+		login.setCreatedAt(user.getCreatedAt());
+		login.setModifiedAt(user.getCreatedAt());
+		user.setLoginCredentials(login);
+		EmailUser email=new EmailUser();
+		email.setID(16);
+		email.setEmailID(user.getID());
+		email.setEmail("arun1233123323@gmail.com");
+		email.setIsPrimary(false);
+		email.setModifiedAt(user.getCreatedAt());
+		email.setCreatedAt(user.getCreatedAt());
+		user.setEmail(email);
+		qg.delete(user).execute(65);
 
+//	
+//		qg.delete(email).execute(63);
+//		user.setID(63);
+//		Userdata  dumm= (Userdata) qg.select(user).executeQuery().getFirst();
+//		System.out.println("here the name is"+ dumm.getName());
 		qg.closeConnection();
+
 	}
 
 }

@@ -1,37 +1,86 @@
 package dbpojo;
 
-public class ContactMail {
+import querybuilderconfig.TableSchema.tables;
 
-	int contact_id;
-	String Contact_email_id;
+public class ContactMail implements Table {
+	private int id = -1;
+	private int contactID = -1;
+	private String contactEmailID;
+	private long createdAt = -1;
+	private long modifiedAt = -1;
 
-	
-	public ContactMail(int contactId,String ContactEmailID) {
-		this.contact_id=contactId;
-		this.Contact_email_id=ContactEmailID;
-		
-		
+	public ContactMail(int id, int contactID, String contactEmailID, long createdAt, long modifiedAt) {
+		this.contactID = contactID;
+		this.contactEmailID = contactEmailID;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+
 	}
-	
-	
+
 	public ContactMail() {
+
+	}
+
+	public String getTableName() {
+
+		return tables.Contact_mail.getTableName();
+	}
+
+	public String getPrimaryIDName() {
 		
+		return tables.Contact_mail.getPrimaryKey();
 	}
 	
-	public void setContactID(int Contactid) {
-		this.contact_id = Contactid;
+	
+	
+	
+	
+	
+	public void setID(int id) {
+		
+		this.id=id;
 	}
 
-	public int getContactId() {
-		return this.contact_id;
+	public int getID() {
+		return this.id;
 	}
 
-	public void setContactMailID(String ContactMailId) {
-		this.Contact_email_id = ContactMailId;
+	public void setCreatedAt(long createdAt) {
+
+		this.createdAt = createdAt;
+	}
+
+	public long getCreatedAt() {
+
+		return this.createdAt;
+	}
+
+	public void setModifiedAt(long modifiedAt) {
+
+		this.modifiedAt = modifiedAt;
+	}
+
+	public long getModifiedAt() {
+
+		return this.modifiedAt;
+
+	}
+
+	public void setContactID(int ContactID) {
+		this.contactID = ContactID;
+	}
+
+	public int getContactID() {
+		return this.contactID;
+	}
+
+	public void setContactMailID(String ContactMailID) {
+		this.contactEmailID = ContactMailID;
 	}
 
 	public String getContactMailID() {
-		return Contact_email_id;
+		return contactEmailID;
 	}
 
 }

@@ -1,5 +1,6 @@
 package servlets;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -87,9 +88,15 @@ public class SignupServlet extends HttpServlet {
 					ud = new Userdata();
 					LoginCredentials lc=new LoginCredentials();
 					EmailUser eu=new EmailUser();
+					ud.setCreatedAt(Instant.now().toEpochMilli());
+					ud.setModifiedAt(ud.getCreatedAt());
 					lc.setUserName(request.getParameter("username"));
+					lc.setCreatedAt(ud.getCreatedAt());
+					lc.setModifiedAt(ud.getModifiedAt());
 					eu.setEmail(request.getParameter("email"));
 					eu.setIsPrimary(true);
+					eu.setCreatedAt(ud.getCreatedAt());
+					eu.setModifiedAt(ud.getModifiedAt());
 					ud.setName(request.getParameter("Name"));
 					ud.setAddress(request.getParameter("Address"));
 //					ud.setUserName(request.getParameter("username"));
@@ -100,6 +107,7 @@ public class SignupServlet extends HttpServlet {
 					ud.setTimezone(request.getParameter("timezone"));
 					ud.setEmail(eu);
 					ud.setLoginCredentials(lc);
+					
 					ud = user_op.createUser(ud);
 
 					if (ud != null) {

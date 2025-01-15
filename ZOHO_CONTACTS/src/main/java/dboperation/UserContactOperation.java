@@ -9,16 +9,16 @@ import dbconnect.DBconnection;
 import dbmodel.UserContacts;
 import dbpojo.ContactDetails;
 import loggerfiles.LoggerSet;
-import querybuilder.QueryBuilder;
-import querybuilder.SqlQueryLayer;
-import querybuilder.TableSchema;
-import querybuilder.TableSchema.Contact_details;
-import querybuilder.TableSchema.Contact_mail;
-import querybuilder.TableSchema.Contact_phone;
-import querybuilder.TableSchema.JoinType;
-import querybuilder.TableSchema.Operation;
-import querybuilder.TableSchema.Statement;
-import querybuilder.TableSchema.tables;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.SqlQueryLayer;
+import querybuilderconfig.TableSchema;
+import querybuilderconfig.TableSchema.Contact_details;
+import querybuilderconfig.TableSchema.Contact_mail;
+import querybuilderconfig.TableSchema.Contact_phone;
+import querybuilderconfig.TableSchema.JoinType;
+import querybuilderconfig.TableSchema.Operation;
+import querybuilderconfig.TableSchema.Statement;
+import querybuilderconfig.TableSchema.tables;
 
 /**
  * This class provides operations for managing user contacts,
@@ -39,7 +39,7 @@ public class UserContactOperation {
     
     
     
-    public ContactDetails addUserContact(ContactDetails ud) throws SQLException {
+    public ContactDetails addUserContact(ContactDetails contactDetails) throws SQLException {
 //        Connection con = DBconnection.getConnection();
         int[]  val= {-1,-1};
         QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -60,14 +60,14 @@ public class UserContactOperation {
 //
 //            int val = ps.executeUpdate();
         	
-        	val=qg.insert(tables.Contact_details, Contact_details.user_id,Contact_details.First_name,Contact_details.Middle_name,Contact_details.Last_name,Contact_details.gender,Contact_details.Address,Contact_details.created_At)
-        			.valuesInsert(ud.getUserID(),ud.getFirstName(),ud.getMiddleName(),ud.getLastName(),ud.getGender(),ud.getAddress(),ud.getCreatedAt())
+        	val=qg.insert(tables.Contact_details, Contact_details.user_id,Contact_details.First_name,Contact_details.Middle_name,Contact_details.Last_name,Contact_details.gender,Contact_details.Address,Contact_details.created_time,Contact_details.modified_time)
+        			.valuesInsert(contactDetails.getUserID(),contactDetails.getFirstName(),contactDetails.getMiddleName(),contactDetails.getLastName(),contactDetails.getGender(),contactDetails.getAddress(),contactDetails.getCreatedAt(),contactDetails.getModifiedAt())
         			.execute(Statement.RETURN_GENERATED_KEYS);
         	System.out.println("step 1"+val[0]+" "+val[1]);
             if (val[0] == -1) {
 //                con.rollback();
             	qg.rollBackConnection();
-                logger.logError("UserContactOperation", "addUserContact", "Failed to insert contact: " + ud.getFirstName(), null);
+                logger.logError("UserContactOperation", "addUserContact", "Failed to insert contact: " + contactDetails.getFirstName(), null);
                 return null;
             }
             
@@ -76,13 +76,14 @@ public class UserContactOperation {
 //            ResultSet id = ps.getGeneratedKeys();
             if (val[1] !=-1) {
                 int gen_contact_id = val[1];
-                ud.setContactID(gen_contact_id);
-
+                contactDetails.setContactID(gen_contact_id);
+                contactDetails.getContactMail().setContactID(contactDetails.getContactID());
+                contactDetails.getContactphone().setContactID(contactDetails.getContactID());
 //                ps = con.prepareStatement("INSERT INTO Contact_mail VALUES (?, ?);");
 //                ps.setInt(1, gen_contact_id);
 //                ps.setString(2, uc.getEmail());
 //                val = ps.executeUpdate();
-                val=qg.insert(tables.Contact_mail).valuesInsert(gen_contact_id,ud.getContactMail().getContactMailID()).execute();
+                val=qg.insert(tables.Contact_mail).valuesInsert(contactDetails.getContactMail().getContactID(),contactDetails.getContactMail().getContactMailID(),contactDetails.getContactMail().getCreatedAt(),contactDetails.getContactMail().getModifiedAt()).execute();
                
                 System.out.println("step 3"+val);
                 
@@ -97,12 +98,12 @@ public class UserContactOperation {
 //                ps.setInt(1, gen_contact_id);
 //                ps.setString(2, uc.getPhoneno());
 //                val = ps.executeUpdate();
-                
+               
                 
                 
                 
                 val=qg.insert(tables.Contact_phone)
-                		.valuesInsert(gen_contact_id,ud.getContactphone().getContactPhone()).execute();
+                		.valuesInsert(contactDetails.getContactphone().getContactID(),contactDetails.getContactphone().getContactPhone(),contactDetails.getContactphone().getCreatedAt(),contactDetails.getContactphone().getModifiedAt()).execute();
                 
                 
                 System.out.println("step 4");
@@ -115,15 +116,15 @@ public class UserContactOperation {
             }else {
             	
             	qg.rollBackConnection();
-                logger.logError("UserContactOperation", "addUserContact", "Failed to insert contact for name: " + ud.getFirstName(), null);
+                logger.logError("UserContactOperation", "addUserContact", "Failed to insert contact for name: " + contactDetails.getFirstName(), null);
                 return null;
             	
             	
             }
 //            con.commit();
             qg.commit();
-            logger.logInfo("UserContactOperation", "addUserContact", "Contact added successfully: " + ud.getFirstName());
-            return ud;
+            logger.logInfo("UserContactOperation", "addUserContact", "Contact added successfully: " + contactDetails.getFirstName());
+            return contactDetails;
         } catch (Exception e) {
             logger.logError("UserContactOperation", "addUserContact", "Exception occurred: " + e.getMessage(), e);
 //            con.rollback(); // Ensure rollback in case of exception
@@ -210,7 +211,7 @@ public class UserContactOperation {
      * @return true if the contact was deleted successfully, false otherwise
      * @throws SQLException if a database access error occurs
      */
-    public boolean deleteContact(int user_id, int contact_id) throws SQLException {
+    public boolean deleteContact(ContactDetails contact) throws SQLException {
         Connection con = DBconnection.getConnection();
         int[] result= {-1,-1};
         QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -225,15 +226,15 @@ public class UserContactOperation {
         	
         	
         	 result=qg.delete(tables.Contact_details)
-        			 .where(TableSchema.Contact_details.user_id, Operation.Equal, user_id)
-        			 .and(TableSchema.Contact_details.contact_id, Operation.Equal,contact_id)
+        			 .where(TableSchema.Contact_details.user_id, Operation.Equal, contact.getUserID())
+        			 .and(TableSchema.Contact_details.contact_id, Operation.Equal,contact.getContactID())
         			 .execute();
         	
         	
             if (result[0] > 0) {
-                logger.logInfo("UserContactOperation", "deleteContact", "Contact deleted successfully: " + contact_id);
+                logger.logInfo("UserContactOperation", "deleteContact", "Contact deleted successfully: " + contact.getUserID());
             } else {
-                logger.logError("UserContactOperation", "deleteContact", "Failed to delete contact ID: " + contact_id, null);
+                logger.logError("UserContactOperation", "deleteContact", "Failed to delete contact ID: " + contact.getContactID(), null);
             }
             return result[0] > 0;
         } catch (Exception e) {
@@ -335,8 +336,8 @@ public class UserContactOperation {
 //            int val = ps.executeUpdate();
         	
         	
-         val=qg.update(tables.Contact_details,Contact_details.First_name,Contact_details.Middle_name,Contact_details.Last_name,Contact_details.gender,Contact_details.Address)
-        	.valuesUpdate(uc.getFirstName(),uc.getMiddleName(),uc.getLastName(),uc.getGender(),uc.getAddress())
+         val=qg.update(tables.Contact_details,Contact_details.First_name,Contact_details.Middle_name,Contact_details.Last_name,Contact_details.gender,Contact_details.Address,Contact_details.modified_time)
+        	.valuesUpdate(uc.getFirstName(),uc.getMiddleName(),uc.getLastName(),uc.getGender(),uc.getAddress(),uc.getModifiedAt())
         	.where(Contact_details.contact_id, Operation.Equal, uc.getContactID()).execute();
          
          
@@ -355,8 +356,8 @@ public class UserContactOperation {
 //            val = ps.executeUpdate();
             
             
-            val=qg.update(tables.Contact_mail,Contact_mail.Contact_email_id)
-            		.valuesUpdate(uc.getContactMail().getContactMailID())
+            val=qg.update(tables.Contact_mail,Contact_mail.Contact_email_id,Contact_mail.modified_time)
+            		.valuesUpdate(uc.getContactMail().getContactMailID(),uc.getContactMail().getModifiedAt())
             		.where(Contact_mail.contact_id, Operation.Equal,uc.getContactID())
             		.execute();
             
@@ -375,8 +376,8 @@ public class UserContactOperation {
             
             
             
-            val=qg.update(tables.Contact_phone, Contact_phone.Contact_phone_no)
-            		.valuesUpdate(uc.getContactphone().getContactPhone())
+            val=qg.update(tables.Contact_phone, Contact_phone.Contact_phone_no,Contact_phone.modified_time)
+            		.valuesUpdate(uc.getContactphone().getContactPhone(),uc.getContactphone().getModifiedAt())
             		.where(Contact_phone.contact_id, Operation.Equal, uc.getContactID())
             		.execute();
             

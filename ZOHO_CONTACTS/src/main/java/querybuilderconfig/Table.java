@@ -1,10 +1,10 @@
-package querybuilder;
+package querybuilderconfig;
 
 
 public interface Table {
 
 	
-	public String getTableName();
+	public  String getTableName();
 	public String getPrimaryKey();
 
 }

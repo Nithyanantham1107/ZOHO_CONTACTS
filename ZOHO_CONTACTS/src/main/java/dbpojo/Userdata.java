@@ -1,41 +1,84 @@
 package dbpojo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class Userdata {
-	int user_id;
-	String Name;
-	String password;
-	String phone_no;
-	String address;
-	String timezone;
-	String CurrentEmail;
-//	HashMap<String,Session> session =new  HashMap<String, Session>();
-	ArrayList<EmailUser> email = new ArrayList<EmailUser>();
-	LoginCredentials LoginCredentials;
+import querybuilderconfig.TableSchema.tables;
 
-	
+public class Userdata implements Table {
+	private int id = -1;
+	private String Name;
+	private String password;
+	private String phoneNo;
+	private String address;
+	private String timeZone;
+	private String CurrentEmail;
+	private long createdAt = -1;
+	private long modifiedAt = -1;
+	private ArrayList<EmailUser> email = new ArrayList<EmailUser>();
+	private LoginCredentials LoginCredentials;
+
 	public Userdata() {
-		
+
 	}
-	
-	
-	Userdata(int userid, String Name, String password, String Phoneno, String address, String timezone) {
+
+	public Userdata(int userId, String Name, String password, String Phoneno, String address, String timezone, long createdAt,
+			long modifiedAt) {
 		this.address = address;
 		this.Name = Name;
 		this.password = password;
-		this.user_id = userid;
-		this.phone_no = Phoneno;
-		this.timezone = timezone;
+		this.id = userId;
+		this.phoneNo = Phoneno;
+		this.timeZone = timezone;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
 
 	}
-	
-	
-	
-	public void setCurrentEmail(String current ) {
 
-		this.CurrentEmail=current;
+	public String getTableName() {
+
+		return tables.user_data.getTableName();
+	}
+
+	
+
+	public String getPrimaryIDName() {
+		
+		return tables.user_data.getPrimaryKey();
+	}
+	public void setRowKey(int rowKey) {
+
+		this.id = rowKey;
+	}
+
+	public int getRowKey() {
+
+		return this.id;
+	}
+
+	public void setCreatedAt(long createdAt) {
+
+		this.createdAt = createdAt;
+	}
+
+	public long getCreatedAt() {
+
+		return this.createdAt;
+	}
+
+	public void setModifiedAt(long modifiedAt) {
+
+		this.modifiedAt = modifiedAt;
+	}
+
+	public long getModifiedAt() {
+
+		return this.modifiedAt;
+
+	}
+
+	public void setCurrentEmail(String current) {
+
+		this.CurrentEmail = current;
 	}
 
 	public String getCurrentemail() {
@@ -51,9 +94,6 @@ public class Userdata {
 		return this.LoginCredentials;
 	}
 
-	
-
-	
 	public void setEmail(EmailUser email) {
 
 		this.email.add(email);
@@ -62,16 +102,24 @@ public class Userdata {
 	public ArrayList<EmailUser> getallemail() {
 		return this.email;
 	}
-	public EmailUser getemail(int i) {
-		return this.email.get(i);
+
+	public EmailUser getemail(int ID) {
+
+		for (EmailUser email : this.email) {
+
+			if (email.getID() == ID) {
+				return email;
+			}
+		}
+		return null;
 	}
 
-	public void setUserId(int user_id) {
-		this.user_id = user_id;
+	public void setID(int id) {
+		this.id = id;
 	}
 
-	public int getUserId() {
-		return this.user_id;
+	public int getID() {
+		return this.id;
 	}
 
 	public String getName() {
@@ -91,19 +139,19 @@ public class Userdata {
 	}
 
 	public void setPhoneno(String Phoneno) {
-		this.phone_no = Phoneno;
+		this.phoneNo = Phoneno;
 	}
 
 	public String getPhoneno() {
-		return this.phone_no;
+		return this.phoneNo;
 	}
 
 	public void setTimezone(String Timezone) {
-		this.timezone = Timezone;
+		this.timeZone = Timezone;
 	}
 
 	public String getTimezone() {
-		return this.timezone;
+		return this.timeZone;
 	}
 
 	public void setAddress(String Address) {

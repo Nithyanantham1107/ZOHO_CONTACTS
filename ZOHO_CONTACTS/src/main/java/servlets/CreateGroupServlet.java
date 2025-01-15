@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,7 +70,7 @@ public class CreateGroupServlet extends HttpServlet {
 
 					int j = 0;
 //                    ug = new UserGroup();
-					Category ug = new Category();
+					Category category = new Category();
 					String sessionid = (String) request.getAttribute("sessionid");
 					CacheModel cachemodel = CacheData.getCache(sessionid);
 
@@ -77,32 +78,37 @@ public class CreateGroupServlet extends HttpServlet {
 
 //					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 
-					ug.setCategoryName(request.getParameter("groupName"));
+					category.setCategoryName(request.getParameter("groupName"));
 //                    ug.setGroupName(request.getParameter("groupName"));
-
+//					category.setCreatedAt(Instant.now().toEpochMilli());
+				
+					
+					category.setModifiedAt(Instant.now().toEpochMilli());
+					category.setCreatedAt(category.getModifiedAt());
 					for (String i : request.getParameterValues("contact_ids")) {
 						if (i != null) {
-							CategoryRelation cr = new CategoryRelation();
-
-							cr.setContactIDtoJoin(Integer.parseInt(i));
-							ug.setCategoryRelation(cr);
+							CategoryRelation categoryRelation = new CategoryRelation();
+							categoryRelation.setCreatedAt(category.getModifiedAt());
+							categoryRelation.setContactIDtoJoin(Integer.parseInt(i));
+							category.setCategoryRelation(categoryRelation);
 //                            contactid[j] = Integer.parseInt(i);
 
 						}
 					}
 
-					ug.setCreatedBY(ud.getUserId());
+					
+					category.setCreatedBY(ud.getUserId());
 //                    ug.setUserid(ud.getUserId());
 
 //                    ug.setcontactid(contactid);
 
-					if (ugo.createGroup(ug)) {
+					if (ugo.createGroup(category)) {
 						ArrayList<Category> usergroup = ugo.viewAllGroup(ud.getUserId());
 						if (usergroup != null) {
 							cachemodel.setUserGroup(usergroup);
 
 							logger.logInfo("CreateGroupServlet", "doPost",
-									"Group created successfully: " + ug.getCategoryName());
+									"Group created successfully: " + category.getCategoryName());
 							response.sendRedirect("Dashboard.jsp");
 						} else {
 							logger.logWarning("CreateGroupServlet", "doPost",
@@ -112,8 +118,9 @@ public class CreateGroupServlet extends HttpServlet {
 						}
 					} else {
 						logger.logWarning("CreateGroupServlet", "doPost",
-								"Failed to create group: " + ug.getCategoryName());
-						request.setAttribute("errorMessage", "Failed to create " + ug.getCategoryName() + " group");
+								"Failed to create group: " + category.getCategoryName());
+						request.setAttribute("errorMessage",
+								"Failed to create " + category.getCategoryName() + " group");
 						request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
 					}
 				} else {
@@ -125,46 +132,48 @@ public class CreateGroupServlet extends HttpServlet {
 				if (request.getParameter("groupName") != null && request.getParameterValues("contact_ids") != null) {
 					int j = 0;
 //					ug = new UserGroup();
-					Category ug = new Category();
+					Category category = new Category();
 
 					String sessionid = (String) request.getAttribute("sessionid");
 					CacheModel cachemodel = CacheData.getCache(sessionid);
 
 					Userdata ud = cachemodel.getUserData();
-
+					category.setModifiedAt(Instant.now().toEpochMilli());
 //					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 
-					ug.setCategoryName(request.getParameter("groupName"));
-
+					category.setCategoryName(request.getParameter("groupName"));
+					category.setCategoryID(Integer.parseInt(request.getParameter("groupdata")));
 //					ug.setGroupName(request.getParameter("groupName"));
-
+//					category.setCreatedAt(Instant.now().toEpochMilli());
 					for (String i : request.getParameterValues("contact_ids")) {
 						if (i != null && !i.isBlank()) {
 //							contactid[j] = Integer.parseInt(i);
 //							j++;
 
 							CategoryRelation cr = new CategoryRelation();
-
+                            
+							cr.setCategoryID(category.getCategoryID());
+							cr.setCreatedAt(category.getModifiedAt());
 							cr.setContactIDtoJoin(Integer.parseInt(i));
-							ug.setCategoryRelation(cr);
+							category.setCategoryRelation(cr);
 						}
 					}
 
-					ug.setCreatedBY(ud.getUserId());
+					category.setCreatedBY(ud.getUserId());
 
 //					ug.setUserid(ud.getUserId());
 //					ug.setcontactid(contactid);
 
-					ug.setCategoryID(Integer.parseInt(request.getParameter("groupdata")));
+				
 //					ug.set(Integer.parseInt(request.getParameter("groupdata")));
 
-					if (ugo.updateUserGroup(ug)) {
+					if (ugo.updateUserGroup(category)) {
 						ArrayList<Category> usergroup = ugo.viewAllGroup(ud.getUserId());
 						if (usergroup != null) {
 							cachemodel.setUserGroup(usergroup);
 
 							logger.logInfo("CreateGroupServlet", "doPost",
-									"Group updated successfully: " + ug.getCategoryName());
+									"Group updated successfully: " + category.getCategoryName());
 							response.sendRedirect("Dashboard.jsp");
 						} else {
 							logger.logWarning("CreateGroupServlet", "doPost",

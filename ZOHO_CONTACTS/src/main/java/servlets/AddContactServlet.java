@@ -88,7 +88,16 @@ public class AddContactServlet extends HttpServlet {
 				ContactMail cm = new ContactMail();
 				cp.setContactPhone(request.getParameter("phone"));
 				cm.setContactMailID(request.getParameter("email"));
+				
+				uc.setCreatedAt(Instant.now().toEpochMilli());
+				uc.setModifiedAt(uc.getCreatedAt());
 				uc.setContactMail(cm);
+				cp.setCreatedAt(uc.getCreatedAt());
+				cp.setModifiedAt(uc.getCreatedAt());
+				cm.setCreatedAt(uc.getCreatedAt());
+				cm.setModifiedAt(uc.getCreatedAt());
+				
+				
 				uc.setContactPhone(cp);
 				uc.setFirstName(request.getParameter("f_name"));
 				uc.setMiddleName(request.getParameter("m_name"));

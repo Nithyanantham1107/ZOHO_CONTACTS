@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 import dbconnect.DBconnection;
 import loggerfiles.LoggerSet;
-import querybuilder.QueryBuilder;
-import querybuilder.SqlQueryLayer;
-import querybuilder.TableSchema.Operation;
-import querybuilder.TableSchema.Session;
-import querybuilder.TableSchema.tables;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.SqlQueryLayer;
+import querybuilderconfig.TableSchema.Operation;
+import querybuilderconfig.TableSchema.Session;
+import querybuilderconfig.TableSchema.tables;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
 
@@ -130,7 +130,7 @@ public class UpdateAndDeleteQueue implements Runnable {
 //						ps.setString(1, val.getString(1));
 //						ps.executeUpdate();
 
-						this.qg.delete(tables.Session).where(querybuilder.TableSchema.Session.Session_id,
+						this.qg.delete(tables.Session).where(querybuilderconfig.TableSchema.Session.Session_id,
 								Operation.Equal, session.getSessionId()).execute();
 
 					}

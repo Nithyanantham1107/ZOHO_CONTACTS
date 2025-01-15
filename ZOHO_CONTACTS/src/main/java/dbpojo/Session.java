@@ -1,43 +1,89 @@
 package dbpojo;
 
-public class Session {
+import querybuilderconfig.TableSchema.tables;
 
-private	String sessionId;
-private	long lastAccessed;
-private	int userId;
+public class Session implements Table {
 
-	
-	Session(String sessionId,long lastAccessed,int userId){
+	private String sessionID;
+	private long lastAccessed = -1;
+	private int userID = -1;
+	private int id = -1;
+	private long createdAt = -1;
+	private long modifiedAt = -1;
 
-		this.sessionId=sessionId;
-		this.lastAccessed=lastAccessed;
-		
-		this.userId=userId;
+	public Session(int id, String sessionId, long lastAccessed, int userId, long createdAt, long modifiedAt) {
+
+		this.sessionID = sessionId;
+		this.lastAccessed = lastAccessed;
+		this.id = id;
+		this.userID = userId;
+
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+
 	}
-	
-	
+
 	public Session() {
-	
+
 	}
-	
-	public void setUserId(int UserId) {
-		this.userId = UserId;
+
+	public String getTableName() {
+
+		return tables.Session.getTableName();
+	}
+
+	public String getPrimaryIDName() {
+
+		return tables.Session.getPrimaryKey();
+	}
+
+	public void setID(int id) {
+		this.id = id;
+
+	}
+
+	public int getID() {
+
+		return this.id;
+	}
+
+	public void setCreatedAt(long createdAt) {
+
+		this.createdAt = createdAt;
+	}
+
+	public long getCreatedAt() {
+
+		return this.createdAt;
+	}
+
+	public void setModifiedAt(long modifiedAt) {
+
+		this.modifiedAt = modifiedAt;
+	}
+
+	public long getModifiedAt() {
+
+		return this.modifiedAt;
+
+	}
+
+	public void setUserId(int UserID) {
+		this.userID = UserID;
 	}
 
 	public int getUserId() {
-		return this.userId;
+		return this.userID;
 	}
-	
-	
-	public void setSessionID(String SessionId) {
-		this.sessionId = SessionId;
+
+	public void setSessionID(String SessionID) {
+		this.sessionID = SessionID;
 	}
 
 	public String getSessionId() {
-		return this.sessionId;
+		return this.sessionID;
 	}
-	
-	
+
 	public void setLastAccessed(long lastAccessed) {
 		this.lastAccessed = lastAccessed;
 	}
@@ -45,5 +91,5 @@ private	int userId;
 	public long getLastAccessed() {
 		return this.lastAccessed;
 	}
-	
+
 }

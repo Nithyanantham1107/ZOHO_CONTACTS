@@ -71,11 +71,19 @@ public class DeleteUserContactServlet extends HttpServlet {
                  Userdata ud = cachemodel.getUserData();
                
 
-                int user_id = ud.getUserId();
+//                int user_id = ud.getUserId();
                 int contact_id = Integer.parseInt(request.getParameter("contact_id"));
 
-               
-                if (uco.deleteContact(user_id, contact_id)) {
+                
+                //check
+                
+                if(cachemodel.getUserContact(contact_id)==null) {
+                	
+                	
+                	System.out.println("here contact are null so see it!!");
+                }
+                 
+                if (uco.deleteContact(cachemodel.getUserContact(contact_id))) {
                     ArrayList<ContactDetails> userContacts = uco.viewAllUserContacts(ud.getUserId());
                   
                     cachemodel.setUserContact(userContacts);

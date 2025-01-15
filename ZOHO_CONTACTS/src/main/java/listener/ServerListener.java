@@ -10,10 +10,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import loggerfiles.LoggerSet;
-import querybuilder.SqlQueryLayer;
 import schedulers.SessionTableCleaner;
 import schedulers.UpdateAndDeleteQueue;
-import querybuilder.QueryBuilder;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.SqlQueryLayer;
 
 public class ServerListener implements ServletContextListener {
  QueryBuilder qg;

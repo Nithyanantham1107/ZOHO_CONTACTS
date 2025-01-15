@@ -1,20 +1,37 @@
-package querybuilder;
-
-
+package querybuilderconfig;
 
 public class TableSchema {
-	
-	
 
-	
-	public enum Statement{
-		
-		
-		
+	public enum Statement {
+
 		RETURN_GENERATED_KEYS;
+		
 	}
-	
-	
+
+	public enum OpType {
+
+		INSERT(1, "INSERT"), UPDATE(2, "UPDATE"), DELETE(3, "DELETE");
+
+		int id;
+		String type;
+
+		OpType(int id, String type) {
+
+			this.id = id;
+			this.type = type;
+
+		}
+
+		public int getID() {
+
+			return this.id;
+		}
+
+		public  String getOpType() {
+			return this.type;
+		}
+
+	}
 
 	public enum Operation {
 		Equal("="), Notequal("!="), GreaterThan(">"), LesserThan("<"), GreaterEqual(">="), LesserEqual("<=");
@@ -26,13 +43,11 @@ public class TableSchema {
 			this.value = val;
 		}
 
-		String getOperation() {
+		public String getOperation() {
 			return this.value;
 		}
 	}
-	
-	
-	
+
 	public enum JoinType {
 		left("LEFT JOIN"), right("RIGHT JOIN"), inner("INNER JOIN"), outer("OUTER JOIN");
 
@@ -43,161 +58,179 @@ public class TableSchema {
 			this.value = val;
 		}
 
-		String getType() {
+		public String getType() {
 			return this.value;
 		}
 	}
 
 	public enum Category_relation implements Table {
-		contact_id_to_join, Category_id;
+		ID, contact_id_to_join, Category_id, created_time, modified_time;
 
 		public String getTableName() {
 			return "Category_relation";
 		}
-	
+
 		public String getPrimaryKey() {
-		
-			return "Category_id";
+
+			return "ID";
 		}
-		
 
 	}
 
 	public enum Category implements Table {
-		Category_id, Category_name, created_by;
+		Category_id, Category_name, created_by, created_time, modified_time;
 
 		public String getTableName() {
 			return "Category";
 		}
-		
+
 		public String getPrimaryKey() {
-			
+
 			return "Category_id";
 		}
 
 	}
 
 	public enum Contact_details implements Table {
-		user_id, contact_id, First_name, Middle_name, Last_name, gender, Address, created_At;
+		user_id, contact_id, First_name, Middle_name, Last_name, gender, Address, created_time, modified_time;
 
 		public String getTableName() {
 			return "Contact_details";
 		}
-	
+
 		public String getPrimaryKey() {
-			
+
 			return "contact_id";
 		}
 
 	}
 
 	public enum Contact_mail implements Table {
-		contact_id, Contact_email_id;
+		ID, contact_id, Contact_email_id, created_time, modified_time;
 
 		public String getTableName() {
 			return "Contact_mail";
 		}
-	
+
 		public String getPrimaryKey() {
-			
-			return "contact_id";
+
+			return "ID";
 		}
 
 	}
 
 	public enum Contact_phone implements Table {
-		contact_id, Contact_phone_no;
+		ID, contact_id, Contact_phone_no, created_time, modified_time;
 
 		public String getTableName() {
 			return "Contact_phone";
 		}
+
 		@Override
 		public String getPrimaryKey() {
-		
-			return "contact_id";
+
+			return "ID";
 		}
 
 	}
 
 	public enum Email_user implements Table {
-		em_id, email, is_primary;
+		ID, em_id, email, is_primary, created_time, modified_time;
 
 		public String getTableName() {
 			return "Email_user";
 		}
-	
+
 		public String getPrimaryKey() {
-			
-			return "email";
+
+			return "ID";
 		}
 
 	}
 
 	public enum Login_credentials implements Table {
-		id, username;
+		ID, log_id, username, created_time, modified_time;
 
 		public String getTableName() {
 			return "Login_credentials";
 		}
-	
+
 		public String getPrimaryKey() {
-			
-			return "username";
+
+			return "ID";
 		}
 
 	}
 
 	public enum Session implements Table {
-		Session_id, last_accessed, user_id;
+		ID, Session_id, last_accessed, user_id, created_time, modified_time;
 
 		public String getTableName() {
 			return "Session";
 		}
-		
+
 		public String getPrimaryKey() {
-		
-			return "Session_id";
+
+			return "ID";
 		}
 
 	}
 
 	public enum user_data implements Table {
-		user_id, Name, password, phone_no, address, timezone;
+		user_id, Name, password, phone_no, address, timezone, created_time, modified_time;
 
 		public String getTableName() {
 			return "user_data";
 		}
-		
-	
+
 		public String getPrimaryKey() {
-			
+
 			return "user_id";
 		}
 
 	}
 
+	public enum Audit_log implements Table {
+
+		ID, previous_state, changed_state, table_name, operation_id, row_key, created_at, created_by;
+
+		
+		public String getTableName() {
+			return "Audit_log";
+		}
+
+		public String getPrimaryKey() {
+
+			return "ID";
+		}
+		
+		
+	}
+
 	public enum tables implements Table {
 
-		Category("Category","Category_id"), Category_relation("Category_relation"," Category_id"), Contact_details("Contact_details","contact_id"),
-		Contact_mail("Contact_mail","contact_id"), Contact_phone("Contact_phone","contact_id"), Email_user("Email_user","email"),
-		Login_credentials("Login_credentials","username"), Session("Session","Session_id"), user_data("user_data","user_id");
+		Category("Category", "Category_id"), Category_relation("Category_relation", "ID"),
+		Contact_details("Contact_details", "contact_id"), Contact_mail("Contact_mail", "ID"),
+		Contact_phone("Contact_phone", "ID"), Email_user("Email_user", "ID"),
+		Login_credentials("Login_credentials", "ID"), Session("Session", "ID"),
+		user_data("user_data", "user_id"),
+		Audit_log("Audit_log", "ID");
 
 		private final String tableName;
 		private final String primarykey;
 
-		private tables(String tableName,String primarykey) {
+		private tables(String tableName, String primarykey) {
 			this.tableName = tableName;
-			this.primarykey=primarykey;
+			this.primarykey = primarykey;
 		}
 
 		public String getTableName() {
 			return tableName;
 		}
+
 		public String getPrimaryKey() {
 			return primarykey;
 		}
 
 	}
 }
-
-

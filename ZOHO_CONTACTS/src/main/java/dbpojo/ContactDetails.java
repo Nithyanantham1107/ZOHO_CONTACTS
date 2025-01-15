@@ -1,39 +1,80 @@
 package dbpojo;
 
-import java.util.ArrayList;
+import querybuilderconfig.TableSchema.tables;
 
-public class ContactDetails {
+public class ContactDetails implements Table{
 
-	int user_id;
-	int contact_id;
-	String First_name;
-	String Middle_name;
-	String Last_name;
-	String gender;
-	String Address;
+	private int userId=-1;
+	private int id=-1;
+	private String Firstname;
+	private String Middlename;
+	private String Lastname;
+	private String gender;
+	private String Address;
+	private long createdAt = -1;
+	private long modifiedAt = -1;
 
-	ContactMail contactmail;
-	ContactPhone contactPhone;
+	private ContactMail contactmail;
+	private ContactPhone contactPhone;
 
-	long created_At;
+
 	
 	public ContactDetails() {
 		
 	}
 
-	public ContactDetails(int userid, int contactid, String Firstname, String middleName, String LastName,
-			String gender, String Address, long CreatedAt) {
+	public ContactDetails(int userid, int id, String Firstname, String middleName, String LastName,
+			String gender, String Address, long CreatedAt,long modifiedAt) {
 
-		this.user_id = userid;
-		this.contact_id = contactid;
-		this.First_name = Firstname;
-		this.Middle_name = middleName;
-		this.Last_name = LastName;
+		this.userId = userid;
+		this.id =id;
+		this.Firstname = Firstname;
+		this.Middlename = middleName;
+		this.Lastname = LastName;
 		this.gender = gender;
 		this.Address = Address;
-		this.created_At = CreatedAt;
+		this.createdAt = CreatedAt;
+		this.modifiedAt=modifiedAt;
 
 	}
+	
+
+	public String getTableName() {
+		
+		return tables.Contact_details.getTableName();
+	}
+	
+
+	public String getPrimaryIDName() {
+		
+		return tables.Contact_details.getPrimaryKey();
+	}
+	
+	
+
+
+	
+	public void setCreatedAt(long createdAt) {
+
+		this.createdAt = createdAt;
+	}
+
+	public long getCreatedAt() {
+
+		return this.createdAt;
+	}
+
+	public void setModifiedAt(long modifiedAt) {
+
+		this.modifiedAt = modifiedAt;
+	}
+
+	public long getModifiedAt() {
+
+		return this.modifiedAt;
+
+	}
+
 
 	public void setContactPhone(ContactPhone phone) {
 
@@ -54,43 +95,43 @@ public class ContactDetails {
 	}
 
 	public void setUserID(int userid) {
-		this.user_id = userid;
+		this.userId = userid;
 	}
 
 	public int getUserID() {
-		return this.user_id;
+		return this.userId;
 	}
 
-	public void setContactID(int Contactid) {
-		this.contact_id = Contactid;
+	public void setID(int id) {
+		this.id = id;
 	}
 
-	public int getContactID() {
-		return this.contact_id;
+	public int getID() {
+		return this.id;
 	}
 
 	public void setFirstName(String FirstName) {
-		this.First_name = FirstName;
+		this.Firstname = FirstName;
 	}
 
 	public String getFirstName() {
-		return this.First_name;
+		return this.Firstname;
 	}
 
 	public void setMiddleName(String MiddleName) {
-		this.Middle_name = MiddleName;
+		this.Middlename = MiddleName;
 	}
 
 	public String getMiddleName() {
-		return this.Middle_name;
+		return this.Middlename;
 	}
 
 	public void setLastName(String LastName) {
-		this.Last_name = LastName;
+		this.Lastname = LastName;
 	}
 
 	public String getLastName() {
-		return this.Last_name;
+		return this.Lastname;
 	}
 
 	public void setGender(String Gender) {
@@ -116,12 +157,8 @@ public class ContactDetails {
 		return this.Address;
 	}
 
-	public void setCreatedAt(long CreatedAt) {
-		this.created_At = CreatedAt;
-	}
+	
 
-	public long getCreatedAt() {
-		return this.created_At;
-	}
+	
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import dbconnect.DBconnection;
+import querybuilderconfig.QueryBuilder;
 
 public class PostgresBuilder implements QueryBuilder {
 	

@@ -2,21 +2,68 @@ package dbpojo;
 
 import java.util.ArrayList;
 
-public class Category {
+import querybuilderconfig.TableSchema.tables;
 
-	int Category_id;
-	String Category_name;
-	int created_by;
-	ArrayList<CategoryRelation> categoryRelation=new ArrayList<CategoryRelation>();
+public class Category implements Table {
 
-	Category(int CategoryId, String CategoryName, int CreatedBy) {
-		this.Category_id = CategoryId;
-		this.Category_name = CategoryName;
-		this.created_by = CategoryId;
+	private int id = -1;
+	private String categoryName;
+	private int createdBy = -1;
+	private long createdAt = -1;
+	private long modifiedAt = -1;
+	private ArrayList<CategoryRelation> categoryRelation = new ArrayList<CategoryRelation>();
+
+	public Category(int id, String CategoryName, int CreatedBy, long createdAt, long modifiedAt) {
+		this.id = id;
+		this.categoryName = CategoryName;
+		this.createdBy = CreatedBy;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
 
 	}
 
 	public Category() {
+
+	}
+	
+
+	public void setID(int id) {
+		
+		this.id=id;
+	}
+	
+	public int getID() {
+		return this.id;
+	}
+
+	public String getPrimaryIDName() {
+		
+		return tables.Category.getPrimaryKey();
+	}
+
+	public  String getTableName() {
+		
+		return tables.Category.getTableName();
+	}
+
+	public void setCreatedAt(long createdAt) {
+
+		this.createdAt = createdAt;
+	}
+
+	public long getCreatedAt() {
+
+		return this.createdAt;
+	}
+
+	public void setModifiedAt(long modifiedAt) {
+
+		this.modifiedAt = modifiedAt;
+	}
+
+	public long getModifiedAt() {
+
+		return this.modifiedAt;
 
 	}
 
@@ -34,28 +81,22 @@ public class Category {
 		return this.categoryRelation;
 	}
 
-	public void setCategoryID(int Categoryid) {
-		this.Category_id = Categoryid;
-	}
 
-	public int getCategoryID() {
-		return this.Category_id;
-	}
 
 	public void setCategoryName(String CategoryName) {
-		this.Category_name = CategoryName;
+		this.categoryName = CategoryName;
 	}
 
 	public String getCategoryName() {
-		return this.Category_name;
+		return this.categoryName;
 	}
 
 	public void setCreatedBY(int createdby) {
-		this.created_by = createdby;
+		this.createdBy = createdby;
 	}
 
 	public int getCreatedBy() {
-		return this.created_by;
+		return this.createdBy;
 	}
 
 	public boolean isContactExist(int usercontactid) {
