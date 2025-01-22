@@ -87,7 +87,7 @@ public class SessionFilter implements Filter {
 			
 			CacheModel cachemodel = so.checkSessionAlive(sessionid);
 			if (cachemodel != null) {
-                int userid=cachemodel.getUserData().getUserId();
+                int userid=cachemodel.getUserData().getID();
 				Userdata ud = uo.getUserData(userid);
 	
 				ArrayList<ContactDetails> uc = uco.viewAllUserContacts(userid);

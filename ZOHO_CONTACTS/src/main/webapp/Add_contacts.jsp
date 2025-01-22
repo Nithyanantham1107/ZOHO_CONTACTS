@@ -175,7 +175,7 @@ CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies
         
             <input type="submit"  onclick="prepareFormData()" value="Add" />
         </form>
-        <form action="/Dashboard.jsp" method="get">
+        <form action="/home.jsp" method="get">
             <input type="submit" value="Back" class="back-btn" />
         </form>
     </div>

@@ -1,0 +1,270 @@
+Jan 20, 2025 11:44:37 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:37.664682577 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:49 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:49.113699605 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:49 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:49.251158464 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:49 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:49.326581243 | Client IP: 127.0.0.1 | Resource: /asset/contactIcon.png | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:51 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:51.253328209 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:51 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:51.419274340 | Client IP: 127.0.0.1 | Resource: /js/script.js | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:53 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:53.662350163 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:56 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:56.429487107 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:44:58 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:44:58.799544470 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:45:00 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:45:00.103854928 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:45:01 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:45:01.925967863 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:45:03 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:45:03.362620485 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:45:24 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:45:24.091263501 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:45:34 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:45:34.338819204 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:45:37 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:45:37.634887487 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:45:40 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:45:40.413787225 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:46:16 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:46:16.411093862 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:47:17 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:47:17.440634354 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:47:22 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:47:22.969531798 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:47:29 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:47:29.648059408 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:47:35 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:47:35.153446084 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:48:36 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:48:36.807131083 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:48:40 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:48:40.009802200 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:49:28 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:49:28.734710156 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:49:33 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:49:33.473213960 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:49:33 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:49:33.754078054 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:50:35 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:50:35.406005161 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:50:40 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:50:40.083537710 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:50:41 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:50:41.149718827 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:52:03 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:52:03.718654505 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:52:03 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:52:03.978143883 | Client IP: 127.0.0.1 | Resource: /asset/contactIcon.png | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:53:12 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:53:12.776275604 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:53:16 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:53:16.553285148 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:53:18 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:53:18.503020517 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:53:21 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:53:21.390804997 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:53:24 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:53:24.610682580 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:54:48 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:54:48.172127054 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:54:57 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:54:57.014155912 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:54:58 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:54:58.049858033 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:54:59 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:54:59.824626158 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:55:40 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:55:40.243146626 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:55:40 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:55:40.488764361 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 11:59:31 AM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T11:59:31.555000355 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:00:32 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:00:32.223474410 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:01:40 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:01:40.234974456 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:02:30 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:02:30.391283310 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:03:40 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:03:40.361684951 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:05:48 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:05:48.556050691 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:08:01 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:08:01.884861915 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:08:02 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:08:02.116253869 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:08:14 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:08:14.135701906 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:31 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:31.175746601 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:37 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:37.214671253 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:37 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:37.532133413 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:39 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:39.870262146 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:40 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:40.201946206 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:41 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:41.503060883 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:43 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:43.496740168 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:43 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:43.816628162 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:52 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:52.731398038 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:57 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:57.210363865 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:11:57 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:11:57.502496086 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:12:06 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:12:06.670981449 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:12:08 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:12:08.077589055 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:12:09 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:12:09.135836004 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:12:10 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:12:10.269765403 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:12:12 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:12:12.118066634 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:14:03 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:14:03.664488313 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:14:03 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:14:03.912995894 | Client IP: 127.0.0.1 | Resource: /asset/contactIcon.png | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:14:37 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:14:37.201303525 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:20:15 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:20:15.570470373 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:20:20 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:20:20.681046587 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:20:23 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:20:23.269346197 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:24:25 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:24:25.021061571 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:24:36 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:24:36.532040237 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:24:36 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:24:36.615785682 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:24:36 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:24:36.661069110 | Client IP: 127.0.0.1 | Resource: /asset/contactIcon.png | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:24:38 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:24:38.543613602 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:24:40 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:24:40.290928118 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:01 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:01.599415200 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:02 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:02.065360578 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:02 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:02.549900633 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:03 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:03.010512596 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:03 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:03.461304724 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:03 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:03.824329905 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:04 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:04.205660917 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:25:04 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:25:04.711286680 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:26:55 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:26:55.399041223 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:27:05.655775957 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:27:05.737960972 | Client IP: 127.0.0.1 | Resource: /css/styles.css | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:27:07.570016279 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:27:08 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:27:08.989224777 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-20T12:27:10.078726453 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:12 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:12.887116303 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:26 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:26.641228107 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:28 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:28.191293348 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:32 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:32.486633744 | Client IP: 127.0.0.1 | Resource: /updatecontact | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:32 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:32.599654166 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:34 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:34.615610195 | Client IP: 127.0.0.1 | Resource: /GetAndUpdatecontact | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:40 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:40.642827622 | Client IP: 127.0.0.1 | Resource: /updatecontact | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:40 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:40.749572997 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:45 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:45.507132672 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:21:46 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:21:46.836869353 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:01 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:01.160291913 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:06 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:06.709704348 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:08 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:08.195294880 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:15 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:15.611319379 | Client IP: 127.0.0.1 | Resource: /deletecontact | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:15 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:15.722589099 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:17 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:17.368436797 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:23 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:23.815309308 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:25 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:25.690278462 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:26 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:26.899983236 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:29 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:29.540064636 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:22:52 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:22:52.781962598 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:26 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:26.316392895 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:28 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:28.070210476 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:32 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:32.858775227 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:34 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:34.239735759 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:36 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:36.136253546 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:37 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:37.454478373 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:40 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:40.639270411 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:48 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:48.433483429 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:50 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:50.197685646 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:51 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:51.501930912 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:53 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:53.289552344 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:54 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:54.543673103 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:56 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:56.494269322 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:23:58 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:23:58.336305554 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:24:00 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:24:00.383222903 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:24:02 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:24:02.111019821 | Client IP: 127.0.0.1 | Resource: /grouplist | Method: POST | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:24:04 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:24:04.752356836 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:24:12 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:24:12.763102969 | Client IP: 127.0.0.1 | Resource: /home.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:24:15 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:24:15.093778108 | Client IP: 127.0.0.1 | Resource: /groups.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:24:19 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:24:19.577382348 | Client IP: 127.0.0.1 | Resource: /profile.jsp | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 
+Jan 21, 2025 1:24:21 PM loggerfiles.LoggerSet logAccessSet
+INFO: 2025-01-21T13:24:21.778923249 | Client IP: 127.0.0.1 | Resource: /favicon.ico | Method: GET | Status: 200 | User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0 

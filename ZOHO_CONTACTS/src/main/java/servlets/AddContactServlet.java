@@ -3,14 +3,13 @@ package servlets;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import dbmodel.UserContacts;
-import dbmodel.UserData;
+
 import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
@@ -105,21 +104,21 @@ public class AddContactServlet extends HttpServlet {
 				uc.setAddress(request.getParameter("Address"));
 				uc.setGender(request.getParameter("gender"));
 //                uc.setPhoneno(request.getParameter("phone"));
-				uc.setUserID(ud.getUserId());
+				uc.setUserID(ud.getID());
 //                uc.setEmail(request.getParameter("email"));
 				  
 				uc.setCreatedAt(Instant.now().toEpochMilli());;
 				uc = co.addUserContact(uc);
 				if (uc != null) {
-					ArrayList<ContactDetails> userContacts = co.viewAllUserContacts(ud.getUserId());
+					ArrayList<ContactDetails> userContacts = co.viewAllUserContacts(ud.getID());
 					cachemodel.setUserContact(userContacts);
 
 					logger.logInfo("AddContactServlet", "doPost",
-							"Contact added successfully for user ID: " + ud.getUserId());
-					request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+							"Contact added successfully for user ID: " + ud.getID());
+					request.getRequestDispatcher("home.jsp").forward(request, response);
 				} else {
 					logger.logWarning("AddContactServlet", "doPost",
-							"Error in adding contact for user ID: " + ud.getUserId());
+							"Error in adding contact for user ID: " + ud.getID());
 					request.setAttribute("errorMessage", "Error in adding contact");
 					request.getRequestDispatcher("Add_contacts.jsp").forward(request, response);
 				}

@@ -130,7 +130,7 @@ input[type="submit"]:hover {
 
 			ContactDetails uc = (ContactDetails) request.getAttribute("user_spec_contact");
 			if (uc == null) {
-				response.sendRedirect("Dashboard.jsp");
+				response.sendRedirect("home.jsp");
 				return;
 			}
 			System.out.println("hey" + uc.getFirstName());
@@ -169,10 +169,17 @@ input[type="submit"]:hover {
 			</div>
 			<label for="address">Address</label>
 			<textarea rows="3" cols="20" name="Address" required><%=uc.getAddress()%></textarea>
-			<input type="hidden" name="contactid" value="<%=uc.getContactID()%>"
-				required /> <input type="submit" value="Update" />
+			<input type="hidden" name="contactid" value="<%=uc.getID()%>"
+				required /> 
+				<input type="hidden" name="contactemailid" value="<%=uc.getContactMail().getID()%>"
+				required /> 
+				<input type="hidden" name="contactphoneid" value="<%=uc.getContactphone().getID()%>"
+				required /> 
+				
+				
+				<input type="submit" value="Update" />
 		</form>
-		<form action="/Dashboard.jsp" method="get">
+		<form action="/home.jsp" method="get">
 			<input type="submit" value="Back" class="back-btn" />
 		</form>
 	</div>

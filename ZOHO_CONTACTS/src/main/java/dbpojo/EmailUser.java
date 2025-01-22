@@ -1,6 +1,11 @@
 package dbpojo;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import querybuilderconfig.TableSchema.Email_user;
 import querybuilderconfig.TableSchema.tables;
+import querybuilderconfig.TableSchema.user_data;
 
 public class EmailUser implements Table {
 	private int id = -1;
@@ -10,14 +15,18 @@ public class EmailUser implements Table {
 	private long createdAt = -1;
 	private long modifiedAt = -1;
 
-public	EmailUser(int id, int emID, String email, boolean isPrimary, long createdAt, long modifiedAt) {
+	private Map<String, Object> settedData = new HashMap<String, Object>();
 
-		this.id = id;
-		this.emID = emID;
-		this.email = email;
-		this.isPrimary = isPrimary;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
+	public EmailUser(int id, int emID, String email, boolean isPrimary, long createdAt, long modifiedAt) {
+
+		settedData.clear();
+
+		setID(id);
+		setEmailID(emID);
+		setEmail(email);
+		setIsPrimary(isPrimary);
+		setCreatedAt(createdAt);
+		setModifiedAt(modifiedAt);
 	}
 
 	public EmailUser() {
@@ -27,6 +36,8 @@ public	EmailUser(int id, int emID, String email, boolean isPrimary, long created
 	public void setID(int id) {
 
 		this.id = id;
+
+		settedData.put( Email_user.ID.toString(), getID());
 	}
 
 	public int getID() {
@@ -34,22 +45,20 @@ public	EmailUser(int id, int emID, String email, boolean isPrimary, long created
 		return this.id;
 	}
 
-	
-
 	public String getTableName() {
 
 		return tables.Email_user.getTableName();
 	}
 
-
 	public String getPrimaryIDName() {
-	
+
 		return tables.Email_user.getPrimaryKey();
 	}
-	
+
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
+		settedData.put( Email_user.created_time.toString(), getCreatedAt());
 	}
 
 	public long getCreatedAt() {
@@ -60,6 +69,7 @@ public	EmailUser(int id, int emID, String email, boolean isPrimary, long created
 	public void setModifiedAt(long modifiedAt) {
 
 		this.modifiedAt = modifiedAt;
+		settedData.put( Email_user.modified_time.toString(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -70,6 +80,8 @@ public	EmailUser(int id, int emID, String email, boolean isPrimary, long created
 
 	public void setEmailID(int EmailId) {
 		this.emID = EmailId;
+
+		settedData.put( Email_user.em_id.toString(), getEmailId());
 	}
 
 	public int getEmailId() {
@@ -78,6 +90,7 @@ public	EmailUser(int id, int emID, String email, boolean isPrimary, long created
 
 	public void setEmail(String Email) {
 		this.email = Email;
+		settedData.put( Email_user.email.toString(), getEmail());
 	}
 
 	public String getEmail() {
@@ -86,15 +99,17 @@ public	EmailUser(int id, int emID, String email, boolean isPrimary, long created
 
 	public void setIsPrimary(Boolean isPrimary) {
 		this.isPrimary = isPrimary;
+
+		settedData.put( Email_user.is_primary.toString(), getIsPrimary());
 	}
 
 	public Boolean getIsPrimary() {
 		return this.isPrimary;
 	}
 
-	@Override
-	public String toString() {
-		return "email :" + getEmail() + "  userID:" + getEmailId() + "  is primary:" + getIsPrimary();
+	public Map<String, Object> getSettedData() {
+
+		return settedData;
 	}
 
 }

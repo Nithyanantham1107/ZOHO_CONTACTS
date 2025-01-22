@@ -269,7 +269,8 @@ textarea {
 
 				// upto this session check is implemented
 				   SessionOperation so=new SessionOperation();
-				
+				UserContactOperation userContactOperation=new UserContactOperation();
+				UserGroupOperation userGroupOperation=new UserGroupOperation();
 				   CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
 
 			if (cachemodel == null) {
@@ -302,8 +303,8 @@ textarea {
 				
 				
 				
-				ArrayList<ContactDetails> user_contacts = cachemodel.getAllUserContact();
-				ArrayList<Category> usergroup = cachemodel.getAllUserGroup();
+				ArrayList<ContactDetails> user_contacts = userContactOperation.viewAllUserContacts(ud.getID());
+				ArrayList<Category> usergroup = userGroupOperation.viewAllGroup(ud.getID());
 		%>
 
 		<div id="profileModal" class="modal">
@@ -366,7 +367,7 @@ textarea {
 									
 							%>
 
-                            
+
 
 
 							<tr>
@@ -521,7 +522,7 @@ textarea {
 				   document.getElementById("groupNameu").value = "<%=ugu.getCategoryName() %>";
 		            
 		        
-		            document.getElementById("groupidu").value = "<%=ugu.getCategoryID()%>";
+		            document.getElementById("groupidu").value = "<%=ugu.getID()%>";
 				
 				</script>
 				<%
@@ -558,25 +559,25 @@ textarea {
 						<tbody>
 							<%
 							for (ContactDetails uc : user_contacts) {
+								
+								System.out.println("here name of contact is"+uc.getFirstName());
 							%>
 							<tr>
 								<td>
 									<%
 									if (ugu != null && ugu.getCategoryRelation() != null) {
-										if (ugu.isContactExist( uc.getContactID())) {
+										if (ugu.isContactExist( uc.getID())) {
 									%> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactID()%>" style="display: block;"
+									value="<%=uc.getID()%>" style="display: block;"
 									class="contact-checkbox" checked="checked" /> <%
  } else {
- %> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactID()%>" style="display: block;"
-									class="contact-checkbox" /> <%
+ %> <input type="checkbox" name="contact_ids" value="<%=uc.getID()%>"
+									style="display: block;" class="contact-checkbox" /> <%
  }
  %> <%
  } else {
- %> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactID()%>" style="display: none;"
-									class="contact-checkbox" /> <%
+ %> <input type="checkbox" name="contact_ids" value="<%=uc.getID()%>"
+									style="display: none;" class="contact-checkbox" /> <%
  }
  %>
 
@@ -593,14 +594,14 @@ textarea {
 								<td><%=uc.getGender()%></td>
 								<td>
 									<form action="/GetAndUpdatecontact" method="post">
-										<input type="hidden" value="<%=uc.getContactID()%>"
-											name="contact_id" /> <input type="submit" value="Update" />
+										<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
+										<input type="submit" value="Update" />
 									</form>
 								</td>
 								<td>
 									<form action="/deletecontact" method="post">
-										<input type="hidden" value="<%=uc.getContactID()%>"
-											name="contact_id" /> <input type="submit" value="Delete" />
+										<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
+										<input type="submit" value="Delete" />
 									</form>
 								</td>
 							</tr>
@@ -641,17 +642,17 @@ textarea {
 
 								<td>
 									<form action="/updategroup" method="post">
-										<input type="hidden" value="<%=ug.getCategoryID()%>"
-											name="groupid" /> <input type="hidden"
-											value="<%=ug.getCategoryName()%>" name="groupName" /> <input
-											type="submit" id="updategrouptable" value="Update" />
+										<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
+										<input type="hidden" value="<%=ug.getCategoryName()%>"
+											name="groupName" /> <input type="submit"
+											id="updategrouptable" value="Update" />
 									</form>
 
 								</td>
 								<td>
 									<form action="/deletegroup" method="post">
-										<input type="hidden" value="<%=ug.getCategoryID()%>"
-											name="groupid" /> <input type="submit" value="Delete" />
+										<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
+										<input type="submit" value="Delete" />
 									</form>
 								</td>
 							</tr>
@@ -730,7 +731,7 @@ textarea {
 
             const dropdown = document.getElementById('emailDropdown');
             dropdown.innerHTML = '';
-            dropdown.innerHTML += '<option value="<%=primary %>"><%= primary %></option>';
+            dropdown.innerHTML += '<option value="<%=primary %>"><%=primary%></option>';
 
             inputs.forEach(input => {
                 const email = input.value.trim();

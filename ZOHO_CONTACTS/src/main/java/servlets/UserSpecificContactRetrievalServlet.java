@@ -1,16 +1,13 @@
 package servlets;
 import java.io.IOException;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import dboperation.SessionOperation;
+
 import dboperation.UserContactOperation;
-import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import dbpojo.ContactDetails;
 import dbpojo.Userdata;
@@ -72,7 +69,7 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
               Userdata ud = cachemodel.getUserData();
 
             if (request.getParameter("contact_id") != null) {
-                int user_id = ud.getUserId();
+                int user_id = ud.getID();
                 int contact_id = Integer.parseInt(request.getParameter("contact_id"));
                 ContactDetails uc = co.viewSpecificUserContact(user_id, contact_id);
 //                System.out.println("contact mail +" uc.getContactMail().getContactMailID());
@@ -87,17 +84,17 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
                 } else {
                     logger.logWarning("UserSpecificContactRetrievalServlet", "doPost", "Failed to retrieve info for Contact ID: " + contact_id);
                     request.setAttribute("errorMessage", "Can't retrieve info of specific user");
-                    request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+                    request.getRequestDispatcher("home.jsp").forward(request, response);
                 }
             } else {
                 logger.logWarning("UserSpecificContactRetrievalServlet", "doPost", "Contact ID parameter is missing.");
                 request.setAttribute("errorMessage", "Contact ID parameter is missing.");
-                request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("home.jsp").forward(request, response);
             }
         } catch (Exception e) {
             logger.logError("UserSpecificContactRetrievalServlet", "doPost", "Exception occurred while retrieving specific contact.", e);
             request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
         }
     }
 }

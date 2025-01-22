@@ -1,8 +1,11 @@
 package dbpojo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import querybuilderconfig.TableSchema.tables;
+import querybuilderconfig.TableSchema.user_data;
 
 public class Userdata implements Table {
 	private int id = -1;
@@ -14,23 +17,27 @@ public class Userdata implements Table {
 	private String CurrentEmail;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
+	private Map<String, Object> settedData = new HashMap<String, Object>();
 	private ArrayList<EmailUser> email = new ArrayList<EmailUser>();
 	private LoginCredentials LoginCredentials;
+	
 
 	public Userdata() {
 
 	}
 
-	public Userdata(int userId, String Name, String password, String Phoneno, String address, String timezone, long createdAt,
-			long modifiedAt) {
-		this.address = address;
-		this.Name = Name;
-		this.password = password;
-		this.id = userId;
-		this.phoneNo = Phoneno;
-		this.timeZone = timezone;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
+	public Userdata(int userId, String Name, String password, String Phoneno, String address, String timezone,
+			long createdAt, long modifiedAt) {
+		settedData.clear();
+	
+		setName(Name);
+		setPassword(password);
+		setAddress(address);
+		setID(userId);
+		setPhoneno(Phoneno);
+		setTimezone(timezone);
+		setCreatedAt(createdAt);
+		setModifiedAt(modifiedAt);
 
 	}
 
@@ -39,25 +46,27 @@ public class Userdata implements Table {
 		return tables.user_data.getTableName();
 	}
 
-	
-
 	public String getPrimaryIDName() {
-		
+
 		return tables.user_data.getPrimaryKey();
 	}
-	public void setRowKey(int rowKey) {
 
-		this.id = rowKey;
-	}
-
-	public int getRowKey() {
-
-		return this.id;
-	}
+//	public void setRowKey(int rowKey) {
+//
+//		this.id = rowKey;
+//		settedData.put(getTableName()+"."+user_data.user_id.toString(), getRowKey());
+//	}
+//
+//	public int getRowKey() {
+//
+//		return this.id;
+//	}
 
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
+
+		settedData.put( user_data.created_time.toString(), getCreatedAt());
 	}
 
 	public long getCreatedAt() {
@@ -68,6 +77,8 @@ public class Userdata implements Table {
 	public void setModifiedAt(long modifiedAt) {
 
 		this.modifiedAt = modifiedAt;
+
+		settedData.put( user_data.modified_time.toString(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -76,13 +87,19 @@ public class Userdata implements Table {
 
 	}
 
-	public void setCurrentEmail(String current) {
 
-		this.CurrentEmail = current;
-	}
 
-	public String getCurrentemail() {
-		return this.CurrentEmail;
+	public EmailUser getPrimaryEmail() {
+		
+		
+		for(EmailUser data: email ) {
+			
+			
+			if(data.getIsPrimary()) {
+				return data;
+			}
+		}
+		return null;
 	}
 
 	public void setLoginCredentials(LoginCredentials login) {
@@ -116,6 +133,7 @@ public class Userdata implements Table {
 
 	public void setID(int id) {
 		this.id = id;
+		settedData.put( user_data.user_id.toString(), getID());
 	}
 
 	public int getID() {
@@ -128,10 +146,12 @@ public class Userdata implements Table {
 
 	public void setName(String name) {
 		this.Name = name;
+		settedData.put( user_data.Name.toString(), getName());
 	}
 
 	public void setPassword(String Password) {
 		this.password = Password;
+		settedData.put( user_data.password.toString(), getPassword());
 	}
 
 	public String getPassword() {
@@ -140,6 +160,7 @@ public class Userdata implements Table {
 
 	public void setPhoneno(String Phoneno) {
 		this.phoneNo = Phoneno;
+		settedData.put( user_data.phone_no.toString(), getPhoneno());
 	}
 
 	public String getPhoneno() {
@@ -148,6 +169,8 @@ public class Userdata implements Table {
 
 	public void setTimezone(String Timezone) {
 		this.timeZone = Timezone;
+
+		settedData.put( user_data.timezone.toString(), getTimezone());
 	}
 
 	public String getTimezone() {
@@ -156,10 +179,17 @@ public class Userdata implements Table {
 
 	public void setAddress(String Address) {
 		this.address = Address;
+		settedData.put( user_data.address.toString(), getAddress());
 	}
 
 	public String getAddress() {
 		return this.address;
+
+	}
+
+	public Map<String, Object> getSettedData() {
+
+		return settedData;
 	}
 
 }

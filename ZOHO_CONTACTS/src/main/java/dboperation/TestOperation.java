@@ -1,7 +1,13 @@
 package dboperation;
 
+import java.sql.SQLException;
 import java.time.Instant;
 
+import dbpojo.Category;
+import dbpojo.CategoryRelation;
+import dbpojo.ContactDetails;
+import dbpojo.ContactMail;
+import dbpojo.ContactPhone;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
 import dbpojo.Userdata;
@@ -10,111 +16,69 @@ import querybuilderconfig.SqlQueryLayer;
 
 public class TestOperation {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		qg.openConnection();
-//		EmailUser email = new EmailUser();
-//		email.setEmailID(63);
-//		
-//		email.setEmail("1237890@gmail.com");
-//		email.setID(14);
-//		email.setIsPrimary(true);
-//		email.setModifiedAt(Instant.now().toEpochMilli());
-//		email.setCreatedAt(email.getModifiedAt());
 
-//		Userdata user2=new Userdata();
-//		user2.setID(63);
-//		user2.setName("devil1");
-//		changedStateContainer changed=  PojoDataConversion.getChangedPojoData(user, user2);
-//		PojoDataContainer contain=PojoDataConversion.convertPojoData(user);
-//		PojoDataContainer contain2=PojoDataConversion.convertPojoData(user2);
-//		System.out.println("here new"+ user.getID());
-//		System.out.println("here old"+user2.getID());
-
-//		user.setPassword("jsfvskc");
-//		user.setPhoneno("113461261");
-//		user.setAddress("gotham");
-//		user.setTimezone("asia");
-//		user.setCreatedAt(Instant.now().toEpochMilli());
-//		user.setModifiedAt(user.getCreatedAt());
-//
-//		LoginCredentials login = new LoginCredentials();
-//		login.setUserID(user.getID());
-//		user.setLoginCredentials(login);
-//		login.setUserName("heloooo");
-//		login.setCreatedAt(user.getCreatedAt());
-//		login.setModifiedAt(user.getModifiedAt());
-//		EmailUser email = new EmailUser();
-//		email.setEmailID(user.getID());
-//		user.setEmail(email);
-//		email.setEmail("123457890@gmail.com");
-//		email.setIsPrimary(false);
-//		email.setCreatedAt(user.getCreatedAt());
-//		email.setModifiedAt(user.getCreatedAt());
-//
-//		user.setEmail(email);
-//		user.setLoginCredentials(login);
-//		qg.insert(user).execute(-1);
-
-//		ContactDetails contact=new ContactDetails();
-//		contact.setID(64);
-//		contact.setFirstName("devil12345");
+//		ContactDetails contact=new ContaSystectDetails();
+//		contact.setID(68);
+//		contact.setFirstName("superman");
 //		contact.setMiddleName("devil1");
-//		contact.setUserID(63);
-//		contact.setLastName("devil2");
+//		contact.setUserID(70);
+//		contact.setLastName("devi2");
 //		contact.setGender("male");
-//		contact.setAddress("gotham");
+//		System.out.println("here gender is"+ contact.getGender());
+//		contact.setAddress("New York");
 //		contact.setCreatedAt(Instant.now().toEpochMilli());
 //		contact.setModifiedAt(contact.getCreatedAt());
-//		ContactMail cm=new ContactMail(0, 0, "123213@gmail.com", contact.getCreatedAt(), contact.getCreatedAt());
+//		ContactMail cm=new ContactMail(5, contact.getID(), "super123@gmail.com", contact.getCreatedAt(), contact.getCreatedAt());
 //		contact.setContactMail(cm);
-//		ContactPhone cp=new ContactPhone(0, 0, "12345586", contact.getCreatedAt(), contact.getCreatedAt());
+//		ContactPhone cp=new ContactPhone(6,contact.getID(), "12000", contact.getCreatedAt(), contact.getCreatedAt());
 //		contact.setContactPhone(cp);
+//		qg.delete(contact).execute(70);
 
+//		
 //		Category category = new Category();
-//		category.setID(62);
-//		category.setCategoryName("summa");
+//		category.setID(63);
+//		category.setCategoryName("junga");
 //		category.setCreatedAt(Instant.now().toEpochMilli());
 //		category.setModifiedAt(category.getCreatedAt());
-//		category.setCreatedBY(63);
-//		CategoryRelation cat = new CategoryRelation(-1, 66, 62, category.getModifiedAt(), category.getModifiedAt());
+//		category.setCreatedBY(71);
+//		CategoryRelation cat = new CategoryRelation(7, 67, category.getID(), category.getModifiedAt(), category.getModifiedAt());
 //
 //		category.setCategoryRelation(cat);
+//		qg.insert(category).execute(71);
+		UserGroupOperation userGroupOperation = new UserGroupOperation();
+	Category group=	userGroupOperation.getSpecificGroup(67, 26);
+//		user.setEmail(email);
+//		qg.insert(user).execute(-1);
+		System.out.println("the group is here hooray !!!"+group.getCategoryName());
 		
-		
-		Userdata user=new Userdata();
-		user.setID(65);
-		user.setName("arun11111");
-		user.setPassword("password");
-		user.setPhoneno("12345");
-		user.setAddress("gotham");
-		user.setTimezone("asia/kolkata");
-		user.setCreatedAt(Instant.now().toEpochMilli());
-		user.setModifiedAt(user.getCreatedAt());
-		LoginCredentials login=new LoginCredentials();
-		login.setID(15);
-		login.setUserID(user.getID());
-		login.setUserName("arun117");
-		login.setCreatedAt(user.getCreatedAt());
-		login.setModifiedAt(user.getCreatedAt());
-		user.setLoginCredentials(login);
-		EmailUser email=new EmailUser();
-		email.setID(16);
-		email.setEmailID(user.getID());
-		email.setEmail("arun1233123323@gmail.com");
-		email.setIsPrimary(false);
-		email.setModifiedAt(user.getCreatedAt());
-		email.setCreatedAt(user.getCreatedAt());
-		user.setEmail(email);
-		qg.delete(user).execute(65);
+
+//		EmailUser email = new EmailUser();
+//		email.setID(22);
+//		email.setEmailID(76);
+//		email.setEmailID(user.getID());
+//		email.setEmail("123458@gmail.com");
+//		email.setIsPrimary(true);
+//		email.setModifiedAt(user.getCreatedAt());
+//		email.setCreatedAt(user.getCreatedAt());
+//		user.setEmail(email);
+//		qg.update(email).execute(76);
+		qg.closeConnection();
+
+//		qg.insert(user).execute(-1);
+
+//	Userdata dummy=  (Userdata)	qg.select(user).executeQuery().getFirst();
+//	
+//		System.out.println("here username"+dummy.getLoginCredentials().getUserName());
 
 //	
 //		qg.delete(email).execute(63);
 //		user.setID(63);
 //		Userdata  dumm= (Userdata) qg.select(user).executeQuery().getFirst();
 //		System.out.println("here the name is"+ dumm.getName());
-		qg.closeConnection();
 
 	}
 

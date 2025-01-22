@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.time.Instant;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import dbmodel.UserData;
+
 import dboperation.SessionOperation;
 import dboperation.UserOperation;
 import dbpojo.EmailUser;
@@ -25,9 +24,9 @@ import sessionstorage.CacheModel;
 public class UserProfileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	UserOperation uo;
+	UserOperation userOperation;
 	HttpSession session;
-	SessionOperation so;
+	SessionOperation sessionOperation;
 	LoggerSet logger; // LoggerSet instance
 
 	/**
@@ -35,8 +34,8 @@ public class UserProfileServlet extends HttpServlet {
 	 */
 	public UserProfileServlet() {
 		super();
-		uo = new UserOperation();
-		so = new SessionOperation();
+		userOperation = new UserOperation();
+		sessionOperation = new SessionOperation();
 		logger = new LoggerSet(); // Initialize logger
 	}
 
@@ -64,8 +63,8 @@ public class UserProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-        	  String sessionid=(String) request.getAttribute("sessionid");
-              CacheModel cachemodel=CacheData.getCache(sessionid);
+        	  String sessionID=(String) request.getAttribute("sessionid");
+              CacheModel cachemodel=CacheData.getCache(sessionID);
               Boolean state=false;
               
               
@@ -80,64 +79,65 @@ public class UserProfileServlet extends HttpServlet {
                         && (request.getParameterValues("timezone") != null) && !request.getParameter("timezone").isBlank()) {
 
 //                    ud = new UserData();
-                	Userdata ud= new Userdata();
-                	LoginCredentials lc=new LoginCredentials();
+                	Userdata userData= new Userdata();
+                	LoginCredentials loginCredentials=new LoginCredentials();
                 	
-                	ud.setModifiedAt(Instant.now().toEpochMilli());
-                	lc.setModifiedAt(ud.getModifiedAt());
+                	userData.setModifiedAt(Instant.now().toEpochMilli());
+                	loginCredentials.setModifiedAt(userData.getModifiedAt());
 					
 					
 					for(String email : request.getParameterValues("email") ) {
-						EmailUser eu=new EmailUser();
-						eu.setEmail(email);
-						eu.setModifiedAt(ud.getModifiedAt());
+						EmailUser emailUser=new EmailUser();
+						emailUser.setEmail(email);
+						emailUser.setCreatedAt(userData.getModifiedAt());
+						emailUser.setModifiedAt(userData.getModifiedAt());
 						
 						if(email.equals(request.getParameter("primaryemail"))) {
 							
 							
-							eu.setIsPrimary(true);
+							emailUser.setIsPrimary(true);
 						}else {
-							eu.setIsPrimary(false);
+							emailUser.setIsPrimary(false);
 						}
-						ud.setEmail(eu);
+						userData.setEmail(emailUser);
 					}
 					
-					lc.setUserName(request.getParameter("username"));
+					loginCredentials.setUserName(request.getParameter("username"));
                 	
-                	ud.setLoginCredentials(lc);
+                	userData.setLoginCredentials(loginCredentials);
                 	
-                    ud.setUserId(userSessionData.getUserId());
-                    ud.setName(request.getParameter("Name"));
-                    ud.setAddress(request.getParameter("Address"));
+                    userData.setID(userSessionData.getID());
+                    userData.setName(request.getParameter("Name"));
+                    userData.setAddress(request.getParameter("Address"));
 //                    ud.setUserName(request.getParameter("username"));
-                    ud.setPhoneno(request.getParameter("phone"));
+                    userData.setPhoneno(request.getParameter("phone"));
 //                    ud.setEmail(request.getParameterValues("email"));
 //                    ud.setPrimaryMail(request.getParameter("primaryemail"));
-                    ud.setTimezone(request.getParameter("timezone"));
+                    userData.setTimezone(request.getParameter("timezone"));
                     
                     
                     
                     if(request.getParameter("password")==null  || request.getParameter("password").isBlank() ||
                        request.getParameter("Newpassword")==null || request.getParameter("Newpassword").isBlank())  {
                     		
-                    	ud.setPassword(null);
+//                    	userData.setPassword(null);
 //                    	ud.setNewPassword(null);
-                    	state=uo.userDataUpdate(ud,null);
+                    	state=userOperation.userDataUpdate(userData,null);
                     	
                     }else {
-                    	ud.setPassword(request.getParameter("password"));
+                    	userData.setPassword(request.getParameter("password"));
 //                    	ud.setNewPassword(request.getParameter("Newpassword"));
                    
-                      state=uo.userDataUpdate(ud,request.getParameter("Newpassword"));
+                      state=userOperation.userDataUpdate(userData,request.getParameter("Newpassword"));
                     
                     }
                     if (state) {
-                    	cachemodel.setUserData(ud);
+                    	cachemodel.setUserData(userData);
                        
-                        response.sendRedirect("Dashboard.jsp");
-                        logger.logInfo("UserProfileServlet", "doPost", "User profile updated successfully for User ID: " + ud.getUserId());
+                        response.sendRedirect("profile.jsp");
+                        logger.logInfo("UserProfileServlet", "doPost", "User profile updated successfully for User ID: " + userData.getID());
                     } else {
-                        logger.logWarning("UserProfileServlet", "doPost", "Error in updating profile data for User ID: " + ud.getUserId());
+                        logger.logWarning("UserProfileServlet", "doPost", "Error in updating profile data for User ID: " + userData.getID());
                         request.setAttribute("errorMessage", "Error in updating profile Data");
                         request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                     }
@@ -147,15 +147,15 @@ public class UserProfileServlet extends HttpServlet {
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }
             } else {
-                if (uo.deleteUserProfile(userSessionData)) {
-                    logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + userSessionData.getUserId());
+                if (userOperation.deleteUserProfile(userSessionData)) {
+                    logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + userSessionData.getID());
                     
-                    SessionOperation so=new SessionOperation();
-                    so.DeleteSessionData(sessionid);
+                    SessionOperation sessionOperation=new SessionOperation();
+                    sessionOperation.DeleteSessionData(sessionID);
                    
                     response.sendRedirect("index.jsp");
                 } else {
-                    logger.logWarning("UserProfileServlet", "doPost", "Error in deleting user profile for User ID: " + userSessionData.getUserId());
+                    logger.logWarning("UserProfileServlet", "doPost", "Error in deleting user profile for User ID: " + userSessionData.getID());
                     request.setAttribute("errorMessage", "Unable to delete user profile data");
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }

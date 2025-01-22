@@ -36,13 +36,12 @@ public class CacheData {
 	}
 
 	public static void addViewCache(String sessionid, CacheModel cachedata) {
-//		viewcache.put(sessionid, cachedata);
-		if(viewcache.get(cachedata.getUserData().getUserId())==null) {
-			viewcache.put(cachedata.getUserData().getUserId(), cachedata);
+		if(viewcache.get(cachedata.getUserData().getID())==null) {
+			viewcache.put(cachedata.getUserData().getID(), cachedata);
 		}
 		
 		
-		sessionMapper.put(sessionid, cachedata.getUserData().getUserId());
+		sessionMapper.put(sessionid, cachedata.getUserData().getID());
 	}
 
 	public static CacheModel getCache(String sessionid) {

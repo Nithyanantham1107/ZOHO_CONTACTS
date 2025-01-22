@@ -1,15 +1,11 @@
 package schedulers;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 
-import dbconnect.DBconnection;
+import dbpojo.Table;
 import loggerfiles.LoggerSet;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
-import querybuilderconfig.TableSchema.Operation;
-import querybuilderconfig.TableSchema.Session;
-import querybuilderconfig.TableSchema.tables;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
 
@@ -19,19 +15,15 @@ public class UpdateAndDeleteQueue implements Runnable {
 
 	public UpdateAndDeleteQueue() {
 //		Connection con=DBconnection.getDriverConnection();
-		
-		
-		
-		
 
 //		Connection con = DBconnection.getConnection();
-		
+
 	}
 
 	public void run() {
-		
+
 		this.qg = new SqlQueryLayer().createQueryBuilder();
-		
+
 		this.qg.openConnection();
 		updateSessionQueue();
 		sessionTableCleaner();
@@ -43,6 +35,7 @@ public class UpdateAndDeleteQueue implements Runnable {
 	private void updateSessionQueue() {
 
 		int[] result = { -1, -1 };
+		int userID = 0;
 		System.out.println("hey here is the update queue");
 //		Connection con = DBconnection.getConnection();
 //     this.qg.openConnection();
@@ -66,9 +59,16 @@ public class UpdateAndDeleteQueue implements Runnable {
 					System.out.println("here the session data" + sessionid + "  then last accessed stored"
 							+ cachemodel.getsession(sessionid).getLastAccessed());
 
-					result = this.qg.update(tables.Session, Session.last_accessed)
-							.valuesUpdate(cachemodel.getsession(sessionid).getLastAccessed())
-							.where(Session.Session_id, Operation.Equal, sessionid).execute();
+					dbpojo.Session session = new dbpojo.Session();
+					session.setID(cachemodel.getsession(sessionid).getID());
+					session.setLastAccessed(cachemodel.getsession(sessionid).getLastAccessed());
+					userID = cachemodel.getsession(sessionid).getUserId();
+					session.setUserId(userID);
+//					result = this.qg.update(tables.Session, Session.last_accessed)
+//							.valuesUpdate(cachemodel.getsession(sessionid).getLastAccessed())
+//							.where(Session.Session_id, Operation.Equal, sessionid).execute();
+
+					result = qg.update(session).execute(userID);
 
 //					 
 //					 PreparedStatement ps = con.prepareStatement("UPDATE Session SET session_expire = ? WHERE session_id = ?");
@@ -100,8 +100,8 @@ public class UpdateAndDeleteQueue implements Runnable {
 
 	private void sessionTableCleaner() {
 
-		int SESSIONTIMEOUT = 30*60;
-		ArrayList<Object> result = new ArrayList<Object>();
+		int SESSIONTIMEOUT = 30 * 60;
+		ArrayList<Table> result = new ArrayList<>();
 		System.out.println("hello im Session Table cleaner");
 //		Connection con = DBconnection.getConnection();
 
@@ -112,26 +112,30 @@ public class UpdateAndDeleteQueue implements Runnable {
 		try {
 
 			currentTime = System.currentTimeMillis() / 1000;
+			dbpojo.Session sessions = new dbpojo.Session();
 
-			result = this.qg.select(tables.Session).executeQuery();
+			result = this.qg.select(sessions).executeQuery();
 
 //			PreparedStatement ps = con.prepareStatement("select Session_id,session_expire from Session;");
 //			ResultSet val = ps.executeQuery();
-			if (result != null) {
+			if (result.size() > 0) {
 
-				for (Object data : result) {
+				for (Table data : result) {
 
 					dbpojo.Session session = (dbpojo.Session) data;
 
 					sessionExpire = session.getLastAccessed() + SESSIONTIMEOUT;
 //					currentTime - sessionExpire < (5 * 60)
 					if (currentTime - sessionExpire > 0) {
+						int userID = session.getUserId();
 //						ps = con.prepareStatement("delete from Session where Session_id=?");
 //						ps.setString(1, val.getString(1));
 //						ps.executeUpdate();
 
-						this.qg.delete(tables.Session).where(querybuilderconfig.TableSchema.Session.Session_id,
-								Operation.Equal, session.getSessionId()).execute();
+//						this.qg.delete(tables.Session).where(querybuilderconfig.TableSchema.Session.Session_id,
+//								Operation.Equal, session.getSessionId()).execute();
+
+						this.qg.delete(session).execute(userID);
 
 					}
 

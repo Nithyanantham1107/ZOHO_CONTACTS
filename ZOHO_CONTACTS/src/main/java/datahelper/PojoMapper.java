@@ -289,8 +289,7 @@ public class PojoMapper {
 
 		EmailUser emailUser = null;
 		String tablename = TableSchema.tables.Email_user.getTableName();
-		System.out.println("here execute query column name"+tablename +"ID"+getInt(tablename + "." + TableSchema.Email_user.ID));
-		System.out.println("here execute query column name"+tablename +"ID"+getString(tablename + "." + TableSchema.Email_user.email));
+		
 		
 		emailUser = new EmailUser(
 

@@ -1,14 +1,12 @@
 package servlets;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import dbmodel.UserContacts;
-import dbmodel.UserData;
+
 import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
@@ -24,10 +22,10 @@ import sessionstorage.CacheModel;
  */
 public class DeleteUserContactServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    UserContactOperation uco;
-    UserGroupOperation ugo;
-    SessionOperation so;
-    UserOperation user_op;
+    UserContactOperation userContactOperation;
+    UserGroupOperation userGroupOperation;
+    SessionOperation ssessionOperation;
+    UserOperation userOperation;
     LoggerSet logger; // LoggerSet instance
 
     /**
@@ -35,10 +33,10 @@ public class DeleteUserContactServlet extends HttpServlet {
      */
     public DeleteUserContactServlet() {
         super();
-        uco = new UserContactOperation();
-        ugo = new UserGroupOperation();
-        so = new SessionOperation();
-        user_op = new UserOperation();
+        userContactOperation = new UserContactOperation();
+        userGroupOperation = new UserGroupOperation();
+        ssessionOperation = new SessionOperation();
+        userOperation = new UserOperation();
         logger = new LoggerSet(); // Initialize logger
     }
 
@@ -68,43 +66,43 @@ public class DeleteUserContactServlet extends HttpServlet {
                  CacheModel cachemodel=CacheData.getCache(sessionid);
                  
                  
-                 Userdata ud = cachemodel.getUserData();
+                 Userdata userData = cachemodel.getUserData();
                
 
 //                int user_id = ud.getUserId();
-                int contact_id = Integer.parseInt(request.getParameter("contact_id"));
+                int contactID = Integer.parseInt(request.getParameter("contact_id"));
 
                 
                 //check
                 
-                if(cachemodel.getUserContact(contact_id)==null) {
+                if(cachemodel.getUserContact(contactID)==null) {
                 	
                 	
                 	System.out.println("here contact are null so see it!!");
                 }
                  
-                if (uco.deleteContact(cachemodel.getUserContact(contact_id))) {
-                    ArrayList<ContactDetails> userContacts = uco.viewAllUserContacts(ud.getUserId());
+                if (userContactOperation.deleteContact(cachemodel.getUserContact(contactID),userData.getID())) {
+                    ArrayList<ContactDetails> userContacts = userContactOperation.viewAllUserContacts(userData.getID());
                   
                     cachemodel.setUserContact(userContacts);
                     
                     
-                    logger.logInfo("DeleteUserContactServlet", "doPost", "Contact deleted successfully: " + contact_id);
-                    response.sendRedirect("Dashboard.jsp");
+                    logger.logInfo("DeleteUserContactServlet", "doPost", "Contact deleted successfully: " + contactID);
+                    response.sendRedirect("home.jsp");
                 } else {
-                    logger.logWarning("DeleteUserContactServlet", "doPost", "Unable to delete contact: " + contact_id);
+                    logger.logWarning("DeleteUserContactServlet", "doPost", "Unable to delete contact: " + contactID);
                     request.setAttribute("errorMessage", "Unable to delete contact");
-                    request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+                    request.getRequestDispatcher("home.jsp").forward(request, response);
                 }
             } else {
                 logger.logWarning("DeleteUserContactServlet", "doPost", "Contact ID is null or empty");
                 request.setAttribute("errorMessage", "Unable to delete contact because specified contact ID is null");
-                request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("home.jsp").forward(request, response);
             }
         } catch (Exception e) {
             logger.logError("DeleteUserContactServlet", "doPost", "Exception occurred while deleting contact", e);
             request.setAttribute("errorMessage", e);
-            request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
         }
     }
 }

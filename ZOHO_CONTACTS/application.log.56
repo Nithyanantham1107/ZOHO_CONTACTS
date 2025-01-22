@@ -1,0 +1,120 @@
+Jan 20, 2025 12:26:55 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:26:55 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$j7l8nL18qTPrzfhIpvuCpuwyJpa1Uj4/pOajYdmPCrh9DBiizDdeG 
+Jan 20, 2025 12:26:55 PM loggerfiles.LoggerSet logError
+SEVERE: 2025-01-20 12:26:55 | UserSpecificContactRetrievalServlet | doPost | Exception occurred while retrieving specific contact. 
+java.lang.IllegalStateException: Cannot forward after response has been committed
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:292)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:284)
+	at servlets.GroupContactListServlet.doPost(GroupContactListServlet.java:84)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:199)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:168)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at filter.SessionFilter.doFilter(SessionFilter.java:135)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:168)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:144)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:660)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:346)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:383)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:936)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1791)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserOperation | isUser | User verified successfully: anand1107 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | SessionOperation | generateSessionId | Created session ID: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | LoginSignupServlet | doPost | User logged in successfully: anand 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:05 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:05 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:07 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:07 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:07 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:07 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:07 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:07 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:07 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:07 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:08 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:08 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:08 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:08 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Jan 20, 2025 12:27:08 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:08 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:08 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:08 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:08 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:08 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:09 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:09 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:09 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:09 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:09 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:09 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:09 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:09 | UserGroupOperation | viewUserGroupContact | Contacts retrieved for group ID: 58 
+Jan 20, 2025 12:27:09 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:09 | UserSpecificContactRetrievalServlet | doPost | Retrieved specific contact info for Contact ID: 58 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserOperation | getUserData | User data retrieved successfully for userId: 26 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | SessionOperation | getCustomSessionId | Cookie value found: $2a$10$yRYNaDgCCyiDGRKBmNG5FedA2AvLF5j/A42S0Kh07lYftvVL/EiBu 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserGroupOperation | viewAllGroup | Groups retrieved for user ID: 26 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserContactOperation | viewAllUserContacts | Contacts retrieved for user ID: 26 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserGroupOperation | viewUserGroupContact | Contacts retrieved for group ID: 58 
+Jan 20, 2025 12:27:10 PM loggerfiles.LoggerSet logInfo
+INFO: 2025-01-20 12:27:10 | UserSpecificContactRetrievalServlet | doPost | Retrieved specific contact info for Contact ID: 58 

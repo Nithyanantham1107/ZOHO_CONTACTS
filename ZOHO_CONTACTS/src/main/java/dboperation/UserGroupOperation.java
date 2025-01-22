@@ -6,15 +6,13 @@ import java.util.ArrayList;
 
 import dbconnect.DBconnection;
 import dbmodel.UserGroup;
+import dbpojo.Category;
 import dbpojo.CategoryRelation;
+import dbpojo.ContactDetails;
+import dbpojo.Table;
 import loggerfiles.LoggerSet;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
-import querybuilderconfig.TableSchema.Category;
-import querybuilderconfig.TableSchema.Category_relation;
-import querybuilderconfig.TableSchema.Operation;
-import querybuilderconfig.TableSchema.Statement;
-import querybuilderconfig.TableSchema.tables;
 
 public class UserGroupOperation {
 	UserGroup ug;
@@ -27,10 +25,10 @@ public class UserGroupOperation {
 	 * @return true if the group was created successfully, false otherwise
 	 * @throws SQLException if a database access error occurs
 	 */
-	
-	public boolean createGroup(dbpojo.Category category) throws SQLException {
+
+	public boolean createGroup(dbpojo.Category category, int userID) throws SQLException {
 		Connection con = DBconnection.getConnection();
-		int[] val = { -1, -1 };
+		int[] result = { -1, -1 };
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		try {
 //            con.setAutoCommit(false);
@@ -41,10 +39,12 @@ public class UserGroupOperation {
 
 			qg.openConnection();
 
-			val = qg.insert(tables.Category, Category.Category_name, Category.created_by, Category.created_time  ,Category.modified_time)
-					.valuesInsert(category.getCategoryName(), category.getCreatedBy(),category.getCreatedAt(), category.getModifiedAt())
-					.execute(Statement.RETURN_GENERATED_KEYS);
-			if (val[0] == 0) {
+//			result = qg.insert(tables.Category, Category.Category_name, Category.created_by, Category.created_time  ,Category.modified_time)
+//					.valuesInsert(category.getCategoryName(), category.getCreatedBy(),category.getCreatedAt(), category.getModifiedAt())
+//					.execute(Statement.RETURN_GENERATED_KEYS);
+
+			result = qg.insert(category).execute(userID);
+			if (result[0] == 0) {
 //                con.rollback();
 				qg.rollBackConnection();
 				logger.logError("UserGroupOperation", "createGroup",
@@ -53,32 +53,32 @@ public class UserGroupOperation {
 			}
 //            ResultSet groups = ps.getGeneratedKeys();
 //            int groupid;
-			if (val[1] != -1) {
+//			if (result[1] != -1) {
+//
+//				category.setCategoryID(result[1]);
+//			} else {
+//				logger.logError("UserGroupOperation", "createGroup", "Failed to retrieve generated group ID", null);
+//				return false;
+//			}
 
-				category.setCategoryID(val[1]);
-			} else {
-				logger.logError("UserGroupOperation", "createGroup", "Failed to retrieve generated group ID", null);
-				return false;
-			}
-
-			for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
+//			for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
 //                ps = con.prepareStatement("INSERT INTO Category_relation VALUES (?, ?);");
 //                ps.setInt(1, i);
 //                ps.setInt(2, groupid);
 //                val = ps.executeUpdate();
-				categoryRelation.setCategoryID(category.getCategoryID());
-
-				val = qg.insert(tables.Category_relation).valuesInsert(categoryRelation.getContactIDtoJoin(),
-						categoryRelation.getCategoryID(), categoryRelation.getCreatedAt()).execute(Statement.RETURN_GENERATED_KEYS);
-				if (val[0] == 0) {
+//				categoryRelation.setCategoryID(category.getCategoryID());
+//
+//				result = qg.insert(tables.Category_relation).valuesInsert(categoryRelation.getContactIDtoJoin(),
+//						categoryRelation.getCategoryID(), categoryRelation.getCreatedAt()).execute(Statement.RETURN_GENERATED_KEYS);
+//				if (result[0] == 0) {
 //                    con.rollback();
-					qg.rollBackConnection();
-					logger.logError("UserGroupOperation", "createGroup", "Failed to insert contact ID: "
-							+ categoryRelation + " for group: " + category.getCategoryName(), null);
-					return false;
-				}
-				
-			}
+//					qg.rollBackConnection();
+//					logger.logError("UserGroupOperation", "createGroup", "Failed to insert contact ID: "
+//							+ categoryRelation + " for group: " + category.getCategoryName(), null);
+//					return false;
+//				}
+
+//			}
 
 //            con.commit();
 			qg.commit();
@@ -94,6 +94,7 @@ public class UserGroupOperation {
 		}
 		return false;
 	}
+
 	/**
 	 * Retrieves all groups created by a specific user.
 	 *
@@ -102,25 +103,44 @@ public class UserGroupOperation {
 	 * @throws SQLException if a database access error occurs
 	 */
 	public ArrayList<dbpojo.Category> viewAllGroup(int userid) throws SQLException {
+
+		ArrayList<Table> result = new ArrayList<>();
 		ArrayList<dbpojo.Category> usergroups = new ArrayList<>();
 //        Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-		ArrayList<Object> data = new ArrayList<>();
+//		ArrayList<Table> data = new ArrayList<>();
 		try {
 
 			qg.openConnection();
 //            PreparedStatement ps = con.prepareStatement("SELECT * FROM Category WHERE created_by = ?;");
 //            ps.setInt(1, userid);
 //            ResultSet val = ps.executeQuery();
-			data = qg.select(tables.Category).where(Category.created_by, Operation.Equal, userid).executeQuery();
 
-			for (Object i : data) {
+			dbpojo.Category category = new dbpojo.Category();
+			category.setCreatedBY(userid);
 
-				if (i instanceof dbpojo.Category) {
-					usergroups.add((dbpojo.Category) i);
+//			data = qg.select(tables.Category).where(Category.created_by, Operation.Equal, userid).executeQuery();
+
+			result = qg.select(category).executeQuery();
+			if (result.size() > 0) {
+				for (Table data : result) {
+
+					usergroups.add((dbpojo.Category) data);
 				}
 
+			} else {
+				logger.logInfo("UserGroupOperation", "viewAllGroup", " No Groups retrieved for user ID: " + userid);
+
+				return null;
 			}
+
+//			for (Object i : data) {
+//
+//				if (i instanceof dbpojo.Category) {
+//					usergroups.add((dbpojo.Category) i);
+//				}
+//
+//			}
 
 //            while (val.next()) {
 //                ug = new UserGroup();
@@ -138,6 +158,7 @@ public class UserGroupOperation {
 			qg.closeConnection();
 		}
 		return null;
+
 	}
 
 	/**
@@ -147,7 +168,7 @@ public class UserGroupOperation {
 	 * @return true if the group was deleted successfully, false otherwise
 	 * @throws SQLException if a database access error occurs
 	 */
-	public Boolean deleteUserGroup(dbpojo.Category category) throws SQLException {
+	public Boolean deleteUserGroup(dbpojo.Category category, int userID) throws SQLException {
 //        Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -156,7 +177,10 @@ public class UserGroupOperation {
 //            PreparedStatement ps = con.prepareStatement("DELETE FROM Category WHERE Category_id = ?;");
 //            ps.setInt(1, groupid);
 //            int val = ps.executeUpdate();
-			val = qg.delete(tables.Category).where(Category.Category_id, Operation.Equal, category.getCategoryID()).and(Category.created_by, Operation.Equal, category.getCreatedBy()).execute();
+//			val = qg.delete(tables.Category).where(Category.Category_id, Operation.Equal, category.getCategoryID())
+//					.and(Category.created_by, Operation.Equal, category.getCreatedBy()).execute();
+
+			val = qg.delete(category).execute(userID);
 			if (val[0] == 0) {
 				logger.logError("UserGroupOperation", "deleteUserGroup", "Failed to delete group with ID: " + category,
 						null);
@@ -176,12 +200,12 @@ public class UserGroupOperation {
 	/**
 	 * Retrieves the contact IDs associated with a user group.
 	 *
-	 * @param groupid the ID of the group
-	 * @param userid  the ID of the user
+	 * @param groupId the ID of the group
+	 * @param userId  the ID of the user
 	 * @return an array of contact IDs or null if an error occurs
 	 * @throws SQLException if a database access error occurs
 	 */
-	public ArrayList<CategoryRelation> viewUserGroupContact(int groupid, int userid) throws SQLException {
+	public ArrayList<CategoryRelation> viewUserGroupContact(int groupId, int userId) throws SQLException {
 //        Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
@@ -189,8 +213,8 @@ public class UserGroupOperation {
 
 			qg.openConnection();
 
-			ArrayList<Object> result = new ArrayList<>();
-			ArrayList<CategoryRelation> data = new ArrayList<>();
+			ArrayList<Table> result = new ArrayList<>();
+//			ArrayList<dbpojo.Category> categories = new ArrayList<>();
 //            PreparedStatement ps = con.prepareStatement("SELECT * FROM Category c LEFT JOIN Category_relation cr ON c.Category_id = cr.Category_id WHERE created_by = ? AND c.Category_id = ?;");
 //            ps.setInt(1, userid);
 //            ps.setInt(2, groupid);
@@ -201,13 +225,34 @@ public class UserGroupOperation {
 //            		.where(Category.created_by, Operation.Equal, userid)
 //            		.and(Category.Category_id,Operation.Equal,groupid)
 //            		.executeQuery();
+			dbpojo.Category category = new dbpojo.Category();
+			category.setID(groupId);
+			category.setCreatedBY(userId);
+			CategoryRelation categoryRelation = new CategoryRelation();
+			categoryRelation.setCategoryID(groupId);
+			category.setCategoryRelation(categoryRelation);
 
-			result = qg.select(tables.Category_relation).where(Category_relation.Category_id, Operation.Equal, groupid)
-					.executeQuery();
+//			result = qg.select(tables.Category_relation).where(Category_relation.Category_id, Operation.Equal, groupid)
+//					.executeQuery();
+			result = qg.select(category).executeQuery();
 
-			for (Object i : result) {
-				data.add((CategoryRelation) i);
+			if (result.size() > 0) {
+
+				category = (dbpojo.Category) result.getFirst();
+
+				logger.logInfo("UserGroupOperation", "viewUserGroupContact",
+						"Contacts retrieved for group ID: " + groupId);
+				return category.getCategoryRelation();
+			} else {
+
+				logger.logInfo("UserGroupOperation", "viewUserGroupContact",
+						" NO Contacts retrieved for group ID: " + groupId);
+				return null;
 			}
+
+//			for (Object i : result) {
+//				data.add((CategoryRelation) i);
+//			}
 //            
 //            while (val.next()) {
 //                data.add(val.getInt(4));
@@ -216,8 +261,7 @@ public class UserGroupOperation {
 //            for (int i = 0; i < data.size(); i++) {
 //                contactid[i] = data.get(i);
 //            }
-			logger.logInfo("UserGroupOperation", "viewUserGroupContact", "Contacts retrieved for group ID: " + groupid);
-			return data;
+
 		} catch (Exception e) {
 			logger.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(), e);
 		} finally {
@@ -227,17 +271,106 @@ public class UserGroupOperation {
 		return null;
 	}
 
+	public ArrayList<ContactDetails> getGroupContactList(int groupID, int userID, String method) throws SQLException {
+//      Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+
+		try {
+
+			qg.openConnection();
+
+			UserContactOperation contactOperation = new UserContactOperation();
+			UserGroupOperation userGroupOperation = new UserGroupOperation();
+
+			ArrayList<ContactDetails> userContacts = contactOperation.viewAllUserContacts(userID);
+
+			ArrayList<CategoryRelation> categoryRelation = userGroupOperation.viewUserGroupContact(groupID, userID);
+
+			ArrayList<ContactDetails> contactsInGroup = new ArrayList<ContactDetails>();
+			ArrayList<ContactDetails> contactsNotInGroup = new ArrayList<ContactDetails>();
+			Boolean state = true;
+			for (ContactDetails contact : userContacts) {
+				state = true;
+
+				for (CategoryRelation relation : categoryRelation) {
+					if (relation.getContactIDtoJoin() == contact.getID()) {
+
+						contactsInGroup.add(contact);
+						state = false;
+						break;
+					}
+
+				}
+				if (state) {
+
+					contactsNotInGroup.add(contact);
+				}
+			}
+
+			if (method.equals("view")) {
+
+				return contactsInGroup;
+			} else {
+
+				return contactsNotInGroup;
+
+			}
+
+		} catch (Exception e) {
+			logger.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(), e);
+		} finally {
+
+			qg.closeConnection();
+		}
+		return null;
+	}
+
+	public Category getSpecificGroup(int groupID, int userID) throws SQLException {
+//      Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+		ArrayList<Table> result = new ArrayList<Table>();
+		try {
+
+			qg.openConnection();
+
+			Category group = new Category();
+			group.setID(groupID);
+			group.setCreatedBY(userID);
+			CategoryRelation catr = new CategoryRelation();
+			catr.setCategoryID(groupID);
+			group.setCategoryRelation(catr);
+			result = qg.select(group).executeQuery();
+			if (result != null && result.size() > 0) {
+
+				group = (Category) result.getFirst();
+
+				return group;
+
+			} else {
+
+				return null;
+			}
+
+		} catch (Exception e) {
+			logger.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(), e);
+		} finally {
+//          con.close();
+			qg.closeConnection();
+		}
+		return null;
+	}
+
 	/**
-	 * Updates a user group's information.
+	 * SS Updates a user group's information.
 	 *
-	 * @param ug the UserGroup object containing updated group details
+	 * @param category the UserGroup object containing updated group details
 	 * @return true if the group was updated successfully, false otherwise
 	 * @throws SQLException if a database access error occurs
 	 */
-	public boolean updateUserGroup(dbpojo.Category ug) throws SQLException {
+	public boolean updateUserGroup(dbpojo.Category category, int userID) throws SQLException {
 //        Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-		int[] val = { -1, -1 };
+		int[] result = { -1, -1 };
 		try {
 
 			qg.openConnection();
@@ -247,14 +380,41 @@ public class UserGroupOperation {
 //            ps.setInt(2, ug.getGroupid());
 //            int val = ps.executeUpdate();
 
-			val = qg.update(tables.Category, Category.Category_name,Category.modified_time).valuesUpdate(ug.getCategoryName(),ug.getModifiedAt())
-					.where(Category.Category_id, Operation.Equal, ug.getCategoryID()).execute();
+//			result = qg.update(tables.Category, Category.Category_name, Category.modified_time)
+//					.valuesUpdate(category.getCategoryName(), category.getModifiedAt())
+//					.where(Category.Category_id, Operation.Equal, category.getCategoryID()).execute();
 
-			if (val[0] == 0) {
+//			CategoryR categoryRelation =new CategoryRelation();
+			ArrayList<CategoryRelation> categoryRelations = category.getCategoryRelation();
+			category.setCategoryRelationAll(null);
+			System.out.println("here the data in update as follows" + categoryRelations.size());
+			for (CategoryRelation dummy : categoryRelations) {
+				System.out.println("the name " + categoryRelations.size());
+				System.out.println("the id of the relation is as" + dummy.getID());
+			}
+			CategoryRelation categoryRelation = new CategoryRelation();
+			categoryRelation.setCategoryID(category.getID());
+
+			ArrayList<Table> data = qg.select(categoryRelation).executeQuery();
+
+			for (Table relation : data) {
+
+				qg.delete(relation).execute(userID);
+			}
+			for (Table relation : categoryRelations) {
+
+				qg.insert(relation).execute(userID);
+			}
+
+			System.out.println("the group name  update is" + category.getCategoryName());
+
+			result = qg.update(category).execute(userID);
+
+			if (result[0] == 0) {
 //                con.rollback();
 				qg.rollBackConnection();
 				logger.logError("UserGroupOperation", "updateUserGroup",
-						"Failed to update group ID: " + ug.getCategoryID(), null);
+						"Failed to update group ID: " + category.getID(), null);
 				return false;
 			}
 
@@ -262,8 +422,8 @@ public class UserGroupOperation {
 //            ps.setInt(1, ug.getGroupid());
 //            val = ps.executeUpdate();
 
-			val = qg.delete(tables.Category_relation)
-					.where(Category_relation.Category_id, Operation.Equal, ug.getCategoryID()).execute();
+//			result = qg.delete(tables.Category_relation)
+//					.where(Category_relation.Category_id, Operation.Equal, category.getCategoryID()).execute();
 //            if (val[0] == 0) { 
 
 //                con.rollback();
@@ -272,27 +432,27 @@ public class UserGroupOperation {
 //                return false;
 //            }
 
-			for (CategoryRelation categoryRelation : ug.getCategoryRelation()) {
+//			for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
 //                ps = con.prepareStatement("INSERT INTO Category_relation VALUES (?, ?);");
 //                ps.setInt(1, i);
 //                ps.setInt(2, ug.getGroupid());
 //                val = ps.executeUpdate();
 
-				val = qg.insert(tables.Category_relation).valuesInsert(categoryRelation.getContactIDtoJoin(), categoryRelation.getCategoryID(),categoryRelation.getCreatedAt())
-						.execute();
-				if (val[0] == 0) {
+//				result = qg.insert(tables.Category_relation).valuesInsert(categoryRelation.getContactIDtoJoin(),
+//						categoryRelation.getCategoryID(), categoryRelation.getCreatedAt()).execute();
+//				if (result[0] == 0) {
 //                    con.rollback();
-					qg.rollBackConnection();
-					logger.logError("UserGroupOperation", "updateUserGroup",
-							"Failed to insert contact ID: " + categoryRelation + " for group ID: " + ug.getCategoryID(), null);
-					return false;
-				}
-			}
+//					qg.rollBackConnection();
+//					logger.logError("UserGroupOperation", "updateUserGroup",
+//							"Failed to insert contact ID: " + categoryRelation + " for group ID: " + category.getID(),
+//							null);
+//					return false;
+//				}
+//			}
 
 //            con.commit();
 			qg.commit();
-			logger.logInfo("UserGroupOperation", "updateUserGroup",
-					"Group updated successfully: " + ug.getCategoryID());
+			logger.logInfo("UserGroupOperation", "updateUserGroup", "Group updated successfully: " + category.getID());
 			return true;
 		} catch (Exception e) {
 			logger.logError("UserGroupOperation", "updateUserGroup", "Exception occurred: " + e.getMessage(), e);
@@ -300,6 +460,77 @@ public class UserGroupOperation {
 			qg.rollBackConnection();
 		} finally {
 //            con.close();
+			qg.closeConnection();
+		}
+		return false;
+	}
+
+	public Boolean removeGroupContacts(CategoryRelation categoryRelation, int userID) throws SQLException {
+//      Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+		int[] val = { -1, -1 };
+		CategoryRelation catrel = null;
+		ArrayList<Table> result = new ArrayList<Table>();
+		try {
+			qg.openConnection();
+//          PreparedStatement ps = con.prepareStatement("DELETE FROM Category WHERE Category_id = ?;");
+//          ps.setInt(1, groupid);
+//          int val = ps.executeUpdate();
+//			val = qg.delete(tables.Category).where(Category.Category_id, Operation.Equal, category.getCategoryID())
+//					.and(Category.created_by, Operation.Equal, category.getCreatedBy()).execute();
+
+			result = qg.select(categoryRelation).executeQuery();
+			if (result.size() > 0) {
+
+				catrel = (CategoryRelation) result.getFirst();
+
+				val = qg.delete(catrel).execute(userID);
+				if (val[0] == -1) {
+					logger.logError("UserGroupOperation", "removeGroupContacts",
+							"Failed to remove contacts from group with ID: " + categoryRelation.getCategoryID(), null);
+					return false;
+				}
+			} else {
+
+				logger.logError("UserGroupOperation", "removeGroupContacts",
+						"Failed to find contacts from group with ID: " + categoryRelation.getCategoryID(), null);
+				return false;
+			}
+
+			logger.logInfo("UserGroupOperation", "removeGroupContacts",
+					"Group  contacts removed successfully: " + categoryRelation.getCategoryID());
+			return true;
+		} catch (Exception e) {
+			logger.logError("UserGroupOperation", "dremoveGroupContacts", "Exception occurred: " + e.getMessage(), e);
+		} finally {
+//          con.close();
+			qg.closeConnection();
+		}
+		return false;
+	}
+
+	public Boolean addGroupContacts(CategoryRelation categoryRelation, int userID) throws SQLException {
+//      Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+		int[] val = { -1, -1 };
+
+		try {
+			qg.openConnection();
+
+			val = qg.insert(categoryRelation).execute(userID);
+			if (val[0] == -1) {
+				logger.logError("UserGroupOperation", "addGroupContacts",
+						"Failed to remove contacts from group with ID: " + categoryRelation.getCategoryID(), null);
+				return false;
+			}
+
+			logger.logInfo("UserGroupOperation", "addGroupContacts",
+					"Group  contacts removed successfully: " + categoryRelation.getCategoryID());
+			return true;
+		} catch (Exception e) {
+			logger.logError("UserGroupOperation", "addGroupContacts", "Exception occurred: " + e.getMessage(), e);
+		} finally {
+//          con.close();
 			qg.closeConnection();
 		}
 		return false;

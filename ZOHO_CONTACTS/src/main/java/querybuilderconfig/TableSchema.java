@@ -192,7 +192,7 @@ public class TableSchema {
 
 	public enum Audit_log implements Table {
 
-		ID, previous_state, changed_state, table_name, operation_id, row_key, created_at, created_by;
+		ID, previous_state, changed_state, table_name, operation, row_key, created_at, created_by;
 
 		
 		public String getTableName() {

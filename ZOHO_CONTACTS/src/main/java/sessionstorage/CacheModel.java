@@ -6,6 +6,7 @@ import java.util.HashMap;
 import dbpojo.Category;
 import dbpojo.ContactDetails;
 import dbpojo.Session;
+import dbpojo.Table;
 import dbpojo.Userdata;
 
 public class CacheModel {
@@ -64,9 +65,9 @@ public class CacheModel {
 		return this.session.get(sessionId);
 	}
 
-	public void setUserData(Userdata ud) {
+	public void setUserData(Userdata table) {
 
-		this.ud = ud;
+		this.ud = table;
 	}
 
 	public Userdata getUserData() {
@@ -86,7 +87,7 @@ public class CacheModel {
 	public Category getUserGroup(int categoryID) {
 		for (Category group : this.groups) {
 
-			if (group.getCategoryID() == categoryID) {
+			if (group.getID() == categoryID) {
 				return group;
 			}
 		}
@@ -108,7 +109,7 @@ public class CacheModel {
 
 		for (ContactDetails contactsDetails : this.contacts) {
 
-			if (contactsDetails.getContactID() == contactID) {
+			if (contactsDetails.getID() == contactID) {
 				return contactsDetails;
 			}
 		}

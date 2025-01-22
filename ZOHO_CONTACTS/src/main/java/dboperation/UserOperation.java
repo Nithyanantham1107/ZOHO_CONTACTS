@@ -1,12 +1,11 @@
 package dboperation;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import dbmodel.UserData;
+import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
 import dbpojo.Table;
@@ -14,14 +13,8 @@ import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
-import querybuilderconfig.TableSchema;
-import querybuilderconfig.TableSchema.Email_user;
-import querybuilderconfig.TableSchema.JoinType;
-import querybuilderconfig.TableSchema.Login_credentials;
-import querybuilderconfig.TableSchema.Operation;
-import querybuilderconfig.TableSchema.Statement;
-import querybuilderconfig.TableSchema.tables;
-import querybuilderconfig.TableSchema.user_data;
+import sessionstorage.CacheData;
+import sessionstorage.CacheModel;
 
 public class UserOperation {
 
@@ -38,7 +31,7 @@ public class UserOperation {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
-		int genUserId = 0;
+
 		try {
 			String password = BCrypt.hashpw(userdata.getPassword(), BCrypt.gensalt());
 //			con.setAutoCommit(false);
@@ -133,6 +126,39 @@ public class UserOperation {
 		return null;
 	}
 
+	public boolean addEmail(EmailUser email, int userID) throws SQLException {
+//		Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+		int[] val = { -1, -1 };
+
+		try {
+
+			qg.openConnection();
+
+			val = qg.insert(email).execute(userID);
+
+			if (val[0] == -1) {
+
+				qg.rollBackConnection();
+				logger.logError("UserOperation", "addEmail", "Failed to insert user data", null);
+				return false;
+			}
+
+			qg.commit();
+			logger.logInfo("UserOperation", "addEmail", "Email added successfully: " + email.getEmail());
+			return true;
+
+		} catch (Exception e) {
+			logger.logError("UserOperation", "addEmailr", "Exception occurred: " + e.getMessage(), e);
+
+			qg.rollBackConnection();
+		} finally {
+
+			qg.closeConnection();
+		}
+		return false;
+	}
+
 	/**
 	 * Verifies user credentials against the database.
 	 *
@@ -143,7 +169,7 @@ public class UserOperation {
 	public Userdata isUser(String userName, String password) throws SQLException {
 //		String[] email = new String[5];
 //		Connection con = DBconnection.getConnection();
-		Userdata val;
+
 		ArrayList<Table> result = new ArrayList<>();
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -241,7 +267,7 @@ public class UserOperation {
 			}
 
 //			val = ps.executeQuery();
-			if (result.size() >0  && BCrypt.checkpw(password, user.getPassword())) {
+			if (result.size() > 0 && BCrypt.checkpw(password, user.getPassword())) {
 //				ud.setUserId(val.getInt(1));
 //				ud.setName(val.getString(2));
 //				ud.setPhoneno(val.getString(4));
@@ -288,15 +314,55 @@ public class UserOperation {
 	public boolean userDataUpdate(Userdata userData, String newPassword) throws SQLException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-		UserData user;
-		int userId=userData.getID();
-		int[] result= {-1,-1};
+		Userdata user;
+		int userId = userData.getID();
+		int[] result = { -1, -1 };
 //		int[] val = { -1, -1 };
 		try {
 //
 //			con.setAutoCommit(false);
 
 			qg.openConnection();
+			EmailUser emailData = new EmailUser();
+			emailData.setEmailID(userId);
+
+			ArrayList<Table> data = qg.select(emailData).executeQuery();
+			if (data.size() > 0) {
+
+				for (Table email : data) {
+					qg.delete(email).execute(userId);
+
+				}
+
+			} else {
+				qg.rollBackConnection();
+				logger.logError("UserOperation", "userDataUpdate", "Failed to delete existing emails", null);
+				return false;
+
+			}
+
+			for (EmailUser email : userData.getallemail()) {
+				if (email != null) {
+//					ps = con.prepareStatement("INSERT INTO Email_user VALUES (?, ?, ?);");
+//					ps.setInt(1, ud.getUserId());
+//					ps.setString(2, email);
+//					ps.setBoolean(3, ud.getPrimaryMail()));
+//					val = ps.executeUpdate();
+
+					email.setEmailID(userData.getID());
+
+					result = qg.insert(email).execute(userId);
+					if (result[0] == -1) {
+//						con.rollback();
+
+						qg.rollBackConnection();
+						logger.logError("UserOperation", "userDataUpdate", "Failed to insert new email: " + email,
+								null);
+						return false;
+					}
+				}
+			}
+
 			if (userData.getPassword() == null || newPassword == null) {
 
 //				PreparedStatement ps = con.prepareStatement(
@@ -314,9 +380,8 @@ public class UserOperation {
 //								userData.getTimezone(), userData.getModifiedAt())
 //						.where(user_data.user_id, Operation.Equal, userData.getUserId()).execute();
 
-				result=  qg.update(userData).execute(userId);
-				
-				
+				result = qg.update(userData).execute(userId);
+
 			} else {
 //				PreparedStatement ps = con.prepareStatement("select password from user_data where user_id=?;");
 //				ps.setInt(1, ud.getUserId());
@@ -329,6 +394,18 @@ public class UserOperation {
 //				} else {
 //					throw new TypeNotPresentException("unable to cast Userdata from  result list Object", null);
 //				}
+				ArrayList<Table> users = qg.select(userData).executeQuery();
+				if (users.size() > 0) {
+
+					user = (Userdata) users.getFirst();
+				} else {
+
+					qg.rollBackConnection();
+					logger.logError("UserOperation", "userDataUpdate", "Failed to find  existing userData", null);
+					return false;
+
+				}
+
 				if (BCrypt.checkpw(userData.getPassword(), user.getPassword())) {
 
 					String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
@@ -349,19 +426,18 @@ public class UserOperation {
 //							.valuesUpdate(userData.getName(), userData.getPhoneno(), userData.getAddress(),
 //									userData.getPassword(), userData.getTimezone(), userData.getModifiedAt())
 //							.where(user_data.user_id, Operation.Equal, userData.getUserId()).execute();
-					
-					
-					result=qg.update(userData).execute(userId);
+
+					result = qg.update(userData).execute(userId);
 
 				} else {
-					result[0] = 0;
+					result[0] = -1;
 					logger.logError("UserOperation", "userDataUpdate", "Incorrect password", null);
 
 				}
 
 			}
 
-			if (result[0] == 0) {
+			if (result[0] == -1) {
 //				con.rollback();
 				qg.rollBackConnection();
 				logger.logError("UserOperation", "userDataUpdate", "Failed to update user data", null);
@@ -390,45 +466,7 @@ public class UserOperation {
 //			ps = con.prepareStatement("DELETE FROM Email_user WHERE em_id = ?;");
 //			ps.setInt(1, ud.getUserId());
 //			val = ps.executeUpdate();
-			for (EmailUser email : userData.getallemail()) {
-				val = qg.delete(tables.Email_user).where(Email_user.em_id, Operation.Equal, userData.getID())
-						.and(Email_user.email, Operation.Equal, email.getEmail()).execute();
 
-				if (val[0] == 0) {
-//					con.rollback();
-
-					qg.rollBackConnection();
-					logger.logError("UserOperation", "userDataUpdate", "Failed to delete existing emails", null);
-					return false;
-				}
-
-			}
-
-			for (EmailUser email : userData.getallemail()) {
-				if (email != null) {
-//					ps = con.prepareStatement("INSERT INTO Email_user VALUES (?, ?, ?);");
-//					ps.setInt(1, ud.getUserId());
-//					ps.setString(2, email);
-//					ps.setBoolean(3, ud.getPrimaryMail()));
-//					val = ps.executeUpdate();
-
-					email.setEmailID(userData.getID());
-
-					val = qg.insert(tables.Email_user, Email_user.em_id, Email_user.email, Email_user.is_primary,
-							Email_user.created_time, Email_user.modified_time)
-							.valuesInsert(userData.getID(), email.getEmail(), email.getIsPrimary(),
-									email.getModifiedAt(), email.getModifiedAt())
-							.execute();
-					if (val[0] == 0) {
-//						con.rollback();
-
-						qg.rollBackConnection();
-						logger.logError("UserOperation", "userDataUpdate", "Failed to insert new email: " + email,
-								null);
-						return false;
-					}
-				}
-			}
 //			con.commit();
 
 			qg.commit();
@@ -449,6 +487,75 @@ public class UserOperation {
 		return false;
 	}
 
+	public boolean userprofileUpdate(Userdata userData) throws SQLException {
+//		Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+
+		int userId = userData.getID();
+		int[] result = { -1, -1 };
+		ArrayList<Table> emails=new ArrayList<Table>();
+
+		try {
+
+			qg.openConnection();
+			
+			EmailUser email=new EmailUser();
+			email.setEmailID(userId);
+			
+			emails=qg.select(email).executeQuery();
+			
+			if(emails.size()>0) {
+				 
+				
+				for(Table data: emails) {
+					
+					EmailUser userEmail=new EmailUser();
+					userEmail.setID(data.getID());
+					userEmail.setIsPrimary(false);
+					
+					qg.update(userEmail).execute(userId);
+					
+					
+				}
+			}
+			
+			for(EmailUser dummy:userData.getallemail()) {
+			
+				
+				System.out.println("here the email of the user"+dummy.getEmail());
+				
+			}
+			
+			
+	
+
+			result = qg.update(userData).execute(userId);
+
+			if (result[0] == -1) {
+
+				qg.rollBackConnection();
+				logger.logError("UserOperation", "userprofileUpdate", "Failed to update user data", null);
+				return false;
+			}
+
+			qg.commit();
+			logger.logInfo("UserOperation", "userprofileUpdate",
+					"User data updated successfully for: " + userData.getLoginCredentials().getUserName());
+			return true;
+
+		}
+
+		catch (Exception e) {
+			logger.logError("UserOperation", "userprofileUpdate", "Exception occurred: " + e.getMessage(), e);
+//			con.rollback(); // Ensure rollback in case of exception
+
+			qg.rollBackConnection();
+		} finally {
+			qg.closeConnection();
+		}
+		return false;
+	}
+
 	/**
 	 * Deletes a user profile from the database.
 	 *
@@ -459,15 +566,14 @@ public class UserOperation {
 	public Boolean deleteUserProfile(Userdata userData) throws SQLException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-		int userId=userData.getID();
+		int userId = userData.getID();
 		int[] result = { -1, -1 };
 		try {
 			qg.openConnection();
 
 //			result = qg.delete(tables.user_data).where(user_data.user_id, Operation.Equal, userData.getUserId()).execute();
 
-			
-			result=qg.delete(userData).execute(userId);
+			result = qg.delete(userData).execute(userId);
 //			PreparedStatement ps = con.prepareStatement("DELETE FROM user_data WHERE user_id = ?;");
 //			ps.setInt(1, userId);
 //			int val = ps.executeUpdate();
@@ -489,6 +595,33 @@ public class UserOperation {
 		return false;
 	}
 
+	public Boolean deleteUserEmail(EmailUser email, int userID) throws SQLException {
+//		Connection con = DBconnection.getConnection();
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+
+		int[] result = { -1, -1 };
+		try {
+			qg.openConnection();
+
+			result = qg.delete(email).execute(userID);
+
+			if (result[0] != -1) {
+				logger.logInfo("UserOperation", "deleteUserEmail", "Email deleted successfully for userId: " + userID);
+				return true;
+			} else {
+				logger.logError("UserOperation", "deleteUserEmail", "Failed to delete email for userId: " + userID,
+						null);
+				return false;
+			}
+		} catch (Exception e) {
+			logger.logError("UserOperation", "deleteUserEmail", "Exception occurred: " + e.getMessage(), e);
+		} finally {
+
+			qg.closeConnection();
+		}
+		return false;
+	}
+
 	/**
 	 * Retrieves user data by user ID.
 	 *
@@ -499,9 +632,8 @@ public class UserOperation {
 	public Userdata getUserData(int userId) throws SQLException {
 //		String[] email = new String[5];
 		Userdata user;
-		ArrayList<Table> result=new ArrayList<>();
-		
-		
+		ArrayList<Table> result = new ArrayList<>();
+
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		try {
@@ -511,26 +643,25 @@ public class UserOperation {
 //			ResultSet val = ps.executeQuery();
 
 			qg.openConnection();
-			user=new Userdata();
+			user = new Userdata();
 			user.setID(userId);
-			LoginCredentials login=new LoginCredentials();
+			LoginCredentials login = new LoginCredentials();
 			login.setUserID(userId);
-			EmailUser email=new EmailUser();
+			EmailUser email = new EmailUser();
 			email.setEmailID(userId);
 			user.setLoginCredentials(login);
 			user.setEmail(email);
+			result = qg.select(user).executeQuery();
 
 //			user = (Userdata) qg.select(tables.user_data)
 //					.join(JoinType.left, user_data.user_id, Operation.Equal, Login_credentials.log_id)
 //					.join(JoinType.left, user_data.user_id, Operation.Equal, Email_user.em_id)
 //					.where(user_data.user_id, Operation.Equal, userId).executeQuery().getFirst();
 
-			
-			
-			
 //			UserData ud = new UserData();
 
-			if (user != null) {
+			if (result.size() > 0) {
+				user = (Userdata) result.getFirst();
 //				ud.setUserId(val.getInt(1));
 //				ud.setName(val.getString(2));
 //				ud.setPhoneno(val.getString(4));
@@ -564,4 +695,62 @@ public class UserOperation {
 		}
 		return null;
 	}
+
+	public boolean userPasswordChange(Userdata oldUser, String oldPassword, String newPassword, int userID)
+			throws SQLException {
+		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+
+		int[] result = { -1, -1 };
+
+		try {
+
+			qg.openConnection();
+			
+			System.out.println("here the stored password is"+oldUser.getPassword());
+			
+			
+
+			System.out.println("here the provided pass is"+oldPassword);
+			
+
+			if (BCrypt.checkpw( oldPassword,oldUser.getPassword())) {
+
+				String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+				Userdata user = new Userdata();
+				user.setID(userID);
+				user.setPassword(password);
+
+				result = qg.update(user).execute(userID);
+
+			} else {
+				result[0] = -1;
+				logger.logError("UserOperation", "userPasswordChange", "Incorrect password", null);
+
+			}
+
+			if (result[0] == -1) {
+
+				qg.rollBackConnection();
+				logger.logError("UserOperation", "userPasswordChange", "Failed to change User password", null);
+				return false;
+			}
+
+			qg.commit();
+			logger.logInfo("UserOperation", "userPasswordChange",
+					"password successfully for userID: " + userID);
+			return true;
+
+		}
+
+		catch (Exception e) {
+			logger.logError("UserOperation", "userPasswordChange", "Exception occurred: " + e.getMessage(), e);
+
+			qg.rollBackConnection();
+		} finally {
+			qg.closeConnection();
+		}
+		return false;
+	}
+
 }

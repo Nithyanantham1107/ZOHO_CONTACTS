@@ -1,5 +1,9 @@
 package dbpojo;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import querybuilderconfig.TableSchema.Contact_mail;
 import querybuilderconfig.TableSchema.tables;
 
 public class ContactMail implements Table {
@@ -8,13 +12,17 @@ public class ContactMail implements Table {
 	private String contactEmailID;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
+	private Map<String, Object> settedData = new HashMap<String, Object>();
 
 	public ContactMail(int id, int contactID, String contactEmailID, long createdAt, long modifiedAt) {
-		this.contactID = contactID;
-		this.contactEmailID = contactEmailID;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
+
+		settedData.clear();
+
+		setContactID(contactID);
+		setContactMailID(contactEmailID);
+		setID(id);
+		setCreatedAt(createdAt);
+		setModifiedAt(modifiedAt);
 
 	}
 
@@ -28,18 +36,14 @@ public class ContactMail implements Table {
 	}
 
 	public String getPrimaryIDName() {
-		
+
 		return tables.Contact_mail.getPrimaryKey();
 	}
-	
-	
-	
-	
-	
-	
+
 	public void setID(int id) {
-		
-		this.id=id;
+
+		this.id = id;
+		settedData.put( Contact_mail.ID.toString(), getID());
 	}
 
 	public int getID() {
@@ -49,6 +53,7 @@ public class ContactMail implements Table {
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
+		settedData.put( Contact_mail.created_time.toString(), getCreatedAt());
 	}
 
 	public long getCreatedAt() {
@@ -59,6 +64,7 @@ public class ContactMail implements Table {
 	public void setModifiedAt(long modifiedAt) {
 
 		this.modifiedAt = modifiedAt;
+		settedData.put( Contact_mail.modified_time.toString(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -69,6 +75,7 @@ public class ContactMail implements Table {
 
 	public void setContactID(int ContactID) {
 		this.contactID = ContactID;
+		settedData.put( Contact_mail.contact_id.toString(), getContactID());
 	}
 
 	public int getContactID() {
@@ -77,10 +84,17 @@ public class ContactMail implements Table {
 
 	public void setContactMailID(String ContactMailID) {
 		this.contactEmailID = ContactMailID;
+
+		settedData.put( Contact_mail.Contact_email_id.toString(), getContactMailID());
 	}
 
 	public String getContactMailID() {
 		return contactEmailID;
+	}
+
+	public Map<String, Object> getSettedData() {
+
+		return settedData;
 	}
 
 }
