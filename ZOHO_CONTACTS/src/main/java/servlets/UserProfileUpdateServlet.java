@@ -80,13 +80,11 @@ int userId=userSessionData.getID();
 				LoginCredentials loginCredentials = new LoginCredentials();
 				EmailUser emailUser = new EmailUser();
 				emailUser.setID(Integer.parseInt(request.getParameter("emailID")));	
-				emailUser.setEmailID(userSessionData.getID());
-				emailUser.setEmail(request.getParameter("email"));
+
+				emailUser.setEmail(request.getParameter("primaryemail"));
 				emailUser.setModifiedAt(userData.getModifiedAt());
-
 				emailUser.setIsPrimary(true);
-
-				userData.setEmail(emailUser);
+//				userData.setEmail(emailUser);
 				loginCredentials.setID(Integer.parseInt(request.getParameter("logID")));
 				loginCredentials.setUserID(userSessionData.getID());
 				loginCredentials.setUserName(request.getParameter("username"));
@@ -99,7 +97,7 @@ int userId=userSessionData.getID();
 				userData.setPhoneno(request.getParameter("phone"));
 				userData.setTimezone(request.getParameter("timezone"));
 
-				state = userOperation.userprofileUpdate(userData);
+				state = userOperation.userprofileUpdate(userData,emailUser);
 
 				if (state) {
 					cachemodel.setUserData(userOperation.getUserData(userId));

@@ -484,7 +484,7 @@ public class UserOperation {
 		return false;
 	}
 
-	public boolean userprofileUpdate(Userdata userData) throws SQLException {
+	public boolean userprofileUpdate(Userdata userData,EmailUser emailData) throws SQLException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
@@ -505,10 +505,22 @@ public class UserOperation {
 				 
 				
 				for(Table data: emails) {
+					EmailUser currentEmail=(EmailUser) data;
 					
 					EmailUser userEmail=new EmailUser();
 					userEmail.setID(data.getID());
-					userEmail.setIsPrimary(false);
+					
+					
+					if(currentEmail.getEmail().equals(emailData.getEmail())){
+						
+						userEmail.setIsPrimary(true);
+						
+					}else {
+						
+						userEmail.setIsPrimary(false);
+					}
+					
+					
 					
 					qg.update(userEmail).execute(userId);
 					
@@ -516,12 +528,7 @@ public class UserOperation {
 				}
 			}
 			
-			for(EmailUser dummy:userData.getallemail()) {
-			
-				
-				System.out.println("here the email of the user"+dummy.getEmail());
-				
-			}
+		
 			
 			
 	
