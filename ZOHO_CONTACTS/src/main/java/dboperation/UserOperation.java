@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
 import dbpojo.Table;
@@ -13,8 +12,6 @@ import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
-import sessionstorage.CacheData;
-import sessionstorage.CacheModel;
 
 public class UserOperation {
 
