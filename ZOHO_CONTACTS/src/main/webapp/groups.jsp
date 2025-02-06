@@ -36,24 +36,22 @@
 
 
 	<%
-	SessionOperation so = new SessionOperation();
-	CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+
+	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
 	if (cachemodel == null) {
 		System.out.println("hello hi");
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("Login.jsp");
 		return;
 
 	}
 
 	Userdata ud = cachemodel.getUserData();
-	UserContactOperation userContactOperation = new UserContactOperation();
 
-	ArrayList<ContactDetails> userContacts = userContactOperation.viewAllUserContacts(ud.getID());
 
-	UserGroupOperation userGroupOperation = new UserGroupOperation();
+	ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 
-	ArrayList<Category> usergroup = userGroupOperation.viewAllGroup(ud.getID());
+	ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(ud.getID());
 
 	ArrayList<ContactDetails> groupsInContact = new ArrayList<>();
 	ArrayList<ContactDetails> groupsNotInContact = new ArrayList<>();
@@ -65,15 +63,15 @@
 
 		String method = (String) request.getAttribute("method");
 		int groupID = (int) request.getAttribute("groupID");
-		group = userGroupOperation.getSpecificGroup(groupID, ud.getID());
+		group = UserGroupOperation.getSpecificGroup(groupID, ud.getID());
 
 		if (method.equals("view")) {
 
-			groupsInContact = userGroupOperation.getGroupContactList(groupID, ud.getID(), method);
+			groupsInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
 
 		} else {
 
-			groupsNotInContact = userGroupOperation.getGroupContactList(groupID, ud.getID(), method);
+			groupsNotInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
 
 		}
 
@@ -83,54 +81,49 @@
 
 
 	<nav id="sidebar">
-		<header id="headernav">
-
-			<div class="head">
+		
+<section id="creategroup">
+			
 				<h1>Create Group</h1>
 
 
-			</div>
+		
 
 
-			<div class="close">
+		
 
 				<button id="closecreatemodel">
-					<i class="fa-solid fa-xmark"></i>
-
+ X
 
 				</button>
 
 
-			</div>
+		
 
 
 
 
 
 
-		</header>
 
 
-		<section id="creategroup">
+		
 
-
+          <div>
 			<input type="text" id="groupNamecreate"
 				placeholder="Enter group name" required /> <input type="hidden"
 				id="groupidcreate" required /> <input type="hidden" value="create"
 				id="methodcreate" />
-			<button id="submitGroup" class="glowbutton">Create Group</button>
+			<button id="submitGroup" class="glowgreenbutton">Create Group</button>
+</div>
 
 
 
 
 
 
-
-
-		</section>
-
-
-		<section id="table">
+<div id="createtablecontainer">
+		
 
 
 
@@ -161,10 +154,6 @@
 
 						for (ContactDetails uc : userContacts) {
 					%>
-
-
-
-
 					<tr>
 
 						<td><input type="checkbox" name="contact_ids"
@@ -190,7 +179,7 @@
 
 			</table>
 
-
+</div>
 		</section>
 
 
@@ -240,7 +229,7 @@
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> ChangePassword</a></li>
+				<li><a href="changePassword.jsp"> More</a></li>
 				<li><a href="/login"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
@@ -270,7 +259,7 @@
 
 				<section id="addbutton">
 
-					<button id="groupbutton" class="glowbutton">Create group</button>
+					<button id="groupbutton" class="glowgreenbutton">Create group</button>
 				</section>
 
 			</section>
@@ -316,7 +305,7 @@
 									<input type="hidden" value="<%=ug.getID()%>" name="groupid"
 										id="categoryID" /> <input type="hidden" value="view"
 										name="method" /> <input type="submit"
-										class="glowbutton" id="viewgroup" value="view Group" />
+										class="glowyellowbutton" id="viewgroup" value="view Group" />
 								</form>
 
 							</td>
@@ -325,7 +314,7 @@
 								 <input type="hidden" value="add"
 										name="method" /> 
 									<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
-									<input type="submit" class="glowbutton" value="add" />
+									<input type="submit" class="glowgreenbutton" value="add" />
 								</form>
 							</td>
 							
@@ -334,7 +323,7 @@
 								<form action="/deletegroup" method="post">
 								 
 									<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
-									<input type="submit" class="glowbutton" value="Delete" />
+									<input type="submit" class="glowredbutton" value="Delete" />
 								</form>
 							</td>
 						</tr>

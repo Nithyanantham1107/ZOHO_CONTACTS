@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import dbpojo.Category;
 import dbpojo.CategoryRelation;
@@ -13,6 +12,7 @@ import dbpojo.ContactMail;
 import dbpojo.ContactPhone;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
+import dbpojo.Oauth;
 import dbpojo.Session;
 import dbpojo.Table;
 import dbpojo.Userdata;
@@ -38,8 +38,8 @@ public class PojoMapper {
 
 		try {
 			while (this.result.next()) {
-				
-			System.out.println("here tablename"+tablename);
+
+				System.out.println("here tablename" + tablename);
 
 				if (tablename.equals(TableSchema.tables.user_data.getTableName())) {
 					userData = userDataSetter();
@@ -72,6 +72,8 @@ public class PojoMapper {
 					this.data.add(userSessionSetter());
 				} else if (tablename.equals(TableSchema.tables.Email_user.getTableName())) {
 					this.data.add(userEmailSetter());
+				} else if (tablename.equals(TableSchema.tables.Oauth.getTableName())) {
+					this.data.add(oauthSetter());
 				}
 
 			}
@@ -80,13 +82,31 @@ public class PojoMapper {
 			e.printStackTrace();
 		} finally {
 
-//			this.result.close();
-
 			this.uniqueList.clear();
 
 		}
 
 		return this.data;
+	}
+
+	private Oauth oauthSetter() {
+
+		Oauth oauth = null;
+		String tablename = TableSchema.tables.Oauth.getTableName();
+
+		oauth = new Oauth(getInt(tablename + "." + TableSchema.Oauth.ID),
+				getInt(tablename + "." + TableSchema.Oauth.userID),
+				getString(tablename + "." + TableSchema.Oauth.Oauth_provider),
+				getString(tablename + "." + TableSchema.Oauth.refresh_token),
+				getString(tablename + "." + TableSchema.Oauth.access_token),
+				getString(tablename + "." + TableSchema.Oauth.email),
+				getBoolean(tablename + "." + TableSchema.Oauth.sync_state),
+				getLong(tablename + "." + TableSchema.Oauth.expiry_time),
+				getLong(tablename + "." + TableSchema.Oauth.created_time),
+				getLong(tablename + "." + TableSchema.Oauth.modified_time));
+
+			return oauth;
+
 	}
 
 	private Userdata userDataSetter() {
@@ -102,6 +122,11 @@ public class PojoMapper {
 			}
 			EmailUser email = userEmailSetter();
 			LoginCredentials login = userLoginSetter();
+			Oauth oauth = oauthSetter();
+			if (userData.getOauth(oauth.getID()) == null) {
+				userData.setOauth(oauth);
+
+			}
 
 			if (userData.getemail(email.getID()) == null) {
 				userData.setEmail(email);
@@ -110,16 +135,11 @@ public class PojoMapper {
 			if (userData.getLoginCredentials() == null) {
 				userData.setLoginCredentials(login);
 			}
-
-//			ud.setSession(userSessionSetter());
-
 			return null;
 
 		} else {
 
-			userData = new Userdata(
-
-					getInt(tablename + "." + TableSchema.user_data.user_id),
+			userData = new Userdata(getInt(tablename + "." + TableSchema.user_data.user_id),
 					getString(tablename + "." + TableSchema.user_data.Name),
 					getString(tablename + "." + TableSchema.user_data.password),
 					getString(tablename + "." + TableSchema.user_data.phone_no),
@@ -131,7 +151,7 @@ public class PojoMapper {
 			this.uniqueList.put(getInt(tablename + "." + TableSchema.user_data.user_id), userData);
 
 			userData.setEmail(userEmailSetter());
-//			ud.setSession(userSessionSetter());
+			userData.setOauth(oauthSetter());
 			userData.setLoginCredentials(userLoginSetter());
 			return userData;
 
@@ -196,15 +216,9 @@ public class PojoMapper {
 	private ContactDetails userContactSetter() {
 
 		ContactDetails contactDetails = null;
-//		boolean state = true;
 
 		String tablename = TableSchema.tables.Contact_details.getTableName();
 
-//		if (k.length > 0) {
-//			state = false;
-//		}
-
-//		System.out.println("hsjdc");
 		if (this.uniqueList.get(getInt(tablename + "." + TableSchema.Contact_details.contact_id)) != null) {
 
 			if (this.uniqueList
@@ -231,6 +245,7 @@ public class PojoMapper {
 
 			contactDetails = new ContactDetails(getInt(tablename + "." + TableSchema.Contact_details.user_id),
 					getInt(tablename + "." + TableSchema.Contact_details.contact_id),
+					getInt(tablename + "." + TableSchema.Contact_details.OauthID),
 					getString(tablename + "." + TableSchema.Contact_details.First_name),
 					getString(tablename + "." + TableSchema.Contact_details.Middle_name),
 					getString(tablename + "." + TableSchema.Contact_details.Last_name),
@@ -238,12 +253,6 @@ public class PojoMapper {
 					getString(tablename + "." + TableSchema.Contact_details.Address),
 					getLong(tablename + "." + TableSchema.Contact_details.created_time),
 					getLong(tablename + "." + TableSchema.Contact_details.modified_time));
-
-//			if (k.length == 0) {
-//
-//				this.uniqueList.put(getInt(tablename + "." + TableSchema.Contact_details.contact_id), cd);
-//			}
-
 			contactDetails.setContactMail(userMailSetter());
 			contactDetails.setContactPhone(userPhoneSetter());
 
@@ -289,8 +298,7 @@ public class PojoMapper {
 
 		EmailUser emailUser = null;
 		String tablename = TableSchema.tables.Email_user.getTableName();
-		
-		
+
 		emailUser = new EmailUser(
 
 				getInt(tablename + "." + TableSchema.Email_user.ID),
@@ -300,8 +308,6 @@ public class PojoMapper {
 				getLong(tablename + "." + TableSchema.Email_user.created_time),
 				getLong(tablename + "." + TableSchema.Email_user.modified_time));
 
-		
-		
 		return emailUser;
 
 	}
@@ -342,7 +348,9 @@ public class PojoMapper {
 	private int getInt(String column) {
 		try {
 			if (this.columnNames.contains(column)) {
-
+				if (result.getInt(column) == 0) {
+					return -1;
+				}
 				return result.getInt(column);
 
 			}
@@ -358,6 +366,9 @@ public class PojoMapper {
 		try {
 			if (this.columnNames.contains(column)) {
 
+				if (result.getLong(column) == 0) {
+					return -1;
+				}
 				return result.getLong(column);
 
 			}

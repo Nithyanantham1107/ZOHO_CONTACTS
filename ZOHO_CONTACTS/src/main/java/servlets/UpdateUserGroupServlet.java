@@ -14,6 +14,7 @@ import dboperation.UserGroupOperation;
 import dbpojo.Category;
 import dbpojo.CategoryRelation;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -66,7 +67,7 @@ public class UpdateUserGroupServlet extends HttpServlet {
 				userGroup.setCreatedBY(userData.getID());
 				userGroup.setID(Integer.parseInt(request.getParameter("groupid")));
 				userGroup.setCategoryName(request.getParameter("groupName"));
-				  categoryRelation = userGroupOperation.viewUserGroupContact(userGroup.getID(), userGroup.getCreatedBy());
+				  categoryRelation = UserGroupOperation.viewUserGroupContact(userGroup.getID(), userGroup.getCreatedBy());
 				if (categoryRelation != null) {
 //					ug.setcontactid(value);
 					userGroup.setCategoryRelationAll(categoryRelation);
@@ -86,7 +87,7 @@ public class UpdateUserGroupServlet extends HttpServlet {
 				request.getRequestDispatcher("groups.jsp").forward(request, response);
 			}
 
-		} catch (Exception e) {
+		} catch (DBOperationException  e) {
 			logger.logError("UpdateUserGroupServlet", "doPost", "Exception occurred while updating user group.", e);
 			request.setAttribute("errorMessage", "An error occurred while processing your request.");
 			request.getRequestDispatcher("groups.jsp").forward(request, response);

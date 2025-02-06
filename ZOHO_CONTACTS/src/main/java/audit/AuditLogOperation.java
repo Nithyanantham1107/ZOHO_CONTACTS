@@ -1,7 +1,6 @@
 package audit;
 
 import datahelper.JsonConverter;
-import datahelper.PojoDataContainer;
 import dbpojo.AuditLog;
 import dbpojo.Table;
 import dbpojo.Userdata;
@@ -14,7 +13,7 @@ public class AuditLogOperation {
 			int userID) {
 
 		int[] result = { -1, -1 };
-		PojoDataContainer pj;
+		
 		StringBuilder json;
 
 		AuditLog audit = new AuditLog();

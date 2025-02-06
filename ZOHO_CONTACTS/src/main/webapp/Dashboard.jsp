@@ -268,14 +268,12 @@ textarea {
 				
 
 				// upto this session check is implemented
-				   SessionOperation so=new SessionOperation();
-				UserContactOperation userContactOperation=new UserContactOperation();
-				UserGroupOperation userGroupOperation=new UserGroupOperation();
-				   CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+
+				   CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
 			if (cachemodel == null) {
 				            System.out.println("hello hi");
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("Login.jsp");
 				            return;
 			
 
@@ -303,8 +301,8 @@ textarea {
 				
 				
 				
-				ArrayList<ContactDetails> user_contacts = userContactOperation.viewAllUserContacts(ud.getID());
-				ArrayList<Category> usergroup = userGroupOperation.viewAllGroup(ud.getID());
+				ArrayList<ContactDetails> user_contacts = UserContactOperation.viewAllUserContacts(ud.getID());
+				ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(ud.getID());
 		%>
 
 		<div id="profileModal" class="modal">

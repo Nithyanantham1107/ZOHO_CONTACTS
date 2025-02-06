@@ -1,9 +1,9 @@
 package dbpojo;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public interface Table {
+	int a=10;
 	public void setCreatedAt(long createdAt);
 
 	public long getCreatedAt();

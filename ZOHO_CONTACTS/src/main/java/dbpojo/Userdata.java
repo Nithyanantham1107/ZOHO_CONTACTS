@@ -14,13 +14,12 @@ public class Userdata implements Table {
 	private String phoneNo;
 	private String address;
 	private String timeZone;
-	private String CurrentEmail;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 	private ArrayList<EmailUser> email = new ArrayList<EmailUser>();
 	private LoginCredentials LoginCredentials;
-	
+	private ArrayList<Oauth> oauths = new ArrayList<Oauth>();
 
 	public Userdata() {
 
@@ -29,7 +28,7 @@ public class Userdata implements Table {
 	public Userdata(int userId, String Name, String password, String Phoneno, String address, String timezone,
 			long createdAt, long modifiedAt) {
 		settedData.clear();
-	
+
 		setName(Name);
 		setPassword(password);
 		setAddress(address);
@@ -38,7 +37,6 @@ public class Userdata implements Table {
 		setTimezone(timezone);
 		setCreatedAt(createdAt);
 		setModifiedAt(modifiedAt);
-
 	}
 
 	public String getTableName() {
@@ -51,23 +49,13 @@ public class Userdata implements Table {
 		return tables.user_data.getPrimaryKey();
 	}
 
-//	public void setRowKey(int rowKey) {
-//
-//		this.id = rowKey;
-//		settedData.put(getTableName()+"."+user_data.user_id.toString(), getRowKey());
-//	}
-//
-//	public int getRowKey() {
-//
-//		return this.id;
-//	}
-
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
 
-		settedData.put( user_data.created_time.toString(), getCreatedAt());
+		settedData.put(user_data.created_time.toString(), getCreatedAt());
 	}
+	
 
 	public long getCreatedAt() {
 
@@ -78,7 +66,7 @@ public class Userdata implements Table {
 
 		this.modifiedAt = modifiedAt;
 
-		settedData.put( user_data.modified_time.toString(), getModifiedAt());
+		settedData.put(user_data.modified_time.toString(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -87,15 +75,11 @@ public class Userdata implements Table {
 
 	}
 
-
-
 	public EmailUser getPrimaryEmail() {
-		
-		
-		for(EmailUser data: email ) {
-			
-			
-			if(data.getIsPrimary()) {
+
+		for (EmailUser data : email) {
+
+			if (data.getIsPrimary()) {
 				return data;
 			}
 		}
@@ -130,10 +114,35 @@ public class Userdata implements Table {
 		}
 		return null;
 	}
+	public void setAllOauth(ArrayList<Oauth> oauths) {
+		this.oauths.clear();
+		this.oauths=oauths;
+		
+	}
+
+	public void setOauth(Oauth oauth) {
+
+		this.oauths.add(oauth);
+	}
+
+	public ArrayList<Oauth> getallOauth() {
+		return this.oauths;
+	}
+
+	public Oauth getOauth(int ID) {
+
+		for (Oauth oauth : this.oauths) {
+
+			if (oauth.getID() == ID) {
+				return oauth;
+			}
+		}
+		return null;
+	}
 
 	public void setID(int id) {
 		this.id = id;
-		settedData.put( user_data.user_id.toString(), getID());
+		settedData.put(user_data.user_id.toString(), getID());
 	}
 
 	public int getID() {
@@ -146,12 +155,12 @@ public class Userdata implements Table {
 
 	public void setName(String name) {
 		this.Name = name;
-		settedData.put( user_data.Name.toString(), getName());
+		settedData.put(user_data.Name.toString(), getName());
 	}
 
 	public void setPassword(String Password) {
 		this.password = Password;
-		settedData.put( user_data.password.toString(), getPassword());
+		settedData.put(user_data.password.toString(), getPassword());
 	}
 
 	public String getPassword() {
@@ -160,7 +169,7 @@ public class Userdata implements Table {
 
 	public void setPhoneno(String Phoneno) {
 		this.phoneNo = Phoneno;
-		settedData.put( user_data.phone_no.toString(), getPhoneno());
+		settedData.put(user_data.phone_no.toString(), getPhoneno());
 	}
 
 	public String getPhoneno() {
@@ -170,7 +179,7 @@ public class Userdata implements Table {
 	public void setTimezone(String Timezone) {
 		this.timeZone = Timezone;
 
-		settedData.put( user_data.timezone.toString(), getTimezone());
+		settedData.put(user_data.timezone.toString(), getTimezone());
 	}
 
 	public String getTimezone() {
@@ -179,7 +188,7 @@ public class Userdata implements Table {
 
 	public void setAddress(String Address) {
 		this.address = Address;
-		settedData.put( user_data.address.toString(), getAddress());
+		settedData.put(user_data.address.toString(), getAddress());
 	}
 
 	public String getAddress() {

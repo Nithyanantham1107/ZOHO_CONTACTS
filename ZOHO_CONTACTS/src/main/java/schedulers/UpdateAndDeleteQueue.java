@@ -1,9 +1,14 @@
 package schedulers;
 
+import java.time.Instant;
 import java.util.ArrayList;
 
+import dboperation.UserContactOperation;
+import dbpojo.ContactDetails;
+import dbpojo.Oauth;
 import dbpojo.Table;
 import loggerfiles.LoggerSet;
+import oauth2helper.Oauth2handler;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
 import sessionstorage.CacheData;
@@ -13,22 +18,109 @@ public class UpdateAndDeleteQueue implements Runnable {
 	QueryBuilder qg = null;
 	LoggerSet logger = new LoggerSet();
 
-	public UpdateAndDeleteQueue() {
-//		Connection con=DBconnection.getDriverConnection();
 
-//		Connection con = DBconnection.getConnection();
-
-	}
 
 	public void run() {
 
 		this.qg = new SqlQueryLayer().createQueryBuilder();
 
 		this.qg.openConnection();
+		AccessTokenRenewal();
+		syncGoogleContacts();
 		updateSessionQueue();
 		sessionTableCleaner();
 
 		this.qg.closeConnection();
+
+	}
+
+	private void syncGoogleContacts() {
+
+		System.out.println("hello here sync Google contact performed");
+
+	
+		ArrayList<Table> result = new ArrayList<Table>();
+
+		try {
+
+			Oauth oauth = new Oauth();
+			result = qg.select(oauth).executeQuery();
+			if (result.size() > 0) {
+
+				for (Table table : result) {
+
+					Oauth oauthData = (Oauth) table;
+
+					if (oauthData.getSyncState()) {
+
+						ArrayList<ContactDetails> contacts = Oauth2handler.getContacts(oauthData);
+						for (ContactDetails contact : contacts) {
+
+							ContactDetails contactDB = UserContactOperation
+									.viewOauthSpecificUserContact(oauthData.getUserID(), contact.getOauthContactID());
+							if (contactDB == null) {
+								UserContactOperation.addUserContact(contact);
+							} else {
+								contact.setID(contactDB.getID());
+								UserContactOperation.updateSpecificUserContact(contact, oauthData.getUserID());
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+			logger.logError("UpdateAndDeleteQueue", "syncGoogleContacts", "Error Syncing the google contact: ", e);
+		} finally {
+
+//			qg.closeConnection();
+		}
+
+	}
+
+	private void AccessTokenRenewal() {
+
+		ArrayList<Table> result = new ArrayList<>();
+		System.out.println("hello im Access token Renewer");
+
+		long currentTime;
+
+		try {
+
+			currentTime = Instant.now().toEpochMilli();
+			Oauth oauth = new Oauth();
+			result = this.qg.select(oauth).executeQuery();
+
+			if (result.size() > 0) {
+
+				for (Table data : result) {
+
+					Oauth oauthData = (Oauth) data;
+
+					if (oauthData.getExpiryTime() < currentTime && oauthData.getRefreshToken() != null) {
+						Oauth oauthUpdate = Oauth2handler.refreshAccessToken(oauthData);
+
+						this.qg.update(oauthUpdate).execute(oauthData.getUserID());
+
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+			logger.logError("UpdateAndDeleteQueue", "AccessTokenRenewal", "Error updating the Oauth table: ", e);
+		} finally {
+
+//			qg.closeConnection();
+		}
 
 	}
 
@@ -37,19 +129,9 @@ public class UpdateAndDeleteQueue implements Runnable {
 		int[] result = { -1, -1 };
 		int userID = 0;
 		System.out.println("hey here is the update queue");
-//		Connection con = DBconnection.getConnection();
-//     this.qg.openConnection();
+
 		try {
-//
-//			if (qg == null) {
-//				System.out.println("connection here in listner is null");
-//
-//			} else {
-//				System.out.println("connection here in listner is not  null");
 
-//			}
-
-//			int sessiontimeout=30*60;
 			CacheData.setSecondaryActive();
 
 			for (String sessionid : CacheData.getPrimaryUpdateQueue()) {
@@ -64,17 +146,9 @@ public class UpdateAndDeleteQueue implements Runnable {
 					session.setLastAccessed(cachemodel.getsession(sessionid).getLastAccessed());
 					userID = cachemodel.getsession(sessionid).getUserId();
 					session.setUserId(userID);
-//					result = this.qg.update(tables.Session, Session.last_accessed)
-//							.valuesUpdate(cachemodel.getsession(sessionid).getLastAccessed())
-//							.where(Session.Session_id, Operation.Equal, sessionid).execute();
 
 					result = qg.update(session).execute(userID);
 
-//					 
-//					 PreparedStatement ps = con.prepareStatement("UPDATE Session SET session_expire = ? WHERE session_id = ?");
-//			         ps.setLong(1, cachemodel.getlastAccessed()+ sessiontimeout);
-//			         ps.setString(2, sessionid);
-//			         int result = ps.executeUpdate();
 					if (result[0] == -1) {
 						System.out.println("Error in updating session data to the table ,session id" + sessionid);
 
@@ -90,34 +164,29 @@ public class UpdateAndDeleteQueue implements Runnable {
 
 		} catch (Exception e) {
 			System.out.println(e);
-			logger.logError("Servletlistener", "UpdateQueueSchedule", "Error updating the session table: ", e);
+			logger.logError("UpdateAndDeleteQueue", "UpdateQueueSchedule", "Error updating the session table: ", e);
 		} finally {
 
-//			this.qg.closeConnection();
 		}
 
 	}
 
 	private void sessionTableCleaner() {
 
-		int SESSIONTIMEOUT = 30 * 60;
+		int SESSIONTIMEOUT = 30 * 60 * 1000;
 		ArrayList<Table> result = new ArrayList<>();
 		System.out.println("hello im Session Table cleaner");
-//		Connection con = DBconnection.getConnection();
 
 		long sessionExpire;
 		long currentTime;
-//		this.qg.openConnection();
 
 		try {
 
-			currentTime = System.currentTimeMillis() / 1000;
+			currentTime = Instant.now().toEpochMilli();
 			dbpojo.Session sessions = new dbpojo.Session();
 
 			result = this.qg.select(sessions).executeQuery();
 
-//			PreparedStatement ps = con.prepareStatement("select Session_id,session_expire from Session;");
-//			ResultSet val = ps.executeQuery();
 			if (result.size() > 0) {
 
 				for (Table data : result) {
@@ -125,15 +194,9 @@ public class UpdateAndDeleteQueue implements Runnable {
 					dbpojo.Session session = (dbpojo.Session) data;
 
 					sessionExpire = session.getLastAccessed() + SESSIONTIMEOUT;
-//					currentTime - sessionExpire < (5 * 60)
+
 					if (currentTime - sessionExpire > 0) {
 						int userID = session.getUserId();
-//						ps = con.prepareStatement("delete from Session where Session_id=?");
-//						ps.setString(1, val.getString(1));
-//						ps.executeUpdate();
-
-//						this.qg.delete(tables.Session).where(querybuilderconfig.TableSchema.Session.Session_id,
-//								Operation.Equal, session.getSessionId()).execute();
 
 						this.qg.delete(session).execute(userID);
 
@@ -146,10 +209,7 @@ public class UpdateAndDeleteQueue implements Runnable {
 		} catch (Exception e) {
 
 			System.out.println(e);
-			logger.logError("Servletlistener", "SessionTableCleaner", "Error updating the session table: ", e);
-		} finally {
-
-//			qg.closeConnection();
+			logger.logError("UpdateAndDeleteQueue", "SessionTableCleaner", "Error Deleting the session table: ", e);
 		}
 
 	}

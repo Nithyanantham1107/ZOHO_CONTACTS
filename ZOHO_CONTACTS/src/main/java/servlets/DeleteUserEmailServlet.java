@@ -16,6 +16,7 @@ import dboperation.UserOperation;
 import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -76,7 +77,7 @@ public class DeleteUserEmailServlet extends HttpServlet {
 				email.setID(emailID);
 				email.setEmailID(userData.getID());
 
-				if (userOperation.deleteUserEmail(email, userData.getID())) {
+				if (UserOperation.deleteUserEmail(email, userData.getID())) {
 
 					logger.logInfo("DeleteUserEmailServlet", "doPost", "email deleted successfully: " + emailID);
 					response.sendRedirect("changePassword.jsp");
@@ -90,7 +91,7 @@ public class DeleteUserEmailServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Unable to delete Email because specified Email ID is null");
 				request.getRequestDispatcher("changePassword.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException e) {
 			logger.logError("DeleteUserEmailServlet", "doPost", "Exception occurred while deleting Email", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("changePassword.jsp").forward(request, response);

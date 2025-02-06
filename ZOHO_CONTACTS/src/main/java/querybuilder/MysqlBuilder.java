@@ -112,7 +112,6 @@ public class MysqlBuilder implements QueryBuilder {
 		opType = OpType.INSERT;
 		isValid = true;
 		query.setLength(0);
-
 		insertOperation.insert(table, query, parameters);
 		newData = table;
 		return this;

@@ -3,6 +3,8 @@ package dboperation;
 import java.sql.SQLException;
 import java.time.Instant;
 
+import com.google.gson.Gson;
+
 import dbpojo.Category;
 import dbpojo.CategoryRelation;
 import dbpojo.ContactDetails;
@@ -11,15 +13,19 @@ import dbpojo.ContactPhone;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
 
 public class TestOperation {
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) throws SQLException, DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		qg.openConnection();
+		
+		
+		Gson gson=new Gson();
 
 //		ContactDetails contact=new ContaSystectDetails();
 //		contact.setID(68);
@@ -57,6 +63,8 @@ public class TestOperation {
 		
 
 //		EmailUser email = new EmailUser();
+		qg.closeConnection();
+
 //		email.setID(22);
 //		email.setEmailID(76);
 //		email.setEmailID(user.getID());
@@ -66,8 +74,6 @@ public class TestOperation {
 //		email.setCreatedAt(user.getCreatedAt());
 //		user.setEmail(email);
 //		qg.update(email).execute(76);
-		qg.closeConnection();
-
 //		qg.insert(user).execute(-1);
 
 //	Userdata dummy=  (Userdata)	qg.select(user).executeQuery().getFirst();

@@ -20,6 +20,7 @@ import dbpojo.ContactDetails;
 import dbpojo.ContactMail;
 import dbpojo.ContactPhone;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -84,7 +85,7 @@ public class ChangeUserPasswordServlet extends HttpServlet {
 				String oldPassword = request.getParameter("password");
 				String newPassword = request.getParameter("Newpassword");
 
-				if (userOp.userPasswordChange(oldUser, oldPassword, newPassword, userData.getID())) {
+				if (UserOperation.userPasswordChange(oldUser, oldPassword, newPassword, userData.getID())) {
 
 					response.sendRedirect("changePassword.jsp");
 					logger.logInfo(" ChangeUserPasswordServlet", "doPost", "User Password Update successfully.");
@@ -100,7 +101,7 @@ public class ChangeUserPasswordServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Input fields should not be empty!");
 				request.getRequestDispatcher("changePassword.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException e) {
 			logger.logError(" ChangeUserPasswordServlet", "doPost", "Exception occurred during Password Update", e);
 			request.setAttribute("errorMessage", "An error occurred while processing your request.");
 			request.getRequestDispatcher("changePassword.jsp").forward(request, response);

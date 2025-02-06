@@ -19,6 +19,7 @@ import querybuilderconfig.TableSchema.Contact_phone;
 import querybuilderconfig.TableSchema.Email_user;
 import querybuilderconfig.TableSchema.JoinType;
 import querybuilderconfig.TableSchema.Login_credentials;
+import querybuilderconfig.TableSchema.Oauth;
 import querybuilderconfig.TableSchema.Operation;
 import querybuilderconfig.TableSchema.user_data;
 
@@ -60,13 +61,16 @@ public class SelectJoinerOperation {
 		if (table instanceof Userdata) {
 
 			Userdata userData = (Userdata) table;
-			if ( userData.getLoginCredentials() != null &&  userData.getLoginCredentials() != null) {
+			if (userData.getLoginCredentials() != null && userData.getLoginCredentials() != null) {
 
 				join(query, JoinType.left, user_data.user_id, Operation.Equal, Login_credentials.log_id);
 
 			}
-			if (  userData.getallemail() != null && userData.getallemail().size() != 0) {
+			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
 				join(query, JoinType.left, user_data.user_id, Operation.Equal, Email_user.em_id);
+			}
+			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
+				join(query, JoinType.left, user_data.user_id, Operation.Equal, Oauth.userID);
 			}
 
 		} else if (table instanceof Category) {

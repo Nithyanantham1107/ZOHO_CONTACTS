@@ -1,3 +1,4 @@
+<%@page import="dbpojo.Oauth"%>
 <%@page import="dboperation.SessionOperation"%>
 <%@page import="dbpojo.ContactDetails"%>
 <%@page import="java.util.ArrayList"%>
@@ -40,21 +41,18 @@
 
 
 	<%
-	SessionOperation so = new SessionOperation();
-	CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
 	if (cachemodel == null) {
 		System.out.println("hello hi");
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("Login.jsp");
 		return;
 
 	}
 
 	Userdata ud = cachemodel.getUserData();
 
-	UserContactOperation userContactOperation = new UserContactOperation();
-
-	ArrayList<ContactDetails> userContacts = userContactOperation.viewAllUserContacts(ud.getID());
+	ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 	%>
 
 	<section id="header">
@@ -72,7 +70,7 @@
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> ChangePassword</a></li>
+				<li><a href="changePassword.jsp"> More</a></li>
 				<li><a href="/login"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
@@ -93,6 +91,64 @@
 		<section id="tableContainer">
 			<section id="header">
 
+				<%
+				if (ud.getallOauth().size() > 0) {
+
+					Oauth oauth = ud.getallOauth().getFirst();
+
+					if (oauth.getID() == -1) {
+						System.out.println("here the Oauth data IDis" + oauth.getID());
+						System.out.println("here the Oauth data is" + oauth.getEmail());
+				%>
+				<form action="/oauthdirector" method="post">
+					<input type="submit" value="Sync with Google"
+						class="glowgreenbutton" />
+				</form>
+
+
+				<%
+				} else {
+
+				if (oauth.getSyncState()) {
+				%>
+
+
+
+				<form action="/syncstate" method="post">
+					<input type="hidden" name="operation" value="syncoff"
+						class="glowbutton" /> <input type="hidden" name="ID"
+						value="<%=oauth.getID()%>" class="glowbutton" /> <input
+						type="submit" value="Sync off" class="glowyellowbutton" />
+				</form>
+
+				<%
+				} else {
+				%>
+				<form action="/syncstate" method="post">
+
+
+					<input type="hidden" name="operation" value="syncon" /> <input
+						type="hidden" name="ID" value="<%=oauth.getID()%>" /> <input
+						type="submit" value="Sync On" class="glowgreenbutton" />
+				</form>
+
+				<%
+				}
+				%>
+
+				<form action="/syncstate" method="post">
+
+					<input type="hidden" name="operation" value="deletesync" /> <input
+						type="hidden" name="ID" value="<%=oauth.getID()%>" /> <input
+						type="submit" value="Delete Sync" class="glowredbutton" />
+				</form>
+				<%
+				}
+				}
+				%>
+
+
+
 				<section id="tableHeader">
 					<h1>Contact</h1>
 
@@ -105,7 +161,7 @@
 					<form action="Add_contacts.jsp">
 
 
-						<input type="submit" class="glowbutton" value="Addcontact" />
+						<input type="submit" class="glowgreenbutton" value="Addcontact" />
 					</form>
 				</section>
 
@@ -161,7 +217,7 @@
 
 								<form action="/GetAndUpdatecontact" method="post">
 									<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
-									<input type="submit" class="glowbutton" value="Update" />
+									<input type="submit" class="glowyellowbutton" value="Update" />
 								</form>
 							</td>
 							<td>
@@ -170,7 +226,7 @@
 
 								<form action="/deletecontact" method="post">
 									<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
-									<input type="submit" class="glowbutton" value="Delete" />
+									<input type="submit" class="glowredbutton" value="Delete" />
 								</form>
 							</td>
 						</tr>

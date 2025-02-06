@@ -1,163 +1,199 @@
 <%@page import="dboperation.SessionOperation"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 
 
 <%
-
-response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
-
-
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+<meta charset="UTF-8">
+<title>Login</title>
 
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
 
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
 
-        label {
-            margin-top: 10px;
-            font-weight: bold;
-            display: block;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+	rel="stylesheet">
 
-        input[type="text"],
-        input[type="password"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-top: 5px;
-        }
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+	integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        input[type="submit"] {
-            padding: 10px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-            font-size: 16px;
-        }
+<style>
+body {
 
-        input[type="submit"]:hover {
-            background-color: white;
-            color: black;
-        }
+	font-family: Arial, sans-serif;
+	background-color: #272727;
+	display: flex;
+	color:black;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0;
+}
+form{
+background-color:white;
+	color:black;
+}
 
-        .back-btn {
-            background-color: #ccc;
-            margin-top: 10px;
-        }
+.container {
+	background-color:white;
+	color:black;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	width: 300px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 
-        .back-btn:hover {
-            background-color: #bbb;
-        }
+h2 {
 
-        #prompt,#prompt1 {
-          
-            display: none;
-            color: #888;
-            font-size: 12px;
-            margin-top: 5px;
-            margin-top: 10px;
-        }
-      
-        
-    </style>
-    
-    
-    
-    <script>
-        <% if (request.getAttribute("errorMessage") != null) { %>
-            alert("<%= request.getAttribute("errorMessage") %>");
-        <% } %>
-    </script>
+background-color:white;
+	color:black;
+	margin-bottom: 20px;
+
+}
+
+
+
+label {
+
+background-color:white;
+	color:black;
+
+	margin-top: 10px;
+	font-weight: bold;
+	display: block;
+}
+
+input[type="text"], input[type="password"] {
+	width: 230px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin-top: 5px;
+	background-color:white;
+	color:black;
+}
+
+input[type="submit"] {
+	padding: 10px;
+	
+	background-color: #FFE400;
+	color: black;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 100%;
+	margin-top: 15px;
+	font-size: 16px;
+}
+
+input[type="submit"]:hover {
+	background-color: white;
+	color: black;
+}
+
+.back-btn {
+	background-color: #ccc;
+	margin-top: 10px;
+}
+
+.back-btn:hover {
+	background-color: #bbb;
+}
+
+#prompt, #prompt1 {
+	display: none;
+	color: black;
+	font-size: 12px;
+	margin-top: 5px;
+
+}
+section{
+	background-color:white;
+	color:black;
+	
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+</style>
+
+
+
+<script>
+        <%if (request.getAttribute("errorMessage") != null) {%>
+            alert("<%=request.getAttribute("errorMessage")%>
+	");
+<%}%>
+	
+</script>
 </head>
 <body>
- <%
-  SessionOperation so=new SessionOperation();
-  String sessionid=so.getCustomSessionId(request.getCookies());
-  if(sessionid !=null ){
-	  
-	  response.sendRedirect("Dashboard.jsp");
-  }
-  
-  
-  
-  %>
-    <div class="container">
-        <h2>Login </h2>
-        <form action="/login" method="post">
-            <label for="username">Username</label>
-            <input type="text" id="user" name="username"  autocomplete="off"   required />
-      <span id="prompt1">  do not use special character for username</span>
-            <label for="password">Password</label>
-            <input type="password" id="pass" name="password" autocomplete="off" required />
-            <span id="prompt"> Password must be 8 - 72 characters </span>
-          <div  class="login_button"> <input type="submit" value="Login" />
-          
-          </div>
-        </form>
-        <form action="/index.jsp" method="get">
-            <input type="submit" value="Back" class="back-btn" />
-        </form>
-    </div>
-    
-    <script>
-       
-    
-    
-       const password = document.getElementById('pass');
-        const prompt = document.getElementById('prompt');
+	<%
+	
+	String sessionid = SessionOperation.getCustomSessionId(request.getCookies());
+	if (sessionid != null) {
 
-        password.addEventListener('focus', function() {
-            prompt.style.display = 'block'; 
-        });
+		response.sendRedirect("home.jsp");
+	}
+	%>
+	<div class="container">
+		<h2 >Login</h2>
+		<form action="/login" method="post">
+			<label for="username">Username</label> <input type="text" id="user"
+				name="username" autocomplete="off" required /> <span id="prompt1">
+				do not use special character for username</span> <label for="password">Password</label>
+			<input type="password" id="pass" name="password" autocomplete="off"
+				required /> <span id="prompt"> Password must be 8 - 72
+				characters </span>
+			<div class="login_button">
+				<input type="submit" value="Login" />
 
-        password.addEventListener('blur', function() {
-            prompt.style.display = 'none'; 
-        });
-        
-        
-        const user= document.getElementById('user');
-        const prompt1 = document.getElementById('prompt1');
+			</div>
+		</form>
 
-        user.addEventListener('focus', function() {
-            prompt1.style.display = 'block'; 
-        });
+<section id="loginfooter">
+<p>don't have an account?</p><a href="Signup.jsp">Create account</a>
+</section>
 
-        user.addEventListener('blur', function() {
-            prompt1.style.display = 'none'; 
-        });
-    </script>
+		
+	</div>
+
+	<script>
+		const password = document.getElementById('pass');
+		const prompt = document.getElementById('prompt');
+
+		password.addEventListener('focus', function() {
+			prompt.style.display = 'block';
+		});
+
+		password.addEventListener('blur', function() {
+			prompt.style.display = 'none';
+		});
+
+		const user = document.getElementById('user');
+		const prompt1 = document.getElementById('prompt1');
+
+		user.addEventListener('focus', function() {
+			prompt1.style.display = 'block';
+		});
+
+		user.addEventListener('blur', function() {
+			prompt1.style.display = 'none';
+		});
+	</script>
 </body>
 </html>

@@ -16,6 +16,7 @@ import dboperation.UserOperation;
 import dbpojo.Category;
 import dbpojo.CategoryRelation;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -73,9 +74,7 @@ public class CreateGroupServlet extends HttpServlet {
 					Category category = new Category();
 					String sessionid = (String) request.getAttribute("sessionid");
 					CacheModel cachemodel = CacheData.getCache(sessionid);
-
 					Userdata userData = cachemodel.getUserData();
-
 //					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 
 					category.setCategoryName(request.getParameter("groupName"));
@@ -102,10 +101,10 @@ public class CreateGroupServlet extends HttpServlet {
 
 //                    ug.setcontactid(contactid);
 
-					if (userGroupOperation.createGroup(category,userData.getID())) {
-						ArrayList<Category> usergroup = userGroupOperation.viewAllGroup(userData.getID());
+					if (UserGroupOperation.createGroup(category,userData.getID())) {
+						ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(userData.getID());
 						if (usergroup != null) {
-							cachemodel.setUserGroup(usergroup);
+//							cachemodel.setUserGroup(usergroup);
 
 							logger.logInfo("CreateGroupServlet", "doPost",
 									"Group created successfully: " + category.getCategoryName());
@@ -169,16 +168,18 @@ public class CreateGroupServlet extends HttpServlet {
 				
 //					ug.set(Integer.parseInt(request.getParameter("groupdata")));
 
-					if (userGroupOperation.updateUserGroup(category,userData.getID())) {
-						ArrayList<Category> usergroup = userGroupOperation.viewAllGroup(userData.getID());
+					if (UserGroupOperation.updateUserGroup(category,userData.getID())) {
+						ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(userData.getID());
 						if (usergroup != null) {
-							cachemodel.setUserGroup(usergroup);
+//							cachemodel.setUserGroup(usergroup);
 
 							logger.logInfo("CreateGroupServlet", "doPost",
 									"Group updated successfully: " + category.getCategoryName());
 							response.sendRedirect("Dashboard.jsp");
 						} else {
-							logger.logWarning("CreateGroupServlet", "doPost",
+							logger.logWarning("Create  <form action=\"/index.jsp\" method=\"get\">\n"
+									+ "            <input type=\"submit\" value=\"Back\" class=\"back-btn\" />\n"
+									+ "        </form>GroupServlet", "doPost",
 									"Failed to view all groups for user ID: " + userData.getID());
 							request.setAttribute("errorMessage", "Failed to view all groups of the user");
 							request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
@@ -194,7 +195,7 @@ public class CreateGroupServlet extends HttpServlet {
 					request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
 				}
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException e) {
 			logger.logError("CreateGroupServlet", "doPost", "Exception occurred", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("groups.jsp").forward(request, response);

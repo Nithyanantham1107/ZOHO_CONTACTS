@@ -11,8 +11,6 @@ public class WhereQueryGenerater {
 
 	public static void executeQueryWhereBuilder(Table newData, StringBuilder query, Queue<Object> parameters) {
 
-		
-
 		if (newData.getID() != -1) {
 			query.append(" WHERE");
 			query.append(" " + newData.getTableName() + "." + newData.getPrimaryIDName() + " "
@@ -20,18 +18,15 @@ public class WhereQueryGenerater {
 
 			parameters.offer(newData.getID());
 		} else {
-			
-			
-			Queue<String> column=new LinkedList<String>();
 
-			for(Map.Entry<String, Object> data: newData.getSettedData().entrySet()) {
+			Queue<String> column = new LinkedList<String>();
+
+			for (Map.Entry<String, Object> data : newData.getSettedData().entrySet()) {
 				column.add(data.getKey());
 				parameters.add(data.getValue());
-				
-				
+
 			}
-			
-			
+
 //			PojoDataContainer pojoDataContainer = PojoDataConversion.convertPojoData(newData);
 
 			if (column.size() != 0) {
@@ -39,8 +34,7 @@ public class WhereQueryGenerater {
 
 				while (column.size() > 0) {
 
-					query.append(
-							" " + column.poll() + " " + Operation.Equal.getOperation() + "?");
+					query.append(" " + column.poll() + " " + Operation.Equal.getOperation() + "?");
 
 					if (column.size() != 0)
 						query.append(" and");

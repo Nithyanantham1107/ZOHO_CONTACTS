@@ -59,12 +59,16 @@ p {
 }
 
 section {
-	diplay: flex;
-	justify-content: space-between;
+background-color:white;
+	
 	margin-bottom: 20px;
+	width:100%;
+
 }
 
 label {
+color:black;
+background-color:white;
 	font-weight: bold;
 	display: block;
 	margin-bottom: 8px;
@@ -73,6 +77,8 @@ label {
 input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
 	select {
 	width: 100%;
+	color:black;
+	background-color:white;
 	padding: 10px;
 	margin-bottom: 12px;
 	border: 1px solid #ddd;
@@ -82,6 +88,7 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="password
 
 input[type="checkbox"], input[type="radio"] {
 	margin-right: 10px;
+		width: 100%;
 }
 
 .name-inputs {
@@ -132,12 +139,11 @@ a:hover {
 
 
 	<%
-	SessionOperation so = new SessionOperation();
-	CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
 	if (cachemodel == null) {
 		System.out.println("hello hi");
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("Login.jsp");
 		return;
 
 	}
@@ -160,7 +166,7 @@ a:hover {
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> ChangePassword</a></li>
+				<li><a href="changePassword.jsp"> More</a></li>
 				<li><a href="/login"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
@@ -175,6 +181,11 @@ a:hover {
 
 
 	<section id="main">
+	
+	
+	
+	
+	
 
 		<div class="form-container">
 			<form action="/userupdate" method="POST" id="registration-form">
@@ -196,13 +207,13 @@ a:hover {
 
 
 						<%
-						int primary=-1;
+						int primary = -1;
 						if (ud.getallemail() != null && ud.getallemail().size() > 0) {
 
 							for (EmailUser data : ud.getallemail()) {
 
 								if (data.getIsPrimary()) {
-									primary=data.getID();
+							primary = data.getID();
 						%>
 						<option value="<%=data.getEmail()%>" selected><%=data.getEmail()%></option>
 
@@ -219,7 +230,7 @@ a:hover {
 						}
 						}
 						%>
-						
+
 
 
 					</select>
@@ -251,21 +262,21 @@ a:hover {
 
 
 				</section>
-				
-				
-				
-					<section>
+
+
+
+				<section>
 
 					<label for="username">UserName</label> <input type="text"
-						 name="username" value="<%=ud.getLoginCredentials().getUserName()%>" required>
- <input type="hidden"
-						 name="emailID" value="<%=primary%>" required>
-						  <input type="hidden"
-						 name="logID" value="<%=ud.getLoginCredentials().getID()%>" required>
+						name="username"
+						value="<%=ud.getLoginCredentials().getUserName()%>" required>
+					<input type="hidden" name="emailID" value="<%=primary%>" required>
+					<input type="hidden" name="logID"
+						value="<%=ud.getLoginCredentials().getID()%>" required>
 
 				</section>
 
-				<button type="submit" class="glowbutton">Update</button>
+				<button type="submit" class="glowyellowbutton">Update</button>
 			</form>
 
 

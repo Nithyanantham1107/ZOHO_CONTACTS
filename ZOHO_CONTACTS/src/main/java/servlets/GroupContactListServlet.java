@@ -14,6 +14,7 @@ import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import dbpojo.Category;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheModel;
 
@@ -71,27 +72,26 @@ public class GroupContactListServlet extends HttpServlet {
 				String method = request.getParameter("method");
 				int groupID = Integer.parseInt(request.getParameter("groupid"));
 				SessionOperation so = new SessionOperation();
-				CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+				CacheModel cachemodel = SessionOperation
+						.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 				Userdata ud = cachemodel.getUserData();
 
-				Category group = userGroupOperation.getSpecificGroup(groupID, ud.getID());
+				Category group = UserGroupOperation.getSpecificGroup(groupID, ud.getID());
 
 				request.setAttribute("group", group);
-				
+
 				logger.logInfo("UserSpecificContactRetrievalServlet", "doPost",
 						"Retrieved specific contact info for Contact ID: " + groupID);
 
 				if (method.equals("view")) {
-					
+
 					request.getRequestDispatcher("groupviewcontact.jsp").forward(request, response);
-					
-				}else {
-					
-					request.getRequestDispatcher("groupcontactadd.jsp").forward(request, response);	
+
+				} else {
+
+					request.getRequestDispatcher("groupcontactadd.jsp").forward(request, response);
 				}
-				
-					
-				
+
 			} else {
 				logger.logWarning("UserSpecificContactRetrievalServlet", "doPost", "Contact ID parameter is missing.");
 				request.setAttribute("errorMessage", "Contact ID parameter is missing.");
@@ -99,7 +99,7 @@ public class GroupContactListServlet extends HttpServlet {
 			}
 		} catch (
 
-		Exception e) {
+		DBOperationException e) {
 			logger.logError("UserSpecificContactRetrievalServlet", "doPost",
 					"Exception occurred while retrieving specific contact.", e);
 			request.setAttribute("errorMessage", e.getMessage());

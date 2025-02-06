@@ -15,6 +15,7 @@ import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
 import dbpojo.Category;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -70,16 +71,17 @@ public class DeleteUserGroupServlet extends HttpServlet {
 				int groupid = Integer.parseInt(request.getParameter("groupid"));
 				CacheModel cachemodel = CacheData.getCache(sessionid);
 
-				Category category = cachemodel.getUserGroup(groupid);
+				Category category = new Category();
+				category.setID(groupid);
 				// Attempt to delete the user group
-				if (userGroupOperation.deleteUserGroup(category, cachemodel.getUserData().getID())) {
+				if (UserGroupOperation.deleteUserGroup(category, cachemodel.getUserData().getID())) {
 
 //                      CacheModel cachemodel=CacheData.getCache(sessionid);
 
-					Userdata userData = cachemodel.getUserData();
-					ArrayList<Category> userGroups = userGroupOperation.viewAllGroup(userData.getID());
+//					Userdata userData = cachemodel.getUserData();
+//					ArrayList<Category> userGroups = UserGroupOperation.viewAllGroup(userData.getID());
 
-					cachemodel.setUserGroup(userGroups);
+//					cachemodel.setUserGroup(userGroups);
 					logger.logInfo("DeleteUserGroupServlet", "doPost", "User group deleted successfully: " + groupid);
 					response.sendRedirect("groups.jsp");
 				} else {
@@ -92,7 +94,7 @@ public class DeleteUserGroupServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Group ID is null in delete post request");
 				request.getRequestDispatcher("groups.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException e) {
 			logger.logError("DeleteUserGroupServlet", "doPost", "Exception occurred while deleting user group", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("groups.jsp").forward(request, response);

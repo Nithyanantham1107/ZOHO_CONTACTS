@@ -13,6 +13,7 @@ import dbpojo.ContactMail;
 import dbpojo.ContactPhone;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
+import dbpojo.Oauth;
 import dbpojo.Table;
 import dbpojo.Userdata;
 import querybuilder.QueryExecuter;
@@ -61,7 +62,9 @@ public class DeleteOperation {
 
 		if (
 
-		oldData != null && !oldData.getTableName().equals(tables.Audit_log.getTableName())) {
+		oldData != null && (!oldData
+				.getTableName().equals(tables.Audit_log.getTableName())
+				&& !oldData.getTableName().equals(tables.Session.getTableName()))) {
 
 			if (AuditLogOperation.audit(qg, oldData.getID(), oldData, null, OpType.DELETE, userID) == null) {
 				System.out.println("Table" + oldData.getTableName() + "  is not audited");
@@ -83,11 +86,14 @@ public class DeleteOperation {
 			Category category = new Category();
 			dbpojo.Session session = new dbpojo.Session();
 			LoginCredentials login = new LoginCredentials();
+			Oauth oauth=new Oauth();
 			email.setEmailID(userID);
 			login.setUserID(userData.getID());
 			contact.setUserID(userData.getID());
 			category.setCreatedBY(userData.getID());
 			session.setUserId(userData.getID());
+			oauth.setUserID(userID);
+			auditall(qg, oauth);
 			auditOne(qg, login);
 			auditall(qg, email);
 			auditall(qg, category);

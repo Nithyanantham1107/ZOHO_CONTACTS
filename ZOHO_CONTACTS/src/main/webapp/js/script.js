@@ -12,7 +12,7 @@ const viewsidebars = document.getElementById('viewsidebar');
 createGroupButton.onclick = function() {
 
 
-	createsidebars.style.display = "block";
+	createsidebars.style.display = "flex";
 	checkboxes.forEach(checkbox => {
 		checkbox.checked = false;
 	});
@@ -127,7 +127,7 @@ function groupView(e) {
 	formData.append("groupid", groupID);
 	formData.append("method", method);
 
-	viewsidebars.style.display = "block";
+	viewsidebars.style.display = "flex";
 
 	fetch('http://localhost:8080/grouplist', {
 		method: 'POST',

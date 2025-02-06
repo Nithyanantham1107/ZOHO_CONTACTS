@@ -15,6 +15,7 @@ import dboperation.UserOperation;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -97,10 +98,10 @@ int userId=userSessionData.getID();
 				userData.setPhoneno(request.getParameter("phone"));
 				userData.setTimezone(request.getParameter("timezone"));
 
-				state = userOperation.userprofileUpdate(userData,emailUser);
+				state = UserOperation.userprofileUpdate(userData,emailUser);
 
 				if (state) {
-					cachemodel.setUserData(userOperation.getUserData(userId));
+					cachemodel.setUserData(UserOperation.getUserData(userId));
 
 					response.sendRedirect("profile.jsp");
 					logger.logInfo("UserProfileServlet", "doPost",
@@ -119,7 +120,7 @@ int userId=userSessionData.getID();
 
 		} catch (
 
-		Exception e) {
+				DBOperationException  e) {
 			logger.logError("UserProfileServlet", "doPost", "Exception occurred while processing user profile.", e);
 			request.setAttribute("errorMessage", e.getMessage());
 			request.getRequestDispatcher("profile.jsp").forward(request, response);

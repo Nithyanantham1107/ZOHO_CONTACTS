@@ -2,6 +2,22 @@ package querybuilderconfig;
 
 public class TableSchema {
 
+	
+	
+	public enum OauthProvider {
+
+		Google,Facebook,Microsoft,LinkedIn;
+		
+		
+	}
+	
+	public enum SyncState{
+		
+		
+		Enabled,Disabled;
+	}
+	
+	
 	public enum Statement {
 
 		RETURN_GENERATED_KEYS;
@@ -92,7 +108,7 @@ public class TableSchema {
 	}
 
 	public enum Contact_details implements Table {
-		user_id, contact_id, First_name, Middle_name, Last_name, gender, Address, created_time, modified_time;
+		user_id, contact_id, First_name, Middle_name, Last_name, gender, Address, created_time, modified_time,Oauth_contactID,OauthID ;
 
 		public String getTableName() {
 			return "Contact_details";
@@ -189,7 +205,9 @@ public class TableSchema {
 		}
 
 	}
-
+	
+	
+	
 	public enum Audit_log implements Table {
 
 		ID, previous_state, changed_state, table_name, operation, row_key, created_at, created_by;
@@ -207,6 +225,23 @@ public class TableSchema {
 		
 	}
 
+	public enum Oauth implements Table {
+
+		ID, userID, Oauth_provider,  sync_state,refresh_token,access_token,email,expiry_time,created_time,modified_time;
+
+		
+		public String getTableName() {
+			return "Oauth";
+		}
+
+		public String getPrimaryKey() {
+
+			return "ID";
+		}
+		
+		
+	}
+
 	public enum tables implements Table {
 
 		Category("Category", "Category_id"), Category_relation("Category_relation", "ID"),
@@ -214,7 +249,8 @@ public class TableSchema {
 		Contact_phone("Contact_phone", "ID"), Email_user("Email_user", "ID"),
 		Login_credentials("Login_credentials", "ID"), Session("Session", "ID"),
 		user_data("user_data", "user_id"),
-		Audit_log("Audit_log", "ID");
+		Audit_log("Audit_log", "ID"),
+		Oauth("Oauth", "ID");
 
 		private final String tableName;
 		private final String primarykey;

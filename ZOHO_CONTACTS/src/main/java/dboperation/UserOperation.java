@@ -7,15 +7,17 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
+import dbpojo.Oauth;
 import dbpojo.Table;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
 
 public class UserOperation {
 
-	private LoggerSet logger = new LoggerSet();
+	private static LoggerSet logger = new LoggerSet();
 
 	/**
 	 * Creates a new user in the database.
@@ -23,89 +25,28 @@ public class UserOperation {
 	 * @param userdata the UserData object containing user details
 	 * @return the created UserData object or null if an error occurs
 	 * @throws SQLException if a database access error occurs
+	 * @throws DBOperationException 
 	 */
-	public Userdata createUser(Userdata userdata) throws SQLException {
+	public static  Userdata createUser(Userdata userdata) throws  DBOperationException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
 
 		try {
 			String password = BCrypt.hashpw(userdata.getPassword(), BCrypt.gensalt());
-//			con.setAutoCommit(false);
 
 			qg.openConnection();
 			userdata.setPassword(password);
 
-			// Insert user data
-//			PreparedStatement ps = con.prepareStatement(
-//					"INSERT INTO user_data (Name, password, phone_no, address, timezone) VALUES (?, ?, ?, ?, ?);",
-//					PreparedStatement.RETURN_GENERATED_KEYS);
-//			ps.setString(1, data.getName());
-//			ps.setString(2, password);
-//			ps.setString(3, data.getPhoneno());
-//			ps.setString(4, data.getAddress());
-//			ps.setString(5, data.getTimezone());
-//			int val = ps.executeUpdate();
-
-//			 val=qg.insert(tables.user_data, user_data.Name,user_data.password,user_data.phone_no,user_data.address,user_data.timezone,user_data.created_time,user_data.modified_time)
-//					.valuesInsert(userdata.getName(),userdata.getPassword(),userdata.getPhoneno(),userdata.getAddress(),userdata.getTimezone(),userdata.getCreatedAt(),userdata.getModifiedAt()).execute(Statement.RETURN_GENERATED_KEYS);
 
 			val = qg.insert(userdata).execute(-1);
 
 			if (val[0] == 0) {
-//				con.rollback();
+
 				qg.rollBackConnection();
 				logger.logError("UserOperation", "createUser", "Failed to insert user data", null);
 				return null;
 			}
-
-//			ResultSet id = ps.getGeneratedKeys();
-//			if (val[1] !=-1){
-//				 genUserId = val[1];
-//				
-
-			// Insert login credentials
-//				ps = con.prepareStatement("INSERT INTO Login_credentials VALUES (?, ?);");
-//				ps.setInt(1, genUserId);
-//				ps.setString(2, data.getUserName());
-//				val = ps.executeUpdate();
-//				 LoginCredentials loginCredential=userdata.getLoginCredentials();
-//				userdata.getLoginCredentials().setUserID(genUserId);
-//				val=qg.insert(tables.Login_credentials,Login_credentials.log_id,Login_credentials.username,Login_credentials.created_time,Login_credentials.modified_time)
-//						.valuesInsert(loginCredential.getUserId(),loginCredential.getUserName(),loginCredential.getCreatedAt(),loginCredential.getModifiedAt()).execute();
-//
-//				if (val[0] == 0) {
-//					con.rollback();
-//					logger.logError("UserOperation", "createUser", "Failed to insert login credentials", null);
-//					return null;
-//				}
-
-			// Insert email data
-//				ps = con.prepareStatement("INSERT INTO Email_user VALUES (?, ?, ?);");
-//				ps.setInt(1, genUserId);
-//				ps.setString(2, data.getCurrentEmail());
-//				ps.setBoolean(3, true);
-//				val = ps.executeUpdate();
-//				for(EmailUser email :userdata.getallemail()) {
-//					
-//					System.out.println("Email data is"+genUserId+"  "+email.getEmail()+" "+email.getIsPrimary());
-//					
-//					email.setEmailID(genUserId);
-//					val=qg.insert(tables.Email_user,Email_user.em_id,Email_user.email,Email_user.is_primary,Email_user.created_time,Email_user.modified_time)
-//							.valuesInsert(email.getEmailId(),email.getEmail(),email.getIsPrimary(),email.getCreatedAt(),email.getModifiedAt())
-//							.execute();
-//					
-//				}
-
-//				if (val[0] == 0) {
-////					con.rollback();
-//					qg.rollBackConnection();
-//					logger.logError("UserOperation", "createUser", "Failed to insert email data", null);
-//					return null;
-//				}
-//				userdata.setUserId(genUserId);
-//			}
-//			con.commit();
 			qg.commit();
 			logger.logInfo("UserOperation", "createUser",
 					"User created successfully: " + userdata.getLoginCredentials().getUserName());
@@ -113,18 +54,18 @@ public class UserOperation {
 
 		} catch (Exception e) {
 			logger.logError("UserOperation", "createUser", "Exception occurred: " + e.getMessage(), e);
-//			con.rollback(); // Ensure rollback in case of exception
-
 			qg.rollBackConnection();
+			
+			throw new DBOperationException(e.getMessage());
 		} finally {
-//			con.close();
+
 			qg.closeConnection();
 		}
-		return null;
+
 	}
 
-	public boolean addEmail(EmailUser email, int userID) throws SQLException {
-//		Connection con = DBconnection.getConnection();
+	public static boolean addEmail(EmailUser email, int userID) throws  DBOperationException {
+
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
 
@@ -149,11 +90,13 @@ public class UserOperation {
 			logger.logError("UserOperation", "addEmailr", "Exception occurred: " + e.getMessage(), e);
 
 			qg.rollBackConnection();
+			
+			throw new DBOperationException(e.getMessage());
 		} finally {
 
 			qg.closeConnection();
 		}
-		return false;
+	
 	}
 
 	/**
@@ -162,8 +105,9 @@ public class UserOperation {
 	 * @param ud the UserData object containing login details
 	 * @return the verified UserData object or null if verification fails
 	 * @throws SQLException if a database access error occurs
+	 * @throws DBOperationException 
 	 */
-	public Userdata isUser(String userName, String password) throws SQLException {
+	public static Userdata isUser(String userName, String password) throws  DBOperationException {
 //		String[] email = new String[5];
 //		Connection con = DBconnection.getConnection();
 
@@ -294,11 +238,14 @@ public class UserOperation {
 
 		} catch (Exception e) {
 			logger.logError("UserOperation", "isUser", "Exception occurred: " + e.getMessage(), e);
+	
+			throw new DBOperationException(e.getMessage());
+		
 		} finally {
 //			con.close();
 			qg.closeConnection();
 		}
-		return null;
+		
 	}
 
 	/**
@@ -307,8 +254,9 @@ public class UserOperation {
 	 * @param userData the UserData object containing updated details
 	 * @return true if the update was successful, false otherwise
 	 * @throws SQLException if a database access error occurs
+	 * @throws DBOperationException 
 	 */
-	public boolean userDataUpdate(Userdata userData, String newPassword) throws SQLException {
+	public static boolean userDataUpdate(Userdata userData, String newPassword) throws  DBOperationException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		Userdata user;
@@ -478,13 +426,15 @@ public class UserOperation {
 //			con.rollback(); // Ensure rollback in case of exception
 
 			qg.rollBackConnection();
+			
+			throw new DBOperationException(e.getMessage());
 		} finally {
 			qg.closeConnection();
 		}
-		return false;
+
 	}
 
-	public boolean userprofileUpdate(Userdata userData,EmailUser emailData) throws SQLException {
+	public static boolean userprofileUpdate(Userdata userData,EmailUser emailData) throws DBOperationException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
@@ -554,10 +504,11 @@ public class UserOperation {
 //			con.rollback(); // Ensure rollback in case of exception
 
 			qg.rollBackConnection();
+			throw new DBOperationException(e.getMessage());
 		} finally {
 			qg.closeConnection();
 		}
-		return false;
+	
 	}
 
 	/**
@@ -566,8 +517,9 @@ public class UserOperation {
 	 * @param userId the ID of the user to delete
 	 * @return true if the deletion was successful, false otherwise
 	 * @throws SQLException if a database access error occurs
+	 * @throws DBOperationException 
 	 */
-	public Boolean deleteUserProfile(Userdata userData) throws SQLException {
+	public static Boolean deleteUserProfile(Userdata userData) throws DBOperationException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int userId = userData.getID();
@@ -592,14 +544,17 @@ public class UserOperation {
 			}
 		} catch (Exception e) {
 			logger.logError("UserOperation", "deleteUserProfile", "Exception occurred: " + e.getMessage(), e);
+		
+			throw new DBOperationException(e.getMessage());
+		
 		} finally {
 
 			qg.closeConnection();
 		}
-		return false;
+	
 	}
 
-	public Boolean deleteUserEmail(EmailUser email, int userID) throws SQLException {
+	public static Boolean deleteUserEmail(EmailUser email, int userID) throws  DBOperationException {
 //		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
@@ -619,11 +574,14 @@ public class UserOperation {
 			}
 		} catch (Exception e) {
 			logger.logError("UserOperation", "deleteUserEmail", "Exception occurred: " + e.getMessage(), e);
+		
+		
+			throw new DBOperationException(e.getMessage());
 		} finally {
 
 			qg.closeConnection();
 		}
-		return false;
+		
 	}
 
 	/**
@@ -632,8 +590,9 @@ public class UserOperation {
 	 * @param userId the ID of the user to retrieve
 	 * @return the UserData object containing user details or null if not found
 	 * @throws SQLException if a database access error occurs
+	 * @throws DBOperationException 
 	 */
-	public Userdata getUserData(int userId) throws SQLException {
+	public static Userdata getUserData(int userId) throws  DBOperationException {
 //		String[] email = new String[5];
 		Userdata user;
 		ArrayList<Table> result = new ArrayList<>();
@@ -653,6 +612,10 @@ public class UserOperation {
 			login.setUserID(userId);
 			EmailUser email = new EmailUser();
 			email.setEmailID(userId);
+			
+			Oauth oauth=new Oauth();
+			oauth.setUserID(userId);
+			user.setOauth(oauth);
 			user.setLoginCredentials(login);
 			user.setEmail(email);
 			result = qg.select(user).executeQuery();
@@ -693,6 +656,9 @@ public class UserOperation {
 			}
 		} catch (Exception e) {
 			logger.logError("UserOperation", "getUserData", "Exception occurred: " + e.getMessage(), e);
+		
+			throw new DBOperationException(e.getMessage());
+		
 		} finally {
 //			con.close();
 			qg.closeConnection();
@@ -700,8 +666,8 @@ public class UserOperation {
 		return null;
 	}
 
-	public boolean userPasswordChange(Userdata oldUser, String oldPassword, String newPassword, int userID)
-			throws SQLException {
+	public static boolean userPasswordChange(Userdata oldUser, String oldPassword, String newPassword, int userID)
+			throws  DBOperationException {
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
 		int[] result = { -1, -1 };
@@ -751,10 +717,13 @@ public class UserOperation {
 			logger.logError("UserOperation", "userPasswordChange", "Exception occurred: " + e.getMessage(), e);
 
 			qg.rollBackConnection();
+			
+			
+			throw new DBOperationException(e.getMessage());
 		} finally {
 			qg.closeConnection();
 		}
-		return false;
+		
 	}
 
 }

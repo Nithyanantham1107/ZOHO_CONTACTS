@@ -42,12 +42,11 @@
 
 
 	<%
-	SessionOperation so = new SessionOperation();
-	CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+		CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 	
 	if (cachemodel == null) {
 		System.out.println("hello hi");
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("Login.jsp");
 		return;
 
 	}
@@ -55,12 +54,11 @@
 	
 	Category group = (Category) request.getAttribute("group");
 	
-	UserGroupOperation userGroupOperation = new UserGroupOperation();
 
 	ArrayList<ContactDetails> contactsInGroup = new ArrayList<>();
 	if(group!=null){
 		
-		contactsInGroup = userGroupOperation.getGroupContactList(group.getID(), ud.getID(), "view");
+		contactsInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "view");
 		
 		
 	}
@@ -86,7 +84,7 @@
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> ChangePassword</a></li>
+				<li><a href="changePassword.jsp"> More</a></li>
 				<li><a href="/login"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
@@ -225,7 +223,7 @@
 									<input type="hidden" value="<%=uc.getID()%>" name="contactID" />
 									
 									<input type="hidden" value="<%=group.getID()%>" name="groupID" />
-									<input type="submit" class="glowbutton" value="remove" />
+									<input type="submit" class="glowredbutton" value="remove" />
 								</form>
 							</td>
 						</tr>

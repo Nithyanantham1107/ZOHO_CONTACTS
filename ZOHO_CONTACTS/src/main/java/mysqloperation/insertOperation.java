@@ -10,6 +10,7 @@ import dbpojo.Category;
 import dbpojo.CategoryRelation;
 import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
+import dbpojo.Oauth;
 import dbpojo.Table;
 import dbpojo.Userdata;
 import querybuilder.QueryExecuter;
@@ -21,22 +22,19 @@ public class insertOperation {
 
 	public static void insert(dbpojo.Table table, StringBuilder query, Queue<Object> parameters) {
 //		this.opType = OpType.INSERT;
-		Queue<String> columns=new LinkedList<String>();
+		
+
+		Queue<String> columns = new LinkedList<String>();
 		Table newData = table;
 		query.append("INSERT INTO " + newData.getTableName() + " ");
 //		PojoDataContainer pojoDataContainer = PojoDataConversion.convertPojoData(newData);
-		
-		
-		for(Map.Entry<String,Object>  data: newData.getSettedData().entrySet()) {
-			
-			
+
+		for (Map.Entry<String, Object> data : newData.getSettedData().entrySet()) {
+
 			columns.add(data.getKey());
 			parameters.add(data.getValue());
-		
-			
+
 		}
-	
-		
 
 //		parameters.addAll(pojoDataContainer.getPojoValue());
 //		parameters = pojoDataContainer.getPojoValue();
@@ -93,7 +91,8 @@ public class insertOperation {
 
 		}
 
-		if ((newData != null && !newData.getTableName().equals(tables.Audit_log.getTableName()))) {
+		if (newData != null && (!newData.getTableName().equals(tables.Audit_log.getTableName())
+				&& !newData.getTableName().equals(tables.Session.getTableName()))) {
 
 			if (AuditLogOperation.audit(qg, id, null, newData, OpType.INSERT, userID) == null) {
 				System.out.println("Table" + newData.getTableName() + "  is not audited");
@@ -116,16 +115,23 @@ public class insertOperation {
 				qg.insert(userData.getLoginCredentials()).execute(userData.getID());
 
 			}
-			if ( userData.getallemail()!=null &&  userData.getallemail().size() != 0) {
+			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
 				for (EmailUser email : userData.getallemail()) {
 					email.setEmailID(userData.getID());
 					qg.insert(email).execute(userData.getID());
 				}
 			}
+			
+			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
+				for (Oauth oauth : userData.getallOauth()) {
+					oauth.setUserID(userID);
+					qg.insert(oauth).execute(userData.getID());
+				}
+			}
 
 		} else if (table instanceof Category) {
 			Category category = (Category) table;
-			if (  category.getCategoryRelation()!=null &&  category.getCategoryRelation().size() != 0) {
+			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
 
 				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
 

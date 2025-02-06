@@ -24,12 +24,13 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 <meta charset="UTF-8">
 <title>Update Contact</title>
 
-
+<link rel="stylesheet" href="css/styles.css" />
 
 <style>
 body {
 	font-family: Arial, sans-serif;
-	background-color: #f4f4f4;
+  color:white;
+	background-color:#272727;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -43,15 +44,29 @@ body {
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	width: 350px;
+	
+	
+	 form{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            
+            background-color:white;
+            }
 }
 
 h2 {
+ background-color:white;
+          color:black;
 	text-align: center;
 	margin-bottom: 20px;
 	color: #333;
 }
 
 label {
+
+ background-color:white;
+          color:black;
 	margin-top: 10px;
 	font-weight: bold;
 	display: block;
@@ -63,14 +78,19 @@ input[type="text"], input[type="email"], textarea {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	margin-top: 5px;
+	margin-bottom:5px;
+	 background-color:white;
+          color:black;
 }
 
 textarea {
 	resize: none; /* Prevent resizing */
 }
 
-input[type="submit"] {
-	padding: 10px;
+
+
+.back-btn {
+padding: 10px;
 	background-color: black;
 	color: white;
 	border: none;
@@ -81,18 +101,9 @@ input[type="submit"] {
 	font-size: 16px;
 }
 
-input[type="submit"]:hover {
-	background-color: white;
-	color: black;
-}
-
-.back-btn {
-	background-color: #ccc;
-	margin-top: 10px;
-}
-
 .back-btn:hover {
-	background-color: #bbb;
+		background-color: white;
+	color: black;
 }
 </style>
 
@@ -114,13 +125,12 @@ input[type="submit"]:hover {
 		<form action="/updatecontact" method="post">
 			<%
 			
-			 SessionOperation so=new SessionOperation();
 			
-			   CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+			   CacheModel alive =  SessionOperation.checkSessionAlive( SessionOperation.getCustomSessionId(request.getCookies()));
 
 				if (alive == null) {
 
-						response.sendRedirect("index.jsp");
+						response.sendRedirect("Login.jsp");
 
 						return;
 
@@ -146,7 +156,7 @@ input[type="submit"]:hover {
 
 
 			<div
-				style="display: flex; flex-direction: row; gap: 10px; align-items: center">
+				style="display: flex; flex-direction: row; gap: 10px; align-items: center;background-color: white;">
 				<%
 				if ("M".equals(uc.getGender())) {
 				%>
@@ -177,7 +187,7 @@ input[type="submit"]:hover {
 				required /> 
 				
 				
-				<input type="submit" value="Update" />
+				<input type="submit" class="glowyellowbutton" value="Update" />
 		</form>
 		<form action="/home.jsp" method="get">
 			<input type="submit" value="Back" class="back-btn" />

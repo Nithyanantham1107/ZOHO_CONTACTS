@@ -10,6 +10,7 @@ import dbpojo.ContactMail;
 import dbpojo.ContactPhone;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
+import dbpojo.Oauth;
 import dbpojo.Session;
 import dbpojo.Table;
 import querybuilderconfig.TableSchema.Category_relation;
@@ -54,7 +55,7 @@ public class JsonConverter {
 
 		}
 
-		json.append("\""+"parent"+"\""+":{");
+		json.append("\"" + "parent" + "\"" + ":{");
 
 		for (int i = 0; i < parentKey.size(); i++) {
 
@@ -89,7 +90,7 @@ public class JsonConverter {
 		return json;
 	}
 
-	public static String[] comparePojoJson(Table previousPojoData, Table currentPojoData,int userID) {
+	public static String[] comparePojoJson(Table previousPojoData, Table currentPojoData, int userID) {
 
 		String[] json = new String[2];
 		ArrayList<String> keysToRemove = new ArrayList<String>();
@@ -108,8 +109,8 @@ public class JsonConverter {
 			oldData.remove(key);
 		}
 
-		json[0] = ConvertPojoToJson(previousPojoData,userID).toString();
-		json[1] = ConvertPojoToJson(currentPojoData,userID).toString();
+		json[0] = ConvertPojoToJson(previousPojoData, userID).toString();
+		json[1] = ConvertPojoToJson(currentPojoData, userID).toString();
 
 		System.out.println("here see convert" + json[0]);
 
@@ -151,6 +152,11 @@ public class JsonConverter {
 			}
 		} else if (table instanceof Session) {
 			if (column.equals(querybuilderconfig.TableSchema.Session.user_id.toString())) {
+
+				return true;
+			}
+		} else if (table instanceof Oauth) {
+			if (column.equals(querybuilderconfig.TableSchema.Oauth.userID.toString())) {
 
 				return true;
 			}

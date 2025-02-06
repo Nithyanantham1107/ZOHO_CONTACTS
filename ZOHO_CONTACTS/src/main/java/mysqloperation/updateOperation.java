@@ -7,13 +7,12 @@ import java.util.Map;
 import java.util.Queue;
 
 import audit.AuditLogOperation;
-import datahelper.PojoDataContainer;
-import datahelper.PojoDataConversion;
 import datahelper.changedStateContainer;
 import dbpojo.Category;
 import dbpojo.CategoryRelation;
 import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
+import dbpojo.Oauth;
 import dbpojo.Table;
 import dbpojo.Userdata;
 import querybuilder.QueryExecuter;
@@ -101,16 +100,23 @@ public class updateOperation {
 				qg.update(userData.getLoginCredentials()).execute(userID);
 
 			}
-			if ( userData.getallemail()!=null &&  userData.getallemail().size() != 0) {
+			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
 				for (EmailUser email : userData.getallemail()) {
 
 					qg.update(email).execute(userID);
 				}
 			}
 
+			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
+				for (Oauth oauth : userData.getallOauth()) {
+
+					qg.update(oauth).execute(userID);
+				}
+			}
+
 		} else if (table instanceof Category) {
 			Category category = (Category) table;
-			if ( category.getCategoryRelation()!=null &&  category.getCategoryRelation().size() != 0) {
+			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
 
 				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
 //					categoryRelation.setCategoryID(category.getID());
@@ -149,9 +155,15 @@ public class updateOperation {
 
 			updateOperation.updateChildTable(qg, newData, userID);
 		}
-		if ((newData != null && !newData.getTableName().equals(tables.Audit_log.getTableName())) ||
+		if ((newData != null && !newData.getTableName().equals(tables.Audit_log.getTableName())) &&
 
-				(oldData != null && !oldData.getTableName().equals(tables.Audit_log.getTableName()))) {
+				(oldData != null && !oldData.getTableName().equals(tables.Audit_log.getTableName()))
+
+				&& (newData != null && !newData.getTableName().equals(tables.Session.getTableName())) &&
+
+				(oldData != null && !oldData.getTableName().equals(tables.Session.getTableName()))
+
+		) {
 
 			if (AuditLogOperation.audit(qg, oldData.getID(), oldData, newData, OpType.UPDATE, userID) == null) {
 				System.out.println("Table" + newData.getTableName() + "  is not audited");

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import querybuilderconfig.TableSchema.Contact_details;
 import querybuilderconfig.TableSchema.tables;
-import querybuilderconfig.TableSchema.user_data;
 
 public class ContactDetails implements Table {
 
@@ -15,19 +14,21 @@ public class ContactDetails implements Table {
 	private String Middlename;
 	private String Lastname;
 	private String gender;
+	private String oauthContactID;
 	private String Address;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 	private ContactMail contactmail;
 	private ContactPhone contactPhone;
+	private int oauth;
 
 	public ContactDetails() {
 
 	}
 
-	public ContactDetails(int userid, int id, String Firstname, String middleName, String LastName, String gender,
-			String Address, long CreatedAt, long modifiedAt) {
+	public ContactDetails(int userid, int id, int oauthID, String Firstname, String middleName, String LastName,
+			String gender, String Address, long CreatedAt, long modifiedAt) {
 
 		settedData.clear();
 
@@ -40,7 +41,16 @@ public class ContactDetails implements Table {
 		setAddress(Address);
 		setCreatedAt(CreatedAt);
 		setModifiedAt(modifiedAt);
+		setOauthID(oauthID);
+	}
 
+	public void setOauthID(int oauth) {
+		this.oauth = oauth;
+		settedData.put(Contact_details.OauthID.toString(), getOauthID());
+	}
+
+	public int getOauthID() {
+		return this.oauth;
 	}
 
 	public String getTableName() {
@@ -68,7 +78,7 @@ public class ContactDetails implements Table {
 
 		this.modifiedAt = modifiedAt;
 
-		settedData.put( Contact_details.modified_time.toString(), getModifiedAt());
+		settedData.put(Contact_details.modified_time.toString(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -98,7 +108,7 @@ public class ContactDetails implements Table {
 	public void setUserID(int userid) {
 		this.userId = userid;
 
-		settedData.put( Contact_details.user_id.toString(), getUserID());
+		settedData.put(Contact_details.user_id.toString(), getUserID());
 	}
 
 	public int getUserID() {
@@ -108,16 +118,25 @@ public class ContactDetails implements Table {
 	public void setID(int id) {
 		this.id = id;
 
-		settedData.put( Contact_details.contact_id.toString(), getID());
+		settedData.put(Contact_details.contact_id.toString(), getID());
 	}
 
 	public int getID() {
 		return this.id;
 	}
 
+	public void setOauthContactID(String oauthContactID) {
+		this.oauthContactID = oauthContactID;
+		settedData.put(Contact_details.Oauth_contactID.toString(), getOauthContactID());
+	}
+
+	public String getOauthContactID() {
+		return this.oauthContactID;
+	}
+
 	public void setFirstName(String FirstName) {
 		this.Firstname = FirstName;
-		settedData.put( Contact_details.First_name.toString(), getFirstName());
+		settedData.put(Contact_details.First_name.toString(), getFirstName());
 	}
 
 	public String getFirstName() {
@@ -126,7 +145,7 @@ public class ContactDetails implements Table {
 
 	public void setMiddleName(String MiddleName) {
 		this.Middlename = MiddleName;
-		settedData.put( Contact_details.Middle_name.toString(), getMiddleName());
+		settedData.put(Contact_details.Middle_name.toString(), getMiddleName());
 	}
 
 	public String getMiddleName() {
@@ -135,7 +154,7 @@ public class ContactDetails implements Table {
 
 	public void setLastName(String LastName) {
 		this.Lastname = LastName;
-		settedData.put( Contact_details.Last_name.toString(), getLastName());
+		settedData.put(Contact_details.Last_name.toString(), getLastName());
 	}
 
 	public String getLastName() {
@@ -155,7 +174,7 @@ public class ContactDetails implements Table {
 			this.gender = null;
 		}
 
-		settedData.put( Contact_details.gender.toString(), getGender());
+		settedData.put(Contact_details.gender.toString(), getGender());
 
 	}
 
@@ -165,7 +184,7 @@ public class ContactDetails implements Table {
 
 	public void setAddress(String Address) {
 		this.Address = Address;
-		settedData.put( Contact_details.Address.toString(), getAddress());
+		settedData.put(Contact_details.Address.toString(), getAddress());
 	}
 
 	public String getAddress() {

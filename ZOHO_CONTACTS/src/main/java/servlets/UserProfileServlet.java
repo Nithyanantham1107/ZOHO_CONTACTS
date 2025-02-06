@@ -14,6 +14,7 @@ import dboperation.UserOperation;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -122,13 +123,13 @@ public class UserProfileServlet extends HttpServlet {
                     		
 //                    	userData.setPassword(null);
 //                    	ud.setNewPassword(null);
-                    	state=userOperation.userDataUpdate(userData,null);
+                    	state=UserOperation.userDataUpdate(userData,null);
                     	
                     }else {
                     	userData.setPassword(request.getParameter("password"));
 //                    	ud.setNewPassword(request.getParameter("Newpassword"));
                    
-                      state=userOperation.userDataUpdate(userData,request.getParameter("Newpassword"));
+                      state=UserOperation.userDataUpdate(userData,request.getParameter("Newpassword"));
                     
                     }
                     if (state) {
@@ -147,11 +148,11 @@ public class UserProfileServlet extends HttpServlet {
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }
             } else {
-                if (userOperation.deleteUserProfile(userSessionData)) {
+                if (UserOperation.deleteUserProfile(userSessionData)) {
                     logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + userSessionData.getID());
                     
-                    SessionOperation sessionOperation=new SessionOperation();
-                    sessionOperation.DeleteSessionData(sessionID);
+               
+                    SessionOperation.DeleteSessionData(sessionID);
                    
                     response.sendRedirect("index.jsp");
                 } else {
@@ -160,7 +161,7 @@ public class UserProfileServlet extends HttpServlet {
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }
             }
-        } catch (Exception e) {
+        } catch (DBOperationException  e) {
             logger.logError("UserProfileServlet", "doPost", "Exception occurred while processing user profile.", e);
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("Dashboard.jsp").forward(request, response);

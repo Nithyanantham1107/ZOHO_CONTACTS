@@ -11,6 +11,7 @@ import dboperation.UserContactOperation;
 import dboperation.UserOperation;
 import dbpojo.ContactDetails;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -71,7 +72,7 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
             if (request.getParameter("contact_id") != null) {
                 int user_id = ud.getID();
                 int contact_id = Integer.parseInt(request.getParameter("contact_id"));
-                ContactDetails uc = co.viewSpecificUserContact(user_id, contact_id);
+                ContactDetails uc = UserContactOperation.viewSpecificUserContact(user_id, contact_id);
 //                System.out.println("contact mail +" uc.getContactMail().getContactMailID());
 //            	System.out.println("contact Phone +" uc.getContactphone().getContactPhone());
                 if (uc != null) {
@@ -91,7 +92,7 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
                 request.setAttribute("errorMessage", "Contact ID parameter is missing.");
                 request.getRequestDispatcher("home.jsp").forward(request, response);
             }
-        } catch (Exception e) {
+        } catch (DBOperationException e) {
             logger.logError("UserSpecificContactRetrievalServlet", "doPost", "Exception occurred while retrieving specific contact.", e);
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("home.jsp").forward(request, response);

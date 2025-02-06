@@ -47,24 +47,38 @@
 }
 
 h1 {
+background-color:white;
+color:black;
 	text-align: center;
 	font-size: 24px;
 	margin-bottom: 10px;
 }
 
-p {
+p {background-color:white;
+color:black;
 	text-align: center;
 	font-size: 14px;
 	margin-bottom: 20px;
 }
 
 section {
+background-color:white;
+color:black;
 	diplay: flex;
 	justify-content: space-between;
 	margin-bottom: 20px;
+	
+	
+	form{
+	
+	
+	background-color:white;
+color:black;}
 }
 
 label {
+background-color:white;
+color:black;
 	font-weight: bold;
 	display: block;
 	margin-bottom: 8px;
@@ -73,6 +87,8 @@ label {
 input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
 	select {
 	width: 100%;
+	background-color:white;
+color:black;
 	padding: 10px;
 	margin-bottom: 12px;
 	border: 1px solid #ddd;
@@ -132,12 +148,12 @@ a:hover {
 
 
 	<%
-	SessionOperation so = new SessionOperation();
-	CacheModel cachemodel = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+	
+	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
 	if (cachemodel == null) {
 		System.out.println("hello hi");
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("Login.jsp");
 		return;
 
 	}
@@ -160,7 +176,7 @@ a:hover {
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> ChangePassword</a></li>
+				<li><a href="changePassword.jsp"> More</a></li>
 				<li><a href="/login"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
@@ -190,7 +206,7 @@ a:hover {
 				<label for="Addemail">Enter email to Add</label> <input type="text"
 					name="newemail" placeholder="Enter Email to add">
 
-				<button type="submit" class="glowbutton">Add email</button>
+				<button type="submit" class="glowgreenbutton">Add email</button>
 
 
 			</form>
@@ -243,7 +259,7 @@ a:hover {
 								<td>
 									<form action="/deleteuseremail" method="post">
 										<input type="hidden" value="<%=data.getID()%>"
-											name="emailID" /> <input type="submit" class="glowbutton"
+											name="emailID" /> <input type="submit" class="glowredbutton"
 											value="Delete" />
 									</form>
 								</td>
@@ -298,7 +314,7 @@ a:hover {
 
 				</section>
 
-				<button type="submit" class="glowbutton">change Password</button>
+				<button type="submit" class="glowyellowbutton">change Password</button>
 			</form>
 
 

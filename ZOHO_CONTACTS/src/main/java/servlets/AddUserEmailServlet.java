@@ -20,6 +20,7 @@ import dbpojo.ContactMail;
 import dbpojo.ContactPhone;
 import dbpojo.EmailUser;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -86,7 +87,7 @@ public class AddUserEmailServlet extends HttpServlet {
 				email.setCreatedAt(Instant.now().toEpochMilli());
 				email.setModifiedAt(email.getCreatedAt());
 
-				if (userOp.addEmail(email, ud.getID())) {
+				if (UserOperation.addEmail(email, ud.getID())) {
 
 					logger.logInfo("AddUserEmailServlet", "doPost",
 							"Contact added successfully for user ID: " + ud.getID());
@@ -102,7 +103,7 @@ public class AddUserEmailServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Parameter Data is empty!!");
 				request.getRequestDispatcher("changePassword.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException  e) {
 			logger.logError("AddUserEmailServlet", "doPost", "Exception occurred", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("changePassword.jsp").forward(request, response);

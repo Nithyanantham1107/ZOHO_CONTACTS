@@ -19,6 +19,7 @@ import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
 import dbpojo.LoginCredentials;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -106,21 +107,21 @@ public class SignupServlet extends HttpServlet {
 					userData.setEmail(emailUser);
 					userData.setLoginCredentials(loginCredentials);
 					
-					userData = userOperation.createUser(userData);
+					userData = UserOperation.createUser(userData);
 
 					if (userData != null) {
 						sessionOperation = new SessionOperation();
-						String sessionID = sessionOperation.generateSessionId(userData.getID());
+						String sessionID = SessionOperation.generateSessionId(userData.getID());
 						Cookie sessionCookie = new Cookie("SESSIONID", sessionID);
 						sessionCookie.setHttpOnly(true);
 						response.addCookie(sessionCookie);
                         CacheModel cachemodel=CacheData.getCache(sessionID);
-						ArrayList<ContactDetails> contacts = userContactOperation.viewAllUserContacts(userData.getID());
-						ArrayList<Category> groups = userGroupOperation.viewAllGroup(userData.getID());
+//						ArrayList<ContactDetails> contacts = UserContactOperation.viewAllUserContacts(userData.getID());
+//						ArrayList<Category> groups = UserGroupOperation.viewAllGroup(userData.getID());
 						System.out.println("hey" +userData.getName());
 						cachemodel.setUserData(userData);
-						cachemodel.setUserContact(contacts);
-						cachemodel.setUserGroup(groups);
+//						cachemodel.setUserContact(contacts);
+//						cachemodel.setUserGroup(groups);
 						
 
 						response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -146,7 +147,7 @@ public class SignupServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Parameters should not be empty!");
 				request.getRequestDispatcher("Signup.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException  e) {
 			logger.logError("SignupServlet", "doPost", "Exception occurred during signup", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("Signup.jsp").forward(request, response);

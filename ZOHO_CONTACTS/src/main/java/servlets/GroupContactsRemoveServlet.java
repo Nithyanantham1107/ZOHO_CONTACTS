@@ -14,6 +14,7 @@ import dboperation.UserOperation;
 import dbpojo.Category;
 import dbpojo.CategoryRelation;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -68,25 +69,22 @@ public class GroupContactsRemoveServlet extends HttpServlet {
 				String sessionid = (String) request.getAttribute("sessionid");
 				CacheModel cachemodel = CacheData.getCache(sessionid);
 
-				
 				Userdata userData = cachemodel.getUserData();
 
 //	                int user_id = ud.getUserId();
 				int contactID = Integer.parseInt(request.getParameter("contactID"));
 				int groupID = Integer.parseInt(request.getParameter("groupID"));
 
-				
-				
-				Category group = userGroupOperation.getSpecificGroup(groupID, userData.getID());
+				Category group = UserGroupOperation.getSpecificGroup(groupID, userData.getID());
 
 				request.setAttribute("group", group);
-				
+
 				CategoryRelation categoryRelation = new CategoryRelation();
 
 				categoryRelation.setCategoryID(groupID);
 				categoryRelation.setContactIDtoJoin(contactID);
 
-				if (userGroupOperation.removeGroupContacts(categoryRelation, userData.getID())) {
+				if (UserGroupOperation.removeGroupContacts(categoryRelation, userData.getID())) {
 
 					logger.logInfo("GroupContactsRemoveServlet", "doPost",
 							"Contact removed successfully: " + contactID);
@@ -103,7 +101,7 @@ public class GroupContactsRemoveServlet extends HttpServlet {
 						"Unable to remove contact because specified contact ID or GroupID is null");
 				request.getRequestDispatcher("groupviewcontact.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException e) {
 			logger.logError("GroupContactsRemoveServlet", "doPost", "Exception occurred while removing contact", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("groupviewcontact.jsp").forward(request, response);

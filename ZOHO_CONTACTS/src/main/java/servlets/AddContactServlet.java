@@ -18,6 +18,7 @@ import dbpojo.ContactDetails;
 import dbpojo.ContactMail;
 import dbpojo.ContactPhone;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -78,6 +79,7 @@ public class AddContactServlet extends HttpServlet {
 					&& (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
 
 				uc = new ContactDetails();
+		
 
 				String sessionid = (String) request.getAttribute("sessionid");
 				CacheModel cachemodel = CacheData.getCache(sessionid);
@@ -94,9 +96,7 @@ public class AddContactServlet extends HttpServlet {
 				cp.setCreatedAt(uc.getCreatedAt());
 				cp.setModifiedAt(uc.getCreatedAt());
 				cm.setCreatedAt(uc.getCreatedAt());
-				cm.setModifiedAt(uc.getCreatedAt());
-				
-				
+				cm.setModifiedAt(uc.getCreatedAt());		
 				uc.setContactPhone(cp);
 				uc.setFirstName(request.getParameter("f_name"));
 				uc.setMiddleName(request.getParameter("m_name"));
@@ -108,10 +108,10 @@ public class AddContactServlet extends HttpServlet {
 //                uc.setEmail(request.getParameter("email"));
 				  
 				uc.setCreatedAt(Instant.now().toEpochMilli());;
-				uc = co.addUserContact(uc);
+				uc = UserContactOperation.addUserContact(uc);
 				if (uc != null) {
-					ArrayList<ContactDetails> userContacts = co.viewAllUserContacts(ud.getID());
-					cachemodel.setUserContact(userContacts);
+//					ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
+//					cachemodel.setUserContact(userContacts);
 
 					logger.logInfo("AddContactServlet", "doPost",
 							"Contact added successfully for user ID: " + ud.getID());
@@ -127,7 +127,7 @@ public class AddContactServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Parameter Data is empty!!");
 				request.getRequestDispatcher("Add_contacts.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException  e) {
 			logger.logError("AddContactServlet", "doPost", "Exception occurred", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("Add_contacts.jsp").forward(request, response);

@@ -9,7 +9,6 @@ import java.util.Queue;
 import datahelper.PojoMapper;
 import dbpojo.Table;
 import querybuilderconfig.TableSchema.OpType;
-import querybuilderconfig.TableSchema.Statement;
 
 public class QueryExecuter {
 	

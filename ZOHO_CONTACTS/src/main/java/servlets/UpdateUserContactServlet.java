@@ -16,6 +16,7 @@ import dbpojo.ContactDetails;
 import dbpojo.ContactMail;
 import dbpojo.ContactPhone;
 import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -96,9 +97,9 @@ public class UpdateUserContactServlet extends HttpServlet {
 				logger.logInfo("UpdateUserContactServlet", "doPost",
 						"Updating contact for user: " + userData.getID() + ", Contact ID: " + contactDetail.getID());
 
-				if (contactOperation.updateSpecificUserContact(contactDetail, userData.getID())) {
-					ArrayList<ContactDetails> userContacts = contactOperation.viewAllUserContacts(userData.getID());
-					cachemodel.setUserContact(userContacts);
+				if (UserContactOperation.updateSpecificUserContact(contactDetail, userData.getID())) {
+//					ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(userData.getID());
+//					cachemodel.setUserContact(userContacts);
 					response.sendRedirect("home.jsp");
 					logger.logInfo("UpdateUserContactServlet", "doPost", "Contact updated successfully.");
 				} else {
@@ -112,7 +113,7 @@ public class UpdateUserContactServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Input fields should not be empty!");
 				request.getRequestDispatcher("update_contact.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException  e) {
 			logger.logError("UpdateUserContactServlet", "doPost", "Exception occurred during contact update", e);
 			request.setAttribute("errorMessage", "An error occurred while processing your request.");
 			request.getRequestDispatcher("update_contact.jsp").forward(request, response);

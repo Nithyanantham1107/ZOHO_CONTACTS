@@ -19,8 +19,9 @@
 <title>Sign up</title>
 <style>
     body {
+    
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
+        background-color: #272727;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -39,7 +40,7 @@
     h2 {
         text-align: center;
         margin-bottom: 20px;
-        color: #333;
+       
     }
 
     label {
@@ -53,7 +54,8 @@
     input[type="password"],
     textarea,
     select {
-        width: calc(100% - 20px);
+  
+        width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -67,8 +69,8 @@
 
     input[type="submit"] {
         padding: 10px;
-        background-color: black;
-        color: white;
+        background-color: #FFE400;
+        color: black;
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -144,11 +146,11 @@
  <div class="container">
  
    <%
-  SessionOperation so=new SessionOperation();
-  String sessionid=so.getCustomSessionId(request.getCookies());
+
+  String sessionid= SessionOperation.getCustomSessionId(request.getCookies());
   if(sessionid !=null ){
 	  
-	  response.sendRedirect("Dashboard.jsp");
+	  response.sendRedirect("home.jsp");
   }
   
   
@@ -205,9 +207,7 @@
 
             <input type="submit" onclick="prepareFormData()" value="Signup" />
         </form>
-        <form action="/index.jsp" method="get">
-            <input type="submit" value="Back" class="back-btn" />
-        </form>
+       
     </div>
     
     <script>
