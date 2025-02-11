@@ -14,7 +14,7 @@ public class OauthOperation {
 
 	private static LoggerSet logger = new LoggerSet();
 
-	public static Oauth addOauth(Oauth oauth, int userID) throws DBOperationException {
+	public static Oauth addOauth(Oauth oauth, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -49,7 +49,7 @@ public class OauthOperation {
 
 	}
 
-	public static Oauth isOauthExist(String email, String provider, int userID) throws DBOperationException {
+	public static Oauth isOauthExist(String email, String provider, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		ArrayList<Table> result = new ArrayList<Table>();
@@ -88,7 +88,7 @@ public class OauthOperation {
 
 	}
 
-	public static Boolean updateOauth(Oauth oauth, int userID) throws DBOperationException {
+	public static Boolean updateOauth(Oauth oauth, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -123,7 +123,7 @@ public class OauthOperation {
 
 	}
 
-	public static void setOauthSynncOn(int oauthID, Userdata user) throws DBOperationException {
+	public static void setOauthSynncOn(long oauthID, Userdata user) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -179,7 +179,7 @@ public class OauthOperation {
 
 	}
 
-	public static void setOauthSynncOff(int oauthID, Userdata user) throws DBOperationException {
+	public static void setOauthSynncOff(long oauthID, Userdata user) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -238,7 +238,7 @@ public class OauthOperation {
 
 	}
 
-	public static void deleteOauth(int oauthID, Userdata user) throws DBOperationException {
+	public static void deleteOauth(long oauthID, Userdata user) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };

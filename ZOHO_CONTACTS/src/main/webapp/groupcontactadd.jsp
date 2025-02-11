@@ -42,9 +42,8 @@
 
 
 	<%
-
 	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
-	
+
 	if (cachemodel == null) {
 		System.out.println("hello hi");
 		response.sendRedirect("Login.jsp");
@@ -52,22 +51,17 @@
 
 	}
 	Userdata ud = cachemodel.getUserData();
-	
+
 	Category group = (Category) request.getAttribute("group");
-	
 
 	ArrayList<ContactDetails> contactsNotInGroup = new ArrayList<>();
-	if(group!=null){
+	if (group != null) {
 		
-		contactsNotInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "add");
+			contactsNotInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "add");
+
 		
-		
+
 	}
-	
-
-	
-
-	
 	%>
 
 	<section id="header">
@@ -135,38 +129,33 @@
 
 
 		<section id="tableContainer">
-			<section id="header">
-			
-			<%
-			
-			if(group!=null){
-				
-			
-			
-			%>
+			<section id="tableHeader">
 
-				<section id="tableHeader">
-					<h1><%= group.getCategoryName() %></h1>
-
-
-
-				</section>
-				
-				
-				<%}else{ %>
-				<section id="tableHeader">
-					<h1> Group Details </h1>
-
-
-
-				</section>
-				
 				<%
-				
+				if (group != null) {
+				%>
+
+
+				<h1><%=group.getCategoryName()%></h1>
+
+
+
+
+
+				<%
+				} else {
+				%>
+
+				<h1>Group Details</h1>
+
+
+
+
+				<%
 				}
 				%>
 
-			
+
 
 			</section>
 
@@ -186,7 +175,7 @@
 							<th>Gender</th>
 							<th>Email</th>
 							<th>Phone</th>
-						
+
 							<th>Remove</th>
 
 
@@ -215,14 +204,14 @@
 							<td><%=uc.getContactphone().getContactPhone()%></td>
 
 
-	
+
 							<td>
 
 
 
 								<form action="/groupaddcontact" method="post">
 									<input type="hidden" value="<%=uc.getID()%>" name="contactID" />
-									
+
 									<input type="hidden" value="<%=group.getID()%>" name="groupID" />
 									<input type="submit" class="glowgreenbutton" value="add" />
 								</form>

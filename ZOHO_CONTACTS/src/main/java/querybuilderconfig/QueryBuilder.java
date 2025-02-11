@@ -2,6 +2,8 @@ package querybuilderconfig;
 
 import java.util.ArrayList;
 
+import querybuilderconfig.TableSchema.Operation;
+
 public interface QueryBuilder {
 	void openConnection();
 
@@ -18,10 +20,12 @@ public interface QueryBuilder {
 	QueryBuilder update(dbpojo.Table table);
 
 	QueryBuilder delete(dbpojo.Table table);
-
+	QueryBuilder where(Table column, Operation operation, Object value) ;
+	QueryBuilder and(Table column, Operation operation, Object value);
+	QueryBuilder or(Table column, Operation operator, Object value) ;
 	public ArrayList<dbpojo.Table> executeQuery();
 
-	int[] execute(int userID);
+	int[] execute(long userID);
 
 	String make();
 

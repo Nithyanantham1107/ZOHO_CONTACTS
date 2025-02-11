@@ -13,22 +13,22 @@ import dbpojo.LoginCredentials;
 import dbpojo.Oauth;
 import dbpojo.Session;
 import dbpojo.Table;
-import querybuilderconfig.TableSchema.Category_relation;
-import querybuilderconfig.TableSchema.Contact_details;
-import querybuilderconfig.TableSchema.Contact_mail;
-import querybuilderconfig.TableSchema.Email_user;
-import querybuilderconfig.TableSchema.Login_credentials;
-import querybuilderconfig.TableSchema.user_data;
+import querybuilderconfig.TableSchema.CategoryRelationSchema;
+import querybuilderconfig.TableSchema.ContactDetailsSchema;
+import querybuilderconfig.TableSchema.ContactMailSchema;
+import querybuilderconfig.TableSchema.EmailUserSchema;
+import querybuilderconfig.TableSchema.LoginCredentialsSchema;
+import querybuilderconfig.TableSchema.UserDataSchema;
 
 public class JsonConverter {
 
-	public static StringBuilder ConvertPojoToJson(Table table, int userId) {
+	public static StringBuilder ConvertPojoToJson(Table table, long userId) {
 		StringBuilder json = new StringBuilder();
 		ArrayList<String> parentKey = new ArrayList<String>();
 
 		Map<String, Object> pojoData = table.getSettedData();
 
-		pojoData.remove(user_data.modified_time.toString());
+		pojoData.remove(UserDataSchema.MODIFIEDTIME.toString());
 
 		json.append("{");
 
@@ -76,9 +76,11 @@ public class JsonConverter {
 		}
 
 		if (table instanceof CategoryRelation || table instanceof ContactMail || table instanceof ContactPhone) {
+			if (parentKey.size() > 0) {
+				json.append(",");
+			}
 
-			json.append(",");
-			json.append("\"" + user_data.user_id + "\"");
+			json.append("\"" + UserDataSchema.USERID.getColumnName() + "\"");
 			json.append(":");
 			json.append(userId);
 
@@ -90,7 +92,7 @@ public class JsonConverter {
 		return json;
 	}
 
-	public static String[] comparePojoJson(Table previousPojoData, Table currentPojoData, int userID) {
+	public static String[] comparePojoJson(Table previousPojoData, Table currentPojoData, long userID) {
 
 		String[] json = new String[2];
 		ArrayList<String> keysToRemove = new ArrayList<String>();
@@ -122,41 +124,41 @@ public class JsonConverter {
 	public static Boolean isParent(Table table, String column) {
 
 		if (table instanceof LoginCredentials) {
-			if (column.equals(Login_credentials.log_id.toString())) {
+			if (column.equals(LoginCredentialsSchema.LOGID.getColumnName())) {
 				return true;
 			}
 		} else if (table instanceof EmailUser) {
-			if (column.equals(Email_user.em_id.toString())) {
+			if (column.equals(EmailUserSchema.EMAILID.getColumnName())) {
 
 				return true;
 			}
 		} else if (table instanceof ContactDetails) {
-			if (column.equals(Contact_details.user_id.toString())) {
+			if (column.equals(ContactDetailsSchema.USERID.getColumnName())) {
 
 				return true;
 			}
 
 		} else if (table instanceof ContactMail || table instanceof ContactPhone) {
 
-			if (column.equals(Contact_mail.contact_id.toString())) {
+			if (column.equals(ContactMailSchema.CONTACTID.getColumnName())) {
 				return true;
 			}
 		} else if (table instanceof Category) {
-			if (column.equals(querybuilderconfig.TableSchema.Category.created_by.toString())) {
+			if (column.equals(querybuilderconfig.TableSchema.CategorySchema.CREATEDBY.getColumnName())) {
 				return true;
 			}
 		} else if (table instanceof CategoryRelation) {
-			if (column.equals(Category_relation.Category_id.toString())
-					|| column.equals(Category_relation.contact_id_to_join.toString())) {
+			if (column.equals(CategoryRelationSchema.CATEGORYID.getColumnName())
+					|| column.equals(CategoryRelationSchema.CONTACTIDTOJOIN.getColumnName())) {
 				return true;
 			}
 		} else if (table instanceof Session) {
-			if (column.equals(querybuilderconfig.TableSchema.Session.user_id.toString())) {
+			if (column.equals(querybuilderconfig.TableSchema.SessionSchema.USERID.getColumnName())) {
 
 				return true;
 			}
 		} else if (table instanceof Oauth) {
-			if (column.equals(querybuilderconfig.TableSchema.Oauth.userID.toString())) {
+			if (column.equals(querybuilderconfig.TableSchema.OauthSchema.USERID.getColumnName())) {
 
 				return true;
 			}

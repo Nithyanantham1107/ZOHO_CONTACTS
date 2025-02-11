@@ -24,11 +24,11 @@ public class UserOperation {
 	 *
 	 * @param userdata the UserData object containing user details
 	 * @return the created UserData object or null if an error occurs
-	 * @throws SQLException if a database access error occurs
-	 * @throws DBOperationException 
+	 * @throws SQLException         if a database access error occurs
+	 * @throws DBOperationException
 	 */
-	public static  Userdata createUser(Userdata userdata) throws  DBOperationException {
-//		Connection con = DBconnection.getConnection();
+	public static Userdata createUser(Userdata userdata) throws DBOperationException {
+
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
 
@@ -37,7 +37,6 @@ public class UserOperation {
 
 			qg.openConnection();
 			userdata.setPassword(password);
-
 
 			val = qg.insert(userdata).execute(-1);
 
@@ -55,7 +54,7 @@ public class UserOperation {
 		} catch (Exception e) {
 			logger.logError("UserOperation", "createUser", "Exception occurred: " + e.getMessage(), e);
 			qg.rollBackConnection();
-			
+
 			throw new DBOperationException(e.getMessage());
 		} finally {
 
@@ -64,7 +63,7 @@ public class UserOperation {
 
 	}
 
-	public static boolean addEmail(EmailUser email, int userID) throws  DBOperationException {
+	public static EmailUser addEmail(EmailUser email, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -79,24 +78,26 @@ public class UserOperation {
 
 				qg.rollBackConnection();
 				logger.logError("UserOperation", "addEmail", "Failed to insert user data", null);
-				return false;
+				return null;
 			}
-
 			qg.commit();
 			logger.logInfo("UserOperation", "addEmail", "Email added successfully: " + email.getEmail());
-			return true;
+		
+			
+			
+			return email;
 
 		} catch (Exception e) {
-			logger.logError("UserOperation", "addEmailr", "Exception occurred: " + e.getMessage(), e);
+			logger.logError("UserOperation", "addEmail", "Exception occurred: " + e.getMessage(), e);
 
 			qg.rollBackConnection();
-			
+
 			throw new DBOperationException(e.getMessage());
 		} finally {
 
 			qg.closeConnection();
 		}
-	
+
 	}
 
 	/**
@@ -104,12 +105,10 @@ public class UserOperation {
 	 *
 	 * @param ud the UserData object containing login details
 	 * @return the verified UserData object or null if verification fails
-	 * @throws SQLException if a database access error occurs
-	 * @throws DBOperationException 
+	 * @throws SQLException         if a database access error occurs
+	 * @throws DBOperationException
 	 */
-	public static Userdata isUser(String userName, String password) throws  DBOperationException {
-//		String[] email = new String[5];
-//		Connection con = DBconnection.getConnection();
+	public static Userdata isUser(String userName, String password) throws DBOperationException {
 
 		ArrayList<Table> result = new ArrayList<>();
 
@@ -122,10 +121,6 @@ public class UserOperation {
 			Userdata user = new Userdata();
 
 			if (userName.contains("@")) {
-//				ps = con.prepareStatement(
-//						"SELECT * FROM user_data ud LEFT JOIN Login_credentials lg ON ud.user_id = lg.id "
-//								+ "LEFT JOIN Email_user eu ON lg.id = eu.em_id WHERE email = ?;");
-//				ps.setString(1, ud.getUserName());
 
 				EmailUser email = new EmailUser();
 				email.setEmail(userName);
@@ -158,16 +153,8 @@ public class UserOperation {
 
 				}
 
-//				val = (Userdata) qg.select(tables.user_data)
-//						.join(JoinType.left, user_data.user_id, Operation.Equal, Login_credentials.log_id)
-//						.join(JoinType.left, user_data.user_id, Operation.Equal, Email_user.em_id)
-//						.where(Email_user.email, Operation.Equal, userName).executeQuery().get(0);
-
 			} else {
-//				ps = con.prepareStatement(
-//						"SELECT * FROM user_data ud LEFT JOIN Login_credentials lg ON ud.user_id = lg.id "
-//								+ "LEFT JOIN Email_user eu ON lg.id = eu.em_id WHERE username = ?;");
-//				ps.setString(1, ud.getUserName());
+
 				LoginCredentials login = new LoginCredentials();
 				login.setUserName(userName);
 
@@ -200,35 +187,10 @@ public class UserOperation {
 
 				}
 
-//				val = (Userdata) qg.select(tables.user_data)
-//						.join(JoinType.left, user_data.user_id, Operation.Equal, Login_credentials.log_id)
-//						.join(JoinType.left, user_data.user_id, Operation.Equal, Email_user.em_id)
-//						.where(Login_credentials.username, Operation.Equal, userName).executeQuery().get(0);
-
 			}
 
-//			val = ps.executeQuery();
 			if (result.size() > 0 && BCrypt.checkpw(password, user.getPassword())) {
-//				ud.setUserId(val.getInt(1));
-//				ud.setName(val.getString(2));
-//				ud.setPhoneno(val.getString(4));
-//				ud.setAddress(val.getString(5));
-//				ud.setTimezone(val.getString(6));
-//				ud.setUserName(val.getString(8));
-//				ud.setCurrentEmail(val.getString(10));
 
-//				ps = con.prepareStatement("SELECT email, is_primary FROM Email_user WHERE em_id = ?;");
-//				ps.setInt(1, ud.getUserId());
-//				val = ps.executeQuery();
-//				int i = 0;
-//				while (val.next() && i < 5) {
-//					email[i] = val.getString(1);
-//					if (val.getBoolean(2)) {
-//						ud.setPrimaryMail(val.getString(1));
-//					}
-//					i++;
-//				}
-//				ud.setEmail(email);
 				logger.logInfo("UserOperation", "isUser", "User verified successfully: " + userName);
 				return user;
 			} else {
@@ -238,14 +200,13 @@ public class UserOperation {
 
 		} catch (Exception e) {
 			logger.logError("UserOperation", "isUser", "Exception occurred: " + e.getMessage(), e);
-	
+
 			throw new DBOperationException(e.getMessage());
-		
+
 		} finally {
-//			con.close();
 			qg.closeConnection();
 		}
-		
+
 	}
 
 	/**
@@ -253,19 +214,17 @@ public class UserOperation {
 	 *
 	 * @param userData the UserData object containing updated details
 	 * @return true if the update was successful, false otherwise
-	 * @throws SQLException if a database access error occurs
-	 * @throws DBOperationException 
+	 * @throws SQLException         if a database access error occurs
+	 * @throws DBOperationException
 	 */
-	public static boolean userDataUpdate(Userdata userData, String newPassword) throws  DBOperationException {
-//		Connection con = DBconnection.getConnection();
+	public static boolean userDataUpdate(Userdata userData, String newPassword) throws DBOperationException {
+
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		Userdata user;
-		int userId = userData.getID();
+		long userId = userData.getID();
 		int[] result = { -1, -1 };
-//		int[] val = { -1, -1 };
+
 		try {
-//
-//			con.setAutoCommit(false);
 
 			qg.openConnection();
 			EmailUser emailData = new EmailUser();
@@ -288,17 +247,11 @@ public class UserOperation {
 
 			for (EmailUser email : userData.getallemail()) {
 				if (email != null) {
-//					ps = con.prepareStatement("INSERT INTO Email_user VALUES (?, ?, ?);");
-//					ps.setInt(1, ud.getUserId());
-//					ps.setString(2, email);
-//					ps.setBoolean(3, ud.getPrimaryMail()));
-//					val = ps.executeUpdate();
 
 					email.setEmailID(userData.getID());
 
 					result = qg.insert(email).execute(userId);
 					if (result[0] == -1) {
-//						con.rollback();
 
 						qg.rollBackConnection();
 						logger.logError("UserOperation", "userDataUpdate", "Failed to insert new email: " + email,
@@ -310,35 +263,10 @@ public class UserOperation {
 
 			if (userData.getPassword() == null || newPassword == null) {
 
-//				PreparedStatement ps = con.prepareStatement(
-//						"UPDATE user_data SET Name = ?, phone_no = ?, address = ?, timezone = ? WHERE user_id = ?;");
-//				ps.setString(1, ud.getName());
-//				ps.setString(2, ud.getPhoneno());
-//				ps.setString(3, ud.getAddress());
-//				ps.setString(4, ud.getTimezone());
-//				ps.setInt(5, ud.getUserId());
-//				val = ps.executeUpdate();
-
-//				val = qg.update(tables.user_data, user_data.Name, user_data.phone_no, user_data.address,
-//						user_data.timezone, user_data.modified_time)
-//						.valuesUpdate(userData.getName(), userData.getPhoneno(), userData.getAddress(),
-//								userData.getTimezone(), userData.getModifiedAt())
-//						.where(user_data.user_id, Operation.Equal, userData.getUserId()).execute();
-
 				result = qg.update(userData).execute(userId);
 
 			} else {
-//				PreparedStatement ps = con.prepareStatement("select password from user_data where user_id=?;");
-//				ps.setInt(1, ud.getUserId());
-//				ArrayList<Object> pass = qg.select(tables.user_data, user_data.password)
-//						.where(user_data.user_id, Operation.Equal, userData.getUserId()).executeQuery();
-//				pass.next();
 
-//				if (pass.get(0) instanceof UserData) {
-//					user = (UserData) pass.get(0);
-//				} else {
-//					throw new TypeNotPresentException("unable to cast Userdata from  result list Object", null);
-//				}
 				ArrayList<Table> users = qg.select(userData).executeQuery();
 				if (users.size() > 0) {
 
@@ -356,22 +284,6 @@ public class UserOperation {
 					String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 					userData.setPassword(password);
 
-//					ps = con.prepareStatement(
-//							"UPDATE user_data SET Name = ?, phone_no = ?, address = ?, password = ?, timezone = ? WHERE user_id = ?;");
-//					ps.setString(1, ud.getName());
-//					ps.setString(2, ud.getPhoneno());
-//					ps.setString(3, ud.getAddress());
-//					ps.setString(4, password);
-//					ps.setString(5, ud.getTimezone());
-//					ps.setInt(6, ud.getUserId());
-//					val = ps.executeUpdate();
-
-//					val = qg.update(tables.user_data, user_data.Name, user_data.phone_no, user_data.address,
-//							user_data.password, user_data.timezone, user_data.modified_time)
-//							.valuesUpdate(userData.getName(), userData.getPhoneno(), userData.getAddress(),
-//									userData.getPassword(), userData.getTimezone(), userData.getModifiedAt())
-//							.where(user_data.user_id, Operation.Equal, userData.getUserId()).execute();
-
 					result = qg.update(userData).execute(userId);
 
 				} else {
@@ -383,36 +295,11 @@ public class UserOperation {
 			}
 
 			if (result[0] == -1) {
-//				con.rollback();
+
 				qg.rollBackConnection();
 				logger.logError("UserOperation", "userDataUpdate", "Failed to update user data", null);
 				return false;
 			}
-
-//			PreparedStatement ps = con.prepareStatement("UPDATE Login_credentials SET username = ? WHERE id = ?;");
-//			ps.setString(1, ud.getUserName());
-//			ps.setInt(2, ud.getUserId());
-//			val = ps.executeUpdate();
-
-//			userData.getLoginCredentials().setUserID(userData.getUserId());
-//			
-//			qg.update(tables.Login_credentials, TableSchema.Login_credentials.username, Login_credentials.modified_time)
-//					.valuesUpdate(userData.getLoginCredentials().getUserName(), userData.getModifiedAt())
-//					.where(TableSchema.Login_credentials.log_id, Operation.Equal, userData.getUserId()).execute();
-//
-//			if (val[0] == 0) {
-//				qg.rollBackConnection();
-//
-////				con.rollback();
-//				logger.logError("UserOperation", "userDataUpdate", "Failed to update login credentials", null);
-//				return false;
-//			}
-
-//			ps = con.prepareStatement("DELETE FROM Email_user WHERE em_id = ?;");
-//			ps.setInt(1, ud.getUserId());
-//			val = ps.executeUpdate();
-
-//			con.commit();
 
 			qg.commit();
 			logger.logInfo("UserOperation", "userDataUpdate",
@@ -423,10 +310,8 @@ public class UserOperation {
 
 		catch (Exception e) {
 			logger.logError("UserOperation", "userDataUpdate", "Exception occurred: " + e.getMessage(), e);
-//			con.rollback(); // Ensure rollback in case of exception
-
 			qg.rollBackConnection();
-			
+
 			throw new DBOperationException(e.getMessage());
 		} finally {
 			qg.closeConnection();
@@ -434,54 +319,44 @@ public class UserOperation {
 
 	}
 
-	public static boolean userprofileUpdate(Userdata userData,EmailUser emailData) throws DBOperationException {
-//		Connection con = DBconnection.getConnection();
+	public static boolean userprofileUpdate(Userdata userData, EmailUser emailData) throws DBOperationException {
+
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
-		int userId = userData.getID();
+		long userId = userData.getID();
 		int[] result = { -1, -1 };
-		ArrayList<Table> emails=new ArrayList<Table>();
+		ArrayList<Table> emails = new ArrayList<Table>();
 
 		try {
 
 			qg.openConnection();
-			
-			EmailUser email=new EmailUser();
+
+			EmailUser email = new EmailUser();
 			email.setEmailID(userId);
-			
-			emails=qg.select(email).executeQuery();
-			
-			if(emails.size()>0) {
-				 
-				
-				for(Table data: emails) {
-					EmailUser currentEmail=(EmailUser) data;
-					
-					EmailUser userEmail=new EmailUser();
+
+			emails = qg.select(email).executeQuery();
+
+			if (emails.size() > 0) {
+
+				for (Table data : emails) {
+					EmailUser currentEmail = (EmailUser) data;
+
+					EmailUser userEmail = new EmailUser();
 					userEmail.setID(data.getID());
-					
-					
-					if(currentEmail.getEmail().equals(emailData.getEmail())){
-						
+
+					if (currentEmail.getEmail().equals(emailData.getEmail())) {
+
 						userEmail.setIsPrimary(true);
-						
-					}else {
-						
+
+					} else {
+
 						userEmail.setIsPrimary(false);
 					}
-					
-					
-					
+
 					qg.update(userEmail).execute(userId);
-					
-					
+
 				}
 			}
-			
-		
-			
-			
-	
 
 			result = qg.update(userData).execute(userId);
 
@@ -501,14 +376,12 @@ public class UserOperation {
 
 		catch (Exception e) {
 			logger.logError("UserOperation", "userprofileUpdate", "Exception occurred: " + e.getMessage(), e);
-//			con.rollback(); // Ensure rollback in case of exception
-
 			qg.rollBackConnection();
 			throw new DBOperationException(e.getMessage());
 		} finally {
 			qg.closeConnection();
 		}
-	
+
 	}
 
 	/**
@@ -516,23 +389,19 @@ public class UserOperation {
 	 *
 	 * @param userId the ID of the user to delete
 	 * @return true if the deletion was successful, false otherwise
-	 * @throws SQLException if a database access error occurs
-	 * @throws DBOperationException 
+	 * @throws SQLException         if a database access error occurs
+	 * @throws DBOperationException
 	 */
 	public static Boolean deleteUserProfile(Userdata userData) throws DBOperationException {
-//		Connection con = DBconnection.getConnection();
+
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-		int userId = userData.getID();
+		long userId = userData.getID();
 		int[] result = { -1, -1 };
 		try {
 			qg.openConnection();
 
-//			result = qg.delete(tables.user_data).where(user_data.user_id, Operation.Equal, userData.getUserId()).execute();
-
 			result = qg.delete(userData).execute(userId);
-//			PreparedStatement ps = con.prepareStatement("DELETE FROM user_data WHERE user_id = ?;");
-//			ps.setInt(1, userId);
-//			int val = ps.executeUpdate();
+
 			if (result[0] != -1) {
 				logger.logInfo("UserOperation", "deleteUserProfile",
 						"User profile deleted successfully for userId: " + userData.getID());
@@ -544,18 +413,18 @@ public class UserOperation {
 			}
 		} catch (Exception e) {
 			logger.logError("UserOperation", "deleteUserProfile", "Exception occurred: " + e.getMessage(), e);
-		
+
 			throw new DBOperationException(e.getMessage());
-		
+
 		} finally {
 
 			qg.closeConnection();
 		}
-	
+
 	}
 
-	public static Boolean deleteUserEmail(EmailUser email, int userID) throws  DBOperationException {
-//		Connection con = DBconnection.getConnection();
+	public static Boolean deleteUserEmail(EmailUser email, long userID) throws DBOperationException {
+
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
 		int[] result = { -1, -1 };
@@ -574,14 +443,13 @@ public class UserOperation {
 			}
 		} catch (Exception e) {
 			logger.logError("UserOperation", "deleteUserEmail", "Exception occurred: " + e.getMessage(), e);
-		
-		
+
 			throw new DBOperationException(e.getMessage());
 		} finally {
 
 			qg.closeConnection();
 		}
-		
+
 	}
 
 	/**
@@ -589,21 +457,16 @@ public class UserOperation {
 	 *
 	 * @param userId the ID of the user to retrieve
 	 * @return the UserData object containing user details or null if not found
-	 * @throws SQLException if a database access error occurs
-	 * @throws DBOperationException 
+	 * @throws SQLException         if a database access error occurs
+	 * @throws DBOperationException
 	 */
-	public static Userdata getUserData(int userId) throws  DBOperationException {
-//		String[] email = new String[5];
+	public static Userdata getUserData(long userId) throws DBOperationException {
+
 		Userdata user;
 		ArrayList<Table> result = new ArrayList<>();
 
-//		Connection con = DBconnection.getConnection();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		try {
-//			PreparedStatement ps = con.prepareStatement(
-//					"SELECT * FROM user_data ud LEFT JOIN Login_credentials lg ON ud.user_id = lg.id WHERE user_id = ?;");
-//			ps.setInt(1, userId);
-//			ResultSet val = ps.executeQuery();
 
 			qg.openConnection();
 			user = new Userdata();
@@ -612,8 +475,8 @@ public class UserOperation {
 			login.setUserID(userId);
 			EmailUser email = new EmailUser();
 			email.setEmailID(userId);
-			
-			Oauth oauth=new Oauth();
+
+			Oauth oauth = new Oauth();
 			oauth.setUserID(userId);
 			user.setOauth(oauth);
 			user.setLoginCredentials(login);
@@ -629,25 +492,7 @@ public class UserOperation {
 
 			if (result.size() > 0) {
 				user = (Userdata) result.getFirst();
-//				ud.setUserId(val.getInt(1));
-//				ud.setName(val.getString(2));
-//				ud.setPhoneno(val.getString(4));
-//				ud.setAddress(val.getString(5));
-//				ud.setTimezone(val.getString(6));
-//				ud.setUserName(val.getString(8));
-//
-//				ps = con.prepareStatement("SELECT email, is_primary FROM Email_user WHERE em_id = ?;");
-//				ps.setInt(1, userId);
-//				val = ps.executeQuery();
-//				int i = 0;
-//				while (val.next() && i < 5) {
-//					email[i] = val.getString(1);
-//					if (val.getBoolean(2)) {
-//						ud.setPrimaryMail(val.getString(1));
-//					}
-//					i++;
-//				}
-//				ud.setEmail(email);
+
 				logger.logInfo("UserOperation", "getUserData",
 						"User data retrieved successfully for userId: " + userId);
 				return user;
@@ -656,18 +501,18 @@ public class UserOperation {
 			}
 		} catch (Exception e) {
 			logger.logError("UserOperation", "getUserData", "Exception occurred: " + e.getMessage(), e);
-		
+
 			throw new DBOperationException(e.getMessage());
-		
+
 		} finally {
-//			con.close();
+
 			qg.closeConnection();
 		}
 		return null;
 	}
 
-	public static boolean userPasswordChange(Userdata oldUser, String oldPassword, String newPassword, int userID)
-			throws  DBOperationException {
+	public static boolean userPasswordChange(Userdata oldUser, String oldPassword, String newPassword, long userID)
+			throws DBOperationException {
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 
 		int[] result = { -1, -1 };
@@ -675,15 +520,12 @@ public class UserOperation {
 		try {
 
 			qg.openConnection();
-			
-			System.out.println("here the stored password is"+oldUser.getPassword());
-			
-			
 
-			System.out.println("here the provided pass is"+oldPassword);
-			
+			System.out.println("here the stored password is" + oldUser.getPassword());
 
-			if (BCrypt.checkpw( oldPassword,oldUser.getPassword())) {
+			System.out.println("here the provided pass is" + oldPassword);
+
+			if (BCrypt.checkpw(oldPassword, oldUser.getPassword())) {
 
 				String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
@@ -707,8 +549,7 @@ public class UserOperation {
 			}
 
 			qg.commit();
-			logger.logInfo("UserOperation", "userPasswordChange",
-					"password successfully for userID: " + userID);
+			logger.logInfo("UserOperation", "userPasswordChange", "password successfully for userID: " + userID);
 			return true;
 
 		}
@@ -717,13 +558,12 @@ public class UserOperation {
 			logger.logError("UserOperation", "userPasswordChange", "Exception occurred: " + e.getMessage(), e);
 
 			qg.rollBackConnection();
-			
-			
+
 			throw new DBOperationException(e.getMessage());
 		} finally {
 			qg.closeConnection();
 		}
-		
+
 	}
 
 }

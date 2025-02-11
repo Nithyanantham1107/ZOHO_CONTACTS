@@ -11,19 +11,16 @@ import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
+import sessionstorage.CacheData;
 
 /**
  * This class provides operations for managing user contacts, including adding,
  * viewing, updating, and deleting contacts.
  */
 public class UserContactOperation {
-
 	private static LoggerSet logger = new LoggerSet();
-
-
-
 	public static ContactDetails addUserContact(ContactDetails contactDetails) throws DBOperationException {
-int[] result = { -1, -1 };
+		int[] result = { -1, -1 };
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		try {
 
@@ -41,7 +38,6 @@ int[] result = { -1, -1 };
 
 			System.out.println("step 2" + result[0] + "   " + result[1]);
 
-
 			if (result[0] == 0) {
 
 				qg.rollBackConnection();
@@ -50,14 +46,13 @@ int[] result = { -1, -1 };
 				return null;
 			}
 
-
 			qg.commit();
 			logger.logInfo("UserContactOperation", "addUserContact",
 					"Contact added successfully: " + contactDetails.getFirstName());
 			return contactDetails;
 		} catch (Exception e) {
 			logger.logError("UserContactOperation", "addUserContact", "Exception occurred: " + e.getMessage(), e);
-	qg.rollBackConnection();
+			qg.rollBackConnection();
 
 			throw new DBOperationException(e.getMessage());
 
@@ -71,12 +66,12 @@ int[] result = { -1, -1 };
 	/**
 	 * Retrieves all contacts for a given user.
 	 *
-	 * @param user_id the ID of the user
+	 * @param userID the ID of the user
 	 * @return a list of UserContacts objects or null if an error occurs
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static ArrayList<ContactDetails> viewAllUserContacts(int user_id) throws DBOperationException {
+	public static ArrayList<ContactDetails> viewAllUserContacts(long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		ArrayList<Table> result = new ArrayList<Table>();
@@ -86,14 +81,12 @@ int[] result = { -1, -1 };
 
 			qg.openConnection();
 
-
 			ContactDetails contact = new ContactDetails();
 			ContactMail contactMail = new ContactMail();
 			ContactPhone contactPhone = new ContactPhone();
 			contact.setContactMail(contactMail);
 			contact.setContactPhone(contactPhone);
-			contact.setUserID(user_id);
-
+			contact.setUserID(userID);
 
 			result = qg.select(contact).executeQuery();
 
@@ -104,12 +97,12 @@ int[] result = { -1, -1 };
 					contacts.add((ContactDetails) data);
 				}
 				logger.logInfo("UserContactOperation", "viewAllUserContacts",
-						"Contacts retrieved for user ID: " + user_id);
+						"Contacts retrieved for user ID: " + userID);
 				return contacts;
 			} else {
 
 				logger.logInfo("UserContactOperation", "viewAllUserContacts",
-						"No Contacts retrieved for user ID: " + user_id);
+						"No Contacts retrieved for user ID: " + userID);
 
 				return null;
 			}
@@ -127,30 +120,43 @@ int[] result = { -1, -1 };
 	/**
 	 * Deletes a specific contact for a user.
 	 *
-	 * @param user_id    the ID of the user
-	 * @param contact_id the ID of the contact to delete
+	 * @param USERID    the ID of the user
+	 * @param CONTACTID the ID of the contact to delete
 	 * @return true if the contact was deleted successfully, false otherwise
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static boolean deleteContact(ContactDetails contact, int userID) throws DBOperationException {
+	public static boolean deleteContact(ContactDetails contact, long userID) throws DBOperationException {
 
 		int[] result = { -1, -1 };
+		ArrayList<Table> data = new ArrayList<Table>();
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		try {
 			qg.openConnection();
 
+			data = qg.select(contact).executeQuery();
+			if (data.size() > 0) {
+				ContactDetails value = (ContactDetails) data.getFirst();
+				
+				
+		result = qg.delete(contact).execute(userID);
+				if (result[0] !=-1) {
+	if (value.getOauthContactID() != null) {
+						CacheData.addDeleteContactID(value.getOauthContactID(), value.getOauthID());
+					}
+					logger.logInfo("UserContactOperation", "deleteContact",
+							"Contact deleted successfully: " + value.getUserID());
+				} else {
+					logger.logError("UserContactOperation", "deleteContact",
+							"Failed to delete contact ID: " + value.getID(), null);
+				}
+				return result[0] > 0;
 
-			result = qg.delete(contact).execute(userID);
-
-			if (result[0] > 0) {
-				logger.logInfo("UserContactOperation", "deleteContact",
-						"Contact deleted successfully: " + contact.getUserID());
 			} else {
-				logger.logError("UserContactOperation", "deleteContact",
-						"Failed to delete contact ID: " + contact.getID(), null);
+
+				return false;
 			}
-			return result[0] > 0;
+
 		} catch (Exception e) {
 			logger.logError("UserContactOperation", "deleteContact", "Exception occurred: " + e.getMessage(), e);
 
@@ -166,13 +172,13 @@ int[] result = { -1, -1 };
 	/**
 	 * Retrieves a specific contact for a user.
 	 *
-	 * @param user_id    the ID of the user
-	 * @param contact_id the ID of the contact to retrieve
+	 * @param userID    the ID of the user
+	 * @param contactID the ID of the contact to retrieve
 	 * @return the UserContacts object or null if not found
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static ContactDetails viewSpecificUserContact(int user_id, int contact_id) throws DBOperationException {
+	public static ContactDetails viewSpecificUserContact(long userID, long contactID) throws DBOperationException {
 
 		ArrayList<Table> contacts = new ArrayList<Table>();
 
@@ -180,26 +186,24 @@ int[] result = { -1, -1 };
 		try {
 			qg.openConnection();
 
-
 			ContactDetails contact = new ContactDetails();
 			ContactMail contactMail = new ContactMail();
 			ContactPhone contactPhone = new ContactPhone();
 			contact.setContactMail(contactMail);
 			contact.setContactPhone(contactPhone);
-			contact.setUserID(user_id);
-			contact.setID(contact_id);
+			contact.setUserID(userID);
+			contact.setID(contactID);
 
 			contacts = qg.select(contact).executeQuery();
 
 			if (contacts.size() > 0) {
 				contact = (ContactDetails) contacts.getFirst();
-
 				logger.logInfo("UserContactOperation", "viewSpecificUserContact",
-						"Contact retrieved successfully for contact ID: " + contact_id);
+						"Contact retrieved successfully for contact ID: " + contactID);
 				return contact;
 			} else {
 				logger.logWarning("UserContactOperation", "viewSpecificUserContact",
-						"No contact data available for user ID: " + user_id + ", contact ID: " + contact_id);
+						"No contact data available for user ID: " + userID + ", contact ID: " + contactID);
 				return null;
 			}
 		} catch (Exception e) {
@@ -222,7 +226,7 @@ int[] result = { -1, -1 };
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static boolean updateSpecificUserContact(ContactDetails contact, int userID) throws DBOperationException {
+	public static boolean updateSpecificUserContact(ContactDetails contact, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] result = { -1, -1 };
@@ -233,7 +237,8 @@ int[] result = { -1, -1 };
 			System.out.println("the Mail here !!" + contact.getContactMail().getContactMailID());
 			if (result[0] == 0) {
 				qg.rollBackConnection();
-				logger.logError("UserContactOperation", "updateSpecificUserContact","Failed to update contact ID: " + contact.getID(), null);
+				logger.logError("UserContactOperation", "updateSpecificUserContact",
+						"Failed to update contact ID: " + contact.getID(), null);
 				return false;
 			}
 			qg.commit();
@@ -254,7 +259,7 @@ int[] result = { -1, -1 };
 
 	}
 
-	public static ContactDetails viewOauthSpecificUserContact(int user_id, String oauthContactID)
+	public static ContactDetails viewOauthSpecificUserContact(long userID, String oauthContactID)
 			throws DBOperationException {
 
 		ArrayList<Table> contacts = new ArrayList<Table>();
@@ -267,7 +272,7 @@ int[] result = { -1, -1 };
 			ContactPhone contactPhone = new ContactPhone();
 			contact.setContactMail(contactMail);
 			contact.setContactPhone(contactPhone);
-			contact.setUserID(user_id);
+			contact.setUserID(userID);
 			contact.setOauthContactID(oauthContactID);
 
 			contacts = qg.select(contact).executeQuery();
@@ -280,7 +285,7 @@ int[] result = { -1, -1 };
 				return contact;
 			} else {
 				logger.logWarning("UserContactOperation", "viewOauthSpecificUserContact",
-						"No contact data available for user ID: " + user_id + ", contact ID: " + contact.getID());
+						"No contact data available for user ID: " + userID + ", contact ID: " + contact.getID());
 				return null;
 			}
 		} catch (Exception e) {

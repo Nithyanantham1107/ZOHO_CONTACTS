@@ -69,19 +69,13 @@ public class CreateGroupServlet extends HttpServlet {
 				if ((request.getParameter("groupName") != null && !request.getParameter("groupName").isBlank())
 						&& request.getParameterValues("contact_ids") != null) {
 
-					
-//                    ug = new UserGroup();
 					Category category = new Category();
 					String sessionid = (String) request.getAttribute("sessionid");
 					CacheModel cachemodel = CacheData.getCache(sessionid);
 					Userdata userData = cachemodel.getUserData();
-//					int[] contactid = new int[request.getParameterValues("contact_ids").length];
 
 					category.setCategoryName(request.getParameter("groupName"));
-//                    ug.setGroupName(request.getParameter("groupName"));
-//					category.setCreatedAt(Instant.now().toEpochMilli());
-				
-					
+
 					category.setModifiedAt(Instant.now().toEpochMilli());
 					category.setCreatedAt(category.getModifiedAt());
 					for (String i : request.getParameterValues("contact_ids")) {
@@ -90,21 +84,15 @@ public class CreateGroupServlet extends HttpServlet {
 							categoryRelation.setCreatedAt(category.getModifiedAt());
 							categoryRelation.setContactIDtoJoin(Integer.parseInt(i));
 							category.setCategoryRelation(categoryRelation);
-//                            contactid[j] = Integer.parseInt(i);
 
 						}
 					}
 
-					
 					category.setCreatedBY(userData.getID());
-//                    ug.setUserid(ud.getUserId());
 
-//                    ug.setcontactid(contactid);
-
-					if (UserGroupOperation.createGroup(category,userData.getID())) {
+					if (UserGroupOperation.createGroup(category, userData.getID())) {
 						ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(userData.getID());
 						if (usergroup != null) {
-//							cachemodel.setUserGroup(usergroup);
 
 							logger.logInfo("CreateGroupServlet", "doPost",
 									"Group created successfully: " + category.getCategoryName());
@@ -129,49 +117,29 @@ public class CreateGroupServlet extends HttpServlet {
 				}
 			} else {
 				if (request.getParameter("groupName") != null && request.getParameterValues("contact_ids") != null) {
-				
-//					ug = new UserGroup();
 					Category category = new Category();
-
 					String sessionid = (String) request.getAttribute("sessionid");
 					CacheModel cachemodel = CacheData.getCache(sessionid);
-
 					Userdata userData = cachemodel.getUserData();
 					category.setModifiedAt(Instant.now().toEpochMilli());
-//					int[] contactid = new int[request.getParameterValues("contact_ids").length];
-
 					category.setCategoryName(request.getParameter("groupName"));
 					category.setID(Integer.parseInt(request.getParameter("groupdata")));
-//					ug.setGroupName(request.getParameter("groupName"));
-//					category.setCreatedAt(Instant.now().toEpochMilli());
 					for (String values : request.getParameterValues("contact_ids")) {
 						if (values != null && !values.isBlank()) {
-//							contactid[j] = Integer.parseInt(i);
-//							j++;
-
 							CategoryRelation categoryRelation = new CategoryRelation();
-                            
 							categoryRelation.setCategoryID(category.getID());
 							categoryRelation.setCreatedAt(category.getModifiedAt());
 							categoryRelation.setContactIDtoJoin(Integer.parseInt(values));
 							category.setCategoryRelation(categoryRelation);
 						}
 					}
-					
-					
 
 					category.setCreatedBY(userData.getID());
 
-//					ug.setUserid(ud.getUserId());
-//					ug.setcontactid(contactid);
 
-				
-//					ug.set(Integer.parseInt(request.getParameter("groupdata")));
-
-					if (UserGroupOperation.updateUserGroup(category,userData.getID())) {
+					if (UserGroupOperation.updateUserGroup(category, userData.getID())) {
 						ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(userData.getID());
 						if (usergroup != null) {
-//							cachemodel.setUserGroup(usergroup);
 
 							logger.logInfo("CreateGroupServlet", "doPost",
 									"Group updated successfully: " + category.getCategoryName());

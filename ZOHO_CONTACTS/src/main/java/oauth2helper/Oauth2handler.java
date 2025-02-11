@@ -33,12 +33,12 @@ public class Oauth2handler {
 		String authorizationUrl = Outh2Credentials.getAuthorizationURL() + "?response_type=code" + "&client_id="
 				+ Outh2Credentials.getClientID() + "&redirect_uri="
 				+ URLEncoder.encode(Outh2Credentials.getRedirectURI(), "UTF-8") + "&scope="
-				+ URLEncoder.encode(Outh2Credentials.getScope(), "UTF-8") + "&access_type=offline";
+				+ URLEncoder.encode(Outh2Credentials.getScope(), "UTF-8") + "&access_type=offline&prompt=consent";
 
 		return authorizationUrl;
 	}
 
-	public static Oauth getAccessToken(String AuthorizationCode, HttpServletResponse response, int userID,
+	public static Oauth getAccessToken(String AuthorizationCode, HttpServletResponse response, long userID,
 			Boolean state) throws IOException {
 		String postData;
 
@@ -95,7 +95,7 @@ public class Oauth2handler {
 				oauth.setSyncState(false);
 				oauth.setCreatedAt(Instant.now().toEpochMilli());
 				oauth.setModifiedAt(oauth.getCreatedAt());
-				oauth.setOauthProvider(OauthProvider.Google.toString());
+				oauth.setOauthProvider(OauthProvider.GOOGLE.toString());
 				if (jsonAccess.get("refresh_token") != null) {
 					oauth.setRefreshToken(jsonAccess.get("refresh_token").getAsString());
 				}
@@ -135,104 +135,105 @@ public class Oauth2handler {
 		JsonArray connections = json.getAsJsonArray("connections");
 
 		ArrayList<ContactDetails> contacts = new ArrayList<ContactDetails>();
+		if (connections != null) {
 
-		for (int i = 0; i < connections.size(); i++) {
-			ContactDetails contact = new ContactDetails();
-			contact.setUserID(oauth.getUserID());
-			contact.setCreatedAt(Instant.now().toEpochMilli());
-			contact.setModifiedAt(contact.getCreatedAt());
-			JsonObject contactJson = connections.get(i).getAsJsonObject();
+			for (int i = 0; i < connections.size(); i++) {
+				ContactDetails contact = new ContactDetails();
+				contact.setUserID(oauth.getUserID());
+				contact.setCreatedAt(Instant.now().toEpochMilli());
+				contact.setModifiedAt(contact.getCreatedAt());
+				JsonObject contactJson = connections.get(i).getAsJsonObject();
 
-			JsonArray names = contactJson.getAsJsonArray("names");
-			System.out.println("name" + names);
-			if (names.size() > 0) {
+				JsonArray names = contactJson.getAsJsonArray("names");
+				System.out.println("name" + names);
+				if (names.size() > 0) {
 
-				if (names.get(0).getAsJsonObject().get("givenName") != null) {
-					contact.setFirstName(names.get(0).getAsJsonObject().get("givenName").getAsString());
+					if (names.get(0).getAsJsonObject().get("givenName") != null) {
+						contact.setFirstName(names.get(0).getAsJsonObject().get("givenName").getAsString());
+
+					}
+					if (names.get(0).getAsJsonObject().get("middleName") != null) {
+						contact.setMiddleName(names.get(0).getAsJsonObject().get("middleName").getAsString());
+
+					}
+
+					if (names.get(0).getAsJsonObject().get("familyName") != null) {
+						contact.setLastName(names.get(0).getAsJsonObject().get("familyName").getAsString());
+
+					}
 
 				}
-				if (names.get(0).getAsJsonObject().get("middleName") != null) {
-					contact.setMiddleName(names.get(0).getAsJsonObject().get("middleName").getAsString());
+
+				if (contactJson.has("emailAddresses")) {
+
+					JsonArray emails = contactJson.getAsJsonArray("emailAddresses");
+
+					for (int j = 0; j < emails.size(); j++) {
+
+						ContactMail contactMail = new ContactMail();
+						contactMail.setContactMailID(emails.get(j).getAsJsonObject().get("value").getAsString());
+						contactMail.setCreatedAt(contact.getCreatedAt());
+						contactMail.setModifiedAt(contact.getModifiedAt());
+						contact.setContactMail(contactMail);
+
+					}
 
 				}
 
-				if (names.get(0).getAsJsonObject().get("familyName") != null) {
-					contact.setLastName(names.get(0).getAsJsonObject().get("familyName").getAsString());
+				if (contactJson.has("phoneNumbers")) {
+
+					JsonArray phone = contactJson.getAsJsonArray("phoneNumbers");
+
+					for (int j = 0; j < phone.size(); j++) {
+						ContactPhone contactPhone = new ContactPhone();
+						contactPhone.setContactPhone(phone.get(j).getAsJsonObject().get("value").getAsString());
+						contactPhone.setCreatedAt(contact.getCreatedAt());
+						contactPhone.setModifiedAt(contact.getModifiedAt());
+						contact.setContactPhone(contactPhone);
+					}
 
 				}
+				if (contactJson.has("addresses")) {
+
+					JsonArray addressesArray = contactJson.getAsJsonArray("addresses");
+					System.out.println("here the address" + addressesArray);
+					for (JsonElement addressElement : addressesArray) {
+						JsonObject addressObject = addressElement.getAsJsonObject();
+//						String formattedValue = addressObject.get("formattedValue").getAsString();
+						String streetAddress = addressObject.get("streetAddress").getAsString();
+						String city = addressObject.get("city").getAsString();
+						String region = addressObject.get("region").getAsString();
+//						String postalCode = addressObject.get("postalCode").getAsString();
+						String country = addressObject.get("country").getAsString();
+						String countryCode = addressObject.get("countryCode").getAsString();
+						String address = streetAddress + city + region + country + countryCode;
+
+						address = address.trim();
+
+						System.out.println("here the address is" + address);
+
+						contact.setAddress(address);
+
+					}
+
+				}
+
+				if (contactJson.has("resourceName")) {
+
+					String oauthContactProvider = contactJson.get("resourceName").getAsString();
+
+					if (oauthContactProvider != null) {
+
+						contact.setOauthContactID(oauthContactProvider);
+					}
+
+				}
+				contact.setOauthID(oauth.getID());
+
+				contacts.add(contact);
 
 			}
-
-			if (contactJson.has("emailAddresses")) {
-
-				JsonArray emails = contactJson.getAsJsonArray("emailAddresses");
-
-				for (int j = 0; j < emails.size(); j++) {
-
-					ContactMail contactMail = new ContactMail();
-					contactMail.setContactMailID(emails.get(j).getAsJsonObject().get("value").getAsString());
-					contactMail.setCreatedAt(contact.getCreatedAt());
-					contactMail.setModifiedAt(contact.getModifiedAt());
-					contact.setContactMail(contactMail);
-
-				}
-
-			}
-
-			if (contactJson.has("phoneNumbers")) {
-
-				JsonArray phone = contactJson.getAsJsonArray("phoneNumbers");
-
-				for (int j = 0; j < phone.size(); j++) {
-					ContactPhone contactPhone = new ContactPhone();
-					contactPhone.setContactPhone(phone.get(j).getAsJsonObject().get("canonicalForm").getAsString());
-					contactPhone.setCreatedAt(contact.getCreatedAt());
-					contactPhone.setModifiedAt(contact.getModifiedAt());
-					contact.setContactPhone(contactPhone);
-				}
-
-			}
-			if (contactJson.has("addresses")) {
-
-				JsonArray addressesArray = contactJson.getAsJsonArray("addresses");
-				System.out.println("here the address" + addressesArray);
-				for (JsonElement addressElement : addressesArray) {
-					JsonObject addressObject = addressElement.getAsJsonObject();
-					String formattedValue = addressObject.get("formattedValue").getAsString();
-					String streetAddress = addressObject.get("streetAddress").getAsString();
-					String city = addressObject.get("city").getAsString();
-					String region = addressObject.get("region").getAsString();
-					String postalCode = addressObject.get("postalCode").getAsString();
-					String country = addressObject.get("country").getAsString();
-					String countryCode = addressObject.get("countryCode").getAsString();
-					String address = streetAddress + city + region + postalCode + country + countryCode;
-
-					address = address.trim();
-
-					System.out.println("here the address is" + address);
-
-					contact.setAddress(address);
-
-				}
-
-			}
-
-			if (contactJson.has("resourceName")) {
-
-				String oauthContactProvider = contactJson.get("resourceName").getAsString();
-
-				if (oauthContactProvider != null) {
-
-					contact.setOauthContactID(oauthContactProvider);
-				}
-
-			}
-			contact.setOauthID(oauth.getID());
-
-			contacts.add(contact);
-
 		}
-
 		return contacts;
 	}
 
@@ -408,31 +409,22 @@ public class Oauth2handler {
 //	    return jsonResponse;
 //	}
 
-	public static void deleteOauthContact(String resourceName,String accessToken) throws IOException {
-		  String urlString = "https://people.googleapis.com/v1/people/" + resourceName;
-
-	          URL url = new URL(urlString);
-
-	        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-
-	     
-	        connection.setRequestMethod("DELETE");
-
-	       
-	        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-
-	        
-	        int responseCode = connection.getResponseCode();
-	        System.out.println("DELETE Response Code: " + responseCode);
-
-	        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-	            String inputLine;
-	            StringBuilder response = new StringBuilder();
-	            while ((inputLine = in.readLine()) != null) {
-	                response.append(inputLine);
-	            }
-	            System.out.println("DELETE Response: " + response.toString());
-	        }
-	    }
+	public static void deleteOauthContact(String resourceName, String accessToken) throws IOException {
+		String urlString = "https://people.googleapis.com/v1/" + resourceName + ":deleteContact";
+		URL url = new URL(urlString);
+		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+		connection.setRequestMethod("DELETE");
+		connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+		int responseCode = connection.getResponseCode();
+		System.out.println("DELETE Response Code: " + responseCode);
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+			String inputLine;
+			StringBuilder response = new StringBuilder();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			System.out.println("DELETE Response: " + response.toString());
+		}
+	}
 
 }

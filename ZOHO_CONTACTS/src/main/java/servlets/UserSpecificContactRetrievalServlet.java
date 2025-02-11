@@ -70,8 +70,8 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
               Userdata ud = cachemodel.getUserData();
 
             if (request.getParameter("contact_id") != null) {
-                int user_id = ud.getID();
-                int contact_id = Integer.parseInt(request.getParameter("contact_id"));
+                long user_id = ud.getID();
+                long contact_id = Long.parseLong(request.getParameter("contact_id"));
                 ContactDetails uc = UserContactOperation.viewSpecificUserContact(user_id, contact_id);
 //                System.out.println("contact mail +" uc.getContactMail().getContactMailID());
 //            	System.out.println("contact Phone +" uc.getContactphone().getContactPhone());

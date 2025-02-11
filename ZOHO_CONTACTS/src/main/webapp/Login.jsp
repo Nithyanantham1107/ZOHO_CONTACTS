@@ -30,24 +30,21 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 body {
 
 	font-family: Arial, sans-serif;
-	background-color: #272727;
+	background-color: #F8F1F1;
 	display: flex;
-	color:black;
+	color:white;
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
 	margin: 0;
 }
-form{
-background-color:white;
-	color:black;
-}
+
 
 .container {
-	background-color:white;
-	color:black;
-	padding: 20px;
-	border-radius: 8px;
+	background-color:#025464;
+	color:white;
+	padding: 65px;
+	border-radius: 45px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	width: 300px;
 	display: flex;
@@ -57,8 +54,7 @@ background-color:white;
 
 h2 {
 
-background-color:white;
-	color:black;
+
 	margin-bottom: 20px;
 
 }
@@ -67,8 +63,6 @@ background-color:white;
 
 label {
 
-background-color:white;
-	color:black;
 
 	margin-top: 10px;
 	font-weight: bold;
@@ -81,27 +75,22 @@ input[type="text"], input[type="password"] {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	margin-top: 5px;
-	background-color:white;
-	color:black;
+	
 }
 
 input[type="submit"] {
 	padding: 10px;
-	
-	background-color: #FFE400;
-	color: black;
+
+background-color:#DDA853;
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
 	width: 100%;
-	margin-top: 15px;
+	margin-top: 32px;
 	font-size: 16px;
 }
 
-input[type="submit"]:hover {
-	background-color: white;
-	color: black;
-}
+
 
 .back-btn {
 	background-color: #ccc;
@@ -114,18 +103,19 @@ input[type="submit"]:hover {
 
 #prompt, #prompt1 {
 	display: none;
-	color: black;
+	color: white;
 	font-size: 12px;
 	margin-top: 5px;
 
 }
 section{
-	background-color:white;
-	color:black;
-	
+
 	display:flex;
 	justify-content: space-between;
 	align-items: center;
+	a{
+	color:white;
+	}
 }
 
 

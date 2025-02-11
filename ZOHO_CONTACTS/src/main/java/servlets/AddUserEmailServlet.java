@@ -86,12 +86,13 @@ public class AddUserEmailServlet extends HttpServlet {
 				email.setIsPrimary(false);
 				email.setCreatedAt(Instant.now().toEpochMilli());
 				email.setModifiedAt(email.getCreatedAt());
-
-				if (UserOperation.addEmail(email, ud.getID())) {
+email=UserOperation.addEmail(email, ud.getID());
+				if (email!=null) {
+					ud.setEmail(email);
 
 					logger.logInfo("AddUserEmailServlet", "doPost",
 							"Contact added successfully for user ID: " + ud.getID());
-					request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+				response.sendRedirect("changePassword.jsp");
 				} else {
 					logger.logWarning("AddUserEmailServlet", "doPost",
 							"Error in adding contact for user ID: " + ud.getID());

@@ -1,14 +1,16 @@
 package dbpojo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import querybuilderconfig.TableSchema.tables;
+import querybuilderconfig.TableSchema.OauthSchema;
+import querybuilderconfig.TableSchema.SessionSchema;
 
 public class Oauth implements Table {
 
-	private int ID = -1;
-	private int userID = -1;
+	private long ID = -1;
+	private long userID = -1;
 	private String oauthProvider;
 	private String refreshToken;
 	private String accessToken;
@@ -20,6 +22,68 @@ public class Oauth implements Table {
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 
 	public Oauth() {
+
+	}
+
+	public Oauth(Map<String, Object> tableData) {
+
+		settedData.clear();
+
+		if (tableData.get(OauthSchema.ID.getColumnName()) != null) {
+
+			setID((Long) tableData.get(OauthSchema.ID.getColumnName()));
+		}
+
+		if (tableData.get(OauthSchema.SYNCSTATE.getColumnName()) != null) {
+
+			setSyncState((Boolean) tableData.get(OauthSchema.SYNCSTATE.getColumnName()));
+		}else {
+			
+			setSyncState(false);
+		}
+
+		if (tableData.get(OauthSchema.OAUTHPROVIDER.getColumnName()) != null) {
+
+			setOauthProvider((String) tableData.get(OauthSchema.OAUTHPROVIDER.getColumnName()));
+
+		}
+
+		if (tableData.get(OauthSchema.REFRESHTOKEN.getColumnName()) != null) {
+			setRefreshToken((String) tableData.get(OauthSchema.REFRESHTOKEN.getColumnName()));
+		}
+		if (tableData.get(OauthSchema.ACCESSTOKEN.getColumnName()) != null) {
+
+			setAccessToken((String) tableData.get(OauthSchema.ACCESSTOKEN.getColumnName()));
+
+		}
+		if (tableData.get(OauthSchema.EMAIL.getColumnName()) != null) {
+
+			setEmail((String) tableData.get(OauthSchema.EMAIL.getColumnName()));
+
+		}
+
+		if (tableData.get(OauthSchema.EXPIRYTIME.getColumnName()) != null) {
+
+			setExpiryTime((Long) tableData.get(OauthSchema.EXPIRYTIME.getColumnName()));
+
+		}
+
+		if (tableData.get(OauthSchema.CREATEDTIME.getColumnName()) != null) {
+
+			setCreatedAt((Long) tableData.get(OauthSchema.CREATEDTIME.getColumnName()));
+
+		}
+
+		if (tableData.get(OauthSchema.MODIFIEDTIME.getColumnName()) != null) {
+
+			setModifiedAt((Long) tableData.get(OauthSchema.MODIFIEDTIME.getColumnName()));
+
+		}
+		if (tableData.get(OauthSchema.USERID.getColumnName()) != null) {
+
+			setUserID((long) tableData.get(OauthSchema.USERID.getColumnName()));
+
+		}
 
 	}
 
@@ -47,28 +111,28 @@ public class Oauth implements Table {
 	public void setSyncState(Boolean syncState) {
 
 		this.syncState = syncState;
-		settedData.put(querybuilderconfig.TableSchema.Oauth.sync_state.toString(), getSyncState());
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.SYNCSTATE.getColumnName(), getSyncState());
 	}
 
-	public int getID() {
+	public long getID() {
 
 		return ID;
 
 	}
 
-	public void setID(int ID) {
+	public void setID(long ID) {
 		this.ID = ID;
 
-		settedData.put(querybuilderconfig.TableSchema.Oauth.ID.toString(), ID);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.ID.getColumnName(), ID);
 	}
 
-	public int getUserID() {
+	public long getUserID() {
 		return userID;
 	}
 
-	public void setUserID(int userID) {
+	public void setUserID(long userID) {
 		this.userID = userID;
-		settedData.put(querybuilderconfig.TableSchema.Oauth.userID.toString(), userID);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.USERID.getColumnName(), userID);
 	}
 
 	public String getOauthProvider() {
@@ -77,7 +141,7 @@ public class Oauth implements Table {
 
 	public void setOauthProvider(String oauthProvider) {
 		this.oauthProvider = oauthProvider;
-		settedData.put(querybuilderconfig.TableSchema.Oauth.Oauth_provider.toString(), oauthProvider);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.OAUTHPROVIDER.getColumnName(), oauthProvider);
 	}
 
 	public String getRefreshToken() {
@@ -86,7 +150,7 @@ public class Oauth implements Table {
 
 	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
-		settedData.put(querybuilderconfig.TableSchema.Oauth.refresh_token.toString(), refreshToken);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.REFRESHTOKEN.getColumnName(), refreshToken);
 	}
 
 	public String getAccessToken() {
@@ -95,7 +159,7 @@ public class Oauth implements Table {
 
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
-		settedData.put(querybuilderconfig.TableSchema.Oauth.access_token.toString(), accessToken);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.ACCESSTOKEN.getColumnName(), accessToken);
 	}
 
 	public String getEmail() {
@@ -105,7 +169,7 @@ public class Oauth implements Table {
 	public void setEmail(String email) {
 		this.email = email;
 
-		settedData.put(querybuilderconfig.TableSchema.Oauth.email.toString(), email);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.EMAIL.getColumnName(), email);
 	}
 
 	public long getExpiryTime() {
@@ -115,12 +179,12 @@ public class Oauth implements Table {
 	public void setExpiryTime(long expiryTime) {
 		this.expiryTime = expiryTime;
 
-		settedData.put(querybuilderconfig.TableSchema.Oauth.expiry_time.toString(), expiryTime);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.EXPIRYTIME.getColumnName(), expiryTime);
 	}
 
 	public void setCreatedAt(long createdAt) {
 		this.createdTime = createdAt;
-		settedData.put(querybuilderconfig.TableSchema.Oauth.created_time.toString(), createdAt);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.CREATEDTIME.getColumnName(), createdAt);
 
 	}
 
@@ -132,7 +196,7 @@ public class Oauth implements Table {
 	public void setModifiedAt(long modifiedAt) {
 		this.modifiedTime = modifiedAt;
 
-		settedData.put(querybuilderconfig.TableSchema.Oauth.modified_time.toString(), modifiedAt);
+		settedData.put(querybuilderconfig.TableSchema.OauthSchema.MODIFIEDTIME.getColumnName(), modifiedAt);
 
 	}
 
@@ -143,17 +207,29 @@ public class Oauth implements Table {
 
 	public String getPrimaryIDName() {
 
-		return tables.Oauth.getPrimaryKey();
+		return querybuilderconfig.TableSchema.OauthSchema.ID.getPrimaryKey();
 	}
 
 	public String getTableName() {
 
-		return tables.Oauth.getTableName();
+		return querybuilderconfig.TableSchema.OauthSchema.ID.getTableName();
 	}
 
 	public Map<String, Object> getSettedData() {
 
 		return settedData;
+	}
+
+	@Override
+	public Table getNewTable(Map<String, Object> tableData) {
+
+		return new Oauth(tableData);
+	}
+
+	@Override
+	public List<String> getTableColumnNames() {
+		
+		return OauthSchema.ID.getColumns();
 	}
 
 }

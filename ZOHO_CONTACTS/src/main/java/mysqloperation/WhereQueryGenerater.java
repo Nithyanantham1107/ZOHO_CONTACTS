@@ -14,7 +14,7 @@ public class WhereQueryGenerater {
 		if (newData.getID() != -1) {
 			query.append(" WHERE");
 			query.append(" " + newData.getTableName() + "." + newData.getPrimaryIDName() + " "
-					+ Operation.Equal.getOperation() + "?");
+					+ Operation.EQUAL.getOperation() + "?");
 
 			parameters.offer(newData.getID());
 		} else {
@@ -34,7 +34,7 @@ public class WhereQueryGenerater {
 
 				while (column.size() > 0) {
 
-					query.append(" " + column.poll() + " " + Operation.Equal.getOperation() + "?");
+					query.append(" " + column.poll() + " " + Operation.EQUAL.getOperation() + "?");
 
 					if (column.size() != 0)
 						query.append(" and");
@@ -60,7 +60,7 @@ public class WhereQueryGenerater {
 		query.append(" WHERE");
 
 		query.append(" " + oldData.getTableName() + "." + oldData.getPrimaryIDName() + " "
-				+ Operation.Equal.getOperation() + "?");
+				+ Operation.EQUAL.getOperation() + "?");
 		parameters.offer(oldData.getID());
 
 		query.append(";");

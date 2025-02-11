@@ -47,38 +47,28 @@
 }
 
 h1 {
-background-color:white;
-color:black;
 	text-align: center;
 	font-size: 24px;
 	margin-bottom: 10px;
 }
 
-p {background-color:white;
-color:black;
+p {
 	text-align: center;
 	font-size: 14px;
 	margin-bottom: 20px;
 }
 
 section {
-background-color:white;
-color:black;
+	background-color: white;
+	color: black;
 	diplay: flex;
 	justify-content: space-between;
 	margin-bottom: 20px;
-	
-	
-	form{
-	
-	
-	background-color:white;
-color:black;}
 }
 
 label {
-background-color:white;
-color:black;
+	background-color: white;
+	color: black;
 	font-weight: bold;
 	display: block;
 	margin-bottom: 8px;
@@ -87,8 +77,8 @@ color:black;
 input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
 	select {
 	width: 100%;
-	background-color:white;
-color:black;
+	background-color: white;
+	color: black;
 	padding: 10px;
 	margin-bottom: 12px;
 	border: 1px solid #ddd;
@@ -117,15 +107,6 @@ button {
 	margin-top: 10px;
 }
 
-a {
-	color: #4CAF50;
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
 .radio-buttons {
 	display: flex;
 	gap: 10px;
@@ -148,7 +129,6 @@ a:hover {
 
 
 	<%
-	
 	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
 	if (cachemodel == null) {
@@ -161,7 +141,7 @@ a:hover {
 	Userdata ud = cachemodel.getUserData();
 	%>
 
-	<section id="header">
+	<div id="header">
 
 
 
@@ -187,22 +167,22 @@ a:hover {
 
 
 
-	</section>
+	</div>
 
 
-	<section id="main">
+	<div id="main">
 
-	
-		
+
+
 
 
 
 
 		<div class="form-container">
-		
-		
-		<section>
-			<form action="/adduseremail" method="post">
+
+
+
+			<form action="/adduseremail" method="post" style="background-color:white;">
 				<label for="Addemail">Enter email to Add</label> <input type="text"
 					name="newemail" placeholder="Enter Email to add">
 
@@ -210,82 +190,83 @@ a:hover {
 
 
 			</form>
-		</section>
-		
-		
-		
-				<section id="table">
-
-					<%
-					if (ud.getallemail() != null && ud.getallemail().size() > 0) {
-					%>
-
-					<table>
-
-						<thead>
-
-
-							<tr>
-								<th>Email</th>
-
-								<th>Delete</th>
-
-
-							</tr>
-
-						</thead>
-						<tbody>
-
-							<%
-							if (ud.getallemail() != null && ud.getallemail().size() > 0) {
-
-								for (EmailUser data : ud.getallemail()) {
-
-									if (!data.getIsPrimary()) {
-							%>
 
 
 
+			<section id="table">
 
-							<tr>
+				<%
+				if (ud.getallemail() != null && ud.getallemail().size() > 0) {
+				%>
+
+				<table>
+
+					<thead>
 
 
-								<td><%=data.getEmail()%></td>
+						<tr>
+							<th>Email</th>
+
+							<th>Delete</th>
+
+
+						</tr>
+
+					</thead>
+					<tbody>
+
+						<%
+						if (ud.getallemail() != null && ud.getallemail().size() > 0) {
+
+							for (EmailUser data : ud.getallemail()) {
+
+								if (!data.getIsPrimary()) {
+						%>
 
 
 
 
+						<tr>
 
-								<td>
-									<form action="/deleteuseremail" method="post">
-										<input type="hidden" value="<%=data.getID()%>"
-											name="emailID" /> <input type="submit" class="glowredbutton"
-											value="Delete" />
-									</form>
-								</td>
-							</tr>
 
-							<%
-							}
-							}
-							}
-							%>
+							<td><%=data.getEmail()%></td>
 
 
 
-						</tbody>
-
-					</table>
 
 
-					<%
-					}
-					%>
+							<td>
+								<form action="/deleteuseremail" method="post">
+									<input type="hidden" value="<%=data.getID()%>" name="emailID" />
+									<input type="submit" class="glowredbutton" value="Delete" />
+								</form>
+							</td>
+						</tr>
+
+						<%
+						}
+								
+
+						}
+						}
+						%>
 
 
-				</section>
-		
-			<form action="/changeuserpassword" method="POST" id="registration-form">
+
+					</tbody>
+
+				</table>
+
+
+				<%
+				}
+				%>
+
+
+			</section>
+
+			<form action="/changeuserpassword" method="POST"
+				id="registration-form">
 
 
 
@@ -314,12 +295,13 @@ a:hover {
 
 				</section>
 
-				<button type="submit" class="glowyellowbutton">change Password</button>
+				<button type="submit" class="glowyellowbutton">change
+					Password</button>
 			</form>
 
 
 		</div>
-	</section>
+	</div>
 
 
 

@@ -2,13 +2,13 @@ package dbpojo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import querybuilderconfig.TableSchema.tables;
-import querybuilderconfig.TableSchema.user_data;
+import querybuilderconfig.TableSchema.UserDataSchema;
 
-public class Userdata implements Table {
-	private int id = -1;
+public class Userdata implements TableWithChild {
+	private long id = -1;
 	private String Name;
 	private String password;
 	private String phoneNo;
@@ -16,12 +16,88 @@ public class Userdata implements Table {
 	private String timeZone;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
+	private List<Table> childTable = new ArrayList<Table>();
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 	private ArrayList<EmailUser> email = new ArrayList<EmailUser>();
 	private LoginCredentials LoginCredentials;
 	private ArrayList<Oauth> oauths = new ArrayList<Oauth>();
 
 	public Userdata() {
+
+	}
+
+	public Userdata(Map<String, Object> tableData) {
+
+		settedData.clear();
+
+		if (tableData.get(UserDataSchema.NAME.getColumnName()) != null) {
+
+			setName((String) tableData.get(UserDataSchema.NAME.getColumnName()));
+
+		}
+
+		if (tableData.get(UserDataSchema.PASSWORD.getColumnName()) != null) {
+
+			setPassword((String) tableData.get(UserDataSchema.PASSWORD.getColumnName()));
+
+		}
+		if (tableData.get(UserDataSchema.ADDRESS.getColumnName()) != null) {
+
+			setAddress((String) tableData.get(UserDataSchema.ADDRESS.getColumnName()));
+
+		}
+		if (tableData.get(UserDataSchema.USERID.getColumnName()) != null) {
+
+			setID((long) tableData.get(UserDataSchema.USERID.getColumnName()));
+
+		}
+		if (tableData.get(UserDataSchema.PHONENO.getColumnName()) != null) {
+
+			setPhoneno((String) tableData.get(UserDataSchema.PHONENO.getColumnName()));
+
+		}
+
+		if (tableData.get(UserDataSchema.TIMEZONE.getColumnName()) != null) {
+
+			setTimezone((String) tableData.get(UserDataSchema.TIMEZONE.getColumnName()));
+
+		}
+
+		if (tableData.get(UserDataSchema.CREATEDTIME.getColumnName()) != null) {
+
+			setCreatedAt((Long) tableData.get(UserDataSchema.CREATEDTIME.getColumnName()));
+
+		}
+
+		if (tableData.get(UserDataSchema.MODIFIEDTIME.getColumnName()) != null) {
+
+			setModifiedAt((Long) tableData.get(UserDataSchema.MODIFIEDTIME.getColumnName()));
+
+		}
+
+	}
+
+	public void setChildTable(Table table) {
+		if (table instanceof LoginCredentials) {
+
+			setLoginCredentials((LoginCredentials) table);
+		} else if (table instanceof EmailUser) {
+
+			EmailUser email = (EmailUser) table;
+			if (getemail(email.getID()) == null) {
+				setEmail(email);
+
+			}
+
+		} else if (table instanceof Oauth) {
+
+			Oauth oauth = (Oauth) table;
+			if (getOauth(oauth.getID()) == null) {
+				setOauth(oauth);
+
+			}
+
+		}
 
 	}
 
@@ -39,23 +115,60 @@ public class Userdata implements Table {
 		setModifiedAt(modifiedAt);
 	}
 
+	public Table getNewTable(Map<String, Object> tableData) {
+
+		return new Userdata(tableData);
+	}
+
+	public String getForiegnkey(String TableName) {
+
+		return UserDataSchema.USERID.getForiegnKey(TableName);
+	}
+
+	public List<Table> getChildTables() {
+
+		childTable.clear();
+		if (LoginCredentials != null) {
+
+			childTable.add(LoginCredentials);
+		}
+		if (oauths.size() > 0) {
+			for (Table table : oauths) {
+				childTable.add(table);
+			}
+
+		}
+		if (email.size() > 0) {
+
+			for (Table table : email) {
+
+				childTable.add(table);
+			}
+		}
+		return childTable;
+	}
+
+	public List<String> getTableColumnNames() {
+
+		return UserDataSchema.USERID.getColumns();
+	}
+
 	public String getTableName() {
 
-		return tables.user_data.getTableName();
+		return UserDataSchema.USERID.getTableName();
 	}
 
 	public String getPrimaryIDName() {
 
-		return tables.user_data.getPrimaryKey();
+		return UserDataSchema.USERID.getPrimaryKey();
 	}
 
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
 
-		settedData.put(user_data.created_time.toString(), getCreatedAt());
+		settedData.put(UserDataSchema.CREATEDTIME.getColumnName(), getCreatedAt());
 	}
-	
 
 	public long getCreatedAt() {
 
@@ -66,7 +179,7 @@ public class Userdata implements Table {
 
 		this.modifiedAt = modifiedAt;
 
-		settedData.put(user_data.modified_time.toString(), getModifiedAt());
+		settedData.put(UserDataSchema.MODIFIEDTIME.getColumnName(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -89,6 +202,7 @@ public class Userdata implements Table {
 	public void setLoginCredentials(LoginCredentials login) {
 
 		this.LoginCredentials = login;
+
 	}
 
 	public LoginCredentials getLoginCredentials() {
@@ -98,13 +212,14 @@ public class Userdata implements Table {
 	public void setEmail(EmailUser email) {
 
 		this.email.add(email);
+
 	}
 
 	public ArrayList<EmailUser> getallemail() {
 		return this.email;
 	}
 
-	public EmailUser getemail(int ID) {
+	public EmailUser getemail(long ID) {
 
 		for (EmailUser email : this.email) {
 
@@ -114,10 +229,11 @@ public class Userdata implements Table {
 		}
 		return null;
 	}
+
 	public void setAllOauth(ArrayList<Oauth> oauths) {
 		this.oauths.clear();
-		this.oauths=oauths;
-		
+		this.oauths = oauths;
+
 	}
 
 	public void setOauth(Oauth oauth) {
@@ -129,7 +245,7 @@ public class Userdata implements Table {
 		return this.oauths;
 	}
 
-	public Oauth getOauth(int ID) {
+	public Oauth getOauth(long ID) {
 
 		for (Oauth oauth : this.oauths) {
 
@@ -140,12 +256,35 @@ public class Userdata implements Table {
 		return null;
 	}
 
-	public void setID(int id) {
+	public void setID(long id) {
 		this.id = id;
-		settedData.put(user_data.user_id.toString(), getID());
+		settedData.put(UserDataSchema.USERID.getColumnName(), getID());
+
+		for (Table table : getChildTables()) {
+
+			if (table instanceof LoginCredentials) {
+				LoginCredentials login = (LoginCredentials) table;
+				login.setUserID(id);
+
+			} else if (table instanceof Oauth) {
+
+				Oauth oauth = (Oauth) table;
+				oauth.setUserID(id);
+
+			} else if (table instanceof EmailUser) {
+
+				EmailUser email = (EmailUser) table;
+				email.setEmailID(id);
+			}
+		}
 	}
 
-	public int getID() {
+	public List<Table> getDeleteChildTable() {
+
+		return UserDataSchema.USERID.deleteChildTables();
+	}
+
+	public long getID() {
 		return this.id;
 	}
 
@@ -155,12 +294,12 @@ public class Userdata implements Table {
 
 	public void setName(String name) {
 		this.Name = name;
-		settedData.put(user_data.Name.toString(), getName());
+		settedData.put(UserDataSchema.NAME.getColumnName(), getName());
 	}
 
 	public void setPassword(String Password) {
 		this.password = Password;
-		settedData.put(user_data.password.toString(), getPassword());
+		settedData.put(UserDataSchema.PASSWORD.getColumnName(), getPassword());
 	}
 
 	public String getPassword() {
@@ -169,7 +308,7 @@ public class Userdata implements Table {
 
 	public void setPhoneno(String Phoneno) {
 		this.phoneNo = Phoneno;
-		settedData.put(user_data.phone_no.toString(), getPhoneno());
+		settedData.put(UserDataSchema.PHONENO.getColumnName(), getPhoneno());
 	}
 
 	public String getPhoneno() {
@@ -179,7 +318,7 @@ public class Userdata implements Table {
 	public void setTimezone(String Timezone) {
 		this.timeZone = Timezone;
 
-		settedData.put(user_data.timezone.toString(), getTimezone());
+		settedData.put(UserDataSchema.TIMEZONE.getColumnName(), getTimezone());
 	}
 
 	public String getTimezone() {
@@ -188,7 +327,7 @@ public class Userdata implements Table {
 
 	public void setAddress(String Address) {
 		this.address = Address;
-		settedData.put(user_data.address.toString(), getAddress());
+		settedData.put(UserDataSchema.ADDRESS.getColumnName(), getAddress());
 	}
 
 	public String getAddress() {

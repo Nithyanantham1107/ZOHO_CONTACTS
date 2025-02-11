@@ -35,15 +35,18 @@
 	
 </script>
 
-
 <style type="text/css">
 .form-container {
-	max-width: 600px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 	margin: auto;
 	padding: 20px;
-	background-color: white;
 	border-radius: 8px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profileHeader {
+	background-color: #FBF5E5;
 }
 
 h1 {
@@ -59,16 +62,14 @@ p {
 }
 
 section {
-background-color:white;
-	
+	background-color: white;
 	margin-bottom: 20px;
-	width:100%;
-
+	width: 100%;
 }
 
 label {
-color:black;
-background-color:white;
+	color: black;
+	background-color: white;
 	font-weight: bold;
 	display: block;
 	margin-bottom: 8px;
@@ -77,8 +78,8 @@ background-color:white;
 input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
 	select {
 	width: 100%;
-	color:black;
-	background-color:white;
+	color: black;
+	background-color: white;
 	padding: 10px;
 	margin-bottom: 12px;
 	border: 1px solid #ddd;
@@ -88,7 +89,7 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="password
 
 input[type="checkbox"], input[type="radio"] {
 	margin-right: 10px;
-		width: 100%;
+	width: 100%;
 }
 
 .name-inputs {
@@ -108,30 +109,12 @@ button {
 	margin-top: 10px;
 }
 
-a {
-	color: #4CAF50;
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
 .radio-buttons {
 	display: flex;
 	gap: 10px;
 }
-
-@media ( max-width : 600px) {
-	.name-inputs {
-		flex-direction: column;
-	}
-	input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
-		select {
-		font-size: 16px;
-	}
-}
 </style>
+
 </head>
 <body>
 
@@ -151,7 +134,7 @@ a:hover {
 	Userdata ud = cachemodel.getUserData();
 	%>
 
-	<section id="header">
+	<div id="header">
 
 
 
@@ -159,129 +142,123 @@ a:hover {
 		</a>
 
 
-		<div>
-
-
-			<ul id="navbar">
-				<li><a href="home.jsp">Contacts</a></li>
-				<li><a href="groups.jsp">Groups</a></li>
-				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> More</a></li>
-				<li><a href="/login"> <i
-						class="fa-solid fa-arrow-right-from-bracket"></i>
-				</a></li>
-
-			</ul>
-
-		</div>
 
 
 
-	</section>
+		<ul id="navbar">
+			<li><a href="home.jsp">Contacts</a></li>
+			<li><a href="groups.jsp">Groups</a></li>
+			<li><a href="profile.jsp">Profile</a></li>
+			<li><a href="changePassword.jsp"> More</a></li>
+			<li><a href="/login"> <i
+					class="fa-solid fa-arrow-right-from-bracket"></i>
+			</a></li>
 
-
-	<section id="main">
-	
-	
-	
-	
-	
-
-		<div class="form-container">
-			<form action="/userupdate" method="POST" id="registration-form">
-
-				<section>
-
-					<label for="first-name">Full Name</label> <input type="text"
-						id="first-name" name="name" value="<%=ud.getName()%>" required>
-					<label for="phone">Phone Number</label> <input type="tel"
-						id="phone" name="phone" value="<%=ud.getPhoneno()%>" required>
-				</section>
+		</ul>
 
 
 
-				<section>
-
-					<label for="primary">primary email</label> <select
-						name="primaryemail" required>
 
 
-						<%
-						int primary = -1;
-						if (ud.getallemail() != null && ud.getallemail().size() > 0) {
-
-							for (EmailUser data : ud.getallemail()) {
-
-								if (data.getIsPrimary()) {
-							primary = data.getID();
-						%>
-						<option value="<%=data.getEmail()%>" selected><%=data.getEmail()%></option>
+	</div>
 
 
-						<%
-						} else {
-						%>
+	<main class="form-container">
 
-						<option value="<%=data.getEmail()%>"><%=data.getEmail()%></option>
 
-						<%
-						}
+		
 
-						}
-						}
-						%>
+		<form action="/userupdate" method="POST" id="registration-form">
+			
+			
+			
+			<section>
+
+				<label for="first-name">Full Name</label> <input type="text"
+					id="first-name" name="name" value="<%=ud.getName()%>" required>
+				<label for="phone">Phone Number</label> <input type="tel" id="phone"
+					name="phone" value="<%=ud.getPhoneno()%>" required>
+			</section>
 
 
 
-					</select>
-				</section>
+			<section>
 
-				<section>
-
-					<label for="timezone">Timezone</label> <select name="timezone"
-						id="timezone" required>
-						<option value="<%=ud.getTimezone()%>" selected><%=ud.getTimezone()%></option>
-						<option value="Asia/Kolkata">Asia/Kolkata (Indian
-							Standard Time)</option>
-						<option value="America/New_York">America/New_York
-							(Eastern Time)</option>
-						<option value="America/Chicago">America/Chicago (Central
-							Time)</option>
-						<option value="America/Denver">America/Denver (Mountain
-							Time)</option>
+				<label for="primary">primary email</label> <select
+					name="primaryemail" required>
 
 
-					</select>
-				</section>
+					<%
+					long primary = -1;
+					if (ud.getallemail() != null && ud.getallemail().size() > 0) {
+
+						for (EmailUser data : ud.getallemail()) {
+
+							if (data.getIsPrimary()) {
+						primary = data.getID();
+					%>
+					<option value="<%=data.getEmail()%>" selected><%=data.getEmail()%></option>
 
 
-				<section>
+					<%
+					} else {
+					%>
 
-					<label for="address">Street Address</label> <input type="text"
-						id="address" name="address" value="<%=ud.getAddress()%>" required>
+					<option value="<%=data.getEmail()%>"><%=data.getEmail()%></option>
 
+					<%
+					}
 
-				</section>
-
-
-
-				<section>
-
-					<label for="username">UserName</label> <input type="text"
-						name="username"
-						value="<%=ud.getLoginCredentials().getUserName()%>" required>
-					<input type="hidden" name="emailID" value="<%=primary%>" required>
-					<input type="hidden" name="logID"
-						value="<%=ud.getLoginCredentials().getID()%>" required>
-
-				</section>
-
-				<button type="submit" class="glowyellowbutton">Update</button>
-			</form>
+					}
+					}
+					%>
 
 
-		</div>
-	</section>
+
+				</select>
+			</section>
+
+			<section>
+
+				<label for="timezone">Timezone</label> <select name="timezone"
+					id="timezone" required>
+					<option value="<%=ud.getTimezone()%>" selected><%=ud.getTimezone()%></option>
+					<option value="Asia/Kolkata">Asia/Kolkata (Indian Standard
+						Time)</option>
+					<option value="America/New_York">America/New_York (Eastern
+						Time)</option>
+					<option value="America/Chicago">America/Chicago (Central
+						Time)</option>
+					<option value="America/Denver">America/Denver (Mountain
+						Time)</option>
+
+
+				</select>
+			</section>
+
+
+			<section>
+
+				<label for="address">Street Address</label> <input type="text"
+					id="address" name="address" value="<%=ud.getAddress()%>" required>
+
+
+			</section>
+
+
+
+			<section>
+
+				<label for="username">UserName</label> <input type="text"
+					name="username" value="<%=ud.getLoginCredentials().getUserName()%>"
+					required> <input type="hidden" name="emailID"
+					value="<%=primary%>" required> <input type="hidden"
+					name="logID" value="<%=ud.getLoginCredentials().getID()%>" required>
+
+			</section>
+
+			<button type="submit" class="glowyellowbutton">Update</button>
+		</form>
 
 
 
@@ -293,6 +270,10 @@ a:hover {
 
 
 
+
+
+
+	</main>
 
 
 

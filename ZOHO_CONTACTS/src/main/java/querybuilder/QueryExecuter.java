@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import datahelper.GenericPojoMapper;
 import datahelper.PojoMapper;
 import dbpojo.Table;
 import querybuilderconfig.TableSchema.OpType;
@@ -87,7 +88,7 @@ public class QueryExecuter {
 	}
 
 	public static ArrayList<Table> mySqlExecuteQuery(Connection con, String query, Queue<Object> parameters,
-			String tableName) {
+			Table table) {
 
 		PreparedStatement ps;
 		ResultSet result;
@@ -133,8 +134,9 @@ public class QueryExecuter {
 			}
 
 			PojoMapper pm = new PojoMapper();
-
-			return pm.PojoResultSetter(tableName, columnNames, result);
+GenericPojoMapper gpm=new GenericPojoMapper();
+//			return pm.PojoResultSetter(tableName, columnNames, result);
+			return gpm.PojoResultSetter(table, columnNames, result);
 
 		} catch (Exception e) {
 			System.out.println(e);

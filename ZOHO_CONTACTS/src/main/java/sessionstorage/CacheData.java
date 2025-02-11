@@ -2,9 +2,6 @@ package sessionstorage;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,22 +9,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CacheData {
 
 	private static final int SIZE = 100;
-	private static ConcurrentHashMap<Integer, CacheModel> viewcache = new ConcurrentHashMap<Integer, CacheModel>();
-	private static HashMap<String, Integer> sessionMapper = new HashMap<String, Integer>();
+	private static ConcurrentHashMap<Long, CacheModel> viewcache = new ConcurrentHashMap<Long, CacheModel>();
+	private static HashMap<String, Long> sessionMapper = new HashMap<String, Long>();
 	private static BlockingQueue<String> primaryUpdateQueue = new ArrayBlockingQueue<String>(100);
 	private static BlockingQueue<String> secondaryUpdateQueue = new ArrayBlockingQueue<String>(100);
 	private static Boolean active = false;
-	
-	private static HashSet<String> deleteSet=new HashSet<String>();
+	private static ConcurrentHashMap<String, Long> deleteContact = new ConcurrentHashMap<String, Long>();
 
-	public void addDeleteContactID(String resourceName) {
-		
-		deleteSet.add(resourceName);
-		
+	public static void addDeleteContactID(String resourceName, long OauthID) {
+		deleteContact.put(resourceName, OauthID);
 	}
-	
-	
-	
+
+	public static void clearDeletecontact() {
+		deleteContact.clear();
+
+	}
+
+	public static ConcurrentHashMap<String, Long> getDeleteCache() {
+		return deleteContact;
+	}
+
 	public static void setSecondaryActive() {
 		active = true;
 	}
@@ -45,7 +46,7 @@ public class CacheData {
 
 	}
 
-	public static CacheModel getUsercache(Integer userID) {
+	public static CacheModel getUsercache(long userID) {
 
 		return viewcache.get(userID);
 	}
@@ -54,7 +55,7 @@ public class CacheData {
 		if (viewcache.get(cachedata.getUserData().getID()) == null) {
 
 			if (viewcache.size() >= SIZE) {
-				Integer userID = -1;
+				long userID = -1;
 				long userCacheLastaccessed = Long.MAX_VALUE;
 				for (CacheModel userCache : viewcache.values()) {
 
@@ -74,7 +75,7 @@ public class CacheData {
 
 	public static CacheModel getCache(String sessionid) {
 
-		if(sessionMapper.get(sessionid)==null) {
+		if (sessionMapper.get(sessionid) == null) {
 			return null;
 		}
 		return viewcache.get(sessionMapper.get(sessionid));
@@ -101,10 +102,10 @@ public class CacheData {
 
 		if (sessionMapper.get(sessionid) != null) {
 
-			int userId = sessionMapper.get(sessionid);
+			long userId = sessionMapper.get(sessionid);
 			sessionMapper.remove(sessionid);
 			boolean state = false;
-			for (int i : sessionMapper.values()) {
+			for (long i : sessionMapper.values()) {
 				if (i == userId) {
 					state = true;
 					break;
@@ -119,7 +120,7 @@ public class CacheData {
 
 	}
 
-	public static HashMap<String, Integer> getsessionMapper() {
+	public static HashMap<String, Long> getsessionMapper() {
 		return sessionMapper;
 	}
 

@@ -9,8 +9,8 @@ import querybuilderconfig.TableSchema.OpType;
 
 public class AuditLogOperation {
 
-	public static AuditLog audit(QueryBuilder qg, int rowKey, Table oldData, Table currentData, OpType opType,
-			int userID) {
+	public static AuditLog audit(QueryBuilder qg, long rowKey, Table oldData, Table currentData, OpType opType,
+			long userID) {
 
 		int[] result = { -1, -1 };
 		

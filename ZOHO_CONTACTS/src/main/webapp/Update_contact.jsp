@@ -1,16 +1,15 @@
 <%@page import="dbpojo.ContactDetails"%>
 <%@page import="sessionstorage.CacheModel"%>
-<%@page import="dbmodel.UserGroup"%>
+
 <%@page import="java.util.ArrayList"%>
 <%@page import="dboperation.UserGroupOperation"%>
 <%@page import="dboperation.UserContactOperation"%>
 <%@page import="dboperation.UserOperation"%>
 <%@page import="dboperation.SessionOperation"%>
-<%@page import="dbmodel.UserContacts"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<%@ page import="dbmodel.UserData,javax.servlet.http.HttpSession"%>
 
 
 <%
@@ -30,7 +29,7 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 body {
 	font-family: Arial, sans-serif;
   color:white;
-	background-color:#272727;
+	background-color:#FBF5E5;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -143,7 +142,7 @@ padding: 10px;
 				response.sendRedirect("home.jsp");
 				return;
 			}
-			System.out.println("hey" + uc.getFirstName());
+			System.out.println("hey" + uc.getFirstName()+uc.getID());
 			%>
 			<label for="name">FirstName</label> <input type="text" name="f_name"
 				value="<%=uc.getFirstName()%>" required /> <label for="name">MiddleName</label>

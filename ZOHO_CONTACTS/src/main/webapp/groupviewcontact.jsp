@@ -57,9 +57,12 @@
 
 	ArrayList<ContactDetails> contactsInGroup = new ArrayList<>();
 	if(group!=null){
-		
-		contactsInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "view");
-		
+	
+			
+			contactsInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "view");
+			
+	
+			
 		
 	}
 	
@@ -134,7 +137,7 @@
 
 
 		<section id="tableContainer">
-			<section id="header">
+			<section id="tableHeader">
 			
 			<%
 			
@@ -144,21 +147,19 @@
 			
 			%>
 
-				<section id="tableHeader">
 					<h1><%= group.getCategoryName() %></h1>
 
 
 
-				</section>
+				
 				
 				
 				<%}else{ %>
-				<section id="tableHeader">
+				
 					<h1> Group Details </h1>
 
 
 
-				</section>
 				
 				<%
 				

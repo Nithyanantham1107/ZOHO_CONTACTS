@@ -1,30 +1,68 @@
 package dbpojo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import querybuilderconfig.TableSchema.Audit_log;
-import querybuilderconfig.TableSchema.tables;
+import querybuilderconfig.TableSchema.AuditLogSchema;
+import querybuilderconfig.TableSchema.ContactMailSchema;
 
 public class AuditLog implements Table {
 
-	private int ID = -1;
+	private long ID = -1;
 	private String previousState;
 	private String changedState;
 	private String tableName;
 	private String operation;
 	private long createdAt = -1;
-	private int createdBy = -1;
+	private long createdBy = -1;
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 
-	public int getID() {
+	public AuditLog() {
+
+	}
+
+	public AuditLog(Map<String, Object> tableData) {
+		if (tableData.get(AuditLogSchema.ID.getColumnName()) != null) {
+
+			setID((long) tableData.get(AuditLogSchema.ID.getColumnName()));
+		}
+
+		if (tableData.get(AuditLogSchema.PREVIOUSSTATE.getColumnName()) != null) {
+
+			setPreviousState((String) tableData.get(AuditLogSchema.PREVIOUSSTATE.getColumnName()));
+		}
+
+		if (tableData.get(AuditLogSchema.CHANGEDSTATE.getColumnName()) != null) {
+
+			setChangedState((String) tableData.get(AuditLogSchema.CHANGEDSTATE.getColumnName()));
+		}
+
+		if (tableData.get(AuditLogSchema.TABLENAME.getColumnName()) != null) {
+
+			setAuditTableName((String) tableData.get(AuditLogSchema.TABLENAME.getColumnName()));
+		}
+
+		if (tableData.get(AuditLogSchema.CREATEDAT.getColumnName()) != null) {
+
+			setCreatedAt((long) tableData.get(AuditLogSchema.CREATEDAT.getColumnName()));
+		}
+
+		if (tableData.get(AuditLogSchema.CREATEDBY.getColumnName()) != null) {
+
+			setCreatedBy((long) tableData.get(AuditLogSchema.CREATEDBY.getColumnName()));
+		}
+
+	}
+
+	public long getID() {
 		return ID;
 
 	}
 
-	public void setID(int iD) {
+	public void setID(long iD) {
 		ID = iD;
-		settedData.put( Audit_log.ID.toString(), getID());
+		settedData.put(AuditLogSchema.ID.getColumnName(), getID());
 	}
 
 	public String getPreviousState() {
@@ -38,7 +76,7 @@ public class AuditLog implements Table {
 
 	public void setPreviousState(String previousState) {
 		this.previousState = previousState;
-		settedData.put( Audit_log.previous_state.toString(), getPreviousState());
+		settedData.put(AuditLogSchema.PREVIOUSSTATE.getColumnName(), getPreviousState());
 	}
 
 	public String getChangedState() {
@@ -48,22 +86,22 @@ public class AuditLog implements Table {
 	public void setChangedState(String changedState) {
 		this.changedState = changedState;
 
-		settedData.put( Audit_log.changed_state.toString(), getChangedState());
+		settedData.put(AuditLogSchema.CHANGEDSTATE.getColumnName(), getChangedState());
 	}
 
 	public String getTableName() {
-		return tables.Audit_log.getTableName();
+		return AuditLogSchema.ID.getTableName();
 	}
 
 	public String getPrimaryIDName() {
 
-		return tables.Audit_log.getPrimaryKey();
+		return AuditLogSchema.ID.getPrimaryKey();
 	}
 
 	public void setAuditTableName(String tableName) {
 		this.tableName = tableName;
 
-		settedData.put( Audit_log.table_name.toString(), getAuditTableName());
+		settedData.put(AuditLogSchema.TABLENAME.getColumnName(), getAuditTableName());
 	}
 
 	public String getOperation() {
@@ -72,7 +110,7 @@ public class AuditLog implements Table {
 
 	public void setOperation(String operation) {
 		this.operation = operation;
-		settedData.put( Audit_log.operation.toString(), getOperation());
+		settedData.put(AuditLogSchema.OPERATION.getColumnName(), getOperation());
 	}
 
 	public long getCreatedAt() {
@@ -81,16 +119,16 @@ public class AuditLog implements Table {
 
 	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
-		settedData.put( Audit_log.created_at.toString(), getCreatedAt());
+		settedData.put(AuditLogSchema.CREATEDAT.getColumnName(), getCreatedAt());
 	}
 
-	public int getCreatedBy() {
+	public long getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(int createdBy) {
+	public void setCreatedBy(long createdBy) {
 		this.createdBy = createdBy;
-		settedData.put( Audit_log.created_by.toString(), getCreatedBy());
+		settedData.put(AuditLogSchema.CREATEDBY.getColumnName(), getCreatedBy());
 	}
 
 	public Map<String, Object> getSettedData() {
@@ -107,5 +145,17 @@ public class AuditLog implements Table {
 	@Override
 	public void setModifiedAt(long modifiedAt) {
 
+	}
+
+	@Override
+	public List<String> getTableColumnNames() {
+
+		return AuditLogSchema.ID.getColumns();
+	}
+
+	@Override
+	public Table getNewTable(Map<String, Object> tableData) {
+
+		return new AuditLog(tableData);
 	}
 }

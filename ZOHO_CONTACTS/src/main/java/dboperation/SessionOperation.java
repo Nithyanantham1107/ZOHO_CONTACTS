@@ -18,7 +18,7 @@ import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import querybuilderconfig.QueryBuilder;
 import querybuilderconfig.SqlQueryLayer;
-import querybuilderconfig.TableSchema.Email_user;
+import querybuilderconfig.TableSchema.EmailUserSchema;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
 
@@ -43,7 +43,7 @@ public class SessionOperation {
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static String generateSessionId(int userID) throws DBOperationException {
+	public static String generateSessionId(long userID) throws DBOperationException {
 
 		int[] result = new int[2];
 		CacheModel cachemodel = new CacheModel();
@@ -138,7 +138,7 @@ public class SessionOperation {
 			if (sessionid != null) {
 				CacheModel cachemodel = CacheData.getCache(sessionid);
 				dbpojo.Session session = cachemodel.getsession(sessionid);
-				int userID = session.getUserId();
+				long userID = session.getUserId();
 
 				result = qg.delete(session).execute(userID);
 			} else {
@@ -255,7 +255,7 @@ public class SessionOperation {
 		qg.openConnection();
 		if (CacheData.getsessionMapper().size() >= 100) {
 			long maxTime = 0;
-			int userID = 0;
+			long userID = 0;
 			long currentTime = Instant.now().toEpochMilli();
 			dbpojo.Session maxSessionid = new dbpojo.Session();
 

@@ -1,27 +1,38 @@
 package querybuilderconfig;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import dbpojo.Category;
+import dbpojo.CategoryRelation;
+import dbpojo.ContactDetails;
+import dbpojo.ContactMail;
+import dbpojo.ContactPhone;
+import dbpojo.EmailUser;
+import dbpojo.LoginCredentials;
+import dbpojo.Oauth;
+import dbpojo.Session;
+
 public class TableSchema {
 
-	
-	
 	public enum OauthProvider {
 
-		Google,Facebook,Microsoft,LinkedIn;
-		
-		
+		GOOGLE, FACEBOOK, MICROSOFT, LINKEDIN;
+
 	}
-	
-	public enum SyncState{
-		
-		
-		Enabled,Disabled;
+
+	public enum SyncState {
+
+		ENABLED, DISABLED;
 	}
-	
-	
+
 	public enum Statement {
 
-		RETURN_GENERATED_KEYS;
-		
+		RETURNGENERATEDKEYS;
+
 	}
 
 	public enum OpType {
@@ -43,14 +54,14 @@ public class TableSchema {
 			return this.id;
 		}
 
-		public  String getOpType() {
+		public String getOpType() {
 			return this.type;
 		}
 
 	}
 
 	public enum Operation {
-		Equal("="), Notequal("!="), GreaterThan(">"), LesserThan("<"), GreaterEqual(">="), LesserEqual("<=");
+		EQUAL("="), NOTEQUAL("!="), GREATERTHAN(">"), LESSERTHAN("<"), GREATEREQUAL(">="), LESSEREQUAL("<=");
 
 		String value;
 
@@ -65,7 +76,7 @@ public class TableSchema {
 	}
 
 	public enum JoinType {
-		left("LEFT JOIN"), right("RIGHT JOIN"), inner("INNER JOIN"), outer("OUTER JOIN");
+		LEFT("LEFT JOIN"), RIGHT("RIGHT JOIN"), INNER("INNER JOIN"), OUTER("OUTER JOIN");
 
 		String value;
 
@@ -79,8 +90,41 @@ public class TableSchema {
 		}
 	}
 
-	public enum Category_relation implements Table {
-		ID, contact_id_to_join, Category_id, created_time, modified_time;
+	public enum CategoryRelationSchema implements Table {
+		ID("ID"), CONTACTIDTOJOIN("contact_id_to_join"), CATEGORYID("Category_id"), CREATEDTIME("created_time"),
+		MODIFIEDTIME("modified_time");
+
+		private String columnName;
+
+		private CategoryRelationSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "contact_id_to_join", "Category_id",
+				"created_time", "modified_time");
+
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Category_relation";
@@ -93,8 +137,44 @@ public class TableSchema {
 
 	}
 
-	public enum Category implements Table {
-		Category_id, Category_name, created_by, created_time, modified_time;
+	public enum CategorySchema implements Table {
+		CATEGORYID("Category_id"), CATEGORYNAME("Category_name"), CREATEDBY("created_by"), CREATEDTIME("created_time"),
+		MODIFIEDTIME("modified_time");
+
+		private String columnName;
+
+		private CategorySchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("Category_id", "Category_name", "created_by",
+				"created_time", "modified_time");
+		private static final Map<String, String> FOREIGNKEYRELATION = Map.of(
+
+				CategoryRelationSchema.CATEGORYID.getTableName(), CategoryRelationSchema.CATEGORYID.getColumnName()
+
+		);
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = Arrays.asList(new CategoryRelation());
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Category";
@@ -107,8 +187,50 @@ public class TableSchema {
 
 	}
 
-	public enum Contact_details implements Table {
-		user_id, contact_id, First_name, Middle_name, Last_name, gender, Address, created_time, modified_time,Oauth_contactID,OauthID ;
+	public enum ContactDetailsSchema implements Table {
+		USERID("user_id"), CONTACTID("contact_id"), FIRSTNAME("First_name"), MIDDLENAME("Middle_name"),
+		LASTNAME("Last_name"), GENDER("gender"), ADDRESS("Address"), CREATEDTIME("created_time"),
+		MODIFIEDTIME("modified_time"), OAUTHCONTACTID("Oauth_contactID"), OAUTHID("OauthID");
+
+		private String columnName;
+
+		private ContactDetailsSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("user_id", "contact_id", "First_name",
+				"Middle_name", "Last_name", "gender", "Address", "created_time", "modified_time", "Oauth_contactID",
+				"OauthID");
+
+		private static final Map<String, String> FOREIGNKEYRELATION = Map.of(
+				ContactPhoneSchema.CONTACTID.getTableName(), ContactPhoneSchema.CONTACTID.getColumnName(),
+				CategoryRelationSchema.CONTACTIDTOJOIN.getTableName(),
+				CategoryRelationSchema.CONTACTIDTOJOIN.getColumnName(),
+
+				ContactMailSchema.CONTACTID.getTableName(), ContactMailSchema.CONTACTID.getColumnName()
+
+		);
+		private static final List<dbpojo.Table> DELETECHILDTABLES = Arrays.asList(new ContactMail(), new ContactPhone(),
+				new CategoryRelation());
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Contact_details";
@@ -121,8 +243,40 @@ public class TableSchema {
 
 	}
 
-	public enum Contact_mail implements Table {
-		ID, contact_id, Contact_email_id, created_time, modified_time;
+	public enum ContactMailSchema implements Table {
+		ID("ID"), CONTACTID("contact_id"), CONTACTMAILID("Contact_email_id"), CREATEDTIME("created_time"),
+		MODIFIEDTIME("modified_time");
+
+		private String columnName;
+
+		private ContactMailSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "contact_id", "Contact_email_id",
+				"created_time", "modified_time");
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Contact_mail";
@@ -135,8 +289,41 @@ public class TableSchema {
 
 	}
 
-	public enum Contact_phone implements Table {
-		ID, contact_id, Contact_phone_no, created_time, modified_time;
+	public enum ContactPhoneSchema implements Table {
+		ID("ID"), CONTACTID("contact_id"), CONTACTPHONENO("Contact_phone_no"), CREATEDTIME("created_time"),
+		MODIFIEDTIME("modified_time");
+
+		private String columnName;
+
+		private ContactPhoneSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "contact_id", "Contact_phone_no",
+				"created_time", "modified_time");
+
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Contact_phone";
@@ -150,8 +337,40 @@ public class TableSchema {
 
 	}
 
-	public enum Email_user implements Table {
-		ID, em_id, email, is_primary, created_time, modified_time;
+	public enum EmailUserSchema implements Table {
+		ID("ID"), EMAILID("em_id"), EMAIL("email"), ISPRIMARY("is_primary"), CREATEDTIME("created_time"),
+		MODIFIEDTIME("modified_time");
+
+		private String columnName;
+
+		private EmailUserSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "em_id", "email", "is_primary",
+				"created_time", "modified_time");
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Email_user";
@@ -164,8 +383,40 @@ public class TableSchema {
 
 	}
 
-	public enum Login_credentials implements Table {
-		ID, log_id, username, created_time, modified_time;
+	public enum LoginCredentialsSchema implements Table {
+		ID("ID"), LOGID("log_id"), USERNAME("username"), CREATEDTIME("created_time"), MODIFIEDTIME("modified_time");
+
+		private String columnName;
+
+		private LoginCredentialsSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "log_id", "username", "created_time",
+				"modified_time");
+
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Login_credentials";
@@ -178,8 +429,41 @@ public class TableSchema {
 
 	}
 
-	public enum Session implements Table {
-		ID, Session_id, last_accessed, user_id, created_time, modified_time;
+	public enum SessionSchema implements Table {
+		ID("ID"), SESSIONID("Session_id"), LASTACCESSED("last_accessed"), USERID("user_id"),
+		CREATEDTIME("created_time"), MODIFIEDTIME("modified_time");
+
+		private String columnName;
+
+		private SessionSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "Session_id", "last_accessed", "user_id",
+				"created_time", "modified_time");
+
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
 
 		public String getTableName() {
 			return "Session";
@@ -192,8 +476,49 @@ public class TableSchema {
 
 	}
 
-	public enum user_data implements Table {
-		user_id, Name, password, phone_no, address, timezone, created_time, modified_time;
+	public enum UserDataSchema implements Table {
+		USERID("user_id"), NAME("Name"), PASSWORD("password"), PHONENO("phone_no"), ADDRESS("address"),
+		TIMEZONE("timezone"), CREATEDTIME("created_time"), MODIFIEDTIME("modified_time");
+
+		private String columnName;
+		private static final List<String> COLUMNNAMES = Arrays.asList("user_id", "Name", "password", "phone_no",
+				"address", "timezone", "created_time", "modified_time");
+		private static final Map<String, String> foreignKeyRelation = Map.of(
+				LoginCredentialsSchema.LOGID.getTableName(), LoginCredentialsSchema.LOGID.columnName,
+				EmailUserSchema.EMAILID.getTableName(), EmailUserSchema.EMAILID.getColumnName(),
+				OauthSchema.USERID.getTableName(), OauthSchema.USERID.getColumnName(),
+				ContactDetailsSchema.CONTACTID.getTableName(), ContactDetailsSchema.USERID.getColumnName(),
+				CategorySchema.CREATEDBY.getTableName(), CategorySchema.CREATEDBY.getColumnName(),
+				SessionSchema.USERID.getTableName(), SessionSchema.USERID.getColumnName()
+
+		);
+
+		private static final List<dbpojo.Table> deleteChildTables = Arrays.asList(new EmailUser(),
+				new LoginCredentials(), new ContactDetails(), new Category(), new Session(), new Oauth());
+
+		private UserDataSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		public String getForiegnKey(String Name) {
+
+			return foreignKeyRelation.get(Name);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return deleteChildTables;
+		}
 
 		public String getTableName() {
 			return "user_data";
@@ -205,14 +530,44 @@ public class TableSchema {
 		}
 
 	}
-	
-	
-	
-	public enum Audit_log implements Table {
 
-		ID, previous_state, changed_state, table_name, operation, row_key, created_at, created_by;
+	public enum AuditLogSchema implements Table {
 
-		
+		ID("ID"), PREVIOUSSTATE("previous_state"), CHANGEDSTATE("changed_state"), TABLENAME("table_name"),
+		OPERATION("operation"), ROWKEY("row_key"), CREATEDAT("created_at"), CREATEDBY("created_by");
+
+		private String columnName;
+
+		private AuditLogSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "previous_state", "changed_state",
+				"table_name", "operation", "row_key", "created_at", "created_by");
+
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
+
 		public String getTableName() {
 			return "Audit_log";
 		}
@@ -221,15 +576,46 @@ public class TableSchema {
 
 			return "ID";
 		}
-		
-		
+
 	}
 
-	public enum Oauth implements Table {
+	public enum OauthSchema implements Table {
+		ID("ID"), USERID("userID"), OAUTHPROVIDER("Oauth_provider"), SYNCSTATE("sync_state"),
+		REFRESHTOKEN("refresh_token"), ACCESSTOKEN("access_token"), EMAIL("email"), EXPIRYTIME("expiry_time"),
+		CREATEDTIME("created_time"), MODIFIEDTIME("modified_time");
 
-		ID, userID, Oauth_provider,  sync_state,refresh_token,access_token,email,expiry_time,created_time,modified_time;
+		private String columnName;
 
-		
+		private OauthSchema(String columnName) {
+			this.columnName = columnName;
+		}
+
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "userID", "Oauth_provider", "sync_state",
+				"refresh_token", "access_token", "email", "expiry_time", "created_time", "modified_time");
+
+		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
+
+		private static final List<dbpojo.Table> DELETECHILDTABLES = new ArrayList<dbpojo.Table>();
+
+		public List<dbpojo.Table> deleteChildTables() {
+
+			return DELETECHILDTABLES;
+		}
+
+		public List<String> getColumns() {
+
+			return COLUMNNAMES;
+		}
+
+		public String getForiegnKey(String TableName) {
+			return FOREIGNKEYRELATION.get(TableName);
+		}
+
+		public String getColumnName() {
+
+			return columnName;
+		}
+
 		public String getTableName() {
 			return "Oauth";
 		}
@@ -238,35 +624,7 @@ public class TableSchema {
 
 			return "ID";
 		}
-		
-		
-	}
-
-	public enum tables implements Table {
-
-		Category("Category", "Category_id"), Category_relation("Category_relation", "ID"),
-		Contact_details("Contact_details", "contact_id"), Contact_mail("Contact_mail", "ID"),
-		Contact_phone("Contact_phone", "ID"), Email_user("Email_user", "ID"),
-		Login_credentials("Login_credentials", "ID"), Session("Session", "ID"),
-		user_data("user_data", "user_id"),
-		Audit_log("Audit_log", "ID"),
-		Oauth("Oauth", "ID");
-
-		private final String tableName;
-		private final String primarykey;
-
-		private tables(String tableName, String primarykey) {
-			this.tableName = tableName;
-			this.primarykey = primarykey;
-		}
-
-		public String getTableName() {
-			return tableName;
-		}
-
-		public String getPrimaryKey() {
-			return primarykey;
-		}
 
 	}
+
 }

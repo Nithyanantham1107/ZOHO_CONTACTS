@@ -20,25 +20,30 @@
 <style>
     body {
     
-        font-family: Arial, sans-serif;
-        background-color: #272727;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
+        	font-family: Arial, sans-serif;
+	background-color: #F8F1F1;
+	display: flex;
+	color:white;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0;
     }
 
     .container {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        width: 350px;
+      background-color:#025464;
+	color:white;
+	padding: 65px;
+	border-radius: 45px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	width: 300px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
     }
 
     h2 {
-        text-align: center;
+       
         margin-bottom: 20px;
        
     }
@@ -69,7 +74,7 @@
 
     input[type="submit"] {
         padding: 10px;
-        background-color: #FFE400;
+       background-color:#DDA853;
         color: black;
         border: none;
         border-radius: 4px;
@@ -79,11 +84,7 @@
         font-size: 16px;
     }
 
-    input[type="submit"]:hover {
-        background-color: white;
-        color: black;
-    }
-
+ 
     .back-btn {
         background-color: #ccc;
         margin-top: 10px;
@@ -95,7 +96,7 @@
 
     #prompt {
         display: none;
-        color: #888;
+        color: white;
         font-size: 12px;
         margin-top: 5px;
     }

@@ -104,12 +104,8 @@ public class LoginSignupServlet extends HttpServlet {
 						sessionCookie.setHttpOnly(true);
 						response.addCookie(sessionCookie);
 						CacheModel cachemodel=CacheData.getCache(sessionid);
-//						ArrayList<ContactDetails> uc = UserContactOperation.viewAllUserContacts(userData.getID());
-//						ArrayList<dbpojo.Category> ug = UserGroupOperation.viewAllGroup(userData.getID());
-						cachemodel.setUserData(userData);
-//						cachemodel.setUserContact(uc);
-//						cachemodel.setUserGroup(ug);
-                        
+	cachemodel.setUserData(userData);
+
 				
 						
 						

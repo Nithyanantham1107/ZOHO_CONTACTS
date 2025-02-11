@@ -1,21 +1,54 @@
 package dbpojo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import querybuilderconfig.TableSchema.Email_user;
-import querybuilderconfig.TableSchema.tables;
-import querybuilderconfig.TableSchema.user_data;
+import querybuilderconfig.TableSchema.EmailUserSchema;
+import querybuilderconfig.TableSchema.LoginCredentialsSchema;
 
 public class EmailUser implements Table {
-	private int id = -1;
-	private int emID = -1;
+	private long id = -1;
+	private long emID = -1;
 	private String email;
 	private Boolean isPrimary;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
 
 	private Map<String, Object> settedData = new HashMap<String, Object>();
+
+	public EmailUser(Map<String, Object> tableData) {
+
+		settedData.clear();
+
+		if (tableData.get(EmailUserSchema.ID.getColumnName()) != null) {
+
+			setID((long) tableData.get(EmailUserSchema.ID.getColumnName()));
+		}
+		if (tableData.get(EmailUserSchema.EMAILID.getColumnName()) != null) {
+
+			setEmailID((long) tableData.get(EmailUserSchema.EMAILID.getColumnName()));
+		}
+		if (tableData.get(EmailUserSchema.EMAIL.getColumnName()) != null) {
+
+			setEmail((String) tableData.get(EmailUserSchema.EMAIL.getColumnName()));
+		}
+
+		if (tableData.get(EmailUserSchema.ISPRIMARY.getColumnName()) != null) {
+
+			setIsPrimary((Boolean) tableData.get(EmailUserSchema.ISPRIMARY.getColumnName()));
+		}
+
+		if (tableData.get(EmailUserSchema.CREATEDTIME.getColumnName()) != null) {
+
+			setCreatedAt((long) tableData.get(EmailUserSchema.CREATEDTIME.getColumnName()));
+		}
+		if (tableData.get(EmailUserSchema.MODIFIEDTIME.getColumnName()) != null) {
+
+			setModifiedAt((long) tableData.get(EmailUserSchema.MODIFIEDTIME.getColumnName()));
+		}
+
+	}
 
 	public EmailUser(int id, int emID, String email, boolean isPrimary, long createdAt, long modifiedAt) {
 
@@ -33,32 +66,32 @@ public class EmailUser implements Table {
 
 	}
 
-	public void setID(int id) {
+	public void setID(long id) {
 
 		this.id = id;
 
-		settedData.put( Email_user.ID.toString(), getID());
+		settedData.put(EmailUserSchema.ID.getColumnName(), getID());
 	}
 
-	public int getID() {
+	public long getID() {
 
 		return this.id;
 	}
 
 	public String getTableName() {
 
-		return tables.Email_user.getTableName();
+		return EmailUserSchema.ID.getTableName();
 	}
 
 	public String getPrimaryIDName() {
 
-		return tables.Email_user.getPrimaryKey();
+		return EmailUserSchema.ID.getPrimaryKey();
 	}
 
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
-		settedData.put( Email_user.created_time.toString(), getCreatedAt());
+		settedData.put(EmailUserSchema.CREATEDTIME.getColumnName(), getCreatedAt());
 	}
 
 	public long getCreatedAt() {
@@ -69,7 +102,7 @@ public class EmailUser implements Table {
 	public void setModifiedAt(long modifiedAt) {
 
 		this.modifiedAt = modifiedAt;
-		settedData.put( Email_user.modified_time.toString(), getModifiedAt());
+		settedData.put(EmailUserSchema.MODIFIEDTIME.getColumnName(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -78,19 +111,19 @@ public class EmailUser implements Table {
 
 	}
 
-	public void setEmailID(int EmailId) {
+	public void setEmailID(long EmailId) {
 		this.emID = EmailId;
 
-		settedData.put( Email_user.em_id.toString(), getEmailId());
+		settedData.put(EmailUserSchema.EMAILID.getColumnName(), getEmailId());
 	}
 
-	public int getEmailId() {
+	public long getEmailId() {
 		return this.emID;
 	}
 
 	public void setEmail(String Email) {
 		this.email = Email;
-		settedData.put( Email_user.email.toString(), getEmail());
+		settedData.put(EmailUserSchema.EMAIL.getColumnName(), getEmail());
 	}
 
 	public String getEmail() {
@@ -100,7 +133,7 @@ public class EmailUser implements Table {
 	public void setIsPrimary(Boolean isPrimary) {
 		this.isPrimary = isPrimary;
 
-		settedData.put( Email_user.is_primary.toString(), getIsPrimary());
+		settedData.put(EmailUserSchema.ISPRIMARY.getColumnName(), getIsPrimary());
 	}
 
 	public Boolean getIsPrimary() {
@@ -110,6 +143,18 @@ public class EmailUser implements Table {
 	public Map<String, Object> getSettedData() {
 
 		return settedData;
+	}
+
+	@Override
+	public List<String> getTableColumnNames() {
+
+		return EmailUserSchema.ID.getColumns();
+	}
+
+	@Override
+	public Table getNewTable(Map<String, Object> tableData) {
+
+		return new EmailUser(tableData);
 	}
 
 }

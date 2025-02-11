@@ -83,9 +83,6 @@ public class DeleteUserContactServlet extends HttpServlet {
 				ContactDetails contact = new ContactDetails();
 				contact.setID(contactID);
 				if (UserContactOperation.deleteContact(contact, userData.getID())) {
-//                    ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(userData.getID());
-
-//                    cachemodel.setUserContact(userContacts);
 
 					logger.logInfo("DeleteUserContactServlet", "doPost", "Contact deleted successfully: " + contactID);
 					response.sendRedirect("home.jsp");

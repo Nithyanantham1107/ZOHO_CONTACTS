@@ -44,7 +44,6 @@ public class SessionFilter implements Filter {
 		String requesturi = httpRequest.getRequestURI();
 //|| requesturi.endsWith("/oauthredirect")
 		try {
-
 			if (requesturi.endsWith("/login") || requesturi.endsWith("/signup") || requesturi.endsWith("/")
 					|| requesturi.endsWith("/Login.jsp") || requesturi.endsWith("/Signup.jsp")
 					|| requesturi.endsWith("/index.jsp") || requesturi.endsWith("/oauthdirector")) {
@@ -67,7 +66,7 @@ public class SessionFilter implements Filter {
 			CacheModel cachemodel = SessionOperation.checkSessionAlive(sessionid);
 			if (cachemodel != null) {
 
-				int userid = cachemodel.getUserData().getID();
+				long userid = cachemodel.getUserData().getID();
 				Userdata ud = UserOperation.getUserData(userid);
 
 				cachemodel.setUserData(ud);
@@ -97,10 +96,8 @@ public class SessionFilter implements Filter {
 				Cookie sessionCookie = new Cookie("SESSIONID", null);
 
 				sessionCookie.setMaxAge(0);
-
 				sessionCookie.setPath("/");
 				httpResponse.addCookie(sessionCookie);
-
 				httpResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 				httpResponse.setHeader("Pragma", "no-cache");
 				httpResponse.setDateHeader("Expires", 0);

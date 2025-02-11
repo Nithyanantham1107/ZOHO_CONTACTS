@@ -75,7 +75,7 @@ public class UserProfileUpdateServlet extends HttpServlet {
 					&& (request.getParameter("emailID") != null) && !request.getParameter("emailID").isBlank()
 					&& (request.getParameter("logID") != null) && !request.getParameter("logID").isBlank()
 					) {
-int userId=userSessionData.getID();
+long userId=userSessionData.getID();
 //                  ud = new UserData();
 				Userdata userData = new Userdata();
 				LoginCredentials loginCredentials = new LoginCredentials();

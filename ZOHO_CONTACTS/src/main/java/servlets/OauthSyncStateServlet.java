@@ -77,17 +77,17 @@ public class OauthSyncStateServlet extends HttpServlet {
 				logger.logWarning("OauthSyncStateServlet", "doPost",
 						"successfully Oauth data modified for userID" + ud.getID());
 
-				response.sendRedirect("home.jsp");
+				response.sendRedirect("linkedaccounts.jsp");
 
 			} else {
 				logger.logWarning("OauthSyncStateServlet", "doPost", "Parameter Data is empty!");
 				request.setAttribute("errorMessage", "Parameter Data is empty!!");
-				request.getRequestDispatcher("home.jsp").forward(request, response);
+				request.getRequestDispatcher("linkedaccounts.jsp").forward(request, response);
 			}
 		} catch (DBOperationException e) {
 			logger.logError("OauthSyncStateServlet", "doPost", "Exception occurred", e);
 			request.setAttribute("errorMessage", e);
-			request.getRequestDispatcher("home.jsp").forward(request, response);
+			request.getRequestDispatcher("linkedaccounts.jsp").forward(request, response);
 		}
 	}
 

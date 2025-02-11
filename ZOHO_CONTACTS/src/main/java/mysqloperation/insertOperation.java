@@ -12,17 +12,18 @@ import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
 import dbpojo.Oauth;
 import dbpojo.Table;
+import dbpojo.TableWithChild;
 import dbpojo.Userdata;
 import querybuilder.QueryExecuter;
 import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.TableSchema.AuditLogSchema;
 import querybuilderconfig.TableSchema.OpType;
-import querybuilderconfig.TableSchema.tables;
+import querybuilderconfig.TableSchema.SessionSchema;
 
 public class insertOperation {
 
 	public static void insert(dbpojo.Table table, StringBuilder query, Queue<Object> parameters) {
 //		this.opType = OpType.INSERT;
-		
 
 		Queue<String> columns = new LinkedList<String>();
 		Table newData = table;
@@ -74,7 +75,7 @@ public class insertOperation {
 	}
 
 	public static int[] execute(QueryBuilder qg, Connection con, String query, Queue<Object> parameters, Table newData,
-			int userID) {
+			long userID) {
 
 		int id = -1;
 		int[] data = QueryExecuter.mySqlExecuter(con, query, parameters, OpType.INSERT);
@@ -87,12 +88,18 @@ public class insertOperation {
 
 		if (data[0] != -1) {
 
-			insertOperation.insertChildTable(qg, newData, userID);
+			if(newData instanceof TableWithChild) {
+				
+				TableWithChild parentTable=(TableWithChild) newData;
+				
+				insertOperation.insertChildTable(qg,parentTable , userID);
+			}
+			
 
 		}
 
-		if (newData != null && (!newData.getTableName().equals(tables.Audit_log.getTableName())
-				&& !newData.getTableName().equals(tables.Session.getTableName()))) {
+		if (newData != null && (!newData.getTableName().equals(AuditLogSchema.ID.getTableName())
+				&& !newData.getTableName().equals(SessionSchema.ID.getTableName()))) {
 
 			if (AuditLogOperation.audit(qg, id, null, newData, OpType.INSERT, userID) == null) {
 				System.out.println("Table" + newData.getTableName() + "  is not audited");
@@ -103,66 +110,74 @@ public class insertOperation {
 		return data;
 	}
 
-	private static Table insertChildTable(QueryBuilder qg, Table table, int userID) {
-
-		if (table instanceof Userdata) {
-
-			Userdata userData = (Userdata) table;
-
-			if (userData.getLoginCredentials() != null) {
-				userData.getLoginCredentials().setUserID(userData.getID());
-
-				qg.insert(userData.getLoginCredentials()).execute(userData.getID());
-
-			}
-			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
-				for (EmailUser email : userData.getallemail()) {
-					email.setEmailID(userData.getID());
-					qg.insert(email).execute(userData.getID());
-				}
-			}
-			
-			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
-				for (Oauth oauth : userData.getallOauth()) {
-					oauth.setUserID(userID);
-					qg.insert(oauth).execute(userData.getID());
-				}
-			}
-
-		} else if (table instanceof Category) {
-			Category category = (Category) table;
-			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
-
-				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
-
-					categoryRelation.setCategoryID(category.getID());
-
-					qg.insert(categoryRelation).execute(userID);
-				}
-
-			}
-
-		} else if (table instanceof ContactDetails) {
-
-			ContactDetails contactDetails = (ContactDetails) table;
-			if (contactDetails.getContactMail() != null) {
-
-				contactDetails.getContactMail().setContactID(contactDetails.getID());
-
-				qg.insert(contactDetails.getContactMail()).execute(userID);
-
-			}
-
-			if (contactDetails.getContactphone() != null) {
-
-				contactDetails.getContactphone().setContactID(contactDetails.getID());
-
-				qg.insert(contactDetails.getContactphone()).execute(userID);
-			}
+	private static void insertChildTable(QueryBuilder qg, TableWithChild table, long userID) {
+		for (Table childTable : table.getChildTables()) {
+			qg.insert(childTable).execute(userID);
 
 		}
 
-		return null;
 	}
+
+//	private static Table insertChildTable(QueryBuilder qg, Table table, int userID) {
+//
+//		if (table instanceof Userdata) {
+//
+//			Userdata userData = (Userdata) table;
+//
+//			if (userData.getLoginCredentials() != null) {
+//				userData.getLoginCredentials().setUserID(userData.getID());
+//
+//				qg.insert(userData.getLoginCredentials()).execute(userData.getID());
+//
+//			}
+//			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
+//				for (EmailUser email : userData.getallemail()) {
+//					email.setEmailID(userData.getID());
+//					qg.insert(email).execute(userData.getID());
+//				}
+//			}
+//			
+//			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
+//				for (Oauth oauth : userData.getallOauth()) {
+//					oauth.setUserID(userID);
+//					qg.insert(oauth).execute(userData.getID());
+//				}
+//			}
+//
+//		} else if (table instanceof Category) {
+//			Category category = (Category) table;
+//			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
+//
+//				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
+//
+//					categoryRelation.setCategoryID(category.getID());
+//
+//					qg.insert(categoryRelation).execute(userID);
+//				}
+//
+//			}
+//
+//		} else if (table instanceof ContactDetails) {
+//
+//			ContactDetails contactDetails = (ContactDetails) table;
+//			if (contactDetails.getContactMail() != null) {
+//
+//				contactDetails.getContactMail().setContactID(contactDetails.getID());
+//
+//				qg.insert(contactDetails.getContactMail()).execute(userID);
+//
+//			}
+//
+//			if (contactDetails.getContactphone() != null) {
+//
+//				contactDetails.getContactphone().setContactID(contactDetails.getID());
+//
+//				qg.insert(contactDetails.getContactphone()).execute(userID);
+//			}
+//
+//		}
+//
+//		return null;
+//	}
 
 }

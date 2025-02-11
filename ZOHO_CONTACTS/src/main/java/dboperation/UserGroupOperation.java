@@ -25,7 +25,7 @@ public class UserGroupOperation {
 	 * @throws DBOperationException
 	 */
 
-	public static boolean createGroup(dbpojo.Category category, int userID) throws DBOperationException {
+	public static boolean createGroup(dbpojo.Category category, long userID) throws DBOperationException {
 
 		int[] result = { -1, -1 };
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -66,13 +66,12 @@ public class UserGroupOperation {
 	 * @throws DBOperationException
 	 * @throws SQLException         if a database access error occurs
 	 */
-	public static ArrayList<dbpojo.Category> viewAllGroup(int userid) throws DBOperationException {
+	public static ArrayList<dbpojo.Category> viewAllGroup(long userid) throws DBOperationException {
 
 		ArrayList<Table> result = new ArrayList<>();
 		ArrayList<dbpojo.Category> usergroups = new ArrayList<>();
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
-
 		try {
 
 			qg.openConnection();
@@ -115,7 +114,7 @@ public class UserGroupOperation {
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static Boolean deleteUserGroup(dbpojo.Category category, int userID) throws DBOperationException {
+	public static Boolean deleteUserGroup(dbpojo.Category category, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -151,7 +150,7 @@ public class UserGroupOperation {
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static ArrayList<CategoryRelation> viewUserGroupContact(int groupId, int userId)
+	public static ArrayList<CategoryRelation> viewUserGroupContact(long groupId, long userId)
 			throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -196,7 +195,7 @@ public class UserGroupOperation {
 
 	}
 
-	public static ArrayList<ContactDetails> getGroupContactList(int groupID, int userID, String method)
+	public static ArrayList<ContactDetails> getGroupContactList(long groupID, long userID, String method)
 			throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -208,7 +207,7 @@ public class UserGroupOperation {
 			ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(userID);
 
 			ArrayList<CategoryRelation> categoryRelation = UserGroupOperation.viewUserGroupContact(groupID, userID);
-
+			System.out.println("the the relation size" + categoryRelation.getFirst().getID());
 			ArrayList<ContactDetails> contactsInGroup = new ArrayList<ContactDetails>();
 			ArrayList<ContactDetails> contactsNotInGroup = new ArrayList<ContactDetails>();
 			Boolean state = true;
@@ -216,8 +215,13 @@ public class UserGroupOperation {
 				state = true;
 
 				for (CategoryRelation relation : categoryRelation) {
+					System.out.println("the group contact ID is:" + contact.getID()+"then teh id from relation"+relation.getContactIDtoJoin()+"then the gorup is "+relation.getCategoryID());
+					
+					
+					
 					if (relation.getContactIDtoJoin() == contact.getID()) {
-
+						
+						System.out.println("the in in group contact" + contact.getID());
 						contactsInGroup.add(contact);
 						state = false;
 						break;
@@ -225,10 +229,13 @@ public class UserGroupOperation {
 
 				}
 				if (state) {
+					System.out.println("the Not  in in group contact" + contact.getID());
 
 					contactsNotInGroup.add(contact);
 				}
 			}
+
+			
 
 			if (method.equals("view")) {
 
@@ -241,7 +248,6 @@ public class UserGroupOperation {
 
 		} catch (Exception e) {
 			logger.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(), e);
-
 			throw new DBOperationException(e.getMessage());
 		} finally {
 
@@ -250,7 +256,7 @@ public class UserGroupOperation {
 
 	}
 
-	public static Category getSpecificGroup(int groupID, int userID) throws DBOperationException {
+	public static Category getSpecificGroup(long groupID, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		ArrayList<Table> result = new ArrayList<Table>();
@@ -296,7 +302,7 @@ public class UserGroupOperation {
 	 * @throws SQLException         if a database access error occurs
 	 * @throws DBOperationException
 	 */
-	public static boolean updateUserGroup(dbpojo.Category category, int userID) throws DBOperationException {
+	public static boolean updateUserGroup(dbpojo.Category category, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] result = { -1, -1 };
@@ -353,7 +359,7 @@ public class UserGroupOperation {
 
 	}
 
-	public static Boolean removeGroupContacts(CategoryRelation categoryRelation, int userID)
+	public static Boolean removeGroupContacts(CategoryRelation categoryRelation, long userID)
 			throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
@@ -396,7 +402,7 @@ public class UserGroupOperation {
 
 	}
 
-	public static Boolean addGroupContacts(CategoryRelation categoryRelation, int userID) throws DBOperationException {
+	public static Boolean addGroupContacts(CategoryRelation categoryRelation, long userID) throws DBOperationException {
 
 		QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
 		int[] val = { -1, -1 };
@@ -407,12 +413,12 @@ public class UserGroupOperation {
 			val = qg.insert(categoryRelation).execute(userID);
 			if (val[0] == -1) {
 				logger.logError("UserGroupOperation", "addGroupContacts",
-						"Failed to remove contacts from group with ID: " + categoryRelation.getCategoryID(), null);
+						"Failed to add contacts from group with ID: " + categoryRelation.getCategoryID(), null);
 				return false;
 			}
 
 			logger.logInfo("UserGroupOperation", "addGroupContacts",
-					"Group  contacts removed successfully: " + categoryRelation.getCategoryID());
+					"Group  contacts added successfully: " + categoryRelation.getCategoryID());
 			return true;
 		} catch (Exception e) {
 			logger.logError("UserGroupOperation", "addGroupContacts", "Exception occurred: " + e.getMessage(), e);

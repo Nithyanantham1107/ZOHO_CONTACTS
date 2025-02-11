@@ -70,38 +70,30 @@ public class GoogleOauthRedirectServlet extends HttpServlet {
 							oauth.getUserID());
 					if (OauthDB == null) {
 						OauthOperation.addOauth(oauth, ud.getID());
-					} else {
+						cachemodel.setUserData(UserOperation.getUserData(ud.getID()));
 
-//						if (OauthDB.getExpiryTime() < Instant.now().toEpochMilli()) {
-//
-//							oauth = Oauth2handler.getAccessToken(code, response, ud.getID(), false);
-//
-//						}
-						Oauth oauthUpdate = new Oauth();
-						if (oauth.getAccessToken() != null) {
-							oauthUpdate.setAccessToken(oauth.getAccessToken());
+						ArrayList<ContactDetails> contacts = Oauth2handler.getContacts(oauth);
+						for (ContactDetails contact : contacts) {
+							ContactDetails contactDB = UserContactOperation
+									.viewOauthSpecificUserContact(oauth.getUserID(), contact.getOauthContactID());
+							if (contactDB == null) {
+								UserContactOperation.addUserContact(contact);
+							} else {
+								contact.setID(contactDB.getID());
+								UserContactOperation.updateSpecificUserContact(contact, oauth.getUserID());
+							}
 						}
-						if (oauth.getRefreshToken() != null) {
-							oauthUpdate.setRefreshToken(oauth.getRefreshToken());
-						}
-
-						oauthUpdate.setID(OauthDB.getID());
-						oauthUpdate.setModifiedAt(Instant.now().toEpochMilli());
-						oauthUpdate.setExpiryTime(oauth.getExpiryTime());
-						OauthOperation.updateOauth(oauthUpdate, ud.getID());
-
 					}
-					cachemodel.setUserData(UserOperation.getUserData(ud.getID()));
 
-					response.sendRedirect("home.jsp");
 				}
 
+				response.sendRedirect("linkedaccounts.jsp");
 			}
 
 		} catch (DBOperationException e) {
 			logger.logError("GoogleOauthRedirectServlet", "doGet", "Exception occurred while processing Oauth .", e);
 			request.setAttribute("errorMessage", e.getMessage());
-			request.getRequestDispatcher("home.jsp").forward(request, response);
+			request.getRequestDispatcher("linkedaccounts.jsp").forward(request, response);
 		}
 
 	}

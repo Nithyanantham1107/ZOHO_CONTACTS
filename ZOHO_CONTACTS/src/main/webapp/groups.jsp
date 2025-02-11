@@ -47,12 +47,17 @@
 	}
 
 	Userdata ud = cachemodel.getUserData();
+	ArrayList<ContactDetails> userContacts=null;
+	ArrayList<Category> usergroup=null;
 
+	 userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 
-	ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
+ usergroup = UserGroupOperation.viewAllGroup(ud.getID());
 
-	ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(ud.getID());
+	
+	
 
+	
 	ArrayList<ContactDetails> groupsInContact = new ArrayList<>();
 	ArrayList<ContactDetails> groupsNotInContact = new ArrayList<>();
 	Category group = null;
@@ -248,7 +253,7 @@
 
 
 		<section id="tableContainer">
-			<section id="header">
+			<section id="tableHeader">
 
 				<section id="tableHeader">
 					<h1>Groups</h1>

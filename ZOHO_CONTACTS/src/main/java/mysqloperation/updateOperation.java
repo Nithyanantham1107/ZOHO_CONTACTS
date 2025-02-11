@@ -14,11 +14,13 @@ import dbpojo.ContactDetails;
 import dbpojo.EmailUser;
 import dbpojo.Oauth;
 import dbpojo.Table;
+import dbpojo.TableWithChild;
 import dbpojo.Userdata;
 import querybuilder.QueryExecuter;
 import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.TableSchema.AuditLogSchema;
 import querybuilderconfig.TableSchema.OpType;
-import querybuilderconfig.TableSchema.tables;
+import querybuilderconfig.TableSchema.SessionSchema;
 
 public class updateOperation {
 
@@ -84,84 +86,95 @@ public class updateOperation {
 
 //		parameters.addAll(pojoDataContainer.getPojoValue());
 
-		WhereQueryGenerater.executeWhereBuilder(newData, query, parameters);
+//		WhereQueryGenerater.executeWhereBuilder(newData, query, parameters);
 
 		return stateContainer;
 
 	}
 
-	private static Table updateChildTable(QueryBuilder qg, Table table, int userID) {
+	private static void updateChildTable(QueryBuilder qg, TableWithChild table, long userID) {
 
-		if (table instanceof Userdata) {
+		for (Table childTable : table.getChildTables()) {
 
-			Userdata userData = (Userdata) table;
-			if (userData.getLoginCredentials() != null) {
-
-				qg.update(userData.getLoginCredentials()).execute(userID);
-
-			}
-			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
-				for (EmailUser email : userData.getallemail()) {
-
-					qg.update(email).execute(userID);
-				}
-			}
-
-			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
-				for (Oauth oauth : userData.getallOauth()) {
-
-					qg.update(oauth).execute(userID);
-				}
-			}
-
-		} else if (table instanceof Category) {
-			Category category = (Category) table;
-			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
-
-				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
-//					categoryRelation.setCategoryID(category.getID());
-					qg.update(categoryRelation).execute(userID);
-				}
-
-			}
-
-		} else if (table instanceof ContactDetails) {
-
-			ContactDetails contactDetails = (ContactDetails) table;
-			if (contactDetails.getContactMail() != null) {
-
-				contactDetails.getContactMail().setContactID(contactDetails.getID());
-				qg.update(contactDetails.getContactMail()).execute(userID);
-
-			}
-
-			if (contactDetails.getContactphone() != null) {
-
-				contactDetails.getContactphone().setContactID(contactDetails.getID());
-				qg.update(contactDetails.getContactphone()).execute(userID);
-			}
-
+			qg.update(childTable).execute(userID);
 		}
-
-		return null;
 	}
 
+//	private static Table updateChildTable(QueryBuilder qg, Table table, int userID) {
+//
+//		if (table instanceof Userdata) {
+//
+//			Userdata userData = (Userdata) table;
+//			if (userData.getLoginCredentials() != null) {
+//
+//				qg.update(userData.getLoginCredentials()).execute(userID);
+//
+//			}
+//			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
+//				for (EmailUser email : userData.getallemail()) {
+//
+//					qg.update(email).execute(userID);
+//				}
+//			}
+//
+//			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
+//				for (Oauth oauth : userData.getallOauth()) {
+//
+//					qg.update(oauth).execute(userID);
+//				}
+//			}
+//
+//		} else if (table instanceof Category) {
+//			Category category = (Category) table;
+//			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
+//
+//				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
+////					categoryRelation.setCategoryID(category.getID());
+//					qg.update(categoryRelation).execute(userID);
+//				}
+//
+//			}
+//
+//		} else if (table instanceof ContactDetails) {
+//
+//			ContactDetails contactDetails = (ContactDetails) table;
+//			if (contactDetails.getContactMail() != null) {
+//
+//				contactDetails.getContactMail().setContactID(contactDetails.getID());
+//				qg.update(contactDetails.getContactMail()).execute(userID);
+//
+//			}
+//
+//			if (contactDetails.getContactphone() != null) {
+//
+//				contactDetails.getContactphone().setContactID(contactDetails.getID());
+//				qg.update(contactDetails.getContactphone()).execute(userID);
+//			}
+//
+//		}
+//		return null;
+//	}
+
 	public static int[] execute(QueryBuilder qg, Connection con, String query, Queue<Object> parameters, Table newData,
-			Table oldData, int userID) {
+			Table oldData, long userID) {
 
 		int[] data = QueryExecuter.mySqlExecuter(con, query, parameters, OpType.UPDATE);
 
 		if (data[0] != -1) {
+			if (newData instanceof TableWithChild) {
 
-			updateOperation.updateChildTable(qg, newData, userID);
+				TableWithChild parentTable = (TableWithChild) newData;
+				updateOperation.updateChildTable(qg, parentTable, userID);
+			}
+
 		}
-		if ((newData != null && !newData.getTableName().equals(tables.Audit_log.getTableName())) &&
+		if ((newData != null && !newData.getTableName().equals(AuditLogSchema.ID.getTableName())) &&
 
-				(oldData != null && !oldData.getTableName().equals(tables.Audit_log.getTableName()))
+				(oldData != null && !oldData.getTableName().equals(AuditLogSchema.ID.getTableName()))
 
-				&& (newData != null && !newData.getTableName().equals(tables.Session.getTableName())) &&
+				&& (newData != null && !newData.getTableName().equals(SessionSchema.ID.getTableName())) &&
 
-				(oldData != null && !oldData.getTableName().equals(tables.Session.getTableName()))
+				(oldData != null && !oldData.getTableName().equals(SessionSchema.ID.getTableName()))
 
 		) {
 

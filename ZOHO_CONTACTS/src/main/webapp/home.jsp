@@ -50,9 +50,12 @@
 
 	}
 
-	Userdata ud = cachemodel.getUserData();
+	Userdata ud = null;
+	ArrayList<ContactDetails> userContacts = null;
 
-	ArrayList<ContactDetails> userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
+	ud = cachemodel.getUserData();
+
+	userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 	%>
 
 	<section id="header">
@@ -89,64 +92,15 @@
 
 
 		<section id="tableContainer">
-			<section id="header">
+			<section id="tableHeader">
 
-				<%
-				if (ud.getallOauth().size() > 0) {
+				
 
-					Oauth oauth = ud.getallOauth().getFirst();
-
-					if (oauth.getID() == -1) {
-						System.out.println("here the Oauth data IDis" + oauth.getID());
-						System.out.println("here the Oauth data is" + oauth.getEmail());
-				%>
-				<form action="/oauthdirector" method="post">
-					<input type="submit" value="Sync with Google"
-						class="glowgreenbutton" />
-				</form>
+<form action="linkedaccounts.jsp">
 
 
-				<%
-				} else {
-
-				if (oauth.getSyncState()) {
-				%>
-
-
-
-				<form action="/syncstate" method="post">
-					<input type="hidden" name="operation" value="syncoff"
-						class="glowbutton" /> <input type="hidden" name="ID"
-						value="<%=oauth.getID()%>" class="glowbutton" /> <input
-						type="submit" value="Sync off" class="glowyellowbutton" />
-				</form>
-
-				<%
-				} else {
-				%>
-				<form action="/syncstate" method="post">
-
-
-					<input type="hidden" name="operation" value="syncon" /> <input
-						type="hidden" name="ID" value="<%=oauth.getID()%>" /> <input
-						type="submit" value="Sync On" class="glowgreenbutton" />
-				</form>
-
-				<%
-				}
-				%>
-
-				<form action="/syncstate" method="post">
-
-					<input type="hidden" name="operation" value="deletesync" /> <input
-						type="hidden" name="ID" value="<%=oauth.getID()%>" /> <input
-						type="submit" value="Delete Sync" class="glowredbutton" />
-				</form>
-				<%
-				}
-				}
-				%>
-
+				<input type="submit" class="glowgreenbutton" value="Link Accounts" />
+			</form>
 
 
 				<section id="tableHeader">
@@ -177,9 +131,9 @@
 
 
 						<tr>
-							<th>FirstName</th>
-							<th>MiddleName</th>
-							<th>LastName</th>
+							<th>First Name</th>
+							<th>Middle Name</th>
+							<th>Last Name</th>
 							<th>Gender</th>
 							<th>Email</th>
 							<th>Phone</th>

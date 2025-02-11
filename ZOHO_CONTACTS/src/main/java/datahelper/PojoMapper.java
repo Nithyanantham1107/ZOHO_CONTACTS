@@ -17,6 +17,7 @@ import dbpojo.Session;
 import dbpojo.Table;
 import dbpojo.Userdata;
 import querybuilderconfig.TableSchema;
+import querybuilderconfig.TableSchema.UserDataSchema;
 
 public class PojoMapper {
 
@@ -41,38 +42,38 @@ public class PojoMapper {
 
 				System.out.println("here tablename" + tablename);
 
-				if (tablename.equals(TableSchema.tables.user_data.getTableName())) {
+				if (tablename.equals(TableSchema.UserDataSchema.USERID.getTableName())) {
 					userData = userDataSetter();
 					if (userData != null) {
 
 						this.data.add(userData);
 					}
 
-				} else if (tablename.equals(TableSchema.tables.Category.getTableName())) {
+				} else if (tablename.equals(TableSchema.CategorySchema.CATEGORYID.getTableName())) {
 					category = userCategorySetter();
 					if (category != null) {
 						this.data.add(category);
 					}
 
-				} else if (tablename.equals(TableSchema.tables.Category_relation.getTableName())) {
+				} else if (tablename.equals(TableSchema.CategoryRelationSchema.ID.getTableName())) {
 					this.data.add(userCategoryRelationSetter());
-				} else if (tablename.equals(TableSchema.tables.Contact_details.getTableName())) {
+				} else if (tablename.equals(TableSchema.ContactDetailsSchema.CONTACTID.getTableName())) {
 					contactDetails = userContactSetter();
 					if (contactDetails != null) {
 						this.data.add(contactDetails);
 					}
 
-				} else if (tablename.equals(TableSchema.tables.Contact_mail.getTableName())) {
+				} else if (tablename.equals(TableSchema.ContactMailSchema.ID.getTableName())) {
 					this.data.add(userMailSetter());
-				} else if (tablename.equals(TableSchema.tables.Contact_phone.getTableName())) {
+				} else if (tablename.equals(TableSchema.ContactPhoneSchema.ID.getTableName())) {
 					this.data.add(userPhoneSetter());
-				} else if (tablename.equals(TableSchema.tables.Login_credentials.getTableName())) {
+				} else if (tablename.equals(TableSchema.LoginCredentialsSchema.ID.getTableName())) {
 					this.data.add(userLoginSetter());
-				} else if (tablename.equals(TableSchema.tables.Session.getTableName())) {
+				} else if (tablename.equals(TableSchema.SessionSchema.ID.getTableName())) {
 					this.data.add(userSessionSetter());
-				} else if (tablename.equals(TableSchema.tables.Email_user.getTableName())) {
+				} else if (tablename.equals(TableSchema.EmailUserSchema.ID.getTableName())) {
 					this.data.add(userEmailSetter());
-				} else if (tablename.equals(TableSchema.tables.Oauth.getTableName())) {
+				} else if (tablename.equals(TableSchema.OauthSchema.ID.getTableName())) {
 					this.data.add(oauthSetter());
 				}
 
@@ -92,32 +93,32 @@ public class PojoMapper {
 	private Oauth oauthSetter() {
 
 		Oauth oauth = null;
-		String tablename = TableSchema.tables.Oauth.getTableName();
+		String tablename = TableSchema.OauthSchema.ID.getTableName();
 
-		oauth = new Oauth(getInt(tablename + "." + TableSchema.Oauth.ID),
-				getInt(tablename + "." + TableSchema.Oauth.userID),
-				getString(tablename + "." + TableSchema.Oauth.Oauth_provider),
-				getString(tablename + "." + TableSchema.Oauth.refresh_token),
-				getString(tablename + "." + TableSchema.Oauth.access_token),
-				getString(tablename + "." + TableSchema.Oauth.email),
-				getBoolean(tablename + "." + TableSchema.Oauth.sync_state),
-				getLong(tablename + "." + TableSchema.Oauth.expiry_time),
-				getLong(tablename + "." + TableSchema.Oauth.created_time),
-				getLong(tablename + "." + TableSchema.Oauth.modified_time));
+		oauth = new Oauth(getInt(tablename + "." + TableSchema.OauthSchema.ID.getColumnName()),
+				getInt(tablename + "." + TableSchema.OauthSchema.USERID.getColumnName()),
+				getString(tablename + "." + TableSchema.OauthSchema.OAUTHPROVIDER.getColumnName()),
+				getString(tablename + "." + TableSchema.OauthSchema.REFRESHTOKEN.getColumnName()),
+				getString(tablename + "." + TableSchema.OauthSchema.ACCESSTOKEN.getColumnName()),
+				getString(tablename + "." + TableSchema.OauthSchema.EMAIL.getColumnName()),
+				getBoolean(tablename + "." + TableSchema.OauthSchema.SYNCSTATE.getColumnName()),
+				getLong(tablename + "." + TableSchema.OauthSchema.EXPIRYTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.OauthSchema.CREATEDTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.OauthSchema.MODIFIEDTIME.getColumnName()));
 
-			return oauth;
+		return oauth;
 
 	}
 
 	private Userdata userDataSetter() {
 
 		Userdata userData = null;
-		String tablename = TableSchema.tables.user_data.getTableName();
+		String tablename = TableSchema.UserDataSchema.USERID.getTableName();
 
-		if (this.uniqueList.get(getInt(tablename + "." + TableSchema.user_data.user_id)) != null) {
+		if (this.uniqueList.get(getInt(tablename + "." + TableSchema.UserDataSchema.USERID.getColumnName())) != null) {
 
-			if (this.uniqueList.get(getInt(tablename + "." + TableSchema.user_data.user_id)) instanceof Userdata) {
-				userData = (Userdata) this.uniqueList.get(getInt(tablename + "." + TableSchema.user_data.user_id));
+			if (this.uniqueList.get(getInt(tablename + "." + TableSchema.UserDataSchema.USERID.getColumnName())) instanceof Userdata) {
+				userData = (Userdata) this.uniqueList.get(getInt(tablename + "." + TableSchema.UserDataSchema.USERID.getColumnName()));
 
 			}
 			EmailUser email = userEmailSetter();
@@ -139,16 +140,16 @@ public class PojoMapper {
 
 		} else {
 
-			userData = new Userdata(getInt(tablename + "." + TableSchema.user_data.user_id),
-					getString(tablename + "." + TableSchema.user_data.Name),
-					getString(tablename + "." + TableSchema.user_data.password),
-					getString(tablename + "." + TableSchema.user_data.phone_no),
-					getString(tablename + "." + TableSchema.user_data.address),
-					getString(tablename + "." + TableSchema.user_data.timezone),
-					getLong(tablename + "." + TableSchema.user_data.created_time),
-					getLong(tablename + "." + TableSchema.user_data.modified_time));
+			userData = new Userdata(getInt(tablename + "." + TableSchema.UserDataSchema.USERID.getColumnName()),
+					getString(tablename + "." + TableSchema.UserDataSchema.NAME.getColumnName()),
+					getString(tablename + "." + TableSchema.UserDataSchema.PASSWORD.getColumnName()),
+					getString(tablename + "." + TableSchema.UserDataSchema.PHONENO.getColumnName()),
+					getString(tablename + "." + TableSchema.UserDataSchema.ADDRESS.getColumnName()),
+					getString(tablename + "." + TableSchema.UserDataSchema.TIMEZONE.getColumnName()),
+					getLong(tablename + "." + TableSchema.UserDataSchema.CREATEDTIME.getColumnName()),
+					getLong(tablename + "." + TableSchema.UserDataSchema.MODIFIEDTIME.getColumnName()));
 
-			this.uniqueList.put(getInt(tablename + "." + TableSchema.user_data.user_id), userData);
+			this.uniqueList.put(getInt(tablename + "." + TableSchema.UserDataSchema.USERID.getColumnName()), userData);
 
 			userData.setEmail(userEmailSetter());
 			userData.setOauth(oauthSetter());
@@ -163,12 +164,12 @@ public class PojoMapper {
 
 		Category category = null;
 
-		String tablename = TableSchema.tables.Category.getTableName();
+		String tablename = TableSchema.CategorySchema.CATEGORYID.getTableName();
 
-		if (this.uniqueList.get(getInt(tablename + "." + TableSchema.Category.Category_id)) != null) {
+		if (this.uniqueList.get(getInt(tablename + "." + TableSchema.CategorySchema.CATEGORYID.getColumnName())) != null) {
 
-			if (this.uniqueList.get(getInt(tablename + "." + TableSchema.Category.Category_id)) instanceof Category) {
-				category = (Category) this.uniqueList.get(getInt(tablename + "." + TableSchema.Category.Category_id));
+			if (this.uniqueList.get(getInt(tablename + "." + TableSchema.CategorySchema.CATEGORYID.getColumnName())) instanceof Category) {
+				category = (Category) this.uniqueList.get(getInt(tablename + "." + TableSchema.CategorySchema.CATEGORYID.getColumnName()));
 			}
 
 			CategoryRelation categoryRelation = userCategoryRelationSetter();
@@ -183,13 +184,13 @@ public class PojoMapper {
 
 		} else {
 
-			category = new Category(getInt(tablename + "." + TableSchema.Category.Category_id),
-					getString(tablename + "." + TableSchema.Category.Category_name),
-					getInt(tablename + "." + TableSchema.Category.created_by),
-					getLong(tablename + "." + TableSchema.Category.created_time),
-					getLong(tablename + "." + TableSchema.Category.modified_time));
+			category = new Category(getInt(tablename + "." + TableSchema.CategorySchema.CATEGORYID.getColumnName()),
+					getString(tablename + "." + TableSchema.CategorySchema.CATEGORYNAME.getColumnName()),
+					getInt(tablename + "." + TableSchema.CategorySchema.CREATEDBY.getColumnName()),
+					getLong(tablename + "." + TableSchema.CategorySchema.CREATEDTIME.getColumnName()),
+					getLong(tablename + "." + TableSchema.CategorySchema.MODIFIEDTIME.getColumnName()));
 
-			this.uniqueList.put(getInt(tablename + "." + TableSchema.Category.Category_id), category);
+			this.uniqueList.put(getInt(tablename + "." + TableSchema.CategorySchema.CATEGORYID.getColumnName()), category);
 
 			category.setCategoryRelation(userCategoryRelationSetter());
 
@@ -201,13 +202,13 @@ public class PojoMapper {
 	private CategoryRelation userCategoryRelationSetter() {
 
 		CategoryRelation categoryRelation = null;
-		String tablename = TableSchema.tables.Category_relation.getTableName();
+		String tablename = TableSchema.CategoryRelationSchema.ID.getTableName();
 
-		categoryRelation = new CategoryRelation(getInt(tablename + "." + TableSchema.Category_relation.ID),
-				getInt(tablename + "." + TableSchema.Category_relation.contact_id_to_join),
-				getInt(tablename + "." + TableSchema.Category_relation.Category_id),
-				getLong(tablename + "." + TableSchema.Category_relation.created_time),
-				getLong(tablename + "." + TableSchema.Category_relation.modified_time));
+		categoryRelation = new CategoryRelation(getInt(tablename + "." + TableSchema.CategoryRelationSchema.ID.getColumnName()),
+				getInt(tablename + "." + TableSchema.CategoryRelationSchema.CONTACTIDTOJOIN.getColumnName()),
+				getInt(tablename + "." + TableSchema.CategoryRelationSchema.CATEGORYID.getColumnName()),
+				getLong(tablename + "." + TableSchema.CategoryRelationSchema.CREATEDTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.CategoryRelationSchema.MODIFIEDTIME.getColumnName()));
 
 		return categoryRelation;
 
@@ -217,14 +218,14 @@ public class PojoMapper {
 
 		ContactDetails contactDetails = null;
 
-		String tablename = TableSchema.tables.Contact_details.getTableName();
+		String tablename = TableSchema.ContactDetailsSchema.CONTACTID.getTableName();
 
-		if (this.uniqueList.get(getInt(tablename + "." + TableSchema.Contact_details.contact_id)) != null) {
+		if (this.uniqueList.get(getInt(tablename + "." + TableSchema.ContactDetailsSchema.CONTACTID.getColumnName())) != null) {
 
 			if (this.uniqueList
-					.get(getInt(tablename + "." + TableSchema.Contact_details.contact_id)) instanceof ContactDetails) {
+					.get(getInt(tablename + "." + TableSchema.ContactDetailsSchema.CONTACTID.getColumnName())) instanceof ContactDetails) {
 				contactDetails = (ContactDetails) this.uniqueList
-						.get(getInt(tablename + "." + TableSchema.Category.Category_id));
+						.get(getInt(tablename + "." + TableSchema.CategorySchema.CATEGORYID.getColumnName()));
 			}
 
 			ContactMail contactMail = userMailSetter();
@@ -243,16 +244,17 @@ public class PojoMapper {
 
 		} else {
 
-			contactDetails = new ContactDetails(getInt(tablename + "." + TableSchema.Contact_details.user_id),
-					getInt(tablename + "." + TableSchema.Contact_details.contact_id),
-					getInt(tablename + "." + TableSchema.Contact_details.OauthID),
-					getString(tablename + "." + TableSchema.Contact_details.First_name),
-					getString(tablename + "." + TableSchema.Contact_details.Middle_name),
-					getString(tablename + "." + TableSchema.Contact_details.Last_name),
-					getString(tablename + "." + TableSchema.Contact_details.gender),
-					getString(tablename + "." + TableSchema.Contact_details.Address),
-					getLong(tablename + "." + TableSchema.Contact_details.created_time),
-					getLong(tablename + "." + TableSchema.Contact_details.modified_time));
+			contactDetails = new ContactDetails(getInt(tablename + "." + TableSchema.ContactDetailsSchema.USERID.getColumnName()),
+					getInt(tablename + "." + TableSchema.ContactDetailsSchema.CONTACTID.getColumnName()),
+					getInt(tablename + "." + TableSchema.ContactDetailsSchema.OAUTHID.getColumnName()),
+					getString(tablename + "." + TableSchema.ContactDetailsSchema.OAUTHCONTACTID.getColumnName()),
+					getString(tablename + "." + TableSchema.ContactDetailsSchema.FIRSTNAME.getColumnName()),
+					getString(tablename + "." + TableSchema.ContactDetailsSchema.MIDDLENAME.getColumnName()),
+					getString(tablename + "." + TableSchema.ContactDetailsSchema.LASTNAME.getColumnName()),
+					getString(tablename + "." + TableSchema.ContactDetailsSchema.GENDER.getColumnName()),
+					getString(tablename + "." + TableSchema.ContactDetailsSchema.ADDRESS.getColumnName()),
+					getLong(tablename + "." + TableSchema.ContactDetailsSchema.CREATEDTIME.getColumnName()),
+					getLong(tablename + "." + TableSchema.ContactDetailsSchema.MODIFIEDTIME.getColumnName()));
 			contactDetails.setContactMail(userMailSetter());
 			contactDetails.setContactPhone(userPhoneSetter());
 
@@ -265,15 +267,15 @@ public class PojoMapper {
 	private ContactMail userMailSetter() {
 
 		ContactMail contactMail = null;
-		String tablename = TableSchema.tables.Contact_mail.getTableName();
+		String tablename = TableSchema.ContactMailSchema.ID.getTableName();
 
 		contactMail = new ContactMail(
 
-				getInt(tablename + "." + TableSchema.Contact_mail.ID),
-				getInt(tablename + "." + TableSchema.Contact_mail.contact_id),
-				getString(tablename + "." + TableSchema.Contact_mail.Contact_email_id),
-				getLong(tablename + "." + TableSchema.Contact_mail.created_time),
-				getLong(tablename + "." + TableSchema.Contact_mail.modified_time));
+				getInt(tablename + "." + TableSchema.ContactMailSchema.ID.getColumnName()),
+				getInt(tablename + "." + TableSchema.ContactMailSchema.CONTACTID.getColumnName()),
+				getString(tablename + "." + TableSchema.ContactMailSchema.CONTACTMAILID.getColumnName()),
+				getLong(tablename + "." + TableSchema.ContactMailSchema.CREATEDTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.ContactMailSchema.MODIFIEDTIME.getColumnName()));
 
 		return contactMail;
 
@@ -282,13 +284,13 @@ public class PojoMapper {
 	private ContactPhone userPhoneSetter() {
 
 		ContactPhone contactPhone = null;
-		String tablename = TableSchema.tables.Contact_phone.getTableName();
+		String tablename = TableSchema.ContactPhoneSchema.ID.getTableName();
 
-		contactPhone = new ContactPhone(getInt(tablename + "." + TableSchema.Contact_phone.ID),
-				getInt(tablename + "." + TableSchema.Contact_phone.contact_id),
-				getString(tablename + "." + TableSchema.Contact_phone.Contact_phone_no),
-				getLong(tablename + "." + TableSchema.Contact_phone.created_time),
-				getLong(tablename + "." + TableSchema.Contact_phone.modified_time));
+		contactPhone = new ContactPhone(getInt(tablename + "." + TableSchema.ContactPhoneSchema.ID.getColumnName()),
+				getInt(tablename + "." + TableSchema.ContactPhoneSchema.CONTACTID.getColumnName()),
+				getString(tablename + "." + TableSchema.ContactPhoneSchema.CONTACTPHONENO.getColumnName()),
+				getLong(tablename + "." + TableSchema.ContactPhoneSchema.CREATEDTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.ContactPhoneSchema.MODIFIEDTIME.getColumnName()));
 
 		return contactPhone;
 
@@ -297,16 +299,16 @@ public class PojoMapper {
 	private EmailUser userEmailSetter() {
 
 		EmailUser emailUser = null;
-		String tablename = TableSchema.tables.Email_user.getTableName();
+		String tablename = TableSchema.EmailUserSchema.ID.getTableName();
 
 		emailUser = new EmailUser(
 
-				getInt(tablename + "." + TableSchema.Email_user.ID),
-				getInt(tablename + "." + TableSchema.Email_user.em_id),
-				getString(tablename + "." + TableSchema.Email_user.email),
-				getBoolean(tablename + "." + TableSchema.Email_user.is_primary),
-				getLong(tablename + "." + TableSchema.Email_user.created_time),
-				getLong(tablename + "." + TableSchema.Email_user.modified_time));
+				getInt(tablename + "." + TableSchema.EmailUserSchema.ID.getColumnName()),
+				getInt(tablename + "." + TableSchema.EmailUserSchema.EMAILID.getColumnName()),
+				getString(tablename + "." + TableSchema.EmailUserSchema.EMAIL.getColumnName()),
+				getBoolean(tablename + "." + TableSchema.EmailUserSchema.ISPRIMARY.getColumnName()),
+				getLong(tablename + "." + TableSchema.EmailUserSchema.CREATEDTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.EmailUserSchema.MODIFIEDTIME.getColumnName()));
 
 		return emailUser;
 
@@ -315,13 +317,13 @@ public class PojoMapper {
 	private LoginCredentials userLoginSetter() {
 
 		LoginCredentials login = null;
-		String tablename = TableSchema.tables.Login_credentials.getTableName();
+		String tablename = TableSchema.LoginCredentialsSchema.ID.getTableName();
 
-		login = new LoginCredentials(getInt(tablename + "." + TableSchema.Login_credentials.ID),
-				getInt(tablename + "." + TableSchema.Login_credentials.log_id),
-				getString(tablename + "." + TableSchema.Login_credentials.username),
-				getLong(tablename + "." + TableSchema.Login_credentials.created_time),
-				getLong(tablename + "." + TableSchema.Login_credentials.modified_time));
+		login = new LoginCredentials(getInt(tablename + "." + TableSchema.LoginCredentialsSchema.ID.getColumnName()),
+				getInt(tablename + "." + TableSchema.LoginCredentialsSchema.LOGID.getColumnName()),
+				getString(tablename + "." + TableSchema.LoginCredentialsSchema.USERNAME.getColumnName()),
+				getLong(tablename + "." + TableSchema.LoginCredentialsSchema.CREATEDTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.LoginCredentialsSchema.MODIFIEDTIME.getColumnName()));
 
 		return login;
 
@@ -330,16 +332,16 @@ public class PojoMapper {
 	private Session userSessionSetter() {
 
 		Session session = null;
-		String tablename = TableSchema.tables.Session.getTableName();
+		String tablename = TableSchema.SessionSchema.ID.getTableName();
 
 		session = new Session(
 
-				getInt(tablename + "." + TableSchema.Session.ID),
-				getString(tablename + "." + TableSchema.Session.Session_id),
-				getLong(tablename + "." + TableSchema.Session.last_accessed),
-				getInt(tablename + "." + TableSchema.Session.user_id),
-				getLong(tablename + "." + TableSchema.Session.created_time),
-				getLong(tablename + "." + TableSchema.Session.modified_time));
+				getInt(tablename + "." + TableSchema.SessionSchema.ID.getColumnName()),
+				getString(tablename + "." + TableSchema.SessionSchema.SESSIONID.getColumnName()),
+				getLong(tablename + "." + TableSchema.SessionSchema.LASTACCESSED.getColumnName()),
+				getInt(tablename + "." + TableSchema.SessionSchema.USERID.getColumnName()),
+				getLong(tablename + "." + TableSchema.SessionSchema.CREATEDTIME.getColumnName()),
+				getLong(tablename + "." + TableSchema.SessionSchema.MODIFIEDTIME.getColumnName()));
 
 		return session;
 

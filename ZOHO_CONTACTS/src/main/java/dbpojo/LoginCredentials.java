@@ -1,21 +1,51 @@
 package dbpojo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import querybuilderconfig.TableSchema.Login_credentials;
-import querybuilderconfig.TableSchema.tables;
+import querybuilderconfig.TableSchema.CategoryRelationSchema;
+import querybuilderconfig.TableSchema.LoginCredentialsSchema;
 
 public class LoginCredentials implements Table {
-	private int id = -1;
-	private int logID = -1;
+	private long id = -1;
+	private long logID = -1;
 	private String userName;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 
+	public LoginCredentials(Map<String, Object> tableData) {
+
+		settedData.clear();
+
+		if (tableData.get(LoginCredentialsSchema.ID.getColumnName()) != null) {
+
+			setID((long) tableData.get(LoginCredentialsSchema.ID.getColumnName()));
+		}
+		if (tableData.get(LoginCredentialsSchema.LOGID.getColumnName()) != null) {
+
+			setUserID((long) tableData.get(LoginCredentialsSchema.LOGID.getColumnName()));
+		}
+
+		if (tableData.get(LoginCredentialsSchema.USERNAME.getColumnName()) != null) {
+
+			setUserName((String) tableData.get(LoginCredentialsSchema.USERNAME.getColumnName()));
+		}
+		if (tableData.get(LoginCredentialsSchema.CREATEDTIME.getColumnName()) != null) {
+
+			setCreatedAt((long) tableData.get(LoginCredentialsSchema.CREATEDTIME.getColumnName()));
+		}
+
+		if (tableData.get(LoginCredentialsSchema.MODIFIEDTIME.getColumnName()) != null) {
+
+			setModifiedAt((long) tableData.get(LoginCredentialsSchema.MODIFIEDTIME.getColumnName()));
+		}
+
+	}
+
 	public LoginCredentials(int id, int logId, String userName, long createdAt, long modifiedAt) {
-		
+
 		settedData.clear();
 		setID(id);
 		setUserID(logId);
@@ -31,21 +61,21 @@ public class LoginCredentials implements Table {
 
 	public String getTableName() {
 
-		return tables.Login_credentials.getTableName();
+		return LoginCredentialsSchema.ID.getTableName();
 	}
 
 	public String getPrimaryIDName() {
 
-		return tables.Login_credentials.getPrimaryKey();
+		return LoginCredentialsSchema.ID.getPrimaryKey();
 	}
 
-	public void setID(int id) {
+	public void setID(long id) {
 		this.id = id;
-		settedData.put( Login_credentials.ID.toString(), getID());
+		settedData.put(LoginCredentialsSchema.ID.getColumnName(), getID());
 
 	}
 
-	public int getID() {
+	public long getID() {
 
 		return this.id;
 	}
@@ -54,7 +84,7 @@ public class LoginCredentials implements Table {
 
 		this.createdAt = createdAt;
 
-		settedData.put( Login_credentials.created_time.toString(), getCreatedAt());
+		settedData.put(LoginCredentialsSchema.CREATEDTIME.getColumnName(), getCreatedAt());
 	}
 
 	public long getCreatedAt() {
@@ -65,7 +95,7 @@ public class LoginCredentials implements Table {
 	public void setModifiedAt(long modifiedAt) {
 
 		this.modifiedAt = modifiedAt;
-		settedData.put( Login_credentials.modified_time.toString(), getModifiedAt());
+		settedData.put(LoginCredentialsSchema.MODIFIEDTIME.getColumnName(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -74,18 +104,18 @@ public class LoginCredentials implements Table {
 
 	}
 
-	public void setUserID(int userId) {
+	public void setUserID(long userId) {
 		this.logID = userId;
-		settedData.put( Login_credentials.log_id.toString(), getUserId());
+		settedData.put(LoginCredentialsSchema.LOGID.getColumnName(), getUserId());
 	}
 
-	public int getUserId() {
+	public long getUserId() {
 		return this.logID;
 	}
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-		settedData.put( Login_credentials.username.toString(), getUserName());
+		settedData.put(LoginCredentialsSchema.USERNAME.getColumnName(), getUserName());
 	}
 
 	public String getUserName() {
@@ -95,6 +125,18 @@ public class LoginCredentials implements Table {
 	public Map<String, Object> getSettedData() {
 
 		return settedData;
+	}
+
+	@Override
+	public List<String> getTableColumnNames() {
+
+		return LoginCredentialsSchema.ID.getColumns();
+	}
+
+	@Override
+	public Table getNewTable(Map<String, Object> tableData) {
+
+		return new LoginCredentials(tableData);
 	}
 
 }

@@ -1,19 +1,49 @@
 package dbpojo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import querybuilderconfig.TableSchema.Contact_phone;
-import querybuilderconfig.TableSchema.tables;
-import querybuilderconfig.TableSchema.user_data;
+import querybuilderconfig.TableSchema.ContactPhoneSchema;
+import querybuilderconfig.TableSchema.LoginCredentialsSchema;
 
 public class ContactPhone implements Table {
-	private int id = -1;
-	private int contactID = -1;
+	private long id = -1;
+	private long contactID = -1;
 	private String ContactPhoneNo;
 	private long createdAt = -1;
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 	private long modifiedAt = -1;
+
+	public ContactPhone(Map<String, Object> tableData) {
+
+		settedData.clear();
+
+		if (tableData.get(ContactPhoneSchema.ID.getColumnName()) != null) {
+
+			setID((long) tableData.get(ContactPhoneSchema.ID.getColumnName()));
+		}
+
+		if (tableData.get(ContactPhoneSchema.CONTACTPHONENO.getColumnName()) != null) {
+
+			setContactPhone((String) tableData.get(ContactPhoneSchema.CONTACTPHONENO.getColumnName()));
+		}
+
+		if (tableData.get(ContactPhoneSchema.CONTACTID.getColumnName()) != null) {
+
+			setContactID((long) tableData.get(ContactPhoneSchema.CONTACTID.getColumnName()));
+		}
+
+		if (tableData.get(ContactPhoneSchema.CREATEDTIME.getColumnName()) != null) {
+
+			setCreatedAt((long) tableData.get(ContactPhoneSchema.CREATEDTIME.getColumnName()));
+		}
+		if (tableData.get(ContactPhoneSchema.MODIFIEDTIME.getColumnName()) != null) {
+
+			setModifiedAt((long) tableData.get(ContactPhoneSchema.MODIFIEDTIME.getColumnName()));
+		}
+
+	}
 
 	public ContactPhone(int id, int contactID, String ContactPhoneNo, long createdAt, long modifiedAt) {
 
@@ -32,31 +62,31 @@ public class ContactPhone implements Table {
 
 	public String getPrimaryIDName() {
 
-		return tables.Contact_phone.getPrimaryKey();
+		return ContactPhoneSchema.ID.getPrimaryKey();
 	}
 
-	public void setID(int id) {
+	public void setID(long id) {
 
 		this.id = id;
 
-		settedData.put( Contact_phone.ID.toString(), getID());
+		settedData.put(ContactPhoneSchema.ID.getColumnName(), getID());
 	}
 
-	public int getID() {
+	public long getID() {
 
 		return this.id;
 	}
 
 	public String getTableName() {
 
-		return tables.Contact_phone.getTableName();
+		return ContactPhoneSchema.ID.getTableName();
 	}
 
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
 
-		settedData.put( Contact_phone.created_time.toString(), getCreatedAt());
+		settedData.put(ContactPhoneSchema.CREATEDTIME.getColumnName(), getCreatedAt());
 	}
 
 	public long getCreatedAt() {
@@ -68,7 +98,7 @@ public class ContactPhone implements Table {
 
 		this.modifiedAt = modifiedAt;
 
-		settedData.put( Contact_phone.modified_time.toString(), getModifiedAt());
+		settedData.put(ContactPhoneSchema.MODIFIEDTIME.getColumnName(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -77,19 +107,19 @@ public class ContactPhone implements Table {
 
 	}
 
-	public void setContactID(int ContactID) {
+	public void setContactID(long ContactID) {
 		this.contactID = ContactID;
 
-		settedData.put( Contact_phone.contact_id.toString(), getContactID());
+		settedData.put(ContactPhoneSchema.CONTACTID.getColumnName(), getContactID());
 	}
 
-	public int getContactID() {
+	public long getContactID() {
 		return this.contactID;
 	}
 
 	public void setContactPhone(String ContactPhone) {
 		this.ContactPhoneNo = ContactPhone;
-		settedData.put( Contact_phone.Contact_phone_no.toString(), getContactPhone());
+		settedData.put(ContactPhoneSchema.CONTACTPHONENO.getColumnName(), getContactPhone());
 	}
 
 	public String getContactPhone() {
@@ -99,6 +129,18 @@ public class ContactPhone implements Table {
 	public Map<String, Object> getSettedData() {
 
 		return settedData;
+	}
+
+	@Override
+	public List<String> getTableColumnNames() {
+
+		return ContactPhoneSchema.ID.getColumns();
+	}
+
+	@Override
+	public Table getNewTable(Map<String, Object> tableData) {
+
+		return new ContactPhone(tableData);
 	}
 
 }
