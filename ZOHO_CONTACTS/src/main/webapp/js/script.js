@@ -9,6 +9,8 @@ const createGroupButton = document.getElementById("groupbutton");
 const checkboxes = document.querySelectorAll('.contact-checkbox');
 const createsidebars = document.getElementById('sidebar');
 const viewsidebars = document.getElementById('viewsidebar');
+
+
 createGroupButton.onclick = function() {
 
 
@@ -21,7 +23,6 @@ createGroupButton.onclick = function() {
 
 
 }
-
 
 
 
@@ -101,16 +102,7 @@ closecreatemodel.onclick = function() {
 
 
 
-viewGroupButton.onclick = function() {
 
-
-	viewsidebars.style.display = "none";
-
-
-
-
-
-}
 
 
 

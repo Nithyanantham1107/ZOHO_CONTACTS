@@ -1,10 +1,10 @@
-<%@page import="dbpojo.Oauth"%>
-<%@page import="dboperation.SessionOperation"%>
-<%@page import="dbpojo.ContactDetails"%>
+<%@page import="com.zohocontacts.dbpojo.Oauth"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="dboperation.UserContactOperation"%>
-<%@page import="dbpojo.Userdata"%>
-<%@page import="sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.dboperation.UserContactOperation"%>
+<%@page import="com.zohocontacts.dbpojo.UserData"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -27,13 +27,7 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
-<script>
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-	");
-<%}%>
-	
-</script>
+
 </head>
 <body>
 
@@ -43,20 +37,175 @@
 	<%
 	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
-	if (cachemodel == null) {
-		System.out.println("hello hi");
-		response.sendRedirect("Login.jsp");
-		return;
+		if (cachemodel == null) {
+			System.out.println("hello hi");
+			response.sendRedirect("Login.jsp");
+			return;
 
-	}
+		}
 
-	Userdata ud = null;
-	ArrayList<ContactDetails> userContacts = null;
+		UserData ud = null;
+		ArrayList<ContactDetails> userContacts = null;
 
-	ud = cachemodel.getUserData();
+		ud = cachemodel.getUserData();
 
-	userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
+		userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 	%>
+
+
+
+
+
+
+
+
+
+
+	<nav id="sidebar">
+
+		<section id="creategroup">
+
+			<h1>Merge Contact</h1>
+
+
+
+
+
+
+
+			<button id="closecreatemodel">X</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<div style="display: flex; justify-content: center;">
+				<input type="hidden" value="create" id="methodcreate" />
+				<button id="mergeContact" class="glowgreenbutton">Merge</button>
+			</div>
+
+
+
+
+
+
+			<div id="createtablecontainer">
+
+
+
+
+				<table>
+
+					<thead>
+
+
+						<tr>
+
+							<th>select</th>
+							<th>FirstName</th>
+
+
+
+							<th>Email</th>
+							<th>Phone</th>
+
+
+
+						</tr>
+
+					</thead>
+					<tbody>
+
+						<%
+						if (userContacts != null) {
+
+							for (ContactDetails uc : userContacts) {
+						%>
+						<tr>
+
+							<td><input type="checkbox" name="contact_ids"
+								value="<%=uc.getID()%>" style="display: block;"
+								class="contact-checkbox" /></td>
+							<td><%=uc.getFirstName()%></td>
+
+							<%
+							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+							%>
+							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
+
+
+							<%
+							} else {
+							%>
+							<td>Mail</td>
+
+							<%
+							}
+							%>
+
+							<%
+							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+							%>
+							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
+
+
+							<%
+							} else {
+							%>
+							<td>Phone</td>
+
+							<%
+							}
+							%>
+
+
+
+						</tr>
+
+						<%
+						}
+						}
+						%>
+
+
+
+					</tbody>
+
+				</table>
+
+			</div>
+		</section>
+
+
+
+
+
+	</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	<section id="header">
 
@@ -74,7 +223,7 @@
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
 				<li><a href="changePassword.jsp"> More</a></li>
-				<li><a href="/login"> <i
+				<li><a href="/logout"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
 
@@ -94,13 +243,13 @@
 		<section id="tableContainer">
 			<section id="tableHeader">
 
-				
-
-<form action="linkedaccounts.jsp">
 
 
-				<input type="submit" class="glowgreenbutton" value="Link Accounts" />
-			</form>
+				<form action="linkedaccounts.jsp">
+
+
+					<input type="submit" class="glowgreenbutton" value="Link Accounts" />
+				</form>
 
 
 				<section id="tableHeader">
@@ -108,9 +257,14 @@
 
 
 
+
+
+
 				</section>
 
 				<section id="addbutton">
+					<button id="groupbutton" class="glowgreenbutton">Merge</button>
+
 
 					<form action="Add_contacts.jsp">
 
@@ -137,8 +291,7 @@
 							<th>Gender</th>
 							<th>Email</th>
 							<th>Phone</th>
-							<th>Update</th>
-							<th>Delete</th>
+							<th>View</th>
 
 
 						</tr>
@@ -162,27 +315,54 @@
 							<td><%=uc.getMiddleName()%></td>
 							<td><%=uc.getLastName()%></td>
 							<td><%=uc.getGender()%></td>
-							<td><%=uc.getContactMail().getContactMailID()%></td>
-							<td><%=uc.getContactphone().getContactPhone()%></td>
+
+
+							<%
+							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+							%>
+							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
+
+
+							<%
+							} else {
+							%>
+							<td>Mail</td>
+
+							<%
+							}
+							%>
+
+							<%
+							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+							%>
+							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
+
+
+							<%
+							} else {
+							%>
+							<td>Phone</td>
+
+							<%
+							}
+							%>
+
+
+
+
 
 
 							<td>
 
 
-								<form action="/GetAndUpdatecontact" method="post">
+								<form action="/contactview" method="post">
 									<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
-									<input type="submit" class="glowyellowbutton" value="Update" />
+
+
+									<input type="submit" class="glowyellowbutton" value="View" />
 								</form>
 							</td>
-							<td>
 
-
-
-								<form action="/deletecontact" method="post">
-									<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
-									<input type="submit" class="glowredbutton" value="Delete" />
-								</form>
-							</td>
 						</tr>
 
 						<%
@@ -216,8 +396,15 @@
 
 
 
-
-
+	<script type="text/javascript" src="js/mergescript.js">
+        <%if (request.getAttribute("errorMessage") != null) {%>
+            alert("<%=request.getAttribute("errorMessage")%>
+		");
+	<%}%>
+		
+	
+		
+	</script>
 
 
 

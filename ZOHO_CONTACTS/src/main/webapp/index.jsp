@@ -1,5 +1,5 @@
-<%@page import="sessionstorage.CacheModel"%>
-<%@page import="dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
   <%

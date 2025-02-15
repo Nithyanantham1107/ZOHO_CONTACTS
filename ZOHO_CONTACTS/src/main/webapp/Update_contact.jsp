@@ -1,11 +1,13 @@
-<%@page import="dbpojo.ContactDetails"%>
-<%@page import="sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.dbpojo.ContactMail"%>
+<%@page import="com.zohocontacts.dbpojo.ContactPhone"%>
+<%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
 
 <%@page import="java.util.ArrayList"%>
-<%@page import="dboperation.UserGroupOperation"%>
-<%@page import="dboperation.UserContactOperation"%>
-<%@page import="dboperation.UserOperation"%>
-<%@page import="dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
+<%@page import="com.zohocontacts.dboperation.UserContactOperation"%>
+<%@page import="com.zohocontacts.dboperation.UserOperation"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -28,8 +30,8 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 <style>
 body {
 	font-family: Arial, sans-serif;
-  color:white;
-	background-color:#FBF5E5;
+	color: white;
+	background-color: #FBF5E5;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -42,30 +44,46 @@ body {
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	width: 350px;
-	
-	
-	 form{
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            
-            background-color:white;
-            }
+	width: 550px; form { display : flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: white;
 }
 
+div {
+	background-color: white;
+}
+
+.remove-btn {
+	display: flex;
+	padding: 20px;
+	margin: 3px;
+	background-color: #dda853;
+	color: white;
+	border: none;
+	font-size: 14px;
+	border-radius: 5px;
+	margin: 3px;
+}
+
+.input-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+}
 h2 {
- background-color:white;
-          color:black;
+	background-color: white;
+	color: black;
 	text-align: center;
 	margin-bottom: 20px;
 	color: #333;
 }
 
 label {
-
- background-color:white;
-          color:black;
+	background-color: white;
+	color: black;
 	margin-top: 10px;
 	font-weight: bold;
 	display: block;
@@ -77,20 +95,23 @@ input[type="text"], input[type="email"], textarea {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	margin-top: 5px;
-	margin-bottom:5px;
-	 background-color:white;
-          color:black;
+	margin-bottom: 5px;
+	background-color: white;
+	color: black;
+}
+
+.liststyle {
+	display: flex;
+	flex-direction: row;
 }
 
 textarea {
-	resize: none; /* Prevent resizing */
+	resize: none;
 }
 
-
-
 .back-btn {
-padding: 10px;
-	background-color: black;
+	padding: 10px;
+	background-color: #dda853;
 	color: white;
 	border: none;
 	border-radius: 4px;
@@ -101,18 +122,12 @@ padding: 10px;
 }
 
 .back-btn:hover {
-		background-color: white;
+	background-color: white;
 	color: black;
 }
 </style>
 
-<script>
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-	");
-<%}%>
-	
-</script>
+
 
 </head>
 <body>
@@ -121,41 +136,104 @@ padding: 10px;
 
 	<div class="container">
 		<h2>Update Contacts</h2>
-		<form action="/updatecontact" method="post">
+		<form  action="/updatecontact" method="post">
 			<%
-			
-			
-			   CacheModel alive =  SessionOperation.checkSessionAlive( SessionOperation.getCustomSessionId(request.getCookies()));
+			CacheModel alive = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
-				if (alive == null) {
+			if (alive == null) {
 
-						response.sendRedirect("Login.jsp");
+				response.sendRedirect("Login.jsp");
 
-						return;
+				return;
 
-					}
-
-			// upto this session check is implemented
+			}
 
 			ContactDetails uc = (ContactDetails) request.getAttribute("user_spec_contact");
 			if (uc == null) {
 				response.sendRedirect("home.jsp");
 				return;
 			}
-			System.out.println("hey" + uc.getFirstName()+uc.getID());
+			System.out.println("hey" + uc.getFirstName() + uc.getID());
 			%>
 			<label for="name">FirstName</label> <input type="text" name="f_name"
 				value="<%=uc.getFirstName()%>" required /> <label for="name">MiddleName</label>
-			<input type="text" value="<%=uc.getMiddleName()%>" name="m_name" /> <label
-				for="name">LastName</label> <input type="text"
+			<input type="text" value="<%=uc.getMiddleName()%>" name="m_name" />
+			<label for="name">LastName</label> <input type="text"
 				value="<%=uc.getLastName()%>" name="l_name" /> <label for="phoneno">Phone
-				No</label> <input type="text" name="phone" value="<%=uc.getContactphone().getContactPhone()%>"
-				required /> <label for="email">Email</label> <input type="email"
-				name="email" value="<%=uc.getContactMail().getContactMailID()%>" required />
+				No</label>
+
+
+			<div id="Phonelist">
+
+
+				<%
+				if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+					for (ContactPhone phone : uc.getAllContactphone()) {
+				%>
+				<div class="input-container">
+					<input type="text" name="phones"
+						value="<%=phone.getContactPhone()%>" required />
+					<button type="button" class="remove-btn"
+						onclick="removeField(this)">Remove</button>
+					<input type="hidden" name="phoneID"
+						value="<%=phone.getID()%>" required />
+				</div>
+				
+				
+				<%
+				}
+				}
+				%>
+
+
+
+
+			</div>
+
+			<button type="button" class="glowyellowbutton" id="addphone">Add
+				Phone No</button>
+			<label for="phoneno">Email</label>
+
+
+			<div id="emaillist">
+
+
+
+				<%
+				if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+					for (ContactMail mail : uc.getAllContactMail()) {
+				%>
+
+
+				<div class="input-container">
+
+					<input type="text" name="emails"
+						value="<%=mail.getContactMailID()%>" required />
+					<button type="button" class="remove-btn"
+						onclick="removeField(this)">Remove</button>
+						
+						
+						<input type="hidden" name="emailID"
+						value="<%=mail.getID()%>" required />
+				</div>
+				<%
+				}
+				}
+				%>
+
+			</div>
+
+
+			<button type="button" class="glowyellowbutton" id="addEmail">Add
+				Email</button>
+
+
+
+
 
 
 			<div
-				style="display: flex; flex-direction: row; gap: 10px; align-items: center;background-color: white;">
+				style="display: flex; flex-direction: row; gap: 10px; align-items: center; background-color: white;">
 				<%
 				if ("M".equals(uc.getGender())) {
 				%>
@@ -179,14 +257,8 @@ padding: 10px;
 			<label for="address">Address</label>
 			<textarea rows="3" cols="20" name="Address" required><%=uc.getAddress()%></textarea>
 			<input type="hidden" name="contactid" value="<%=uc.getID()%>"
-				required /> 
-				<input type="hidden" name="contactemailid" value="<%=uc.getContactMail().getID()%>"
-				required /> 
-				<input type="hidden" name="contactphoneid" value="<%=uc.getContactphone().getID()%>"
-				required /> 
-				
-				
-				<input type="submit" class="glowyellowbutton" value="Update" />
+				required /> <input type="submit" class="glowyellowbutton"
+				value="Update" />
 		</form>
 		<form action="/home.jsp" method="get">
 			<input type="submit" value="Back" class="back-btn" />
@@ -194,5 +266,17 @@ padding: 10px;
 	</div>
 
 
+		
+	
+
+	<script type="text/javascript" src="js/formfunctional.js">
+        <%if (request.getAttribute("errorMessage") != null) {%>
+            alert("<%=request.getAttribute("errorMessage")%>
+		");
+	<%}%>
+		
+	
+		
+	</script>
 </body>
 </html>

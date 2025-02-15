@@ -1,11 +1,11 @@
-<%@page import="dbpojo.Category"%>
-<%@page import="dboperation.UserGroupOperation"%>
-<%@page import="dboperation.SessionOperation"%>
-<%@page import="dbpojo.ContactDetails"%>
+<%@page import="com.zohocontacts.dbpojo.Category"%>
+<%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="dboperation.UserContactOperation"%>
-<%@page import="dbpojo.Userdata"%>
-<%@page import="sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.dboperation.UserContactOperation"%>
+<%@page import="com.zohocontacts.dbpojo.UserData"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -44,24 +44,24 @@
 	<%
 	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
-	if (cachemodel == null) {
-		System.out.println("hello hi");
-		response.sendRedirect("Login.jsp");
-		return;
+		if (cachemodel == null) {
+			System.out.println("hello hi");
+			response.sendRedirect("Login.jsp");
+			return;
 
-	}
-	Userdata ud = cachemodel.getUserData();
+		}
+		UserData ud = cachemodel.getUserData();
 
-	Category group = (Category) request.getAttribute("group");
+		Category group = (Category) request.getAttribute("group");
 
-	ArrayList<ContactDetails> contactsNotInGroup = new ArrayList<>();
-	if (group != null) {
-		
-			contactsNotInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "add");
+		ArrayList<ContactDetails> contactsNotInGroup = new ArrayList<>();
+		if (group != null) {
+			
+		contactsNotInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "add");
 
-		
+			
 
-	}
+		}
 	%>
 
 	<section id="header">
@@ -80,7 +80,7 @@
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
 				<li><a href="changePassword.jsp"> More</a></li>
-				<li><a href="/login"> <i
+				<li><a href="/logout"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
 
@@ -200,9 +200,37 @@
 							<td><%=uc.getMiddleName()%></td>
 							<td><%=uc.getLastName()%></td>
 							<td><%=uc.getGender()%></td>
-							<td><%=uc.getContactMail().getContactMailID()%></td>
-							<td><%=uc.getContactphone().getContactPhone()%></td>
+							
+							<%
+							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+							%>
+							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
 
+
+							<%
+							} else {
+							%>
+							<td>Mail</td>
+
+							<%
+							}
+							%>
+							
+						<%
+							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+							%>
+							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
+
+
+							<%
+							} else {
+							%>
+							<td>Phone</td>
+
+							<%
+							}
+							%>
+						
 
 
 							<td>

@@ -1,10 +1,10 @@
-<%@page import="sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
 
 <%@page import="java.util.ArrayList"%>
-<%@page import="dboperation.UserGroupOperation"%>
-<%@page import="dboperation.UserContactOperation"%>
-<%@page import="dboperation.UserOperation"%>
-<%@page import="dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
+<%@page import="com.zohocontacts.dboperation.UserContactOperation"%>
+<%@page import="com.zohocontacts.dboperation.UserOperation"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -40,10 +40,18 @@ body {
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	width: 350px; form { display : flex;
+	width: 550px; form { display : flex;
 	flex-direction: column;
 	justify-content: center;
 	background-color: white;
+}
+
+
+.input-container {
+	display: flex;
+	background-color:white;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
 }
@@ -52,6 +60,17 @@ h2 {
 	color: black;
 	text-align: center;
 	margin-bottom: 20px;
+}
+.remove-btn {
+	display: flex;
+	padding: 20px;
+	margin: 3px;
+	background-color: #dda853;
+	color: white;
+	border: none;
+	font-size: 14px;
+	border-radius: 5px;
+	margin: 3px;
 }
 
 label {
@@ -121,43 +140,61 @@ textarea {
 
 	<div class="container">
 		<h2>Add Contacts</h2>
-		<form action="/addcontact" method="post">
-			<label for="name">FirstName</label> <input type="text" name="f_name"
-				required /> <label for="name">MiddleName</label> <input type="text"
-				name="m_name" /> <label for="name">LastName</label> <input
-				type="text" name="l_name" /> <label for="phoneno">Phone No</label>
-			<input type="text" name="phone" required /> <label for="email">Email</label>
-			<input type="email" name="email" required />
+	 <form id="contactForm">
+        <label for="name">FirstName</label> 
+        <input type="text" name="f_name" required /> 
 
+        <label for="name">MiddleName</label> 
+        <input type="text" name="m_name" /> 
 
-			<div
-				style="display: flex; flex-direction: row; gap: 10px; align-items: center; background-color: white">
-				<label for="Gender">Gender</label>  <input type="radio"
-					name="gender" value="male">   <label for="male">Male</label><br>
-				  <input type="radio" name="gender" value="female">   <label
-					for="female">female</label><br>  
-			</div>
+        <label for="name">LastName</label> 
+        <input type="text" name="l_name" /> 
 
+        <label for="phoneno">Phone No</label>
+        <div id="Phonelist">
+            <div class="input-container">
+                <input type="text" name="phones" required />
+                <button type="button" class="remove-btn" onclick="removeField(this)">Remove</button>
+            </div>
+        </div>
+        <button type="button" class="glowyellowbutton" id="addphone">Add Phone No</button>
 
+        <label for="email">Email</label>
+        <div id="emaillist">
+            <div class="input-container">
+                <input type="text" name="emails" required />
+                <button type="button" class="remove-btn" onclick="removeField(this)">Remove</button>
+            </div>
+        </div>
+        <button type="button" class="glowyellowbutton" id="addEmail">Add Email</button>
 
-			<input type="hidden" id="localDateTime" name="localDateTime">
-			<input type="hidden" id="timeZoneId" name="timeZoneId"> <input
-				type="hidden" id="utcDateTime" name="utcDateTime"> <label
-				for="address">Address</label>
-			<textarea rows="3" cols="20" name="Address" required></textarea>
+        <div style="display: flex; flex-direction: row; gap: 10px; align-items: center; background-color: white">
+            <label for="Gender">Gender</label>  
+            <input type="radio" name="gender" value="male">   
+            <label for="male">Male</label><br>
+            <input type="radio" name="gender" value="female">   
+            <label for="female">female</label><br>   
+        </div>
 
+        <input type="hidden" id="localDateTime" name="localDateTime">
+        <input type="hidden" id="timeZoneId" name="timeZoneId"> 
+        <input type="hidden" id="utcDateTime" name="utcDateTime"> 
 
-			<input type="submit" class="glowgreenbutton"
-				onclick="prepareFormData()" value="Add" />
-		</form>
+        <label for="address">Address</label>
+        <textarea rows="3" cols="20" name="Address" required></textarea>
+
+        <input type="submit" class="glowgreenbutton" value="Add" />
+    </form>
 		<form action="/home.jsp" method="get">
 			<input type="submit" value="Back" class="back-btn" />
 		</form>
 	</div>
 
 
-
-	<script>
+	<script type="text/javascript" src="js/addcontact.js">
+	
+	</script>
+	<script type="text/javascript" src="js/formfunctional.js">
 		function prepareFormData() {
 
 			let localDate = new Date();

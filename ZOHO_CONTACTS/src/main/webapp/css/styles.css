@@ -64,6 +64,13 @@ color:black;
 	
 }
 
+#addbutton{
+	
+	
+	display:flex;
+	justify-content: space-between;
+}
+
 #registration-form{
 	
 	

@@ -1,9 +1,9 @@
-<%@page import="dbpojo.EmailUser"%>
-<%@page import="dbpojo.Category"%>
-<%@page import="dbpojo.ContactDetails"%>
-<%@page import="dbpojo.Userdata"%>
-<%@page import="sessionstorage.CacheData"%>
-<%@page import="sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.dbpojo.EmailUser"%>
+<%@page import="com.zohocontacts.dbpojo.Category"%>
+<%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
+<%@page import="com.zohocontacts.dbpojo.UserData"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheData"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
 
 <%@page import="dboperation.UserOperation"%>
 
@@ -15,10 +15,7 @@
 	pageEncoding="UTF-8"%>
 
 <%
-
-response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
-
-
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 %>
 
 
@@ -283,7 +280,7 @@ textarea {
 				         // CacheModel cachemodel=CacheData.getCache(sessionid);
 				          
 				          
-				          Userdata ud = cachemodel.getUserData();
+				          UserData ud = cachemodel.getUserData();
 				
 				Category ugu = (Category) request.getAttribute("usergroupupdate");
 				

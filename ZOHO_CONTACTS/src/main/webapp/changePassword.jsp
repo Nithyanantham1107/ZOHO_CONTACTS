@@ -1,10 +1,10 @@
-<%@page import="dbpojo.EmailUser"%>
-<%@page import="dboperation.SessionOperation"%>
-<%@page import="dbpojo.ContactDetails"%>
+<%@page import="com.zohocontacts.dbpojo.EmailUser"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="dboperation.UserContactOperation"%>
-<%@page import="dbpojo.Userdata"%>
-<%@page import="sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.dboperation.UserContactOperation"%>
+<%@page import="com.zohocontacts.dbpojo.UserData"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -131,14 +131,14 @@ button {
 	<%
 	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
-	if (cachemodel == null) {
-		System.out.println("hello hi");
-		response.sendRedirect("Login.jsp");
-		return;
+		if (cachemodel == null) {
+			System.out.println("hello hi");
+			response.sendRedirect("Login.jsp");
+			return;
 
-	}
+		}
 
-	Userdata ud = cachemodel.getUserData();
+		UserData ud = cachemodel.getUserData();
 	%>
 
 	<div id="header">
@@ -157,7 +157,7 @@ button {
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
 				<li><a href="changePassword.jsp"> More</a></li>
-				<li><a href="/login"> <i
+				<li><a href="/logout"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
 

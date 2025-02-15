@@ -1,11 +1,11 @@
-<%@page import="dboperation.UserGroupOperation"%>
-<%@page import="dbpojo.Category"%>
-<%@page import="dboperation.SessionOperation"%>
-<%@page import="dbpojo.ContactDetails"%>
+<%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
+<%@page import="com.zohocontacts.dbpojo.Category"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="dboperation.UserContactOperation"%>
-<%@page import="dbpojo.Userdata"%>
-<%@page import="sessionstorage.CacheModel"%>
+<%@page import="com.zohocontacts.dboperation.UserContactOperation"%>
+<%@page import="com.zohocontacts.dbpojo.UserData"%>
+<%@page import="com.zohocontacts.sessionstorage.CacheModel"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -36,51 +36,50 @@
 
 
 	<%
-
 	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
 
-	if (cachemodel == null) {
-		System.out.println("hello hi");
-		response.sendRedirect("Login.jsp");
-		return;
-
-	}
-
-	Userdata ud = cachemodel.getUserData();
-	ArrayList<ContactDetails> userContacts=null;
-	ArrayList<Category> usergroup=null;
-
-	 userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
-
- usergroup = UserGroupOperation.viewAllGroup(ud.getID());
-
-	
-	
-
-	
-	ArrayList<ContactDetails> groupsInContact = new ArrayList<>();
-	ArrayList<ContactDetails> groupsNotInContact = new ArrayList<>();
-	Category group = null;
-	System.out
-			.println("here the type" + (request.getAttribute("method") != null && request.getAttribute("groupID") != null));
-
-	if (request.getAttribute("method") != null && request.getAttribute("groupID") != null) {
-
-		String method = (String) request.getAttribute("method");
-		int groupID = (int) request.getAttribute("groupID");
-		group = UserGroupOperation.getSpecificGroup(groupID, ud.getID());
-
-		if (method.equals("view")) {
-
-			groupsInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
-
-		} else {
-
-			groupsNotInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
+		if (cachemodel == null) {
+			System.out.println("hello hi");
+			response.sendRedirect("Login.jsp");
+			return;
 
 		}
 
-	}
+		UserData ud = cachemodel.getUserData();
+		ArrayList<ContactDetails> userContacts=null;
+		ArrayList<Category> usergroup=null;
+
+		 userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
+
+	 usergroup = UserGroupOperation.viewAllGroup(ud.getID());
+
+		
+		
+
+		
+		ArrayList<ContactDetails> groupsInContact = new ArrayList<>();
+		ArrayList<ContactDetails> groupsNotInContact = new ArrayList<>();
+		Category group = null;
+		System.out
+		.println("here the type" + (request.getAttribute("method") != null && request.getAttribute("groupID") != null));
+
+		if (request.getAttribute("method") != null && request.getAttribute("groupID") != null) {
+
+			String method = (String) request.getAttribute("method");
+			int groupID = (int) request.getAttribute("groupID");
+			group = UserGroupOperation.getSpecificGroup(groupID, ud.getID());
+
+			if (method.equals("view")) {
+
+		groupsInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
+
+			} else {
+
+		groupsNotInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
+
+			}
+
+		}
 	%>
 
 
@@ -114,7 +113,7 @@
 
 		
 
-          <div>
+          <div style="display: flex;">
 			<input type="text" id="groupNamecreate"
 				placeholder="Enter group name" required /> <input type="hidden"
 				id="groupidcreate" required /> <input type="hidden" value="create"
@@ -166,9 +165,36 @@
 							class="contact-checkbox" /></td>
 						<td><%=uc.getFirstName()%></td>
 
-						<td><%=uc.getContactMail().getContactMailID()%></td>
-						<td><%=uc.getContactphone().getContactPhone()%></td>
+						<%
+							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+							%>
+							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
 
+
+							<%
+							} else {
+							%>
+							<td>Mail</td>
+
+							<%
+							}
+							%>
+							
+						<%
+							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+							%>
+							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
+
+
+							<%
+							} else {
+							%>
+							<td>Phone</td>
+
+							<%
+							}
+							%>
+						
 
 
 					</tr>
@@ -235,7 +261,7 @@
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
 				<li><a href="changePassword.jsp"> More</a></li>
-				<li><a href="/login"> <i
+				<li><a href="/logout"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
 

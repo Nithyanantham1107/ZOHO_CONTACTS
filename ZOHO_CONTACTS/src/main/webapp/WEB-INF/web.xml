@@ -25,7 +25,35 @@
 
 		<listener-class>listener.ServerListener</listener-class>
 	</listener>
+<servlet>
+		<servlet-name>contactview</servlet-name>
+		<servlet-class>servlets.ContactViewRedirectServlet</servlet-class>
 
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>contactview</servlet-name>
+		<url-pattern>/contactview</url-pattern>
+	</servlet-mapping>
+	
+<servlet>
+		<servlet-name>mergecontact</servlet-name>
+		<servlet-class>servlets.ContactMergeServlet</servlet-class>
+
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mergecontact</servlet-name>
+		<url-pattern>/mergecontact</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>logout</servlet-name>
+		<servlet-class>servlets.LogoutServlet</servlet-class>
+
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>logout</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>login</servlet-name>
 		<servlet-class>servlets.LoginSignupServlet</servlet-class>
@@ -37,6 +65,28 @@
 	</servlet-mapping>
 	
 	
+		
+	<servlet>
+		<servlet-name>servercache</servlet-name>
+		<servlet-class>servlets.ServerCacheDeleteServlet</servlet-class>
+
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>servercache</servlet-name>
+		<url-pattern>/servercache</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>sessioncache</servlet-name>
+		<servlet-class>servlets.SessionCacheHandleServlet</servlet-class>
+
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>sessioncache</servlet-name>
+		<url-pattern>/sessioncache</url-pattern>
+	</servlet-mapping>
+
+
 	
 	
 	<servlet>
