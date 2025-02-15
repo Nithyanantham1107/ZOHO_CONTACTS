@@ -1,17 +1,18 @@
+<%@page import="dbpojo.EmailUser"%>
+<%@page import="dbpojo.Category"%>
+<%@page import="dbpojo.ContactDetails"%>
+<%@page import="dbpojo.Userdata"%>
 <%@page import="sessionstorage.CacheData"%>
 <%@page import="sessionstorage.CacheModel"%>
-<%@page import="dboperation.UserGroupOperation"%>
+
 <%@page import="dboperation.UserOperation"%>
-<%@page import="dboperation.SessionOperation"%>
-<%@page import="dbmodel.UserGroup"%>
+
 <%@page import="java.util.UUID"%>
 <%@page import="dboperation.UserContactOperation"%>
-<%@page import="dbmodel.UserContacts"%>
+
 <%@page import="java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="dbmodel.UserData,javax.servlet.http.HttpSession"%>
-
 
 <%
 
@@ -178,11 +179,10 @@ th, td {
 tbody tr {
 	border: none;
 	background-color: white;
-	}
+}
 
 tbody tr:hover {
 	background-color: white;
-	
 }
 
 }
@@ -208,14 +208,13 @@ th, td {
 tbody tr {
 	border: none;
 	background-color: #f4db7d;
-	 transition: transform 0.2s ease, box-shadow 0.2s ease;
-
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 tbody tr:hover {
 	background-color: white;
-	   transform: translateY(-5px); /* Move the row up */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+	transform: translateY(-5px); /* Move the row up */
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 }
@@ -260,40 +259,47 @@ textarea {
 
 	<div>
 		<%
-		
-		
-		
-		
+		String primary =null;
+				
+				
+				
 
-		// upto this session check is implemented
-   SessionOperation so=new SessionOperation();
-		
-   CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+				// upto this session check is implemented
 
-	if (alive == null) {
-            System.out.println("hello hi");
-			response.sendRedirect("index.jsp");
-            return;
+				   CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
+
+			if (cachemodel == null) {
+				            System.out.println("hello hi");
+			response.sendRedirect("Login.jsp");
+				            return;
 			
 
-		}
+				}
 
-		
-		
-		  String sessionid=(String) request.getAttribute("sessionid");
-          CacheModel cachemodel=CacheData.getCache(sessionid);
-          
-          
-          UserData ud = cachemodel.getUserData();
-		
-		UserGroup ugu = (UserGroup) request.getAttribute("usergroupupdate");
-		
-		
-		
-		
-		
-		ArrayList<UserContacts> user_contacts = cachemodel.getUserContact();
-		ArrayList<UserGroup> usergroup = cachemodel.getUserGroup();
+			
+			
+				
+				 // String sessionid=(String) request.getAttribute("sessionid");
+				         // CacheModel cachemodel=CacheData.getCache(sessionid);
+				          
+				          
+				          Userdata ud = cachemodel.getUserData();
+				
+				Category ugu = (Category) request.getAttribute("usergroupupdate");
+				
+				for (EmailUser email : ud.getallemail()) {
+			if (email != null &&  email.getIsPrimary()) {
+			
+				
+				
+				primary=email.getEmail();
+				
+			}}
+				
+				
+				
+				ArrayList<ContactDetails> user_contacts = UserContactOperation.viewAllUserContacts(ud.getID());
+				ArrayList<Category> usergroup = UserGroupOperation.viewAllGroup(ud.getID());
 		%>
 
 		<div id="profileModal" class="modal">
@@ -351,7 +357,10 @@ textarea {
 
 
 
-
+							<%
+							
+									
+							%>
 
 
 
@@ -360,8 +369,7 @@ textarea {
 								<td><label for="email">Email</label></td>
 								<td>
 									<div class="emailstyle">
-										<input type="email" name="email"
-											value="<%=ud.getPrimaryMail()%>"
+										<input type="email" name="email" value="<%=primary%>"
 											onchange="addEmailToDropdown()" required />
 										<button type="button" onclick="Addemail()">Add</button>
 
@@ -370,17 +378,22 @@ textarea {
 									</div>
 								</td>
 							</tr>
-							<%
-							for (String email : ud.getEmail()) {
-								if (email != null && !email.equals(ud.getPrimaryMail())) {
-							%>
 
+							<%
+							
+							
+							for (EmailUser email : ud.getallemail()) {
+								if (email != null &&  !email.getIsPrimary()) {
+									
+							
+							
+							%>
 
 							<tr>
 								<td></td>
 								<td>
 									<div class="emailstyle">
-										<input type="email" name="email" value="<%=email%>"
+										<input type="email" name="email" value="<%=email.getEmail()%>"
 											onchange="addEmailToDropdown()" required />
 										<button type="button" onclick="removeEmail(this)">Remove</button>
 									</div>
@@ -407,7 +420,7 @@ textarea {
 							<tr>
 								<td><label for="username">Username</label></td>
 								<td><input type="text" name="username"
-									value="<%=ud.getUserName()%>" required /></td>
+									value="<%=ud.getLoginCredentials().getUserName()%>" required /></td>
 							</tr>
 							<tr>
 								<td><label for="password">Enter password</label></td>
@@ -501,10 +514,10 @@ textarea {
 		   	    	 groupbutton.style.display = groupbutton.style.display =='none';
 				   
 				   
-				   document.getElementById("groupNameu").value = "<%=ugu.getGroupName()%>";
+				   document.getElementById("groupNameu").value = "<%=ugu.getCategoryName() %>";
 		            
 		        
-		            document.getElementById("groupidu").value = "<%=ugu.getGroupid()%>";
+		            document.getElementById("groupidu").value = "<%=ugu.getID()%>";
 				
 				</script>
 				<%
@@ -540,26 +553,26 @@ textarea {
 						</thead>
 						<tbody>
 							<%
-							for (UserContacts uc : user_contacts) {
+							for (ContactDetails uc : user_contacts) {
+								
+								System.out.println("here name of contact is"+uc.getFirstName());
 							%>
 							<tr>
 								<td>
 									<%
-									if (ugu != null && ugu.getContacId() != null) {
-										if (ugu.checkcontact(ugu.getContacId(), uc.getContactid())) {
+									if (ugu != null && ugu.getCategoryRelation() != null) {
+										if (ugu.isContactExist( uc.getID())) {
 									%> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactid()%>" style="display: block;"
+									value="<%=uc.getID()%>" style="display: block;"
 									class="contact-checkbox" checked="checked" /> <%
  } else {
- %> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactid()%>" style="display: block;"
-									class="contact-checkbox" /> <%
+ %> <input type="checkbox" name="contact_ids" value="<%=uc.getID()%>"
+									style="display: block;" class="contact-checkbox" /> <%
  }
  %> <%
  } else {
- %> <input type="checkbox" name="contact_ids"
-									value="<%=uc.getContactid()%>" style="display: none;"
-									class="contact-checkbox" /> <%
+ %> <input type="checkbox" name="contact_ids" value="<%=uc.getID()%>"
+									style="display: none;" class="contact-checkbox" /> <%
  }
  %>
 
@@ -568,22 +581,22 @@ textarea {
 
 								</td>
 								<!-- Hidden checkbox -->
-								<td><%=uc.getFname()%></td>
-								<td><%=uc.getMname()%></td>
-								<td><%=uc.getLname()%></td>
-								<td><%=uc.getEmail()%></td>
-								<td><%=uc.getPhoneno()%></td>
+								<td><%=uc.getFirstName()%></td>
+								<td><%=uc.getMiddleName()%></td>
+								<td><%=uc.getLastName()%></td>
+								<td><%=uc.getContactMail().getContactMailID()%></td>
+								<td><%=uc.getContactphone().getContactPhone()%></td>
 								<td><%=uc.getGender()%></td>
 								<td>
 									<form action="/GetAndUpdatecontact" method="post">
-										<input type="hidden" value="<%=uc.getContactid()%>"
-											name="contact_id" /> <input type="submit" value="Update" />
+										<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
+										<input type="submit" value="Update" />
 									</form>
 								</td>
 								<td>
 									<form action="/deletecontact" method="post">
-										<input type="hidden" value="<%=uc.getContactid()%>"
-											name="contact_id" /> <input type="submit" value="Delete" />
+										<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
+										<input type="submit" value="Delete" />
 									</form>
 								</td>
 							</tr>
@@ -608,33 +621,33 @@ textarea {
 							<tr>
 
 								<th>Group Name</th>
-								
+
 								<th>Update</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-							for (UserGroup ug : usergroup) {
+							for (Category ug : usergroup) {
 							%>
 							<tr>
 
-								<td><%=ug.getGroupName()%></td>
+								<td><%=ug.getCategoryName()%></td>
 
 
 								<td>
 									<form action="/updategroup" method="post">
-										<input type="hidden" value="<%=ug.getGroupid()%>"
-											name="groupid" /> <input type="hidden"
-											value="<%=ug.getGroupName()%>" name="groupName" /> <input
-											type="submit" id="updategrouptable" value="Update" />
+										<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
+										<input type="hidden" value="<%=ug.getCategoryName()%>"
+											name="groupName" /> <input type="submit"
+											id="updategrouptable" value="Update" />
 									</form>
 
 								</td>
 								<td>
 									<form action="/deletegroup" method="post">
-										<input type="hidden" value="<%=ug.getGroupid()%>"
-											name="groupid" /> <input type="submit" value="Delete" />
+										<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
+										<input type="submit" value="Delete" />
 									</form>
 								</td>
 							</tr>
@@ -713,12 +726,12 @@ textarea {
 
             const dropdown = document.getElementById('emailDropdown');
             dropdown.innerHTML = '';
-            dropdown.innerHTML += '<option value="<%=ud.getPrimaryMail()%>"><%=ud.getPrimaryMail()%></option>';
+            dropdown.innerHTML += '<option value="<%=primary %>"><%=primary%></option>';
 
             inputs.forEach(input => {
                 const email = input.value.trim();
-                console.log("<%=ud.getPrimaryMail()%>" === email);
-                if (email && validateEmail(email) && !emailList.includes(email) && !("<%=ud.getPrimaryMail()%>" === email) ) {
+                
+                if (email && validateEmail(email) && !emailList.includes(email) && !("<%=primary%>" === email) ) {
                     emailList.push(email);
                     const option = document.createElement('option');
                     option.value = email;
@@ -892,10 +905,9 @@ textarea {
                	           	
              	</script>
 
-             </body>
-             </html>
-             
-            
-   	    	
-   	    	
-   	    
+</body>
+</html>
+
+
+
+

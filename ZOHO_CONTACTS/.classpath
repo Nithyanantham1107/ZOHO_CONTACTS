@@ -38,5 +38,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jbcrypt-0.4.jar"/>
+	<classpathentry kind="lib" path="/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/src/main/webapp/WEB-INF/lib/gson-2.11.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

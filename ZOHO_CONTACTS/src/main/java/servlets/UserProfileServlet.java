@@ -1,14 +1,20 @@
 package servlets;
+
 import java.io.IOException;
+import java.time.Instant;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import dbmodel.UserData;
+
 import dboperation.SessionOperation;
 import dboperation.UserOperation;
+import dbpojo.EmailUser;
+import dbpojo.LoginCredentials;
+import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -17,37 +23,37 @@ import sessionstorage.CacheModel;
  * Servlet implementation class UserProfileServlet
  */
 public class UserProfileServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    UserData ud;
-    UserOperation uo;
-    HttpSession session;
-    SessionOperation so;
-    LoggerSet logger; // LoggerSet instance
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UserProfileServlet() {
-        super();
-        uo = new UserOperation();
-        so = new SessionOperation();
-        logger = new LoggerSet(); // Initialize logger
-    }
+	UserOperation userOperation;
+	HttpSession session;
+	SessionOperation sessionOperation;
+	LoggerSet logger; // LoggerSet instance
 
-    /**
-     * Handles GET requests for user profile.
-     *
-     * @param request the HttpServletRequest object that contains the request data
-     * @param response the HttpServletResponse object used to send a response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an input or output error occurs
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.getWriter().append("Served at: ").append(request.getContextPath());
-    }
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public UserProfileServlet() {
+		super();
+		userOperation = new UserOperation();
+		sessionOperation = new SessionOperation();
+		logger = new LoggerSet(); // Initialize logger
+	}
 
-    /**
+	/**
+	 * Handles GET requests for user profile.
+	 *
+	 * @param request  the HttpServletRequest object that contains the request data
+	 * @param response the HttpServletResponse object used to send a response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException      if an input or output error occurs
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
      * Handles POST requests for updating user profile information or deleting a user account.
      *
      * @param request the HttpServletRequest object that contains the request data
@@ -58,11 +64,12 @@ public class UserProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-        	  String sessionid=(String) request.getAttribute("sessionid");
-              CacheModel cachemodel=CacheData.getCache(sessionid);
+        	  String sessionID=(String) request.getAttribute("sessionid");
+              CacheModel cachemodel=CacheData.getCache(sessionID);
+              Boolean state=false;
               
               
-              UserData userSessionData = cachemodel.getUserData();
+             Userdata userSessionData = cachemodel.getUserData();
 
             if (request.getParameter("method").equals("update")) {
                 if ((request.getParameter("Name") != null && !request.getParameter("Name").isBlank())
@@ -72,32 +79,66 @@ public class UserProfileServlet extends HttpServlet {
                         && (request.getParameterValues("email") != null) && !request.getParameter("email").isBlank()
                         && (request.getParameterValues("timezone") != null) && !request.getParameter("timezone").isBlank()) {
 
-                    ud = new UserData();
-                    ud.setUserId(userSessionData.getUserId());
-                    ud.setName(request.getParameter("Name"));
-                    ud.setAddress(request.getParameter("Address"));
-                    ud.setUserName(request.getParameter("username"));
-                    ud.setPhoneno(request.getParameter("phone"));
-                    ud.setEmail(request.getParameterValues("email"));
-                    ud.setPrimaryMail(request.getParameter("primaryemail"));
-                    ud.setTimezone(request.getParameter("timezone"));
+//                    ud = new UserData();
+                	Userdata userData= new Userdata();
+                	LoginCredentials loginCredentials=new LoginCredentials();
+                	
+                	userData.setModifiedAt(Instant.now().toEpochMilli());
+                	loginCredentials.setModifiedAt(userData.getModifiedAt());
+					
+					
+					for(String email : request.getParameterValues("email") ) {
+						EmailUser emailUser=new EmailUser();
+						emailUser.setEmail(email);
+						emailUser.setCreatedAt(userData.getModifiedAt());
+						emailUser.setModifiedAt(userData.getModifiedAt());
+						
+						if(email.equals(request.getParameter("primaryemail"))) {
+							
+							
+							emailUser.setIsPrimary(true);
+						}else {
+							emailUser.setIsPrimary(false);
+						}
+						userData.setEmail(emailUser);
+					}
+					
+					loginCredentials.setUserName(request.getParameter("username"));
+                	
+                	userData.setLoginCredentials(loginCredentials);
+                	
+                    userData.setID(userSessionData.getID());
+                    userData.setName(request.getParameter("Name"));
+                    userData.setAddress(request.getParameter("Address"));
+//                    ud.setUserName(request.getParameter("username"));
+                    userData.setPhoneno(request.getParameter("phone"));
+//                    ud.setEmail(request.getParameterValues("email"));
+//                    ud.setPrimaryMail(request.getParameter("primaryemail"));
+                    userData.setTimezone(request.getParameter("timezone"));
+                    
+                    
+                    
                     if(request.getParameter("password")==null  || request.getParameter("password").isBlank() ||
                        request.getParameter("Newpassword")==null || request.getParameter("Newpassword").isBlank())  {
                     		
-                    	ud.setPassword(null);
-                    	ud.setNewPassword(null);
+//                    	userData.setPassword(null);
+//                    	ud.setNewPassword(null);
+                    	state=UserOperation.userDataUpdate(userData,null);
                     	
                     }else {
-                    	ud.setPassword(request.getParameter("password"));
-                    	ud.setNewPassword(request.getParameter("Newpassword"));
+                    	userData.setPassword(request.getParameter("password"));
+//                    	ud.setNewPassword(request.getParameter("Newpassword"));
+                   
+                      state=UserOperation.userDataUpdate(userData,request.getParameter("Newpassword"));
+                    
                     }
-                    if (uo.userDataUpdate(ud)) {
-                    	cachemodel.setUserData(ud);
+                    if (state) {
+                    	cachemodel.setUserData(userData);
                        
-                        response.sendRedirect("Dashboard.jsp");
-                        logger.logInfo("UserProfileServlet", "doPost", "User profile updated successfully for User ID: " + ud.getUserId());
+                        response.sendRedirect("profile.jsp");
+                        logger.logInfo("UserProfileServlet", "doPost", "User profile updated successfully for User ID: " + userData.getID());
                     } else {
-                        logger.logWarning("UserProfileServlet", "doPost", "Error in updating profile data for User ID: " + ud.getUserId());
+                        logger.logWarning("UserProfileServlet", "doPost", "Error in updating profile data for User ID: " + userData.getID());
                         request.setAttribute("errorMessage", "Error in updating profile Data");
                         request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                     }
@@ -107,20 +148,20 @@ public class UserProfileServlet extends HttpServlet {
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }
             } else {
-                if (uo.deleteUserProfile(userSessionData.getUserId())) {
-                    logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + userSessionData.getUserId());
+                if (UserOperation.deleteUserProfile(userSessionData)) {
+                    logger.logInfo("UserProfileServlet", "doPost", "Successfully deleted user profile for User ID: " + userSessionData.getID());
                     
-                    SessionOperation so=new SessionOperation();
-                    so.DeleteSessionData(sessionid);
+               
+                    SessionOperation.DeleteSessionData(sessionID);
                    
                     response.sendRedirect("index.jsp");
                 } else {
-                    logger.logWarning("UserProfileServlet", "doPost", "Error in deleting user profile for User ID: " + userSessionData.getUserId());
+                    logger.logWarning("UserProfileServlet", "doPost", "Error in deleting user profile for User ID: " + userSessionData.getID());
                     request.setAttribute("errorMessage", "Unable to delete user profile data");
                     request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
                 }
             }
-        } catch (Exception e) {
+        } catch (DBOperationException  e) {
             logger.logError("UserProfileServlet", "doPost", "Exception occurred while processing user profile.", e);
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("Dashboard.jsp").forward(request, response);

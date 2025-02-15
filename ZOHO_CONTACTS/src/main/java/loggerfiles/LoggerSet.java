@@ -11,34 +11,32 @@ import java.util.logging.SimpleFormatter;
 public class LoggerSet {
 
 	private static final Logger applog = Logger.getLogger("AppLogger");
-	
 
 	public static void appLog() {
-		 try {
-	            String logFilePath = "/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/application.log";
-	            File logFile = new File(logFilePath);
+		try {
+			String logFilePath = "/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/application.log";
+			File logFile = new File(logFilePath);
+			FileHandler fileHandler;
+			if (logFile.exists()) {
+				fileHandler = new FileHandler(logFilePath, true); // Append mode
+			} else {
 
-	            
-	            FileHandler fileHandler;
-	            if (logFile.exists()) {
-	                fileHandler = new FileHandler(logFilePath, true); // Append mode
-	            } else {
-	                
-	                fileHandler = new FileHandler(logFilePath);
-	                System.out.println("Application log file created: " + logFilePath);
-	            }
+				fileHandler = new FileHandler(logFilePath);
+				System.out.println("Application log file created: " + logFilePath);
+			}
 
-	            
-	            fileHandler.setFormatter(new SimpleFormatter());
-	            applog.addHandler(fileHandler);
-	            applog.setLevel(Level.ALL);
+			fileHandler.setFormatter(new SimpleFormatter());
+			applog.addHandler(fileHandler);
+			applog.setLevel(Level.ALL);
 
-	        } catch (IOException e) {
-	            applog.log(Level.SEVERE, "Failed to initialize file handler.", e);
-	        }
+		} catch (IOException e) {
+			applog.log(Level.SEVERE, "Failed to initialize file handler.", e);
+		}
 
 	}
+
 	private static final Logger accesslog = Logger.getLogger("AccessLogger");
+
 	public static void accessLog() {
 		try {
 
@@ -50,9 +48,9 @@ public class LoggerSet {
 
 				fileHandler = new FileHandler(logFilePath, true);
 			} else {
-				 fileHandler = new FileHandler(logFilePath);
-	                System.out.println("Access log file created: " + logFilePath);
-				
+				fileHandler = new FileHandler(logFilePath);
+				System.out.println("Access log file created: " + logFilePath);
+
 			}
 
 			fileHandler.setFormatter(new SimpleFormatter());
@@ -77,14 +75,12 @@ public class LoggerSet {
 		accesslog.info(logMessage);
 	}
 
-
-
 	public String logAction(String className, String methodName, String Message) {
-		
+
 		long timestamp = System.currentTimeMillis();
 		String formattedDate = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 				.format(new java.util.Date(timestamp));
-		
+
 		String logEntry = String.format("%s | %s | %s | %s ", formattedDate, className, methodName, Message);
 
 		System.out.println(logEntry);
@@ -98,9 +94,9 @@ public class LoggerSet {
 	public void logError(String className, String methodName, String message, Throwable throwable) {
 		applog.log(Level.SEVERE, logAction(className, methodName, message), throwable);
 	}
-	
-	 public void logWarning(String className, String methodName, String message) {
-	        applog.log(Level.WARNING, logAction(className, methodName, message));
-	    }
+
+	public void logWarning(String className, String methodName, String message) {
+		applog.log(Level.WARNING, logAction(className, methodName, message));
+	}
 
 }

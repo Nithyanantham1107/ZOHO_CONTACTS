@@ -1,46 +1,40 @@
 package querybuilder;
 
-import java.net.ConnectException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
+import datahelper.changedStateContainer;
 import dbconnect.DBconnection;
+import mysqloperation.DeleteOperation;
+import mysqloperation.SelectJoinerOperation;
+import mysqloperation.WhereQueryGenerater;
+import mysqloperation.insertOperation;
+import mysqloperation.updateOperation;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.Table;
+import querybuilderconfig.TableSchema.OpType;
+import querybuilderconfig.TableSchema.Operation;
 
 public class MysqlBuilder implements QueryBuilder {
 	private StringBuilder query = new StringBuilder();
-	private String TableName;
+	private dbpojo.Table newData;
+	private String tableName;
 	private Connection con = null;
+	private Boolean isValid = true;
+	private Boolean isWhereAdded = false;
+	private dbpojo.Table oldData;
+	private OpType opType;
 	private Queue<Object> parameters = new LinkedList<Object>();
-	private Map<String, Set<String>> tableColumn = new HashMap<>();
-	String url = "jdbc:mysql://localhost:3306/ZOHO_CONTACTS";
-	String username = "root";
-	String password = "root";
 
 	public MysqlBuilder() throws SQLException {
-
-		this.con = DriverManager.getConnection(this.url, this.username, this.password);
-
-//		this.con = DBconnection.getConnection();
-
-		if (this.con == null) {
-			System.out.println("Hello im null ");
-		}
-
+		con = DBconnection.getConnection();
+//		con=DBconnection.getDriverConnection();
 		System.out.println("Query is  in mysql ");
 
-	}
+	};
 
 	@Override
 	public void openConnection() {
@@ -66,7 +60,7 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
-	public void rollBackConnectio() {
+	public void rollBackConnection() {
 		try {
 			this.con.rollback();
 		} catch (SQLException e) {
@@ -87,286 +81,164 @@ public class MysqlBuilder implements QueryBuilder {
 
 	}
 
-//	public QueryBuilder join(Table table1, String operation, Table table2) {
-//
-//		this.query.append(" join  " + " " + table2.getTableName() + "  on  " + table1 + " = " + table2);
-//
-//		return this;
-//
-//	}
+	@Override
+	public QueryBuilder select(dbpojo.Table table) {
+
+		query.setLength(0);
+		newData=table;
+		tableName = table.getTableName();
+		SelectJoinerOperation.selectTable(table, con, this, query, parameters);
+
+		return this;
+
+	}
 
 	@Override
-	public QueryBuilder select(Table tablename, Table... columns) {
+	public QueryBuilder delete(dbpojo.Table table) {
+		opType = OpType.DELETE;
 
-		this.TableName = tablename.getTableName();
+		query.setLength(0);
 
-		this.query.append("SELECT");
-		if (columns.length == 0) {
-			this.query.append(" * ");
-			this.query.append("FROM");
+		oldData = DeleteOperation.deleteTable(this, con, table, query, parameters);
+
+		if (oldData == null) {
+			isValid = false;
 		} else {
-			for (int i = 0; i < columns.length; i++) {
-				if (this.TableName.equals(columns[i].getTableName())) {
-					query.append(" " + columns[i] + " ");
-					if (i < columns.length - 1) {
-						this.query.append(",");
-					}
-
-				} else {
-					System.out.println("Invalid columnName for table:" + this.TableName);
-					return null;
-				}
-
-			}
-			query.append(" FROM ");
-
-		}
-		query.append(" " + this.TableName);
-
-		return this;
-	}
-
-	@Override
-	public QueryBuilder Delete(Table tablename) {
-
-		this.TableName = tablename.getTableName();
-
-		this.query.append("DELETE FROM " + this.TableName + " ");
-
-		return this;
-	}
-
-	@Override
-	public QueryBuilder insert(Table tablename, Table... columns) {
-
-		this.TableName = tablename.getTableName();
-		this.query.append("INSERT INTO " + tablename + " ");
-		if (columns.length != 0) {
-			this.query.append("(" + " ");
-
-			for (int i = 0; i < columns.length; i++) {
-				if (TableName.equals(columns[i].getTableName())) {
-					this.query.append(columns[i]);
-
-				} else {
-					System.out.println("Invalid columnName for table:" + this.TableName);
-					return null;
-				}
-				if (i < columns.length - 1) {
-					this.query.append(",");
-				}
-
-			}
-			this.query.append(")" + " ");
+			isValid = true;
 		}
 
 		return this;
 	}
 
 	@Override
-	public QueryBuilder valuesInsert(Object... values) {
-		this.query.append(" VALUES(" + " ");
-		for (int i = 0; i < values.length; i++) {
-
-			this.parameters.offer(values[i]);
-
-			this.query.append("?");
-
-			if (i < values.length - 1) {
-				this.query.append(",");
-			}
-
-		}
-		this.query.append(")" + " ");
+	public QueryBuilder insert(dbpojo.Table table) {
+		opType = OpType.INSERT;
+		isValid = true;
+		query.setLength(0);
+		insertOperation.insert(table, query, parameters);
+		newData = table;
 		return this;
 	}
 
-	@Override
-	public QueryBuilder update(Table tablename, Table... columns) {
+	public QueryBuilder update(dbpojo.Table table) {
 
-		this.TableName = tablename.getTableName();
+		opType = OpType.UPDATE;
+		query.setLength(0);
 
-		this.query.append("UPDATE " + this.TableName + " " + "SET" + " ");
-		for (int i = 0; i < columns.length; i++) {
-			if (this.TableName.equals(columns[i].getTableName())) {
+		changedStateContainer changedState = updateOperation.updateTable(this, con, table, query, parameters);
+		if (changedState == null) {
+			isValid = false;
+		} else {
+			newData = changedState.getnewData();
+			oldData = changedState.getOldData();
+			isValid = true;
+		}
 
-				if (i == columns.length - 1) {
-					this.query.append(columns[i] + "=?" + " ");
-				} else {
+		return this;
+	}
 
-					this.query.append(columns[i] + "=?,");
-				}
+	public QueryBuilder where(Table column, Operation operation, Object value) {
+		query.append(" WHERE ");
+
+		query.append(column).append(" ").append(operation.getOperation()).append(" ").append(formatValue(value));
+
+		isWhereAdded = true;
+		return this;
+	}
+
+	public QueryBuilder and(Table column, Operation operation, Object value) {
+
+		query.append(" AND ");
+
+		query.append(column).append(" ").append(operation.getOperation()).append(" ").append(formatValue(value));
+
+		return this;
+	}
+
+	public QueryBuilder or(Table column, Operation operator, Object value) {
+		query.append(" OR ");
+		query.append(column).append(" ").append(operator).append(" ").append(formatValue(value));
+
+		return this;
+	}
+
+	private String formatValue(Object value) {
+		if (value instanceof String) {
+			return "'" + value + "'";
+		} else {
+			return value.toString();
+		}
+	}
+
+	public ArrayList<dbpojo.Table> executeQuery() {
+
+		ArrayList<dbpojo.Table> result = SelectJoinerOperation.executeQuery(con, query.toString(), parameters,
+				newData);
+
+		query.setLength(0);
+		isWhereAdded = false;
+		return result;
+
+	}
+
+	public int[] execute(long userID) {
+		int[] result = { -1, -1 };
+		if (!isValid) {
+
+			return result;
+		}
+
+		if (this.opType.getOpType().equals(OpType.INSERT.getOpType())) {
+
+			if (!isWhereAdded ) {
+
+					isWhereAdded = false;
 
 			} else {
-				System.out.println("Invalid columnName for table:" + this.TableName);
-				return null;
+				query.append(";");
 			}
 
-		}
+			result = insertOperation.execute(this, con, query.toString(), parameters, newData, userID);
 
-		return this;
-	}
+		} else if (this.opType.getOpType().equals(OpType.UPDATE.getOpType())) {
 
-	@Override
-	public QueryBuilder valuesUpdate(Object... values) {
+			if (!isWhereAdded ) {
 
-		for (int i = 0; i < values.length; i++) {
+				WhereQueryGenerater.executeWhereBuilder(newData, query, parameters);
+				isWhereAdded = false;
 
-			this.parameters.offer(values[i]);
-
-		}
-
-		return this;
-	}
-
-	@Override
-	public QueryBuilder where(Table columns, String operation, Object data) {
-
-		this.query.append(" WHERE");
-
-		if (!this.TableName.equals(columns.getTableName())) {
-			return null;
-		}
-		this.query.append(" " + columns + " " + operation + "?");
-		this.parameters.offer(data);
-
-		return this;
-	}
-
-	@Override
-	public QueryBuilder and(Table columns, String operation, Object data) {
-
-		this.query.append(" and");
-
-		if (!this.TableName.equals(columns.getTableName())) {
-			return null;
-		}
-		this.query.append(" " + columns + " " + operation + "?");
-		this.parameters.offer(data);
-
-		return this;
-	}
-
-	@Override
-	public QueryBuilder or(Table columns, String operation, Object data) {
-
-		this.query.append("or");
-		if (!this.TableName.equals(columns.getTableName())) {
-			return null;
-		}
-		this.query.append(" " + columns + " " + operation + "?");
-		this.parameters.offer(data);
-
-		return this;
-	}
-
-	@Override
-	public ArrayList<Map<String, Object>> buildQuery() {
-		this.query.append(";");
-		System.out.println("generated query upto select is :" + this.query);
-
-		try {
-			int i = 1;
-			PreparedStatement ps = con.prepareStatement(this.query.toString());
-
-			while (!this.parameters.isEmpty()) {
-
-				if (this.parameters.peek() instanceof String) {
-
-					ps.setString(i, (String) this.parameters.peek());
-					System.out.println(i);
-
-				} else if (this.parameters.peek() instanceof Integer) {
-
-					ps.setInt(i, (Integer) this.parameters.peek());
-					System.out.println(i);
-
-				} else if (this.parameters.peek() instanceof Long) {
-					ps.setLong(i, (Long) this.parameters.peek());
-					System.out.println(i);
-				}
-				this.parameters.poll();
-				i++;
-
+			} else {
+				query.append(";");
 			}
 
-			ResultSet result = ps.executeQuery();
-			this.parameters.clear();
-			ArrayList<Map<String, Object>> resultList = new ArrayList<>();
-			int columnCount = result.getMetaData().getColumnCount();
+			result = updateOperation.execute(this, con, query.toString(), parameters, newData, oldData, userID);
+		} else if (this.opType.getOpType().equals(OpType.DELETE.getOpType())) {
 
-			while (result.next()) {
-				Map<String, Object> row = new HashMap<>();
-				for (i = 1; i <= columnCount; i++) {
-					String columnName = result.getMetaData().getColumnName(i);
-					Object value = result.getObject(i);
-					row.put(columnName, value);
-				}
-				resultList.add(row);
+			if (!isWhereAdded ) {
+
+				WhereQueryGenerater.executeWhereBuilder(oldData, query, parameters);
+				isWhereAdded = false;
+
+			} else {
+				query.append(";");
 			}
-			return resultList;
 
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-
-			this.TableName = null;
-			this.query.setLength(0);
-
+			result = DeleteOperation.execute(this, con, query.toString(), parameters, oldData, userID);
 		}
-		return null;
+		query.setLength(0);
 
+		return result;
 	}
 
 	public String make() {
 		this.query.append(";");
 		System.out.println("generated query upto select is :" + this.query);
 
-		this.TableName = null;
+		this.tableName = null;
 		this.parameters.clear();
 		this.query.setLength(0);
 
 		return this.query.toString();
-	}
-
-	public int build() {
-		try {
-			this.query.append(";");
-			int i = 1;
-			System.out.println("generated query upto select is :" + this.query);
-			PreparedStatement ps = this.con.prepareStatement(this.query.toString());
-
-			while (!this.parameters.isEmpty()) {
-
-				if (this.parameters.peek() instanceof String) {
-
-					ps.setString(i, (String) this.parameters.peek());
-					System.out.println(i);
-
-				} else if (this.parameters.peek() instanceof Integer) {
-
-					ps.setInt(i, (Integer) this.parameters.peek());
-					System.out.println(i);
-
-				} else if (this.parameters.peek() instanceof Long) {
-					ps.setLong(i, (Long) this.parameters.peek());
-					System.out.println(i);
-				}
-				this.parameters.poll();
-				i++;
-
-			}
-			this.parameters.clear();
-			return ps.executeUpdate();
-
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			this.TableName = null;
-			this.query.setLength(0);
-
-		}
-		return -1;
 	}
 
 }

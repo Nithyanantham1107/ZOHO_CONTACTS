@@ -1,17 +1,17 @@
 package servlets;
 import java.io.IOException;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import dboperation.SessionOperation;
+
 import dboperation.UserContactOperation;
-import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import dbpojo.ContactDetails;
+import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
@@ -60,35 +60,42 @@ public class UserSpecificContactRetrievalServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+        	
+        	   
+        	
         	  String sessionid=(String) request.getAttribute("sessionid");
               CacheModel cachemodel=CacheData.getCache(sessionid);
               
-              
-              UserData ud = cachemodel.getUserData();
+              System.out.println("hello im update contact");
+              Userdata ud = cachemodel.getUserData();
 
             if (request.getParameter("contact_id") != null) {
-                int user_id = ud.getUserId();
-                int contact_id = Integer.parseInt(request.getParameter("contact_id"));
-                UserContacts uc = co.viewSpecificUserContact(user_id, contact_id);
-
+                long user_id = ud.getID();
+                long contact_id = Long.parseLong(request.getParameter("contact_id"));
+                ContactDetails uc = UserContactOperation.viewSpecificUserContact(user_id, contact_id);
+//                System.out.println("contact mail +" uc.getContactMail().getContactMailID());
+//            	System.out.println("contact Phone +" uc.getContactphone().getContactPhone());
                 if (uc != null) {
+                	
+//                	 System.out.println("contact mail +" uc.getContactMail().getContactMailID());
+//                 	System.out.println("contact Phone +" uc.getContactphone().getContactPhone());
                     request.setAttribute("user_spec_contact", uc);
                     request.getRequestDispatcher("Update_contact.jsp").forward(request, response);
                     logger.logInfo("UserSpecificContactRetrievalServlet", "doPost", "Retrieved specific contact info for Contact ID: " + contact_id);
                 } else {
                     logger.logWarning("UserSpecificContactRetrievalServlet", "doPost", "Failed to retrieve info for Contact ID: " + contact_id);
                     request.setAttribute("errorMessage", "Can't retrieve info of specific user");
-                    request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+                    request.getRequestDispatcher("home.jsp").forward(request, response);
                 }
             } else {
                 logger.logWarning("UserSpecificContactRetrievalServlet", "doPost", "Contact ID parameter is missing.");
                 request.setAttribute("errorMessage", "Contact ID parameter is missing.");
-                request.getRequestDispatcher("Dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("home.jsp").forward(request, response);
             }
-        } catch (Exception e) {
+        } catch (DBOperationException e) {
             logger.logError("UserSpecificContactRetrievalServlet", "doPost", "Exception occurred while retrieving specific contact.", e);
             request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            request.getRequestDispatcher("home.jsp").forward(request, response);
         }
     }
 }

@@ -1,37 +1,42 @@
 package servlets;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import dbmodel.UserGroup;
+
 import dboperation.SessionOperation;
 import dboperation.UserContactOperation;
 import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
-import validation.UserValidation;
+import dbpojo.Category;
+import dbpojo.ContactDetails;
+import dbpojo.EmailUser;
+import dbpojo.LoginCredentials;
+import dbpojo.Userdata;
+import exception.DBOperationException;
 import loggerfiles.LoggerSet;
 import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
+import validation.UserValidation;
 
 /**
  * Servlet implementation class SignupServlet
  */
 public class SignupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	UserOperation user_op;
-	UserData ud;
-	UserGroupOperation ugo;
-	UserContactOperation uco;
-	UserValidation uservalidate;
+	UserOperation userOperation;
+	Userdata userData;
+	UserGroupOperation userGroupOperation;
+	UserContactOperation userContactOperation;
+	UserValidation userValidate;
 	HttpSession session;
-	SessionOperation so;
+	SessionOperation sessionOperation;
 	
 	
 	LoggerSet logger; // LoggerSet instance
@@ -41,11 +46,11 @@ public class SignupServlet extends HttpServlet {
 	 */
 	public SignupServlet() {
 		super();
-		user_op = new UserOperation();
-		uservalidate = new UserValidation();
-		uco = new UserContactOperation();
-		ugo = new UserGroupOperation();
-		so = new SessionOperation();
+		userOperation = new UserOperation();
+		userValidate = new UserValidation();
+		userContactOperation = new UserContactOperation();
+		userGroupOperation = new UserGroupOperation();
+		sessionOperation = new SessionOperation();
 		logger = new LoggerSet();
 		
 		
@@ -78,38 +83,53 @@ public class SignupServlet extends HttpServlet {
 					&& (request.getParameter("Address") != null && !request.getParameter("Address").isBlank())
 					&& (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
 
-				if (uservalidate.validateUserPassword(request.getParameter("password"))) {
-					ud = new UserData();
-					ud.setName(request.getParameter("Name"));
-					ud.setAddress(request.getParameter("Address"));
-					ud.setUserName(request.getParameter("username"));
-					ud.setPhoneno(request.getParameter("phone"));
-					ud.setPrimaryMail(request.getParameter("email"));
-					ud.setPassword(request.getParameter("password"));
-					ud.setCurrentEmail(request.getParameter("email"));
-					ud.setTimezone(request.getParameter("timezone"));
-					ud = user_op.createUser(ud);
+				if (userValidate.validateUserPassword(request.getParameter("password"))) {
+					userData = new Userdata();
+					LoginCredentials loginCredentials=new LoginCredentials();
+					EmailUser emailUser=new EmailUser();
+					userData.setCreatedAt(Instant.now().toEpochMilli());
+					userData.setModifiedAt(userData.getCreatedAt());
+					loginCredentials.setUserName(request.getParameter("username"));
+					loginCredentials.setCreatedAt(userData.getCreatedAt());
+					loginCredentials.setModifiedAt(userData.getModifiedAt());
+					emailUser.setEmail(request.getParameter("email"));
+					emailUser.setIsPrimary(true);
+					emailUser.setCreatedAt(userData.getCreatedAt());
+					emailUser.setModifiedAt(userData.getModifiedAt());
+					userData.setName(request.getParameter("Name"));
+					userData.setAddress(request.getParameter("Address"));
+//					ud.setUserName(request.getParameter("username"));
+					userData.setPhoneno(request.getParameter("phone"));
+//					ud.setPrimaryMail(request.getParameter("email"));
+					userData.setPassword(request.getParameter("password"));
+//					userData.setCurrentEmail(request.getParameter("email"));
+					userData.setTimezone(request.getParameter("timezone"));
+					userData.setEmail(emailUser);
+					userData.setLoginCredentials(loginCredentials);
+					
+					userData = UserOperation.createUser(userData);
 
-					if (ud != null) {
-						so = new SessionOperation();
-						String sessionid = so.generateSessionId(ud.getUserId());
-						Cookie sessionCookie = new Cookie("SESSIONID", sessionid);
+					if (userData != null) {
+						sessionOperation = new SessionOperation();
+						String sessionID = SessionOperation.generateSessionId(userData.getID());
+						Cookie sessionCookie = new Cookie("SESSIONID", sessionID);
 						sessionCookie.setHttpOnly(true);
 						response.addCookie(sessionCookie);
-                        CacheModel cachemodel=CacheData.getCache(sessionid);
-						ArrayList<UserContacts> uc = uco.viewAllUserContacts(ud.getUserId());
-						ArrayList<UserGroup> ug = ugo.viewAllGroup(ud.getUserId());
-						cachemodel.setUserData(ud);
-						cachemodel.setUserContact(uc);
-						cachemodel.setUserGroup(ug);
+                        CacheModel cachemodel=CacheData.getCache(sessionID);
+//						ArrayList<ContactDetails> contacts = UserContactOperation.viewAllUserContacts(userData.getID());
+//						ArrayList<Category> groups = UserGroupOperation.viewAllGroup(userData.getID());
+						System.out.println("hey" +userData.getName());
+						cachemodel.setUserData(userData);
+//						cachemodel.setUserContact(contacts);
+//						cachemodel.setUserGroup(groups);
 						
 
 						response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 						response.setHeader("Pragma", "no-cache");
 						response.setDateHeader("Expires", 0);
-						response.sendRedirect("Dashboard.jsp");
+						response.sendRedirect("home.jsp");
 
-						logger.logInfo("SignupServlet", "doPost", "User signed up successfully: " + ud.getUserName());
+						logger.logInfo("SignupServlet", "doPost", "User signed up successfully: " + loginCredentials.getUserName());
 					} else {
 						logger.logWarning("SignupServlet", "doPost", "User creation failed.");
 						request.setAttribute("errorMessage", "An error occurred while creating user");
@@ -127,7 +147,7 @@ public class SignupServlet extends HttpServlet {
 				request.setAttribute("errorMessage", "Parameters should not be empty!");
 				request.getRequestDispatcher("Signup.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
+		} catch (DBOperationException  e) {
 			logger.logError("SignupServlet", "doPost", "Exception occurred during signup", e);
 			request.setAttribute("errorMessage", e);
 			request.getRequestDispatcher("Signup.jsp").forward(request, response);

@@ -1,15 +1,15 @@
+<%@page import="dbpojo.ContactDetails"%>
 <%@page import="sessionstorage.CacheModel"%>
-<%@page import="dbmodel.UserGroup"%>
+
 <%@page import="java.util.ArrayList"%>
 <%@page import="dboperation.UserGroupOperation"%>
 <%@page import="dboperation.UserContactOperation"%>
 <%@page import="dboperation.UserOperation"%>
 <%@page import="dboperation.SessionOperation"%>
-<%@page import="dbmodel.UserContacts"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<%@ page import="dbmodel.UserData,javax.servlet.http.HttpSession"%>
 
 
 <%
@@ -23,12 +23,13 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 <meta charset="UTF-8">
 <title>Update Contact</title>
 
-
+<link rel="stylesheet" href="css/styles.css" />
 
 <style>
 body {
 	font-family: Arial, sans-serif;
-	background-color: #f4f4f4;
+  color:white;
+	background-color:#FBF5E5;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -42,15 +43,29 @@ body {
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	width: 350px;
+	
+	
+	 form{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            
+            background-color:white;
+            }
 }
 
 h2 {
+ background-color:white;
+          color:black;
 	text-align: center;
 	margin-bottom: 20px;
 	color: #333;
 }
 
 label {
+
+ background-color:white;
+          color:black;
 	margin-top: 10px;
 	font-weight: bold;
 	display: block;
@@ -62,14 +77,19 @@ input[type="text"], input[type="email"], textarea {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	margin-top: 5px;
+	margin-bottom:5px;
+	 background-color:white;
+          color:black;
 }
 
 textarea {
 	resize: none; /* Prevent resizing */
 }
 
-input[type="submit"] {
-	padding: 10px;
+
+
+.back-btn {
+padding: 10px;
 	background-color: black;
 	color: white;
 	border: none;
@@ -80,18 +100,9 @@ input[type="submit"] {
 	font-size: 16px;
 }
 
-input[type="submit"]:hover {
-	background-color: white;
-	color: black;
-}
-
-.back-btn {
-	background-color: #ccc;
-	margin-top: 10px;
-}
-
 .back-btn:hover {
-	background-color: #bbb;
+		background-color: white;
+	color: black;
 }
 </style>
 
@@ -113,13 +124,12 @@ input[type="submit"]:hover {
 		<form action="/updatecontact" method="post">
 			<%
 			
-			 SessionOperation so=new SessionOperation();
 			
-			   CacheModel alive = so.checkSessionAlive(so.getCustomSessionId(request.getCookies()));
+			   CacheModel alive =  SessionOperation.checkSessionAlive( SessionOperation.getCustomSessionId(request.getCookies()));
 
 				if (alive == null) {
 
-						response.sendRedirect("index.jsp");
+						response.sendRedirect("Login.jsp");
 
 						return;
 
@@ -127,25 +137,25 @@ input[type="submit"]:hover {
 
 			// upto this session check is implemented
 
-			UserContacts uc = (UserContacts) request.getAttribute("user_spec_contact");
+			ContactDetails uc = (ContactDetails) request.getAttribute("user_spec_contact");
 			if (uc == null) {
-				response.sendRedirect("Dashboard.jsp");
+				response.sendRedirect("home.jsp");
 				return;
 			}
-			System.out.println("hey" + uc.getFname());
+			System.out.println("hey" + uc.getFirstName()+uc.getID());
 			%>
 			<label for="name">FirstName</label> <input type="text" name="f_name"
-				value="<%=uc.getFname()%>" required /> <label for="name">MiddleName</label>
-			<input type="text" value="<%=uc.getMname()%>" name="m_name" /> <label
+				value="<%=uc.getFirstName()%>" required /> <label for="name">MiddleName</label>
+			<input type="text" value="<%=uc.getMiddleName()%>" name="m_name" /> <label
 				for="name">LastName</label> <input type="text"
-				value="<%=uc.getLname()%>" name="l_name" /> <label for="phoneno">Phone
-				No</label> <input type="text" name="phone" value="<%=uc.getPhoneno()%>"
+				value="<%=uc.getLastName()%>" name="l_name" /> <label for="phoneno">Phone
+				No</label> <input type="text" name="phone" value="<%=uc.getContactphone().getContactPhone()%>"
 				required /> <label for="email">Email</label> <input type="email"
-				name="email" value="<%=uc.getEmail()%>" required />
+				name="email" value="<%=uc.getContactMail().getContactMailID()%>" required />
 
 
 			<div
-				style="display: flex; flex-direction: row; gap: 10px; align-items: center">
+				style="display: flex; flex-direction: row; gap: 10px; align-items: center;background-color: white;">
 				<%
 				if ("M".equals(uc.getGender())) {
 				%>
@@ -168,10 +178,17 @@ input[type="submit"]:hover {
 			</div>
 			<label for="address">Address</label>
 			<textarea rows="3" cols="20" name="Address" required><%=uc.getAddress()%></textarea>
-			<input type="hidden" name="contactid" value="<%=uc.getContactid()%>"
-				required /> <input type="submit" value="Update" />
+			<input type="hidden" name="contactid" value="<%=uc.getID()%>"
+				required /> 
+				<input type="hidden" name="contactemailid" value="<%=uc.getContactMail().getID()%>"
+				required /> 
+				<input type="hidden" name="contactphoneid" value="<%=uc.getContactphone().getID()%>"
+				required /> 
+				
+				
+				<input type="submit" class="glowyellowbutton" value="Update" />
 		</form>
-		<form action="/Dashboard.jsp" method="get">
+		<form action="/home.jsp" method="get">
 			<input type="submit" value="Back" class="back-btn" />
 		</form>
 	</div>

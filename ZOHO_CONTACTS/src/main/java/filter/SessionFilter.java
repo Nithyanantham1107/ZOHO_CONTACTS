@@ -1,9 +1,6 @@
 package filter;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,33 +11,25 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import dbmodel.UserGroup;
 import dboperation.SessionOperation;
-import dboperation.UserContactOperation;
-import dboperation.UserGroupOperation;
 import dboperation.UserOperation;
+import dbpojo.Userdata;
 import loggerfiles.LoggerSet;
-import sessionstorage.CacheData;
 import sessionstorage.CacheModel;
 
 public class SessionFilter implements Filter {
 
 	SessionOperation so;
 	UserOperation uo;
-	UserContactOperation uco;
-	UserGroupOperation ugo;
+
 	LoggerSet logger;
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 
 		so = new SessionOperation();
 		uo = new UserOperation();
-		uco = new UserContactOperation();
-		ugo = new UserGroupOperation();
+
 		logger = new LoggerSet();
 
 	}
@@ -49,81 +38,77 @@ public class SessionFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		// TODO Auto-generated method stub
-
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		String requesturi = httpRequest.getRequestURI();
-
+//|| requesturi.endsWith("/oauthredirect")
 		try {
 			if (requesturi.endsWith("/login") || requesturi.endsWith("/signup") || requesturi.endsWith("/")
 					|| requesturi.endsWith("/Login.jsp") || requesturi.endsWith("/Signup.jsp")
-					|| requesturi.endsWith("/index.jsp")) {
+					|| requesturi.endsWith("/index.jsp") || requesturi.endsWith("/oauthdirector")) {
 
 				chain.doFilter(request, response);
 				return;
 			}
 
-			String sessionid = so.getCustomSessionId(httpRequest.getCookies());
+			String sessionid = SessionOperation.getCustomSessionId(httpRequest.getCookies());
+
 			System.out.println("here data is session " + sessionid);
 			if (sessionid == null) {
 
-				httpResponse.sendRedirect("index.jsp");
+				httpResponse.sendRedirect("Login.jsp");
 
 				return;
 
 			}
-			CacheModel cachemodel = so.checkSessionAlive(sessionid);
+
+			CacheModel cachemodel = SessionOperation.checkSessionAlive(sessionid);
 			if (cachemodel != null) {
-                int userid=cachemodel.getUserData().getUserId();
-				UserData ud = uo.getUserData(userid);
-	
-				ArrayList<UserContacts> uc = uco.viewAllUserContacts(userid);
-				ArrayList<UserGroup> ug = ugo.viewAllGroup(userid);
-				cachemodel.setUserContact(uc);
+
+				long userid = cachemodel.getUserData().getID();
+				Userdata ud = UserOperation.getUserData(userid);
+
 				cachemodel.setUserData(ud);
-				cachemodel.setUserGroup(ug);
-				so.addSessionCacheData(sessionid, cachemodel);
-				
+
+				SessionOperation.addSessionCacheData(sessionid, cachemodel);
+				String clientIp = httpRequest.getRemoteAddr();
+				String resource = httpRequest.getRequestURI();
+				String httpMethod = httpRequest.getMethod();
+				int responseStatus = HttpServletResponse.SC_OK;
+				String userAgent = httpRequest.getHeader("User-Agent");
+
+				logger.logAccessSet(clientIp, resource, httpMethod, responseStatus, userAgent);
+
+				System.out.println("hello im filter");
+
+				httpRequest.setAttribute("sessionid", sessionid);
+				chain.doFilter(request, response);
 
 			} else {
 
-				if( ! so.DeleteSessionData(sessionid)) {
-					System.out.println("Error in deleting session data");
-				}
-
-				
+//				if( ! so.DeleteSessionData(sessionid)) {
+//					System.out.println("Error in deleting session data");
+//				}
 
 				System.out.println("hello im exiting dude!!");
 
 				Cookie sessionCookie = new Cookie("SESSIONID", null);
 
 				sessionCookie.setMaxAge(0);
-
 				sessionCookie.setPath("/");
 				httpResponse.addCookie(sessionCookie);
-
 				httpResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 				httpResponse.setHeader("Pragma", "no-cache");
 				httpResponse.setDateHeader("Expires", 0);
-				httpResponse.sendRedirect("index.jsp");
+				httpResponse.sendRedirect("Login.jsp");
 
 			}
-			String clientIp = httpRequest.getRemoteAddr();
-			String resource = httpRequest.getRequestURI();
-			String httpMethod = "GET";
-			int responseStatus = HttpServletResponse.SC_OK;
-			String userAgent = httpRequest.getHeader("User-Agent");
 
-			logger.logAccessSet(clientIp, resource, httpMethod, responseStatus, userAgent);
-
-			System.out.println("hello im filter");
-			
-			httpRequest.setAttribute("sessionid", sessionid);
-			chain.doFilter(request, response);
 		} catch (Exception e) {
+
 			System.out.println(e);
+			e.printStackTrace();
 		}
 
 	}

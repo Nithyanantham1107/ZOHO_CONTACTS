@@ -1,61 +1,41 @@
 package sessionstorage;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import dbmodel.UserGroup;
+import dbpojo.Session;
+import dbpojo.Userdata;
 
 public class CacheModel {
-	private long sessionExpireTime;
-	private long lastAccessed;
-	private UserData ud;
-	private ArrayList<UserGroup> ug;
-	private ArrayList<UserContacts> uc;
+	private Userdata ud;
+	private long lastAccessedTime=Long.MAX_VALUE;
+	private Map<String, Session> session = new HashMap<String, Session>();
 
-	public void setSessionExpire(long sessionExpireTime) {
+	public void setSession(Session session) {
 
-		this.sessionExpireTime = sessionExpireTime;
+		this.session.put(session.getSessionId(), session);
+		if(session.getLastAccessed()<lastAccessedTime) {
+			
+			lastAccessedTime=session.getLastAccessed();
+		}
 	}
 
-	public long getSessionExpire() {
-		return this.sessionExpireTime;
+	public Session getsession(String sessionId) {
+		
+		return this.session.get(sessionId);
+	}
+	
+	public long getLastAccessed() {
+		return lastAccessedTime;
 	}
 
-	public void setLastAccessed(long lastAccessed) {
+	public void setUserData(Userdata table) {
 
-		this.lastAccessed = lastAccessed;
+		this.ud = table;
 	}
 
-	public long getlastAccessed() {
-		return this.lastAccessed;
-	}
-
-	public void setUserData(UserData ud) {
-
-		this.ud = ud;
-	}
-
-	public UserData getUserData() {
+	public Userdata getUserData() {
 		return this.ud;
-	}
-
-	public void setUserGroup(ArrayList<UserGroup> ug) {
-
-		this.ug = ug;
-	}
-
-	public ArrayList<UserGroup> getUserGroup() {
-		return this.ug;
-	}
-
-	public void setUserContact(ArrayList<UserContacts> uc) {
-
-		this.uc = uc;
-	}
-
-	public ArrayList<UserContacts> getUserContact() {
-		return this.uc;
 	}
 
 }

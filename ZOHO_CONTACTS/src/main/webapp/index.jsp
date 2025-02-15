@@ -70,15 +70,15 @@
 <body>
  <%
   SessionOperation so=new SessionOperation();
-  String sessionid=so.getCustomSessionId(request.getCookies());
+  String sessionid=SessionOperation.getCustomSessionId(request.getCookies());
   if(sessionid !=null ){
 	  
 		
-	   CacheModel alive = so.checkSessionAlive(sessionid);
+	   CacheModel alive = SessionOperation.checkSessionAlive(sessionid);
 
 		if (alive != null) {
 	            System.out.println("hello hi");
-	            response.sendRedirect("Dashboard.jsp");
+	            response.sendRedirect("home.jsp");
 	            return;
 
 				

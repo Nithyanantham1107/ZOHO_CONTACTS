@@ -1,43 +1,40 @@
 package dboperation;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Map;
 
-import org.eclipse.jdt.internal.compiler.ast.InstanceOfExpression;
+import com.google.gson.Gson;
 
-import dbmodel.UserContacts;
-import dbmodel.UserData;
-import querybuilder.QueryBuilder;
-import querybuilder.SqlQueryLayer;
-import querybuilder.TableSchema;
+import dbpojo.Category;
+import dbpojo.CategoryRelation;
+import dbpojo.ContactDetails;
+import dbpojo.ContactMail;
+import dbpojo.ContactPhone;
+import dbpojo.EmailUser;
+import dbpojo.LoginCredentials;
+import dbpojo.Table;
+import dbpojo.Userdata;
+import exception.DBOperationException;
+import oauth2helper.Oauth2handler;
+import querybuilderconfig.QueryBuilder;
+import querybuilderconfig.SqlQueryLayer;
+import sessionstorage.CacheData;
 
 public class TestOperation {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException, DBOperationException, IOException {
 
-		
-		
+		ArrayList<CategoryRelation> contacts = UserGroupOperation.viewUserGroupContact(81,86);
+		System.out.println("size of contacts"+contacts.size());
+		for (CategoryRelation contact : contacts) {
+			System.out.println("the name of row ID" + contact.getID());
+			System.out.println("the name of contact ID" + contact.getContactIDtoJoin());
+			System.out.println("the name of gro ID" + contact.getCategoryID());
 
-	QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();
+		}
 
-		qg.openConnection();
-	
-//		qg.insert(TableSchema.tables.Category,TableSchema.Category.CATEGORY_NAME).valuesInsert("arun").make();
-//		qg.select(TableSchema.tables.Email_user, TableSchema.Email_user.em_id,TableSchema.Email_user.is_primary).where(TableSchema.Email_user.em_id, ">", 2).make();
-//qg.Delete(TableSchema.tables.Category).make();
-//		qg.update(TableSchema.tables.Category, TableSchema.Category.CATEGORY_NAME).valuesUpdate("arunkk").where(TableSchema.Category.CATEGORY_ID, "=", 2).make();
-//		qg.Delete(TableSchema.tables.Category_relation).where(TableSchema.Category_relation.CATEGORY_ID, ">",2).make();
-	
-		qg.select(TableSchema.tables.Contact_details,TableSchema.Contact_details.user_id).make();
-//		ArrayList<Map<String,Object>> result=	qg.select(TableSchema.tables.user_data).where(TableSchema.user_data.user_id, ">", 20).buildQuery();
-		
-//		for(Map<String,Object> data: result) {
-//			System.out.println(ty)
-//			System.out.println(data.get("Name")+"  "+data.get("password"));
-//		}
-		
-		
-		qg.closeConnection();
 	}
 
 }

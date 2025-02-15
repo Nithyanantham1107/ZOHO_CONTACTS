@@ -1,11 +1,28 @@
 package querybuilder;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Map;
 
+import dbconnect.DBconnection;
+import querybuilderconfig.QueryBuilder;
+
 public class PostgresBuilder implements QueryBuilder {
+	
+	
+	private Connection con = null;
+	
+	
 	public PostgresBuilder() {
 
+		
+		
+	
+			this.con = DBconnection.getConnection();
+			
+		
+		
+		
 		System.out.println("Query is in postgresql  ");
 	}
  @Override
