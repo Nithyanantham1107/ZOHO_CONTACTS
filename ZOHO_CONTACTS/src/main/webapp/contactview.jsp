@@ -1,3 +1,4 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
 <%@page import="com.zohocontacts.dbpojo.ContactPhone"%>
 <%@page import="com.zohocontacts.dbpojo.ContactMail"%>
 <%@page import="java.time.ZoneId"%>
@@ -30,6 +31,20 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 <title>Update Contact</title>
 
 <link rel="stylesheet" href="css/styles.css" />
+
+
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+	rel="stylesheet">
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+	integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
 <style>
 body {
@@ -98,33 +113,63 @@ textarea {
 	resize: none; /* Prevent resizing */
 }
 
+.updatelogobutton{
+i{
+background-color:white;
+	color:#0b57d0;
+}
+
+	
+	border: none;
+
+	background-color: white;
+	font-size: 20px;
+
+
+}
+
+.deletelogobutton{
+i{
+background-color:white;
+	color:#ff0000;
+}
+
+	
+	border: none;
+
+	background-color: white;
+	font-size: 20px;
+
+
+}
 .back-btn {
 	padding: 10px;
-	background-color: black;
+	background-color: #dda853;
 	color: white;
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
-	width: 100%;
+	width: 100px;
 	margin-top: 15px;
 	font-size: 16px;
+	align-self: center;
 }
 
-.back-btn:hover {
-	background-color: white;
-	color: black;
-}
+
 </style>
 
-
+	<% if (request.getAttribute("errorMessage") != null) { %>
+    <script type="text/javascript">
+        alert("<%= request.getAttribute("errorMessage") %>");
+    </script>
+<% } %>
 
 </head>
 <body>
 
 	<%
-	CacheModel alive = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
-
-	if (alive == null) {
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData() == null) {
 
 		response.sendRedirect("Login.jsp");
 
@@ -156,11 +201,42 @@ textarea {
 	%>
 
 	<div class="container">
-		<div>
+	<section class="contactfooter">
 
-			<h1>Contact</h1>
-		</div>
+		
+				<form action="/contact" method="post">
+					<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
+					<input type="hidden" value="specificContact" name="action" />
+								
+					<button type="submit" class="updatelogobutton" >
+					<i class="fa-solid fa-pen-to-square"></i>
+					</button>
 
+				</form>
+		
+			
+			
+			<div>
+			
+			<h1>
+			Contact
+			</h1>
+			</div>
+			
+				<form action="/contact" method="post">
+					<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
+			
+			
+								<input type="hidden" value="deletecontact" name="action" />
+								
+					
+					<button type="submit" class="deletelogobutton" >
+				<i class="fa-regular fa-trash-can"></i>	</button>
+					
+						</form>
+
+
+		</section>
 
 		<div>
 			<label> First Name </label> <span> <%=uc.getFirstName()%>
@@ -255,40 +331,20 @@ textarea {
 
 			</span>
 		</div>
-		<section class="contactfooter">
-
-			<section class="contactbutton">
-				<form  action="/GetAndUpdatecontact" method="post">
-					<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
-					<input type="submit" class="glowyellowbutton" value="Update" />
-				</form>
-			</section>
-			<section class="contactbutton">
-				<form  action="/deletecontacts" method="post">
-					<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
-					<input type="submit" class="glowredbutton" value="Delete" />
-				</form>
-
-			</section>
-
-		</section>
+		
 
 
 
 
-
+<form action="/home.jsp" method="get">
+			<input type="submit" value="Back" class="back-btn" />
+		</form>
 
 
 	</div>
 
-       
-<script type="text/javascript" src="js/contactdelete.js">
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-	");
-<%}%>
+
 	
-</script>
 
 </body>
 </html>

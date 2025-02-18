@@ -1,3 +1,4 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
 <%@page import="com.zohocontacts.dbpojo.EmailUser"%>
 <%@page import="com.zohocontacts.dboperation.SessionOperation"%>
 <%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
@@ -122,6 +123,16 @@ button {
 	}
 }
 </style>
+
+<%
+if (request.getAttribute("errorMessage") != null) {
+%>
+<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>");
+    </script>
+<%
+}
+%>
 </head>
 <body>
 
@@ -129,16 +140,16 @@ button {
 
 
 	<%
-	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData() == null) {
 
-		if (cachemodel == null) {
-			System.out.println("hello hi");
-			response.sendRedirect("Login.jsp");
-			return;
+		System.out.println("hello hi");
+		response.sendRedirect("Login.jsp");
+		return;
 
-		}
+	}
 
-		UserData ud = cachemodel.getUserData();
+	UserData ud = cacheModel.getUserData();
 	%>
 
 	<div id="header">
@@ -182,9 +193,10 @@ button {
 
 
 
-			<form action="/adduseremail" method="post" style="background-color:white;">
-				<label for="Addemail">Enter email to Add</label> <input type="text"
-					name="newemail" placeholder="Enter Email to add">
+			<form action="/user" method="post" style="background-color: white;">
+				<label for="Addemail">Enter email to Add</label> 
+					<input type="hidden" value="addemail" name="action" />
+					<input type="text"name="newemail" placeholder="Enter Email to add">
 
 				<button type="submit" class="glowgreenbutton">Add email</button>
 
@@ -236,16 +248,17 @@ button {
 
 
 							<td>
-								<form action="/deleteuseremail" method="post">
-									<input type="hidden" value="<%=data.getID()%>" name="emailID" />
-									<input type="submit" class="glowredbutton" value="Delete" />
+								<form action="/user" method="post">
+
+									<input type="hidden" value="deleteemail" name="action" /> <input
+										type="hidden" value="<%=data.getID()%>" name="emailID" /> <input
+										type="submit" class="glowredbutton" value="Delete" />
 								</form>
 							</td>
 						</tr>
 
 						<%
 						}
-								
 
 						}
 						}
@@ -265,8 +278,7 @@ button {
 
 			</section>
 
-			<form action="/changeuserpassword" method="POST"
-				id="registration-form">
+			<form action="/user" method="POST" id="registration-form">
 
 
 
@@ -275,6 +287,7 @@ button {
 
 
 
+				<input type="hidden" value="changepassword" name="action" />
 
 
 				<section>
@@ -302,7 +315,6 @@ button {
 
 		</div>
 	</div>
-
 
 
 

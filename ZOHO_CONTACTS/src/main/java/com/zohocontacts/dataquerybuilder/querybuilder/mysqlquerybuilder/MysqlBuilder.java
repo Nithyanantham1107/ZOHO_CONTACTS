@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import com.zohocontacts.dataquerybuilder.querybuilder.datahelper.changedStateContainer;
@@ -17,6 +18,7 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.Table;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.Operation;
 import com.zohocontacts.dbconnect.DBconnection;
+import com.zohocontacts.exception.DBOperationException;
 
 public class MysqlBuilder implements QueryBuilder {
 	private StringBuilder query = new StringBuilder();
@@ -178,7 +180,7 @@ public class MysqlBuilder implements QueryBuilder {
 		}
 	}
 
-	public ArrayList<com.zohocontacts.dbpojo.tabledesign.Table> executeQuery() {
+	public List<com.zohocontacts.dbpojo.tabledesign.Table> executeQuery() {
 		if (!isWhereAdded) {
 
 			WhereQueryGenerater.executeQueryWhereBuilder(newData, query, parameters);
@@ -187,7 +189,7 @@ public class MysqlBuilder implements QueryBuilder {
 			query.append(";");
 		}
 
-		ArrayList<com.zohocontacts.dbpojo.tabledesign.Table> result = SelectJoinerOperation.executeQuery(con, query.toString(), parameters, newData);
+		List<com.zohocontacts.dbpojo.tabledesign.Table> result = SelectJoinerOperation.executeQuery(con, query.toString(), parameters, newData);
 
 		query.setLength(0);
 		isWhereAdded = false;

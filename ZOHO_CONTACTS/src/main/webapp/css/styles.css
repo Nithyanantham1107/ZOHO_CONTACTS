@@ -42,6 +42,43 @@ color:black;
 	
 }
 
+.synconstate{
+	
+	
+	
+i{
+background-color:white;
+	color:green;
+}
+
+	
+	border: none;
+
+	background-color: white;
+	font-size: 20px;
+
+	
+}
+
+.syncoffstate{
+	
+	
+	
+	
+i{
+background-color:white;
+	color:red;
+}
+
+	
+	border: none;
+
+	background-color: white;
+	font-size: 20px;
+
+	
+	
+}
 
 .loginlabel{
 	
@@ -50,10 +87,86 @@ color:black;
 	display: block;
 }
 
+.mergelogobutton{
+	
+		border: none;
+margin-right:15px;
+	
+	img{
+	
+	height:30px;
+	width:30px;
+	}
+
+	
+}
+
+.updatelogobutton{
+i{
+background-color:white;
+	color:#0b57d0;
+}
+
+	
+	border: none;
+
+	background-color: white;
+	font-size: 20px;
+
+
+}
+.addlogobutton{
+i{
+background-color:white;
+	color:#04aa6d;
+}
+
+	
+	border: none;
+
+	background-color: white;
+	font-size: 20px;
+
+
+}
+
+.deletelogobutton{
+i{
+background-color:white;
+	color:#ff0000;
+}
+
+	
+	border: none;
+
+	background-color: white;
+	font-size: 20px;
+
+
+}
+.logobutton{
+	
+	
+	border: none;
+	color:black;
+	background-color: white;
+	font-size: 20px;
+}
+
+
+.modelcreategroup{
+	
+	
+	display: flex;
+  justify-content: space-between;
+  margin: 4px;
+	
+}
+
 #logincontainer{
 	background: white;
 	padding: 20px;
-	border-radius: 8px;
+	border-radius: 8px;	
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 	width: 300px;
 	display: flex;
@@ -107,8 +220,7 @@ color:black;
 	justify-content: space-between;
 	padding: 20px 80px;
 
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
-	align-items: center;
+align-items: center;
 }
 
 #navbar {
@@ -191,6 +303,7 @@ thead th {
 
 #tableContainer {
 	display: flex;
+	width:1140px;
 	flex-direction: column;
 	align-items: center;
 
@@ -568,7 +681,7 @@ z-index:100;
 
 
 #table{
-	
+	width:100%;
 	   max-height: 500px;
    overflow: auto;
    

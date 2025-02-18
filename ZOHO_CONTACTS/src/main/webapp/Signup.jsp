@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-   <%@page import="dboperation.SessionOperation"%> 
+   <%@page import="com.zohocontacts.dboperation.SessionOperation"%> 
    
     
  
@@ -136,11 +136,11 @@
     
     
     
-      <script>
-        <% if (request.getAttribute("errorMessage") != null) { %>
-            alert("<%= request.getAttribute("errorMessage") %>");
-        <% } %>
+    	<% if (request.getAttribute("errorMessage") != null) { %>
+    <script type="text/javascript">
+        alert("<%= request.getAttribute("errorMessage") %>");
     </script>
+<% } %>
 
 </head>
 <body>

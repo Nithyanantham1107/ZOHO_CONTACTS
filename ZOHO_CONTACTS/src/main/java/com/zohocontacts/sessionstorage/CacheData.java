@@ -1,21 +1,18 @@
 package com.zohocontacts.sessionstorage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.zohocontacts.dbpojo.ServerRegistry;
+import com.zohocontacts.dbpojo.Session;
 
 public class CacheData {
 
 	private static final int SIZE = 100;
-	private static Map<Long, CacheModel> viewcache = new ConcurrentHashMap<Long, CacheModel>();
-	private static Map<String, Long> sessionMapper = new ConcurrentHashMap<String, Long>();
-	private static Map<String, Long> secondarySessionMapper = new HashMap<String, Long>();
-	private static Boolean active = false;
-	private static Map<String, Long> deleteContact = new ConcurrentHashMap<String, Long>();
+	private static Map<Long, CacheModel> userCache = new ConcurrentHashMap<Long, CacheModel>();
+	private static Map<String, com.zohocontacts.dbpojo.Session> sessionMapper = new ConcurrentHashMap<String, com.zohocontacts.dbpojo.Session>();
 	private static ServerRegistry serverInfo;
 	private static List<ServerRegistry> servers = new ArrayList<ServerRegistry>();
 
@@ -38,31 +35,18 @@ public class CacheData {
 		return servers;
 	}
 
-	public static void addDeleteContactID(String resourceName, long OauthID) {
-		deleteContact.put(resourceName, OauthID);
-	}
-
-	public static void clearDeletecontact() {
-		deleteContact.clear();
-
-	}
-
-	public static Map<String, Long> getDeleteCache() {
-		return deleteContact;
-	}
-
 	public static CacheModel getUsercache(long userID) {
 
-		return viewcache.get(userID);
+		return userCache.get(userID);
 	}
 
-	public static void addViewCache(String sessionid, CacheModel cachedata) {
-		if (viewcache.get(cachedata.getUserData().getID()) == null) {
+	public static void addUserCache(com.zohocontacts.dbpojo.Session sessionID, CacheModel cachedata) {
+		if (userCache.get(cachedata.getUserData().getID()) == null) {
 
-			if (viewcache.size() >= SIZE) {
+			if (userCache.size() >= SIZE) {
 				long userID = -1;
 				long userCacheLastaccessed = Long.MAX_VALUE;
-				for (CacheModel userCache : viewcache.values()) {
+				for (CacheModel userCache : userCache.values()) {
 
 					if (userCache.getLastAccessed() < userCacheLastaccessed) {
 
@@ -71,11 +55,12 @@ public class CacheData {
 
 				}
 
-				viewcache.remove(userID);
+				userCache.remove(userID);
 			}
-			viewcache.put(cachedata.getUserData().getID(), cachedata);
+			userCache.put(cachedata.getUserData().getID(), cachedata);
 		}
-		sessionMapper.put(sessionid, cachedata.getUserData().getID());
+		sessionID.setUserId(cachedata.getUserData().getID());
+		sessionMapper.put(sessionID.getSessionId(), sessionID);
 	}
 
 	public static CacheModel getCache(String sessionid) {
@@ -83,7 +68,7 @@ public class CacheData {
 		if (sessionMapper.get(sessionid) == null) {
 			return null;
 		}
-		return viewcache.get(sessionMapper.get(sessionid));
+		return userCache.get(sessionMapper.get(sessionid).getUserId());
 
 	}
 
@@ -91,25 +76,32 @@ public class CacheData {
 
 		if (sessionMapper.get(sessionid) != null) {
 
-			long userId = sessionMapper.get(sessionid);
+			long userId = sessionMapper.get(sessionid).getUserId();
 			sessionMapper.remove(sessionid);
 			boolean state = false;
-			for (long i : sessionMapper.values()) {
-				if (i == userId) {
+			for (com.zohocontacts.dbpojo.Session session : sessionMapper.values()) {
+				if (session.getUserId() == userId) {
 					state = true;
 					break;
 				}
 
 			}
 			if (!state) {
-				viewcache.remove(userId);
+				userCache.remove(userId);
 			}
 
 		}
 
 	}
 
-	public static Map<String, Long> getsessionMapper() {
+	public static void addSessionMapperCache(Session session) {
+		if (userCache.get(session.getUserId()) != null) {
+			sessionMapper.put(session.getSessionId(), session);
+
+		}
+	}
+
+	public static Map<String, com.zohocontacts.dbpojo.Session> getsessionMapper() {
 		return sessionMapper;
 	}
 

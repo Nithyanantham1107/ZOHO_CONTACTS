@@ -1,3 +1,4 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
 <%@page import="com.zohocontacts.dbpojo.Oauth"%>
 <%@page import="com.zohocontacts.dbpojo.Category"%>
 <%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
@@ -29,29 +30,32 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
-<script>
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-	");
-<%}%>
-	
-</script>
+
 </head>
 <body>
 
-
+	<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 	<%
-	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData() == null) {
 
-		if (cachemodel == null) {
-			System.out.println("hello hi");
-			response.sendRedirect("Login.jsp");
-			return;
+		System.out.println("hello hi");
+		response.sendRedirect("Login.jsp");
+		return;
 
-		}
-		UserData ud = cachemodel.getUserData();
+	}
+	UserData ud = cacheModel.getUserData();
 	%>
 
 	<section id="header">
@@ -121,7 +125,7 @@
 		<section id="tableContainer">
 
 
-			<
+
 
 
 			<section id="tableHeader">
@@ -159,7 +163,7 @@
 							<th>Email</th>
 							<th>Oauth Provider</th>
 
-
+<th>sync</th>
 							<th>Sync State</th>
 							<th>Delete Link</th>
 
@@ -185,6 +189,19 @@
 
 							<td><%=oauth.getEmail()%></td>
 							<td><%=oauth.getOauthProvider()%></td>
+							
+							
+							<td>
+												<form action="/syncstate" method="post">
+
+									<input type="hidden" name="action" value="syncnow" /> <input
+										type="hidden" name="ID" value="<%=oauth.getID()%>" />
+									<button type="submit" class="glowgreenbutton">SyncNow</button>
+
+								</form>
+							
+							
+							</td>
 							<td>
 								<%
 								if (oauth.getSyncState()) {
@@ -193,19 +210,27 @@
 
 
 								<form action="/syncstate" method="post">
-									<input type="hidden" name="operation" value="syncoff"
+									<input type="hidden" name="action" value="syncoff"
 										class="glowbutton" /> <input type="hidden" name="ID"
-										value="<%=oauth.getID()%>" class="glowbutton" /> <input
-										type="submit" value="Sync On" class="glowyellowbutton" />
+										value="<%=oauth.getID()%>" class="glowbutton" />
+									<button type="submit" class="addlogobutton">
+
+										<i class="fa-solid fa-arrows-rotate"></i>
+									</button>
 								</form> <%
  } else {
  %>
 								<form action="/syncstate" method="post">
 
 
-									<input type="hidden" name="operation" value="syncon" /> <input
-										type="hidden" name="ID" value="<%=oauth.getID()%>" /> <input
-										type="submit" value="Sync Off" class="glowgreenbutton" />
+									<input type="hidden" name="action" value="syncon" /> <input
+										type="hidden" name="ID" value="<%=oauth.getID()%>" />
+
+
+									<button type="submit" class="deletelogobutton">
+
+										<i class="fa-solid fa-arrows-rotate"></i>
+									</button>
 								</form> <%
  }
  %>
@@ -221,9 +246,12 @@
 
 								<form action="/syncstate" method="post">
 
-									<input type="hidden" name="operation" value="deletesync" /> <input
-										type="hidden" name="ID" value="<%=oauth.getID()%>" /> <input
-										type="submit" value="Delete Sync" class="glowredbutton" />
+									<input type="hidden" name="action" value="deletesync" /> <input
+										type="hidden" name="ID" value="<%=oauth.getID()%>" />
+									<button type="submit" class="deletelogobutton">
+										<i class="fa-regular fa-trash-can"></i>
+									</button>
+
 								</form>
 							</td>
 						</tr>

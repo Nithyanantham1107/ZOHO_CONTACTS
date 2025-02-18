@@ -10,116 +10,116 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
-import com.zohocontacts.dataquerybuilder.querybuilderconfig.QueryBuilder;
+import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import com.zohocontacts.dboperation.ServerRegistryOperation;
 import com.zohocontacts.dbpojo.ServerRegistry;
 import com.zohocontacts.exception.DBOperationException;
 import com.zohocontacts.loggerfiles.LoggerSet;
+import com.zohocontacts.schedulers.AccessTokenRenewal;
 import com.zohocontacts.schedulers.SessionTableCleaner;
-import com.zohocontacts.schedulers.UpdateAndDeleteQueue;
+import com.zohocontacts.schedulers.SyncGoogleContacts;
+import com.zohocontacts.schedulers.UpdateSessionCache;
 import com.zohocontacts.sessionstorage.CacheData;
 import com.zohocontacts.sessionstorage.SessionCacheHandler;
 
 public class ServerListener implements ServletContextListener {
-	QueryBuilder qg;
-	private ScheduledExecutorService updateCacheSchedule;
-	private ScheduledExecutorService sessionTableCleanSchedule;
+	private ScheduledExecutorService AppScheduler;
 
-	private String servletPath = "/servercache";
+	private static final String servletPath = "/servercache";
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		System.out.println("the context here started see !!..");
-		InetAddress inetAddress;
-		String serverIP;
+		System.out.println("The context here started see !!..");
+		LoggerSet.appLog();
+		LoggerSet.accessLog();
+		ServletContext context = sce.getServletContext();
+		String port = context.getInitParameter("serverPort");
+		serverCacheSet(port);
 
-		try {
+		AppScheduler = Executors.newScheduledThreadPool(2);
+		AppScheduler.scheduleAtFixedRate(new UpdateSessionCache(), 0, 2, TimeUnit.MINUTES);
 
-			inetAddress = InetAddress.getLocalHost();
-			serverIP = inetAddress.getHostAddress();
-			ServletContext context = sce.getServletContext();
-			String port = context.getInitParameter("serverPort");
-			long portNumber = Long.valueOf(port);
-			LoggerSet.appLog();
-			LoggerSet.accessLog();
+		AppScheduler.scheduleAtFixedRate(new SessionTableCleaner(), 0, 10, TimeUnit.MINUTES);
+		AppScheduler.scheduleAtFixedRate(new AccessTokenRenewal(), 0, 5, TimeUnit.MINUTES);
+		AppScheduler.scheduleAtFixedRate(new SyncGoogleContacts(), 0, 10, TimeUnit.MINUTES);
 
-			ServerRegistry server = ServerRegistryOperation.insertServerRegistry(serverIP, portNumber);
-			if (server != null) {
-
-				CacheData.setServerInfo(server);
-				List<ServerRegistry> servers = ServerRegistryOperation.getServerRegistryExcept(server);
-				CacheData.setServers(servers);
-
-				SessionCacheHandler.sendServerCacheDeleteRequest(CacheData.getServers(), servletPath);
-
-			}
-
-		} catch (UnknownHostException e) {
-
-			e.printStackTrace();
-		} catch (DBOperationException e) {
-
-			e.printStackTrace();
-		}
-
-		updateCacheSchedule = Executors.newScheduledThreadPool(1);
-		updateCacheSchedule.scheduleAtFixedRate(new UpdateAndDeleteQueue(), 0, 5, TimeUnit.MINUTES);
-		sessionTableCleanSchedule = Executors.newScheduledThreadPool(1);
-		sessionTableCleanSchedule.scheduleAtFixedRate(new SessionTableCleaner(), 0, 5, TimeUnit.MINUTES);
 		System.out.println("Update queue Scheduler started");
 		System.out.println("Session Table Cleaner Scheduler started");
-		System.out.println("Delete Oauth Contact  Scheduler started");
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
+		System.out.println("The context ends here see...!!");
+		deleteServerCache();
+		shutdownScheduler(AppScheduler);
 
-		System.out.println("the context ends here see...!!");
+		AbandonedConnectionCleanupThread.checkedShutdown();
 
-		try {
-			ServerRegistryOperation.deleteServerRegistry(CacheData.getServerInfo());
+		System.out.println("Scheduled tasks have been shut down successfully.");
+	}
 
-			if (SessionCacheHandler.sendServerCacheDeleteRequest(CacheData.getServers(), servletPath)) {
-
-				System.out.println("Server registry cache in other server deleted  successfully.");
-
-			} else {
-
-				System.out.println("server registry cache in other server failed to delete .");
-
+	private void shutdownScheduler(ScheduledExecutorService scheduler) {
+		if (scheduler != null) {
+			scheduler.shutdown();
+			try {
+				if (!scheduler.awaitTermination(60, TimeUnit.SECONDS)) {
+					scheduler.shutdownNow();
+				}
+			} catch (InterruptedException e) {
+				scheduler.shutdownNow();
+				Thread.currentThread().interrupt();
 			}
-		} catch (DBOperationException e) {
+		}
+	}
+
+	private void serverCacheSet(String port) {
+		InetAddress inetAddress;
+		String serverIP;
+		try {
+			inetAddress = InetAddress.getLocalHost();
+			serverIP = inetAddress.getHostAddress();
+			long portNumber = Long.valueOf(port);
+
+			ServerRegistry server = ServerRegistryOperation.insertServerRegistry(serverIP, portNumber);
+			if (server != null) {
+				CacheData.setServerInfo(server);
+				List<ServerRegistry> servers = ServerRegistryOperation.getServerRegistryExcept(server);
+				CacheData.setServers(servers);
+
+				boolean cacheDeleteSuccessful = SessionCacheHandler.sendServerCacheDeleteRequest(CacheData.getServers(),
+						servletPath);
+				if (cacheDeleteSuccessful) {
+					System.out.println("Server registry cache in other server deleted successfully.");
+				} else {
+					System.out.println("Server registry cache in other server failed to delete.");
+				}
+			}
+
+		} catch (DBOperationException | UnknownHostException e) {
+			LoggerSet.logError("servletListener", "contextInitialized", "Exception occured", e);
+
 			e.printStackTrace();
 		}
 
-		if (updateCacheSchedule != null) {
-			updateCacheSchedule.shutdown();
-			try {
-				if (!updateCacheSchedule.awaitTermination(60, TimeUnit.SECONDS)) {
-					updateCacheSchedule.shutdownNow();
-				}
-			} catch (InterruptedException e) {
-				updateCacheSchedule.shutdownNow();
-				Thread.currentThread().interrupt();
-			}
-		}
-
-		System.out.println("Scheduled tasks have been shut down successfully.");
-
-		if (sessionTableCleanSchedule != null) {
-			sessionTableCleanSchedule.shutdown();
-			try {
-				if (!sessionTableCleanSchedule.awaitTermination(60, TimeUnit.SECONDS)) {
-					sessionTableCleanSchedule.shutdownNow();
-				}
-			} catch (InterruptedException e) {
-				sessionTableCleanSchedule.shutdownNow();
-				Thread.currentThread().interrupt();
-			}
-		}
-
-		System.out.println("Scheduled tasks Ses have been shut down successfully.");
 	}
 
+	private void deleteServerCache() {
+
+		try {
+
+			ServerRegistryOperation.deleteServerRegistry(CacheData.getServerInfo());
+
+			boolean cacheDeleteSuccessful = SessionCacheHandler.sendServerCacheDeleteRequest(CacheData.getServers(),
+					servletPath);
+			if (cacheDeleteSuccessful) {
+				System.out.println("Server registry cache in other server deleted successfully.");
+			} else {
+				System.out.println("Server registry cache in other server failed to delete.");
+			}
+		} catch (DBOperationException e) {
+			LoggerSet.logError("servletListener", "contextDestroy", "Exception occured", e);
+			e.printStackTrace();
+		}
+
+	}
 }

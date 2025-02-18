@@ -14,8 +14,15 @@ public class SqlQueryLayer {
 
 		Properties property = new Properties();
 		System.out.println("check1");
-		try (FileInputStream fis = new FileInputStream(
-				"/home/nithya-pt7676/git/ZOHO_CONTACTS/ZOHO_CONTACTS/database.properties")) {
+		
+		
+		    String currentWorkingDirectory = System.getProperty("user.dir");  
+		    
+		    String dbConfigPath = currentWorkingDirectory + "/git/ZOHO_CONTACTS/ZOHO_CONTACTS/database.properties";
+
+
+		    try (FileInputStream fis = new FileInputStream(
+					dbConfigPath)) {
 			property.load(fis);
 			
 

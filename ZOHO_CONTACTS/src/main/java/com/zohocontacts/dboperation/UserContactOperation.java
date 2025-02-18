@@ -12,7 +12,6 @@ import com.zohocontacts.dbpojo.ContactPhone;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
 import com.zohocontacts.loggerfiles.LoggerSet;
-import com.zohocontacts.sessionstorage.CacheData;
 
 /**
  * This class provides operations for managing user contacts, including adding,
@@ -101,7 +100,8 @@ public class UserContactOperation {
 			}
 
 		} catch (Exception e) {
-			LoggerSet.logError("UserContactOperation", "viewAllUserContacts", "Exception occurred: " + e.getMessage(), e);
+			LoggerSet.logError("UserContactOperation", "viewAllUserContacts", "Exception occurred: " + e.getMessage(),
+					e);
 			throw new DBOperationException(e.getMessage());
 
 		}
@@ -232,18 +232,16 @@ public class UserContactOperation {
 
 			resultList = query.select(contact).executeQuery();
 			if (resultList.size() > 0) {
-				ContactDetails value = (ContactDetails) resultList.getFirst();
+				ContactDetails contactDB = (ContactDetails) resultList.getFirst();
 
 				result = query.delete(contact).execute(userID);
 				if (result[0] != -1) {
-					if (value.getOauthContactID() != null) {
-						CacheData.addDeleteContactID(value.getOauthContactID(), value.getOauthID());
-					}
+
 					LoggerSet.logInfo("UserContactOperation", "deleteContact",
-							"Contact deleted successfully: " + value.getUserID());
+							"Contact deleted successfully: " + contactDB.getUserID());
 				} else {
 					LoggerSet.logError("UserContactOperation", "deleteContact",
-							"Failed to delete contact ID: " + value.getID(), null);
+							"Failed to delete contact ID: " + contactDB.getID(), null);
 				}
 				return result[0] > 0;
 
@@ -298,8 +296,8 @@ public class UserContactOperation {
 				return null;
 			}
 		} catch (Exception e) {
-			LoggerSet.logError("UserContactOperation", "viewSpecificUserContact", "Exception occurred: " + e.getMessage(),
-					e);
+			LoggerSet.logError("UserContactOperation", "viewSpecificUserContact",
+					"Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
 		}
@@ -325,8 +323,7 @@ public class UserContactOperation {
 			contactDB.setContactMail(new ContactMail());
 			contactDB.setContactPhone(new ContactPhone());
 
-			ArrayList<Table> resultList = query.select(contactDB).executeQuery();
-
+			List<Table> resultList = query.select(contactDB).executeQuery();
 			result = query.update(contact).execute(userID);
 			if (result[0] == 0) {
 				query.rollBackConnection();
@@ -368,7 +365,139 @@ public class UserContactOperation {
 			LoggerSet.logInfo("UserContactOperation", "deleteAllContactMail", "Contact Mail deleted  successfully ");
 			return true;
 		} catch (Exception e) {
-			LoggerSet.logError("UserContactOperation", "deleteAllContactMail", "Exception occurred: " + e.getMessage(), e);
+			LoggerSet.logError("UserContactOperation", "deleteAllContactMail", "Exception occurred: " + e.getMessage(),
+					e);
+
+			throw new DBOperationException(e.getMessage());
+
+		}
+
+	}
+
+	public static Boolean mergeUserContacts(long[] contactID, long userID) throws DBOperationException {
+		int[] result = { -1, -1 };
+		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder();) {
+			if (contactID.length > 1) {
+
+				query.openConnection();
+				ContactDetails mergeContact = new ContactDetails();
+				mergeContact.setID(contactID[0]);
+				mergeContact.setContactMail(new ContactMail());
+				mergeContact.setContactPhone(new ContactPhone());
+				List<Table> resultList = query.select(mergeContact).executeQuery();
+
+				if (resultList != null && resultList.size() > 0) {
+
+					List<ContactMail> mails = new ArrayList<ContactMail>();
+					List<ContactPhone> phones = new ArrayList<ContactPhone>();
+					mergeContact = (ContactDetails) resultList.getFirst();
+					for (int i = 1; i < contactID.length; i++) {
+						ContactDetails contactToMerge = new ContactDetails();
+						contactToMerge.setID(contactID[i]);
+						contactToMerge.setContactMail(new ContactMail());
+						contactToMerge.setContactPhone(new ContactPhone());
+						resultList = query.select(contactToMerge).executeQuery();
+						if (resultList != null && resultList.size() > 0) {
+
+							contactToMerge = (ContactDetails) resultList.getFirst();
+
+							for (ContactMail primaryMail : mergeContact.getAllContactMail()) {
+
+								boolean isMailExist = false;
+								ContactMail contactmail = null;
+								for (ContactMail mergeContactMail : contactToMerge.getAllContactMail()) {
+
+									contactmail = mergeContactMail;
+									if (mergeContactMail.getContactMailID().equals(primaryMail.getContactMailID())) {
+										isMailExist = true;
+										break;
+
+									}
+
+								}
+
+								if (!isMailExist && contactmail != null) {
+
+									mails.add(contactmail);
+								}
+							}
+
+							for (ContactPhone primaryPhone : mergeContact.getAllContactphone()) {
+
+								boolean isPhoneExist = false;
+								ContactPhone contactphone = null;
+								for (ContactPhone mergeContactPhone : contactToMerge.getAllContactphone()) {
+
+									contactphone = mergeContactPhone;
+									if (mergeContactPhone.getContactPhone().equals(primaryPhone.getContactPhone())) {
+										isPhoneExist = true;
+										break;
+
+									}
+
+								}
+
+								if (!isPhoneExist && contactphone != null) {
+
+									phones.add(contactphone);
+								}
+							}
+						}
+
+						result = query.delete(contactToMerge).execute(userID);
+
+						if (result[0] == -1) {
+
+							query.rollBackConnection();
+							LoggerSet.logInfo("UserContactOperation", "mergeUserContacts",
+									"Failed To delete contact for contact ID:" + mergeContact.getID());
+							return false;
+						}
+					}
+
+					for (ContactMail mail : mails) {
+						mail.setContactID(mergeContact.getID());
+						result = query.insert(mail).execute(userID);
+						if (result[0] == -1) {
+
+							query.rollBackConnection();
+							LoggerSet.logInfo("UserContactOperation", "mergeUserContacts", "Failed To merge contacts");
+							return false;
+						}
+
+					}
+
+					for (ContactPhone phone : phones) {
+						phone.setContactID(mergeContact.getID());
+						result = query.insert(phone).execute(userID);
+						if (result[0] == -1) {
+
+							query.rollBackConnection();
+							LoggerSet.logInfo("UserContactOperation", "mergeUserContacts", "Failed To merge contacts");
+							return false;
+						}
+
+					}
+					LoggerSet.logInfo("UserContactOperation", "mergeUserContacts",
+							"Contact Merged Successfully");
+					
+					return true;
+				} else {
+					LoggerSet.logInfo("UserContactOperation", "mergeUserContacts",
+							"No Contacts Available to perform merge");
+					return false;
+				}
+
+			} else {
+				LoggerSet.logInfo("UserContactOperation", "mergeUserContacts",
+						"More than one cotactID should be specified to perform Merge");
+				return false;
+			}
+
+		} catch (
+
+		Exception e) {
+			LoggerSet.logError("UserContactOperation", "mergeUserContacts", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
 

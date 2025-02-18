@@ -6,17 +6,18 @@ import java.util.List;
 
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.QueryBuilder;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.SqlQueryLayer;
+import com.zohocontacts.dbpojo.Oauth;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.loggerfiles.LoggerSet;
+import com.zohocontacts.oauth2helper.Oauth2handler;
 
-public class SessionTableCleaner implements Runnable {
-private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
+public class AccessTokenRenewal implements Runnable {
+
 	public void run() {
 		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder()) {
 
 			query.openConnection();
-			sessionTableCleaner(query);
-		
+			googleAccessTokenRenewal(query);
 
 		} catch (Exception e) {
 
@@ -25,34 +26,29 @@ private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
 
 	}
 
-	private void sessionTableCleaner(QueryBuilder query) {
+	private void googleAccessTokenRenewal(QueryBuilder query) {
 
-		
 		List<Table> result = new ArrayList<>();
-		System.out.println("hello im Session Table cleaner");
+		System.out.println("hello im Access token Renewer");
 
-		long sessionExpire;
 		long currentTime;
 
 		try {
 
 			currentTime = Instant.now().toEpochMilli();
-			com.zohocontacts.dbpojo.Session sessions = new com.zohocontacts.dbpojo.Session();
-
-			result = query.select(sessions).executeQuery();
+			Oauth oauth = new Oauth();
+			result = query.select(oauth).executeQuery();
 
 			if (result.size() > 0) {
 
 				for (Table data : result) {
 
-					com.zohocontacts.dbpojo.Session session = (com.zohocontacts.dbpojo.Session) data;
+					Oauth oauthData = (Oauth) data;
 
-					sessionExpire = session.getLastAccessed() + SESSIONTIMEOUT;
+					if (oauthData.getExpiryTime() < currentTime && oauthData.getRefreshToken() != null) {
+						Oauth oauthUpdate = Oauth2handler.refreshAccessToken(oauthData);
 
-					if (currentTime - sessionExpire > 0) {
-						long userID = session.getUserId();
-
-						query.delete(session).execute(userID);
+						query.update(oauthUpdate).execute(oauthData.getUserID());
 
 					}
 
@@ -63,7 +59,7 @@ private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
 		} catch (Exception e) {
 
 			System.out.println(e);
-			LoggerSet.logError("SessionTableCleaner", "SessionTableCleaner", "Error Deleting the session table: ", e);
+			LoggerSet.logError("AccessTokenRenewal", "AccessTokenRenewal", "Error updating the Oauth table: ", e);
 		}
 
 	}

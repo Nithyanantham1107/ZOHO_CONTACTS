@@ -1,3 +1,5 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
+<%@page import="java.util.List"%>
 <%@page import="com.zohocontacts.dbpojo.Category"%>
 <%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
 <%@page import="com.zohocontacts.dboperation.SessionOperation"%>
@@ -27,14 +29,16 @@
 	integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
-<script>
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
+<%
+if (request.getAttribute("errorMessage") != null) {
+%>
+<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
 	");
-<%}%>
-	
 </script>
+<%
+}
+%>
 </head>
 <body>
 
@@ -42,29 +46,24 @@
 
 
 	<%
-	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
-		
-		if (cachemodel == null) {
-			System.out.println("hello hi");
-			response.sendRedirect("Login.jsp");
-			return;
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData() == null) {
 
-		}
-		UserData ud = cachemodel.getUserData();
-		
-		Category group = (Category) request.getAttribute("group");
-		
+		System.out.println("hello hi");
+		response.sendRedirect("Login.jsp");
+		return;
 
-		ArrayList<ContactDetails> contactsInGroup = new ArrayList<>();
-		if(group!=null){
-		
-		
+	}
+	UserData ud = cacheModel.getUserData();
+
+	Category group = (Category) request.getAttribute("group");
+
+	List<ContactDetails> contactsInGroup = new ArrayList<>();
+	if (group != null) {
+
 		contactsInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "view");
-		
-		
-		
-			
-		}
+
+	}
 	%>
 
 	<section id="header">
@@ -133,35 +132,32 @@
 
 		<section id="tableContainer">
 			<section id="tableHeader">
-			
-			<%
-			
-			if(group!=null){
-				
-			
-			
-			%>
 
-					<h1><%= group.getCategoryName() %></h1>
-
-
-
-				
-				
-				
-				<%}else{ %>
-				
-					<h1> Group Details </h1>
-
-
-
-				
 				<%
-				
+				if (group != null) {
+				%>
+
+				<h1><%=group.getCategoryName()%></h1>
+
+
+
+
+
+
+				<%
+				} else {
+				%>
+
+				<h1>Group Details</h1>
+
+
+
+
+				<%
 				}
 				%>
 
-			
+
 
 			</section>
 
@@ -181,7 +177,7 @@
 							<th>Gender</th>
 							<th>Email</th>
 							<th>Phone</th>
-						
+
 							<th>Remove</th>
 
 
@@ -206,9 +202,9 @@
 							<td><%=uc.getMiddleName()%></td>
 							<td><%=uc.getLastName()%></td>
 							<td><%=uc.getGender()%></td>
-						
-						
-						<%
+
+
+							<%
 							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
 							%>
 							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
@@ -222,8 +218,8 @@
 							<%
 							}
 							%>
-							
-						<%
+
+							<%
 							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
 							%>
 							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
@@ -237,18 +233,21 @@
 							<%
 							}
 							%>
-						
 
-	
+
+
 							<td>
 
 
 
-								<form action="/groupcontactremoval" method="post">
+								<form action="/group" method="post">
 									<input type="hidden" value="<%=uc.getID()%>" name="contactID" />
-									
-									<input type="hidden" value="<%=group.getID()%>" name="groupID" />
-									<input type="submit" class="glowredbutton" value="remove" />
+									<input type="hidden" value="groupremove" name="action" /> <input
+										type="hidden" value="<%=group.getID()%>" name="groupID" />
+									<button type="submit" class="deletelogobutton">
+										<i class="fa-regular fa-trash-can"></i>
+									</button>
+
 								</form>
 							</td>
 						</tr>

@@ -18,6 +18,7 @@ public class Oauth implements Table {
 	private Boolean syncState;
 	private long expiryTime = -1;
 	private long createdTime = -1;
+	private long oauthSyncTime = -1;
 	private long modifiedTime = -1;
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 
@@ -37,8 +38,8 @@ public class Oauth implements Table {
 		if (tableData.get(OauthSchema.SYNCSTATE.getColumnName()) != null) {
 
 			setSyncState((Boolean) tableData.get(OauthSchema.SYNCSTATE.getColumnName()));
-		}else {
-			
+		} else {
+
 			setSyncState(false);
 		}
 
@@ -85,23 +86,14 @@ public class Oauth implements Table {
 
 		}
 
-	}
+		if (tableData.get(OauthSchema.OAUTHSYNCTIME.getColumnName()) != null) {
+			setOauthSyncTime((long) tableData.get(OauthSchema.OAUTHSYNCTIME.getColumnName()));
 
-	public Oauth(int ID, int userID, String oauthProvider, String refreshToken, String accessToken, String email,
-			Boolean syncState, long expiryTime, long createdTime, long modifiedTime) {
-
-		setID(ID);
-		setUserID(userID);
-		setSyncState(syncState);
-		setOauthProvider(oauthProvider);
-		setRefreshToken(refreshToken);
-		setAccessToken(accessToken);
-		setEmail(email);
-		setExpiryTime(expiryTime);
-		setCreatedAt(createdTime);
-		setModifiedAt(modifiedTime);
+		}
 
 	}
+
+	
 
 	public Boolean getSyncState() {
 
@@ -111,7 +103,9 @@ public class Oauth implements Table {
 	public void setSyncState(Boolean syncState) {
 
 		this.syncState = syncState;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.SYNCSTATE.getColumnName(), getSyncState());
+		settedData.put(
+				com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.SYNCSTATE.getColumnName(),
+				getSyncState());
 	}
 
 	public long getID() {
@@ -123,7 +117,8 @@ public class Oauth implements Table {
 	public void setID(long ID) {
 		this.ID = ID;
 
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.ID.getColumnName(), ID);
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.ID.getColumnName(),
+				ID);
 	}
 
 	public long getUserID() {
@@ -132,7 +127,9 @@ public class Oauth implements Table {
 
 	public void setUserID(long userID) {
 		this.userID = userID;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.USERID.getColumnName(), userID);
+		settedData.put(
+				com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.USERID.getColumnName(),
+				userID);
 	}
 
 	public String getOauthProvider() {
@@ -141,7 +138,8 @@ public class Oauth implements Table {
 
 	public void setOauthProvider(String oauthProvider) {
 		this.oauthProvider = oauthProvider;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.OAUTHPROVIDER.getColumnName(), oauthProvider);
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.OAUTHPROVIDER
+				.getColumnName(), oauthProvider);
 	}
 
 	public String getRefreshToken() {
@@ -150,7 +148,8 @@ public class Oauth implements Table {
 
 	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.REFRESHTOKEN.getColumnName(), refreshToken);
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.REFRESHTOKEN
+				.getColumnName(), refreshToken);
 	}
 
 	public String getAccessToken() {
@@ -159,7 +158,8 @@ public class Oauth implements Table {
 
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.ACCESSTOKEN.getColumnName(), accessToken);
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.ACCESSTOKEN
+				.getColumnName(), accessToken);
 	}
 
 	public String getEmail() {
@@ -169,7 +169,9 @@ public class Oauth implements Table {
 	public void setEmail(String email) {
 		this.email = email;
 
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.EMAIL.getColumnName(), email);
+		settedData.put(
+				com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.EMAIL.getColumnName(),
+				email);
 	}
 
 	public long getExpiryTime() {
@@ -179,12 +181,15 @@ public class Oauth implements Table {
 	public void setExpiryTime(long expiryTime) {
 		this.expiryTime = expiryTime;
 
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.EXPIRYTIME.getColumnName(), expiryTime);
+		settedData.put(
+				com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.EXPIRYTIME.getColumnName(),
+				expiryTime);
 	}
 
 	public void setCreatedAt(long createdAt) {
 		this.createdTime = createdAt;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.CREATEDTIME.getColumnName(), createdAt);
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.CREATEDTIME
+				.getColumnName(), createdAt);
 
 	}
 
@@ -196,7 +201,8 @@ public class Oauth implements Table {
 	public void setModifiedAt(long modifiedAt) {
 		this.modifiedTime = modifiedAt;
 
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.MODIFIEDTIME.getColumnName(), modifiedAt);
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.MODIFIEDTIME
+				.getColumnName(), modifiedAt);
 
 	}
 
@@ -215,6 +221,20 @@ public class Oauth implements Table {
 		return com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.ID.getTableName();
 	}
 
+	public void setOauthSyncTime(long oauthSyncTime) {
+
+		this.oauthSyncTime = oauthSyncTime;
+		
+		settedData.put(
+				com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OauthSchema.OAUTHSYNCTIME.getColumnName(),
+	getOauthSyncTime());
+	}
+
+	public long getOauthSyncTime() {
+
+		return this.oauthSyncTime;
+	}
+
 	public Map<String, Object> getSettedData() {
 
 		return settedData;
@@ -228,7 +248,7 @@ public class Oauth implements Table {
 
 	@Override
 	public List<String> getTableColumnNames() {
-		
+
 		return OauthSchema.ID.getColumns();
 	}
 

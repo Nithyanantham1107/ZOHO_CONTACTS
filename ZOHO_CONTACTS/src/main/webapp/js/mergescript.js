@@ -97,7 +97,14 @@ document.getElementById('mergeContact').onclick = function() {
 
 	const form = document.createElement('form');
 	form.method = 'post';
-	form.action = '/mergecontact';
+	form.action = '/contact';
+	
+	
+	const action = document.createElement('input');
+	action.type = 'hidden';
+	action.name = 'action';
+	action.value = 'mergecontact';
+	form.appendChild(action);
 	
 
 

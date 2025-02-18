@@ -7,28 +7,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zohocontacts.dboperation.OauthOperation;
-import com.zohocontacts.dbpojo.UserData;
-import com.zohocontacts.exception.DBOperationException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 import com.zohocontacts.servletHandler.GroupServletHandler;
-import com.zohocontacts.servletHandler.OauthServletHandler;
-import com.zohocontacts.sessionstorage.CacheModel;
-import com.zohocontacts.sessionstorage.ThreadLocalStorage;
+import com.zohocontacts.servletHandler.UserServletHandler;
 
 /**
- * Servlet implementation class OauthSyncStateServlet
+ * Servlet implementation class GroupServlet
  */
 
-public class OauthSyncStateServlet extends HttpServlet {
+public class GroupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public OauthSyncStateServlet() {
+	public GroupServlet() {
 		super();
-
 		// TODO Auto-generated constructor stub
 	}
 
@@ -39,7 +33,6 @@ public class OauthSyncStateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -55,29 +48,35 @@ public class OauthSyncStateServlet extends HttpServlet {
 			String action = request.getParameter("action");
 			switch (action) {
 
-			case "deletesync":
-				LoggerSet.logError(" OauthSyncStateServlet", "doPost", "delete Sync State Hitted", null);
+			case "deletegroup":
+				LoggerSet.logError(" GroupServlet", "doPost", "delete Group Hitted", null);
 
-				OauthServletHandler.oauthDeleteSyncStateRequestHandler(request, response);
+				GroupServletHandler.deleteGroupRequestHandler(request, response);
 				break;
 
-			case "syncon":
-				LoggerSet.logError("OauthSyncStateServlet", "doPost", "Sync state on Hitted", null);
+			case "groupview":
+				LoggerSet.logError("GroupServlet", "doPost", "Hgroup View Hitted", null);
 
-				OauthServletHandler.oauthSyncStateOnRequestHandler(request, response);
+				GroupServletHandler.groupContactViewRequestHandler(request, response);
 				break;
 
-			case "syncoff":
+			case "groupadd":
 
-				LoggerSet.logError("OauthSyncStateServlet", "doPost", "Sync state off Hitted", null);
+				LoggerSet.logError("GroupServlet", "doPost", "Group Add Hitted", null);
 
-				OauthServletHandler.oauthSyncStateRequestOffHandler(request, response);
+				GroupServletHandler.groupContactAddRequestHandler(request, response);
 				break;
-			case "syncnow":
+			case "groupremove":
 
-				LoggerSet.logError("OauthSyncStateServlet", "doPost", "Sync now contact is Hitted", null);
+				LoggerSet.logError("GroupServlet", "doPost", "Group remove Hitted", null);
 
-				OauthServletHandler.OauthContactSyncRequestHandler(request, response);
+				GroupServletHandler.groupContactRemoveRequestHandler(request, response);
+				break;
+			case "groupcreate":
+
+				LoggerSet.logError("GroupServlet", "doPost", "group Create is empty", null);
+
+				GroupServletHandler.createGroupRequestHandler(request, response);
 				break;
 
 			default:
@@ -90,7 +89,7 @@ public class OauthSyncStateServlet extends HttpServlet {
 			}
 		} else {
 
-			LoggerSet.logError("OauthSyncStateServlet", "doPost", "Action string is empty", null);
+			LoggerSet.logError("GroupServlet", "doPost", "Action string is empty", null);
 			request.setAttribute("errorMessage", "the action parameter not provided");
 			request.getRequestDispatcher("home.jsp").forward(request, response);
 

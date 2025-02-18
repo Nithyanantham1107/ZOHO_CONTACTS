@@ -13,6 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.QueryBuilder;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.SqlQueryLayer;
+import com.zohocontacts.dbpojo.Session;
 import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
@@ -48,9 +49,7 @@ public class SessionOperation {
 		UserData userData = new UserData();
 		userData.setID(userID);
 		String uniqueID = UUID.randomUUID().toString();
-
 		long currentTime = Instant.now().toEpochMilli();
-
 		String sessionplaintext = uniqueID + currentTime + userID;
 		String sessionid = BCrypt.hashpw(sessionplaintext, BCrypt.gensalt());
 
@@ -59,7 +58,6 @@ public class SessionOperation {
 		session.setLastAccessed(currentTime);
 		session.setCreatedAt(currentTime);
 		session.setModifiedAt(currentTime);
-		cachemodel.setSession(session);
 		cachemodel.setUserData(userData);
 
 		LoggerSet.logInfo("SessionOperation", "generateSessionId", "Created session ID: " + sessionid);
@@ -77,7 +75,7 @@ public class SessionOperation {
 			}
 
 			query.commit();
-			addSessionCacheData(sessionid, cachemodel);
+			addSessionCacheData(session, cachemodel);
 
 			return sessionid;
 		} catch (Exception e) {
@@ -123,8 +121,8 @@ public class SessionOperation {
 			query.openConnection();
 			if (sessionID != null) {
 				int[] result = { -1, -1 };
-				CacheModel cachemodel = CacheData.getCache(sessionID);
-				com.zohocontacts.dbpojo.Session session = cachemodel.getsession(sessionID);
+
+				com.zohocontacts.dbpojo.Session session = CacheData.getsessionMapper().get(sessionID);
 				long userID = session.getUserId();
 
 				result = query.delete(session).execute(userID);
@@ -165,14 +163,14 @@ public class SessionOperation {
 		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder();) {
 			query.openConnection();
 			CacheModel cacheModel = CacheData.getCache(sessionID);
-			if (cacheModel != null && cacheModel.getsession(sessionID) != null) {
+			if (cacheModel != null) {
 
-				if (cacheModel.getsession(sessionID).getLastAccessed() + SESSIONTIMEOUT < currentTime) {
+				if (CacheData.getsessionMapper().get(sessionID).getLastAccessed() + SESSIONTIMEOUT < currentTime) {
 
 					CacheData.deleteAllCache(sessionID);
 					return null;
 				}
-				cacheModel.getsession(sessionID).setLastAccessed(Instant.now().toEpochMilli());
+				CacheData.getsessionMapper().get(sessionID).setLastAccessed(Instant.now().toEpochMilli());
 				return cacheModel;
 
 			} else {
@@ -189,8 +187,10 @@ public class SessionOperation {
 					}
 
 					if (CacheData.getUsercache(session.getUserId()) != null) {
-						cacheModel = CacheData.getUsercache(session.getUserId());
-						cacheModel.setSession(session);
+//						cacheModel = CacheData.getUsercache(session.getUserId());
+//						cacheModel.setSession(session);
+
+						CacheData.addSessionMapperCache(session);
 					} else {
 
 //						
@@ -204,9 +204,8 @@ public class SessionOperation {
 									"user not Found for userID " + session.getUserId());
 							return null;
 						}
-						cacheModel.setSession(session);
 
-						SessionOperation.addSessionCacheData(sessionID, cacheModel);
+						SessionOperation.addSessionCacheData(session, cacheModel);
 
 					}
 				} else {
@@ -228,7 +227,7 @@ public class SessionOperation {
 		}
 	}
 
-	private static void addSessionCacheData(String sessionid, CacheModel cachemodel) throws DBOperationException {
+	private static void addSessionCacheData(Session session, CacheModel cachemodel) throws DBOperationException {
 
 		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder();) {
 
@@ -240,10 +239,9 @@ public class SessionOperation {
 				com.zohocontacts.dbpojo.Session maxSessionid = new com.zohocontacts.dbpojo.Session();
 
 				for (String sessionID : CacheData.getsessionMapper().keySet()) {
-					CacheModel cacheModel = CacheData.getCache(sessionID);
-					if (currentTime - cacheModel.getsession(sessionid).getLastAccessed() > maxTime) {
-						maxTime = currentTime - cacheModel.getsession(sessionid).getLastAccessed();
-						maxSessionid = cacheModel.getsession(sessionid);
+					if (currentTime - CacheData.getsessionMapper().get(sessionID).getLastAccessed() > maxTime) {
+						maxTime = currentTime - CacheData.getsessionMapper().get(sessionID).getLastAccessed();
+						maxSessionid = CacheData.getsessionMapper().get(sessionID);
 						userID = maxSessionid.getUserId();
 					}
 				}
@@ -254,7 +252,7 @@ public class SessionOperation {
 
 			}
 
-			CacheData.addViewCache(sessionid, cachemodel);
+			CacheData.addUserCache(session, cachemodel);
 
 		} catch (Exception e) {
 			LoggerSet.logError("SessionOperation", "addSessionCacheData(", "Exception occurred", e);

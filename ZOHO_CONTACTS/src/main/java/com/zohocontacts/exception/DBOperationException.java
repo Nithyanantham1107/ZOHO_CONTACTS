@@ -4,6 +4,8 @@ public class DBOperationException extends Exception {
 
 
 
+	private static final long serialVersionUID = 1L;
+
 	public DBOperationException() {
 		super("Error Occured while Performing DB Operation");
 	}

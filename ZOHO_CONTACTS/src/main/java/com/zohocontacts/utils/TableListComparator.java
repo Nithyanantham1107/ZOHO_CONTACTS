@@ -8,8 +8,6 @@ import com.zohocontacts.dbpojo.ContactPhone;
 
 public class TableListComparator {
 
-
-
 	public static List<ContactMail> deleteTableMailListComparator(List<ContactMail> dbContactMail,
 			List<ContactMail> clientContactMail) {
 		List<ContactMail> deleteTableList = new ArrayList<ContactMail>();

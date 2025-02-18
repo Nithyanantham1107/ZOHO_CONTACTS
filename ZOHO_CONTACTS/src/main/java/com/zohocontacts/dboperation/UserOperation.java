@@ -480,7 +480,9 @@ public class UserOperation {
 			resultList = query.select(user).executeQuery();
 			if (resultList.size() > 0) {
 				user = (UserData) resultList.getFirst();
-
+				
+				
+		
 				LoggerSet.logInfo("UserOperation", "getUserData",
 						"User data retrieved successfully for userId: " + userId);
 				return user;

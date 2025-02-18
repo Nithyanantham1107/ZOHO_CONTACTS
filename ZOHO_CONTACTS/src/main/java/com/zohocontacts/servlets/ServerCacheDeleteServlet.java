@@ -53,7 +53,7 @@ public class ServerCacheDeleteServlet extends HttpServlet {
 			List<ServerRegistry> servers=ServerRegistryOperation.getServerRegistryExcept(CacheData.getServerInfo());
 			CacheData.setServers(servers);
 		} catch (DBOperationException e) {
-			logger.logError("UserProfileServlet", "doPost", "Exception occurred while processing user profile.", e);
+			LoggerSet.logError("UserProfileServlet", "doPost", "Exception occurred while processing user profile.", e);
 				}
 
 	}

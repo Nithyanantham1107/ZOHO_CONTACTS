@@ -202,7 +202,8 @@ public class TableSchema {
 
 		);
 
-		private static final List<com.zohocontacts.dbpojo.tabledesign.Table> DELETECHILDTABLES = Arrays.asList(new CategoryRelation());
+		private static final List<com.zohocontacts.dbpojo.tabledesign.Table> DELETECHILDTABLES = Arrays
+				.asList(new CategoryRelation());
 
 		public List<com.zohocontacts.dbpojo.tabledesign.Table> deleteChildTables() {
 
@@ -237,7 +238,8 @@ public class TableSchema {
 	public enum ContactDetailsSchema implements Table {
 		USERID("user_id"), CONTACTID("contact_id"), FIRSTNAME("First_name"), MIDDLENAME("Middle_name"),
 		LASTNAME("Last_name"), GENDER("gender"), ADDRESS("Address"), CREATEDTIME("created_time"),
-		MODIFIEDTIME("modified_time"),OAUTHCONTACTID("Oauth_contactID"), OAUTHID("OauthID"),OAUTHCONTACTMODIFIEDTIME("Oauth_contact_modifiedtime");
+		MODIFIEDTIME("modified_time"), OAUTHCONTACTID("Oauth_contactID"), OAUTHID("OauthID"),
+		OAUTHCONTACTMODIFIEDTIME("Oauth_contact_modifiedtime");
 
 		private String columnName;
 
@@ -247,7 +249,7 @@ public class TableSchema {
 
 		private static final List<String> COLUMNNAMES = Arrays.asList("user_id", "contact_id", "First_name",
 				"Middle_name", "Last_name", "gender", "Address", "created_time", "modified_time", "Oauth_contactID",
-				"OauthID","Oauth_contact_modifiedtime");
+				"OauthID", "Oauth_contact_modifiedtime");
 
 		private static final Map<String, String> FOREIGNKEYRELATION = Map.of(
 				ContactPhoneSchema.CONTACTID.getTableName(), ContactPhoneSchema.CONTACTID.getColumnName(),
@@ -257,8 +259,8 @@ public class TableSchema {
 				ContactMailSchema.CONTACTID.getTableName(), ContactMailSchema.CONTACTID.getColumnName()
 
 		);
-		private static final List<com.zohocontacts.dbpojo.tabledesign.Table> DELETECHILDTABLES = Arrays.asList(new ContactMail(), new ContactPhone(),
-				new CategoryRelation());
+		private static final List<com.zohocontacts.dbpojo.tabledesign.Table> DELETECHILDTABLES = Arrays
+				.asList(new ContactMail(), new ContactPhone(), new CategoryRelation());
 
 		public List<com.zohocontacts.dbpojo.tabledesign.Table> deleteChildTables() {
 
@@ -291,7 +293,7 @@ public class TableSchema {
 	}
 
 	public enum ContactMailSchema implements Table {
-		ID("ID"), CONTACTID("contact_id"), CONTACTMAILID("Contact_email_id"), CREATEDTIME("created_time"),
+		ID("ID"), CONTACTID("contact_id"), LABELNAME("label_name"),CONTACTMAILID("Contact_email_id"), CREATEDTIME("created_time"),
 		MODIFIEDTIME("modified_time");
 
 		private String columnName;
@@ -300,7 +302,7 @@ public class TableSchema {
 			this.columnName = columnName;
 		}
 
-		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "contact_id", "Contact_email_id",
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "contact_id", "Contact_email_id","label_name",
 				"created_time", "modified_time");
 		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
 
@@ -337,7 +339,7 @@ public class TableSchema {
 	}
 
 	public enum ContactPhoneSchema implements Table {
-		ID("ID"), CONTACTID("contact_id"), CONTACTPHONENO("Contact_phone_no"), CREATEDTIME("created_time"),
+		ID("ID"), CONTACTID("contact_id"),LABELNAME("label_name"), CONTACTPHONENO("Contact_phone_no"), CREATEDTIME("created_time"),
 		MODIFIEDTIME("modified_time");
 
 		private String columnName;
@@ -346,7 +348,7 @@ public class TableSchema {
 			this.columnName = columnName;
 		}
 
-		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "contact_id", "Contact_phone_no",
+		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "contact_id", "Contact_phone_no","label_name",
 				"created_time", "modified_time");
 
 		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
@@ -540,8 +542,9 @@ public class TableSchema {
 
 		);
 
-		private static final List<com.zohocontacts.dbpojo.tabledesign.Table> deleteChildTables = Arrays.asList(new EmailUser(),
-				new LoginCredentials(), new ContactDetails(), new Category(), new Session(), new Oauth());
+		private static final List<com.zohocontacts.dbpojo.tabledesign.Table> deleteChildTables = Arrays.asList(
+				new EmailUser(), new LoginCredentials(), new ContactDetails(), new Category(), new Session(),
+				new Oauth());
 
 		private UserDataSchema(String columnName) {
 			this.columnName = columnName;
@@ -628,8 +631,8 @@ public class TableSchema {
 
 	public enum OauthSchema implements Table {
 		ID("ID"), USERID("userID"), OAUTHPROVIDER("Oauth_provider"), SYNCSTATE("sync_state"),
-		REFRESHTOKEN("refresh_token"), ACCESSTOKEN("access_token"), EMAIL("email"), EXPIRYTIME("expiry_time"),
-		CREATEDTIME("created_time"), MODIFIEDTIME("modified_time");
+		REFRESHTOKEN("refresh_token"), ACCESSTOKEN("access_token"), OAUTHSYNCTIME("last_sync_time"), EMAIL("email"),
+		EXPIRYTIME("expiry_time"), CREATEDTIME("created_time"), MODIFIEDTIME("modified_time");
 
 		private String columnName;
 
@@ -638,7 +641,8 @@ public class TableSchema {
 		}
 
 		private static final List<String> COLUMNNAMES = Arrays.asList("ID", "userID", "Oauth_provider", "sync_state",
-				"refresh_token", "access_token", "email", "expiry_time", "created_time", "modified_time");
+				"refresh_token", "access_token", "email", "expiry_time", "last_sync_time", "created_time",
+				"modified_time");
 
 		private static final Map<String, String> FOREIGNKEYRELATION = new HashMap<String, String>();
 

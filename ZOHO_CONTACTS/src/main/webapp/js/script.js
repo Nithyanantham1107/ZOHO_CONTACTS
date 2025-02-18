@@ -49,8 +49,12 @@ document.getElementById('submitGroup').onclick = function() {
 
 	const form = document.createElement('form');
 	form.method = 'post';
-	form.action = '/creategroup';
-
+	form.action = '/group';
+	const action = document.createElement('input');
+	action.type = 'hidden';
+	action.name = 'action';
+	action.value = 'groupcreate';
+	form.appendChild(action);
 
 	const groupNameInput = document.createElement('input');
 	groupNameInput.type = 'hidden';

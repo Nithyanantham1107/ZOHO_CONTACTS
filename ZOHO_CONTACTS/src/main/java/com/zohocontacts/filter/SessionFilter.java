@@ -35,10 +35,11 @@ public class SessionFilter implements Filter {
 		String requesturi = httpRequest.getRequestURI();
 
 		List<String> excludedPaths = Arrays.asList("/login", "/signup", "/", "/Login.jsp", "/Signup.jsp", "/index.jsp",
-				"/oauthdirector", "/sessioncache", "/servercache");
+				"/sessioncache", "/servercache");
 
 		try {
 			if (excludedPaths.stream().anyMatch(requesturi::endsWith)) {
+
 				chain.doFilter(request, response);
 				return;
 			}

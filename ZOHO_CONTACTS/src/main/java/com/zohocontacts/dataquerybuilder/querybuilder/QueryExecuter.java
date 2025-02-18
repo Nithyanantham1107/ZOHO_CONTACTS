@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 import com.zohocontacts.dataquerybuilder.querybuilder.datahelper.GenericPojoMapper;
@@ -70,21 +71,19 @@ public class QueryExecuter {
 
 	}
 
-	public static ArrayList<Table> mySqlExecuteQuery(Connection con, String query, Queue<Object> parameters,
-			Table table) {
+	public static List<Table> mySqlExecuteQuery(Connection con, String query, Queue<Object> parameters, Table table) {
 
-		PreparedStatement ps;
+	
 		ResultSet result;
 
 		System.out.println("generated query upto select is :" + query);
 
-		try {
+		try (PreparedStatement preparedStatement = con.prepareStatement(query.toString());) {
 			int i = 1;
-			ps = con.prepareStatement(query.toString());
 
 			while (!parameters.isEmpty()) {
 
-				if (!QueryBuilderHelper.queryParamSetter(ps, parameters.peek(), i)) {
+				if (!QueryBuilderHelper.queryParamSetter(preparedStatement, parameters.peek(), i)) {
 
 					System.out.println("Error in setting parameter on query");
 				}
@@ -94,13 +93,13 @@ public class QueryExecuter {
 
 			}
 
-			result = ps.executeQuery();
+			result = preparedStatement.executeQuery();
 
 			parameters.clear();
 
 			int columnCount = result.getMetaData().getColumnCount();
 
-			ArrayList<String> columnNames = new ArrayList<>();
+			List<String> columnNames = new ArrayList<>();
 
 			for (int j = 1; j <= columnCount; j++) {
 				String columnName = result.getMetaData().getColumnName(j);
@@ -108,20 +107,17 @@ public class QueryExecuter {
 				columnNames.add(tablename + "." + columnName);
 
 			}
-
-			GenericPojoMapper gpm = new GenericPojoMapper();
-//			return pm.PojoResultSetter(tableName, columnNames, result);
-			return gpm.PojoResultSetter(table, columnNames, result);
+			return GenericPojoMapper.PojoResultSetter(table, columnNames, result);
 
 		} catch (Exception e) {
 			System.out.println(e);
-		} finally {
 
-//			tableName.clear();
+		} finally {
 
 			query = null;
 
 		}
+
 		return null;
 
 	}

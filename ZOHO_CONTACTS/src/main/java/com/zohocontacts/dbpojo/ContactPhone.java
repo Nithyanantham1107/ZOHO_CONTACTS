@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.ContactMailSchema;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.ContactPhoneSchema;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 
@@ -11,6 +12,7 @@ public class ContactPhone implements Table {
 	private long id = -1;
 	private long contactID = -1;
 	private String ContactPhoneNo;
+	private String labelName;
 	private long createdAt = -1;
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 	private long modifiedAt = -1;
@@ -43,21 +45,27 @@ public class ContactPhone implements Table {
 			setModifiedAt((long) tableData.get(ContactPhoneSchema.MODIFIEDTIME.getColumnName()));
 		}
 
-	}
+		if (tableData.get(ContactPhoneSchema.LABELNAME.getColumnName()) != null) {
 
-	public ContactPhone(int id, int contactID, String ContactPhoneNo, long createdAt, long modifiedAt) {
-
-		settedData.clear();
-		setContactID(contactID);
-		setContactPhone(ContactPhoneNo);
-		setID(id);
-		setCreatedAt(createdAt);
-		setModifiedAt(modifiedAt);
+			setLabelName((String) tableData.get(ContactPhoneSchema.LABELNAME.getColumnName()));
+		}
 
 	}
 
 	public ContactPhone() {
 
+	}
+
+	public void setLabelName(String labelName) {
+
+		this.labelName = labelName;
+
+		settedData.put(ContactPhoneSchema.LABELNAME.getColumnName(), getLabelName());
+	}
+
+	public String getLabelName() {
+
+		return this.labelName;
 	}
 
 	public String getPrimaryIDName() {

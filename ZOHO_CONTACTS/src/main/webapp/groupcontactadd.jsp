@@ -1,3 +1,5 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
+<%@page import="java.util.List"%>
 <%@page import="com.zohocontacts.dbpojo.Category"%>
 <%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
 <%@page import="com.zohocontacts.dboperation.SessionOperation"%>
@@ -28,13 +30,16 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
-<script>
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
+<%
+if (request.getAttribute("errorMessage") != null) {
+%>
+<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
 	");
-<%}%>
-	
 </script>
+<%
+}
+%>
 </head>
 <body>
 
@@ -42,26 +47,24 @@
 
 
 	<%
-	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData() == null) {
 
-		if (cachemodel == null) {
-			System.out.println("hello hi");
-			response.sendRedirect("Login.jsp");
-			return;
+		System.out.println("hello hi");
+		response.sendRedirect("Login.jsp");
+		return;
 
-		}
-		UserData ud = cachemodel.getUserData();
+	}
+	UserData ud = cacheModel.getUserData();
 
-		Category group = (Category) request.getAttribute("group");
+	Category group = (Category) request.getAttribute("group");
 
-		ArrayList<ContactDetails> contactsNotInGroup = new ArrayList<>();
-		if (group != null) {
-			
+	List<ContactDetails> contactsNotInGroup = new ArrayList<>();
+	if (group != null) {
+
 		contactsNotInGroup = UserGroupOperation.getGroupContactList(group.getID(), ud.getID(), "add");
 
-			
-
-		}
+	}
 	%>
 
 	<section id="header">
@@ -176,7 +179,7 @@
 							<th>Email</th>
 							<th>Phone</th>
 
-							<th>Remove</th>
+							<th>Add</th>
 
 
 						</tr>
@@ -200,7 +203,7 @@
 							<td><%=uc.getMiddleName()%></td>
 							<td><%=uc.getLastName()%></td>
 							<td><%=uc.getGender()%></td>
-							
+
 							<%
 							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
 							%>
@@ -215,8 +218,8 @@
 							<%
 							}
 							%>
-							
-						<%
+
+							<%
 							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
 							%>
 							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
@@ -230,18 +233,24 @@
 							<%
 							}
 							%>
-						
+
 
 
 							<td>
 
 
 
-								<form action="/groupaddcontact" method="post">
+								<form action="/group" method="post">
 									<input type="hidden" value="<%=uc.getID()%>" name="contactID" />
 
 									<input type="hidden" value="<%=group.getID()%>" name="groupID" />
-									<input type="submit" class="glowgreenbutton" value="add" />
+									<input type="hidden" value="groupadd" name="action" />
+
+
+									<button type="submit" class="addlogobutton">
+										<i class="fa-solid fa-circle-plus"></i>
+									</button>
+
 								</form>
 							</td>
 						</tr>

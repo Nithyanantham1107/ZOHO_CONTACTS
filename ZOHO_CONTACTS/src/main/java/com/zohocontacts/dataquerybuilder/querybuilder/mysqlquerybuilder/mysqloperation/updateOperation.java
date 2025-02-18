@@ -1,8 +1,8 @@
 package com.zohocontacts.dataquerybuilder.querybuilder.mysqlquerybuilder.mysqloperation;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -13,12 +13,6 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.QueryBuilder;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.AuditLogSchema;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema;
-import com.zohocontacts.dbpojo.Category;
-import com.zohocontacts.dbpojo.CategoryRelation;
-import com.zohocontacts.dbpojo.ContactDetails;
-import com.zohocontacts.dbpojo.EmailUser;
-import com.zohocontacts.dbpojo.Oauth;
-import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.dbpojo.tabledesign.TableWithChild;
 
@@ -36,7 +30,7 @@ public class updateOperation {
 			return null;
 		}
 
-		ArrayList<com.zohocontacts.dbpojo.tabledesign.Table> data = qg.select(newData).executeQuery();
+		List<com.zohocontacts.dbpojo.tabledesign.Table> data = qg.select(newData).executeQuery();
 
 		if (data.size() == 0) {
 
@@ -76,10 +70,6 @@ public class updateOperation {
 
 		}
 
-//		parameters.addAll(pojoDataContainer.getPojoValue());
-
-//		WhereQueryGenerater.executeWhereBuilder(newData, query, parameters);
-
 		return stateContainer;
 
 	}
@@ -91,61 +81,6 @@ public class updateOperation {
 			qg.update(childTable).execute(userID);
 		}
 	}
-
-//	private static Table updateChildTable(QueryBuilder qg, Table table, int userID) {
-//
-//		if (table instanceof Userdata) {
-//
-//			Userdata userData = (Userdata) table;
-//			if (userData.getLoginCredentials() != null) {
-//
-//				qg.update(userData.getLoginCredentials()).execute(userID);
-//
-//			}
-//			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
-//				for (EmailUser email : userData.getallemail()) {
-//
-//					qg.update(email).execute(userID);
-//				}
-//			}
-//
-//			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
-//				for (Oauth oauth : userData.getallOauth()) {
-//
-//					qg.update(oauth).execute(userID);
-//				}
-//			}
-//
-//		} else if (table instanceof Category) {
-//			Category category = (Category) table;
-//			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
-//
-//				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
-////					categoryRelation.setCategoryID(category.getID());
-//					qg.update(categoryRelation).execute(userID);
-//				}
-//
-//			}
-//
-//		} else if (table instanceof ContactDetails) {
-//
-//			ContactDetails contactDetails = (ContactDetails) table;
-//			if (contactDetails.getContactMail() != null) {
-//
-//				contactDetails.getContactMail().setContactID(contactDetails.getID());
-//				qg.update(contactDetails.getContactMail()).execute(userID);
-//
-//			}
-//
-//			if (contactDetails.getContactphone() != null) {
-//
-//				contactDetails.getContactphone().setContactID(contactDetails.getID());
-//				qg.update(contactDetails.getContactphone()).execute(userID);
-//			}
-//
-//		}
-//		return null;
-//	}
 
 	public static int[] execute(QueryBuilder qg, Connection con, String query, Queue<Object> parameters, Table newData,
 			Table oldData, long userID) {

@@ -1,3 +1,5 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
+<%@page import="java.util.List"%>
 <%@page import="com.zohocontacts.dbpojo.Oauth"%>
 <%@page import="com.zohocontacts.dboperation.SessionOperation"%>
 <%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
@@ -30,26 +32,35 @@
 
 </head>
 <body>
-
+	<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 
 	<%
-	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData() == null) {
 
-		if (cachemodel == null) {
-			System.out.println("hello hi");
-			response.sendRedirect("Login.jsp");
-			return;
+		System.out.println("hello hi");
+		response.sendRedirect("Login.jsp");
+		return;
 
-		}
+	}
 
-		UserData ud = null;
-		ArrayList<ContactDetails> userContacts = null;
+	UserData ud = null;
+	List<ContactDetails> userContacts = null;
 
-		ud = cachemodel.getUserData();
+	ud = cacheModel.getUserData();
 
-		userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
+	userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 	%>
 
 
@@ -89,6 +100,7 @@
 
 			<div style="display: flex; justify-content: center;">
 				<input type="hidden" value="create" id="methodcreate" />
+
 				<button id="mergeContact" class="glowgreenbutton">Merge</button>
 			</div>
 
@@ -263,10 +275,11 @@
 				</section>
 
 				<section id="addbutton">
-					<button id="groupbutton" class="glowgreenbutton">Merge</button>
+					<button id="groupbutton" class="mergelogobutton">	 <img src="asset/merge.png" class="logo" alt="">
+	</button>
 
 
-					<form action="Add_contacts.jsp">
+					<form action="addcontacts.jsp">
 
 
 						<input type="submit" class="glowgreenbutton" value="Addcontact" />
@@ -355,11 +368,12 @@
 							<td>
 
 
-								<form action="/contactview" method="post">
+								<form action="/contact" method="post">
 									<input type="hidden" value="<%=uc.getID()%>" name="contact_id" />
-
-
-									<input type="submit" class="glowyellowbutton" value="View" />
+									<input type="hidden" value="viewcontact" name="action" />
+									<button type="submit" class="logobutton">
+										<i class="fa-regular fa-eye"></i>
+									</button>
 								</form>
 							</td>
 
@@ -391,20 +405,11 @@
 
 
 
+	<script type="text/javascript" src="js/mergescript.js"></script>
 
 
 
 
-
-	<script type="text/javascript" src="js/mergescript.js">
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-		");
-	<%}%>
-		
-	
-		
-	</script>
 
 
 

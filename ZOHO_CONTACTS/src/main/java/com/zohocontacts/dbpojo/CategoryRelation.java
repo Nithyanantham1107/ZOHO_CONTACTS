@@ -49,16 +49,7 @@ public class CategoryRelation implements Table {
 
 	}
 
-	public CategoryRelation(int id, int contactIdtoJoin, int CategoryID, long createdAt, long modifiedAt) {
-		settedData.clear();
-
-		setCategoryID(CategoryID);
-		setContactIDtoJoin(contactIdtoJoin);
-		setCreatedAt(createdAt);
-		setModifiedAt(modifiedAt);
-		setID(id);
-
-	}
+	
 
 	public void setID(long id) {
 

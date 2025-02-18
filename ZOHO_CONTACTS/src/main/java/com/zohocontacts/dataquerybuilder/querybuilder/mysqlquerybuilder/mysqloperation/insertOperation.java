@@ -22,13 +22,11 @@ import com.zohocontacts.dbpojo.tabledesign.TableWithChild;
 
 public class insertOperation {
 
-	public static void insert(com.zohocontacts.dbpojo.tabledesign.Table table, StringBuilder query, Queue<Object> parameters) {
-//		this.opType = OpType.INSERT;
-
+	public static void insert(com.zohocontacts.dbpojo.tabledesign.Table table, StringBuilder query,
+			Queue<Object> parameters) {
 		Queue<String> columns = new LinkedList<String>();
 		Table newData = table;
 		query.append("INSERT INTO " + newData.getTableName() + " ");
-//		PojoDataContainer pojoDataContainer = PojoDataConversion.convertPojoData(newData);
 
 		for (Map.Entry<String, Object> data : newData.getSettedData().entrySet()) {
 
@@ -37,8 +35,6 @@ public class insertOperation {
 
 		}
 
-//		parameters.addAll(pojoDataContainer.getPojoValue());
-//		parameters = pojoDataContainer.getPojoValue();
 		int length = parameters.size();
 
 		System.out.println("here inside the insert method" + length + parameters);
@@ -88,13 +84,12 @@ public class insertOperation {
 
 		if (data[0] != -1) {
 
-			if(newData instanceof TableWithChild) {
-				
-				TableWithChild parentTable=(TableWithChild) newData;
-				
-				insertOperation.insertChildTable(qg,parentTable , userID);
+			if (newData instanceof TableWithChild) {
+
+				TableWithChild parentTable = (TableWithChild) newData;
+
+				insertOperation.insertChildTable(qg, parentTable, userID);
 			}
-			
 
 		}
 
@@ -117,67 +112,5 @@ public class insertOperation {
 		}
 
 	}
-
-//	private static Table insertChildTable(QueryBuilder qg, Table table, int userID) {
-//
-//		if (table instanceof Userdata) {
-//
-//			Userdata userData = (Userdata) table;
-//
-//			if (userData.getLoginCredentials() != null) {
-//				userData.getLoginCredentials().setUserID(userData.getID());
-//
-//				qg.insert(userData.getLoginCredentials()).execute(userData.getID());
-//
-//			}
-//			if (userData.getallemail() != null && userData.getallemail().size() != 0) {
-//				for (EmailUser email : userData.getallemail()) {
-//					email.setEmailID(userData.getID());
-//					qg.insert(email).execute(userData.getID());
-//				}
-//			}
-//			
-//			if (userData.getallOauth() != null && userData.getallOauth().size() != 0) {
-//				for (Oauth oauth : userData.getallOauth()) {
-//					oauth.setUserID(userID);
-//					qg.insert(oauth).execute(userData.getID());
-//				}
-//			}
-//
-//		} else if (table instanceof Category) {
-//			Category category = (Category) table;
-//			if (category.getCategoryRelation() != null && category.getCategoryRelation().size() != 0) {
-//
-//				for (CategoryRelation categoryRelation : category.getCategoryRelation()) {
-//
-//					categoryRelation.setCategoryID(category.getID());
-//
-//					qg.insert(categoryRelation).execute(userID);
-//				}
-//
-//			}
-//
-//		} else if (table instanceof ContactDetails) {
-//
-//			ContactDetails contactDetails = (ContactDetails) table;
-//			if (contactDetails.getContactMail() != null) {
-//
-//				contactDetails.getContactMail().setContactID(contactDetails.getID());
-//
-//				qg.insert(contactDetails.getContactMail()).execute(userID);
-//
-//			}
-//
-//			if (contactDetails.getContactphone() != null) {
-//
-//				contactDetails.getContactphone().setContactID(contactDetails.getID());
-//
-//				qg.insert(contactDetails.getContactphone()).execute(userID);
-//			}
-//
-//		}
-//
-//		return null;
-//	}
 
 }

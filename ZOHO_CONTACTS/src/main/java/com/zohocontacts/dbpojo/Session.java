@@ -51,18 +51,6 @@ public class Session implements Table {
 
 	}
 
-	public Session(int id, String sessionId, long lastAccessed, int userId, long createdAt, long modifiedAt) {
-
-		settedData.clear();
-
-		setSessionID(sessionId);
-		setLastAccessed(lastAccessed);
-		setID(id);
-		setUserId(userId);
-		setCreatedAt(createdAt);
-		setModifiedAt(modifiedAt);
-
-	}
 
 	public Session() {
 

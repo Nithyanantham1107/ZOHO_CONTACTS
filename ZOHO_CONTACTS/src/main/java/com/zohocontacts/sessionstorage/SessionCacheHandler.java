@@ -6,16 +6,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-
 import com.zohocontacts.dbpojo.ServerRegistry;
-import com.zohocontacts.exception.DBOperationException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 
 public class SessionCacheHandler {
 
-	
-	public static Boolean sendCacheDeleteRequest(List<ServerRegistry> servers, String servletPath, String sessionID)
-			throws DBOperationException {
+	public static Boolean sendCacheDeleteRequest(List<ServerRegistry> servers, String servletPath, String sessionID) {
 
 		try {
 			if (servers != null && servers.size() > 0) {
@@ -36,21 +32,26 @@ public class SessionCacheHandler {
 		} catch (Exception e) {
 			LoggerSet.logError("SessionCacheHandler", "sendServerCacheDeleteRequest",
 					"Exception occurred: " + e.getMessage(), e);
-			throw new DBOperationException(e.getMessage());
 
 		}
 
+		return false;
+
 	}
 
-	public static Boolean sendServerCacheDeleteRequest(List<ServerRegistry> servers, String servletPath)
-			throws DBOperationException {
+	public static Boolean sendServerCacheDeleteRequest(List<ServerRegistry> servers, String servletPath) {
 
 		try {
+
+			ServerRegistry serverInfo = CacheData.getServerInfo();
 			if (servers != null && servers.size() > 0) {
 
 				for (ServerRegistry server : servers) {
 
-					sendPostRequestToServer(server.getServerIP(), server.getServerPort(), servletPath, null);
+					if (server.getServerPort() != serverInfo.getServerPort()) {
+						sendPostRequestToServer(server.getServerIP(), server.getServerPort(), servletPath, null);
+
+					}
 
 				}
 				LoggerSet.logInfo("SessionCacheHandler", "sendServerCacheDeleteRequest",
@@ -67,9 +68,9 @@ public class SessionCacheHandler {
 		} catch (Exception e) {
 			LoggerSet.logError("SessionCacheHandler", "sendServerCacheDeleteRequest",
 					"Exception occurred: " + e.getMessage(), e);
-			throw new DBOperationException(e.getMessage());
 
 		}
+		return false;
 
 	}
 
@@ -92,6 +93,7 @@ public class SessionCacheHandler {
 				}
 
 			}
+			
 
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {

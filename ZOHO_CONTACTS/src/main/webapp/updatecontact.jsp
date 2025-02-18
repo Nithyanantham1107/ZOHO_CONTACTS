@@ -1,3 +1,4 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
 <%@page import="com.zohocontacts.dbpojo.ContactMail"%>
 <%@page import="com.zohocontacts.dbpojo.ContactPhone"%>
 <%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
@@ -44,10 +45,13 @@ body {
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	width: 550px; form { display : flex;
+	width: 550px;
+	max-height: 973px;
+	overflow: scroll; form { display : flex;
 	flex-direction: column;
 	justify-content: center;
 	background-color: white;
+	overflow: scroll;
 }
 
 div {
@@ -58,12 +62,14 @@ div {
 	display: flex;
 	padding: 20px;
 	margin: 3px;
-	background-color: #dda853;
-	color: white;
+	font-size: large;
+	background-color: white;
+	color: red;
 	border: none;
 	font-size: 14px;
 	border-radius: 5px;
 	margin: 3px;
+	color: red;
 }
 
 .input-container {
@@ -109,6 +115,26 @@ textarea {
 	resize: none;
 }
 
+.datalabel{
+
+width:250px;
+display:flex;
+
+background-color: white;
+input[type="text"]{
+
+background-color: white;
+	color: black;
+	width:140pxpx;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+
+}
+
+}
 .back-btn {
 	padding: 10px;
 	background-color: #dda853;
@@ -131,16 +157,24 @@ textarea {
 
 </head>
 <body>
-
+	<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 	<div class="container">
 		<h2>Update Contacts</h2>
-		<form  action="/updatecontact" method="post">
+		<form action="/contact" method="post">
 			<%
-			CacheModel alive = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
-
-			if (alive == null) {
+			CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+			if (cacheModel == null || cacheModel.getUserData() == null) {
 
 				response.sendRedirect("Login.jsp");
 
@@ -173,13 +207,39 @@ textarea {
 				<div class="input-container">
 					<input type="text" name="phones"
 						value="<%=phone.getContactPhone()%>" required />
+				
+				<div class="datalabel">
+					<%
+					
+				if(phone.getLabelName()==null){
+					
+				%>
+					<input type="text" name="phonelabels" placeholder="label" class="datalabel" />
+					
+				
+				<%
+				} else{
+				%>
+				
+					<input type="text" name="phonelabels" value="<%=phone.getLabelName()%>" class="datalabel" />
+					
+				
+				<%
+				
+				}
+				%>
+			
+				
+				
+					</div>
+				
 					<button type="button" class="remove-btn"
-						onclick="removeField(this)">Remove</button>
-					<input type="hidden" name="phoneID"
-						value="<%=phone.getID()%>" required />
+						onclick="removeField(this)">X</button>
+					<input type="hidden" name="phoneID" value="<%=phone.getID()%>"
+						required />
 				</div>
-				
-				
+
+
 				<%
 				}
 				}
@@ -209,12 +269,38 @@ textarea {
 
 					<input type="text" name="emails"
 						value="<%=mail.getContactMailID()%>" required />
+				
+					<div  class="datalabel">
+					
+					
+					
+						<%
+					
+				if(mail.getLabelName()==null){
+					
+				%>
+					<input type="text" name="emaillabels" placeholder="label" class="datalabel"/>
+				
+				<%
+				} else{
+				%>
+				
+					<input type="text" name="emaillabels" value="<%=mail.getLabelName()%>" class="datalabel"/>
+				
+				<%
+				
+				}
+				%>
+					
+				
+					
+					</div>
 					<button type="button" class="remove-btn"
-						onclick="removeField(this)">Remove</button>
-						
-						
-						<input type="hidden" name="emailID"
-						value="<%=mail.getID()%>" required />
+						onclick="removeField(this)">X</button>
+
+
+					<input type="hidden" name="emailID" value="<%=mail.getID()%>"
+						required />
 				</div>
 				<%
 				}
@@ -258,25 +344,22 @@ textarea {
 			<textarea rows="3" cols="20" name="Address" required><%=uc.getAddress()%></textarea>
 			<input type="hidden" name="contactid" value="<%=uc.getID()%>"
 				required /> <input type="submit" class="glowyellowbutton"
-				value="Update" />
+				value="Update" /> <input type="hidden" value="updateContact"
+				name="action" />
+
+
 		</form>
 		<form action="/home.jsp" method="get">
 			<input type="submit" value="Back" class="back-btn" />
 		</form>
 	</div>
 
-
-		
-	
-
 	<script type="text/javascript" src="js/formfunctional.js">
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-		");
-	<%}%>
-		
-	
-		
-	</script>
+
+</script>
+
+
+
+
 </body>
 </html>

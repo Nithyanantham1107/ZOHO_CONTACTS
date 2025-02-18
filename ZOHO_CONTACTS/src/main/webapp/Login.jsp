@@ -1,4 +1,4 @@
-<%@page import="dboperation.SessionOperation"%>
+<%@page import="com.zohocontacts.dboperation.SessionOperation"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -28,21 +28,19 @@ response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
 <style>
 body {
-
 	font-family: Arial, sans-serif;
 	background-color: #F8F1F1;
 	display: flex;
-	color:white;
+	color: white;
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
 	margin: 0;
 }
 
-
 .container {
-	background-color:#025464;
-	color:white;
+	background-color: #025464;
+	color: white;
 	padding: 65px;
 	border-radius: 45px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -53,17 +51,10 @@ body {
 }
 
 h2 {
-
-
 	margin-bottom: 20px;
-
 }
 
-
-
 label {
-
-
 	margin-top: 10px;
 	font-weight: bold;
 	display: block;
@@ -75,13 +66,11 @@ input[type="text"], input[type="password"] {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	margin-top: 5px;
-	
 }
 
 input[type="submit"] {
 	padding: 10px;
-
-background-color:#DDA853;
+	background-color: #DDA853;
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
@@ -89,8 +78,6 @@ background-color:#DDA853;
 	margin-top: 32px;
 	font-size: 16px;
 }
-
-
 
 .back-btn {
 	background-color: #ccc;
@@ -106,34 +93,27 @@ background-color:#DDA853;
 	color: white;
 	font-size: 12px;
 	margin-top: 5px;
-
 }
-section{
 
-	display:flex;
+section {
+	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	a{
-	color:white;
-	}
+	a
+	{
+	color
+	:
+	white;
 }
-
-
+}
 </style>
 
 
 
-<script>
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-	");
-<%}%>
-	
-</script>
+
 </head>
 <body>
 	<%
-	
 	String sessionid = SessionOperation.getCustomSessionId(request.getCookies());
 	if (sessionid != null) {
 
@@ -141,7 +121,7 @@ section{
 	}
 	%>
 	<div class="container">
-		<h2 >Login</h2>
+		<h2>Login</h2>
 		<form action="/login" method="post">
 			<label for="username">Username</label> <input type="text" id="user"
 				name="username" autocomplete="off" required /> <span id="prompt1">
@@ -155,14 +135,27 @@ section{
 			</div>
 		</form>
 
-<section id="loginfooter">
-<p>don't have an account?</p><a href="Signup.jsp">Create account</a>
-</section>
+		<section id="loginfooter">
+			<p>don't have an account?</p>
+			<a href="Signup.jsp">Create account</a>
+		</section>
 
-		
+
 	</div>
 
+	
+	<% if (request.getAttribute("errorMessage") != null) { %>
+    <script type="text/javascript">
+        alert("<%= request.getAttribute("errorMessage") %>");
+    </script>
+<% } %>
+
 	<script>
+
+  
+
+
+	
 		const password = document.getElementById('pass');
 		const prompt = document.getElementById('prompt');
 

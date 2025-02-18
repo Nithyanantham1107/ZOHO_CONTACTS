@@ -50,17 +50,7 @@ public class EmailUser implements Table {
 
 	}
 
-	public EmailUser(int id, int emID, String email, boolean isPrimary, long createdAt, long modifiedAt) {
-
-		settedData.clear();
-
-		setID(id);
-		setEmailID(emID);
-		setEmail(email);
-		setIsPrimary(isPrimary);
-		setCreatedAt(createdAt);
-		setModifiedAt(modifiedAt);
-	}
+	
 
 	public EmailUser() {
 

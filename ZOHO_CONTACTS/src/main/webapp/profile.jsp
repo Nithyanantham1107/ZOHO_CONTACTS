@@ -1,3 +1,4 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
 <%@page import="com.zohocontacts.dbpojo.EmailUser"%>
 <%@page import="com.zohocontacts.dboperation.SessionOperation"%>
 <%@page import="com.zohocontacts.dbpojo.ContactDetails"%>
@@ -117,21 +118,25 @@ button {
 
 </head>
 <body>
-
+	<% if (request.getAttribute("errorMessage") != null) { %>
+    <script type="text/javascript">
+        alert("<%= request.getAttribute("errorMessage") %>");
+    </script>
+<% } %>
 
 
 
 	<%
-	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData()==null) {
 
-		if (cachemodel == null) {
 			System.out.println("hello hi");
 			response.sendRedirect("Login.jsp");
 			return;
 
 		}
 
-		UserData ud = cachemodel.getUserData();
+		UserData ud = cacheModel.getUserData();
 	%>
 
 	<div id="header">
@@ -168,10 +173,9 @@ button {
 
 		
 
-		<form action="/userupdate" method="POST" id="registration-form">
+		<form action="/user" method="POST" id="registration-form">
 			
-			
-			
+				<input type="hidden" value="updateuser" name="action" />
 			<section>
 
 				<label for="first-name">Full Name</label> <input type="text"
@@ -190,12 +194,12 @@ button {
 
 					<%
 					long primary = -1;
-					if (ud.getallemail() != null && ud.getallemail().size() > 0) {
+											if (ud.getallemail() != null && ud.getallemail().size() > 0) {
 
-						for (EmailUser data : ud.getallemail()) {
+												for (EmailUser data : ud.getallemail()) {
 
-							if (data.getIsPrimary()) {
-						primary = data.getID();
+													if (data.getIsPrimary()) {
+														primary = data.getID();
 					%>
 					<option value="<%=data.getEmail()%>" selected><%=data.getEmail()%></option>
 

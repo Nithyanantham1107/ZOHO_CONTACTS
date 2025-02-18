@@ -3,14 +3,13 @@ package com.zohocontacts.oauth2helper;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletResponse;
@@ -45,20 +44,7 @@ public class Oauth2handler {
 				+ Outh2Credentials.getClientSecret() + "&redirect_uri="
 				+ URLEncoder.encode(Outh2Credentials.getRedirectURI(), "UTF-8")
 				+ "&grant_type=authorization_code&prompt=consent";
-//		if (state) {
-//
-//			postData = "code=" + AuthorizationCode + "&client_id=" + Outh2Credentials.getClientID() + "&client_secret="
-//					+ Outh2Credentials.getClientSecret() + "&redirect_uri="x
-//					+ URLEncoder.encode(Outh2Credentials.getRedirectURI(), "UTF-8") + "&grant_type=authorization_code";
-//
-//		} else {
-//
-//			postData = "code=" + AuthorizationCode + "&client_id=" + Outh2Credentials.getClientID() + "&client_secret="
-//					+ Outh2Credentials.getClientSecret() + "&redirect_uri="
-//					+ URLEncoder.encode(Outh2Credentials.getRedirectURI(), "UTF-8")
-//					+ "&grant_type=authorization_code&prompt=consent";
-//
-//		}
+
 		try {
 
 			System.out.println("the Authorization code is:" + AuthorizationCode);
@@ -93,6 +79,7 @@ public class Oauth2handler {
 				oauth.setUserID(userID);
 				oauth.setSyncState(false);
 				oauth.setCreatedAt(Instant.now().toEpochMilli());
+				oauth.setOauthSyncTime(oauth.getCreatedAt());
 				oauth.setModifiedAt(oauth.getCreatedAt());
 				oauth.setOauthProvider(OauthProvider.GOOGLE.toString());
 				if (jsonAccess.get("refresh_token") != null) {
@@ -125,7 +112,7 @@ public class Oauth2handler {
 
 	}
 
-	public static ArrayList<ContactDetails> getContacts(Oauth oauth) {
+	public static List<ContactDetails> getContacts(Oauth oauth) {
 
 		String apiUrl = "https://people.googleapis.com/v1/people/me/connections?personFields=names,emailAddresses,phoneNumbers,addresses,metadata";
 
@@ -133,7 +120,7 @@ public class Oauth2handler {
 
 		JsonArray connections = json.getAsJsonArray("connections");
 
-		ArrayList<ContactDetails> contacts = new ArrayList<ContactDetails>();
+		List<ContactDetails> contacts = new ArrayList<ContactDetails>();
 		if (connections != null) {
 
 			for (int i = 0; i < connections.size(); i++) {
@@ -407,50 +394,6 @@ public class Oauth2handler {
 		return null;
 
 	}
-
-//	private static JsonObject requestOauthWithJson(String apiUrl, String accessToken, JsonObject jsonBody) throws Exception {
-//URL url = new URL(apiUrl);
-//	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//connection.setRequestMethod("PUT");
-//	
-//	    connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-//	    connection.setRequestProperty("Content-Type", "application/json");
-//
-//
-//	    connection.setDoOutput(true);
-//
-//	  
-//	    try (OutputStream os = connection.getOutputStream()) {
-//	        byte[] input = jsonBody.toString().getBytes("UTF_8");
-//	        os.write(input, 0, input.length); 	    }
-// int responseCode = connection.getResponseCode();
-//
-//	
-//	    InputStream inputStream;
-//	    if (responseCode < HttpURLConnection.HTTP_BAD_REQUEST) {
-//	        inputStream = connection.getInputStream();
-//	    } else {
-//	        inputStream = connection.getErrorStream();
-//	    }
-//
-//
-//	    StringBuilder response = new StringBuilder();
-//	    try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-//	        String line;
-//	        while ((line = reader.readLine()) != null) {
-//	            response.append(line);
-//	        }
-//	    }
-//
-//	    JsonObject jsonResponse = new JsonObject();
-//	    if (responseCode == HttpURLConnection.HTTP_OK) {
-//	        jsonResponse = new JsonObject(response.toString());
-//	    } else {
-//	        throw new Exception("Request failed with status code: " + responseCode + ", response: " + response.toString());
-//	    }
-//
-//	    return jsonResponse;
-//	}
 
 	public static void deleteOauthContact(String resourceName, String accessToken) throws IOException {
 		String urlString = "https://people.googleapis.com/v1/" + resourceName + ":deleteContact";

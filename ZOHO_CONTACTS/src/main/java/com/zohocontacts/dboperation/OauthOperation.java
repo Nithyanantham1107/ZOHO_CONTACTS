@@ -76,6 +76,37 @@ public class OauthOperation {
 		}
 
 	}
+	
+	
+	public static Oauth getOauth(Oauth oauth) throws DBOperationException {
+
+		List<Table> resultList = new ArrayList<Table>();
+
+		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder();) {
+
+			query.openConnection();
+	
+
+			resultList = query.select(oauth).executeQuery();
+
+			if (resultList.size() <= 0) {
+
+				query.rollBackConnection();
+				LoggerSet.logError("OauthOperation", "getOauth", "cannot find Oauth data", null);
+				return null;
+			}
+			oauth = (Oauth) resultList.getFirst();
+			query.commit();
+			LoggerSet.logInfo("OauthOperation", "getOauth", "Oauth data found: " + oauth.getEmail());
+			return oauth;
+
+		} catch (Exception e) {
+			LoggerSet.logError("OauthOperation", "getOauth", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException(e.getMessage());
+		}
+
+	}
 
 	public static Boolean updateOauth(Oauth oauth, long userID) throws DBOperationException {
 		int[] result = { -1, -1 };
@@ -228,10 +259,10 @@ public class OauthOperation {
 			newOauth.setUserID(user.getID());
 
 			List<Table> resultList = query.select(newOauth).executeQuery();
-
+			List<Oauth> oauths = new ArrayList<>();
 			if (resultList != null && resultList.size() > 0) {
 
-				List<Oauth> oauths = new ArrayList<>();
+				
 
 				for (Table oauthdata : resultList) {
 
@@ -239,10 +270,20 @@ public class OauthOperation {
 
 				}
 
-				user.setAllOauth(oauths);
-
+			
 			}
+			
+				
+				
+			System.out.println("the ouath size in Db data from Dao is"+oauths.size());
+			user.setAllOauth(oauths);
+			
 
+			System.out.println("the ouath size in Db data cache is"+user.getallOauth().size());
+
+				
+			
+			
 			query.commit();
 			LoggerSet.logInfo("OauthOperation", "deleteOauthSynncOff",
 					"Oauth data deleted successfully: " + oauth.getEmail());

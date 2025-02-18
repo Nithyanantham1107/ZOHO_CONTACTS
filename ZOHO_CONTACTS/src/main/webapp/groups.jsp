@@ -1,3 +1,5 @@
+<%@page import="com.zohocontacts.sessionstorage.ThreadLocalStorage"%>
+<%@page import="java.util.List"%>
 <%@page import="com.zohocontacts.dboperation.UserGroupOperation"%>
 <%@page import="com.zohocontacts.dbpojo.Category"%>
 <%@page import="com.zohocontacts.dboperation.SessionOperation"%>
@@ -32,77 +34,76 @@
 </head>
 <body>
 
-
+	<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 	<%
-	CacheModel cachemodel = SessionOperation.checkSessionAlive(SessionOperation.getCustomSessionId(request.getCookies()));
+	CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+	if (cacheModel == null || cacheModel.getUserData() == null) {
 
-		if (cachemodel == null) {
-			System.out.println("hello hi");
-			response.sendRedirect("Login.jsp");
-			return;
+		System.out.println("hello hi");
+		response.sendRedirect("Login.jsp");
+		return;
 
-		}
+	}
 
-		UserData ud = cachemodel.getUserData();
-		ArrayList<ContactDetails> userContacts=null;
-		ArrayList<Category> usergroup=null;
+	UserData ud = cacheModel.getUserData();
+	List<ContactDetails> userContacts = null;
+	List<Category> usergroup = null;
 
-		 userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
+	userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 
-	 usergroup = UserGroupOperation.viewAllGroup(ud.getID());
+	usergroup = UserGroupOperation.viewAllGroup(ud.getID());
 
-		
-		
+	List<ContactDetails> groupsInContact = new ArrayList<>();
+	List<ContactDetails> groupsNotInContact = new ArrayList<>();
+	Category group = null;
+	System.out
+			.println("here the type" + (request.getAttribute("method") != null && request.getAttribute("groupID") != null));
 
-		
-		ArrayList<ContactDetails> groupsInContact = new ArrayList<>();
-		ArrayList<ContactDetails> groupsNotInContact = new ArrayList<>();
-		Category group = null;
-		System.out
-		.println("here the type" + (request.getAttribute("method") != null && request.getAttribute("groupID") != null));
+	if (request.getAttribute("method") != null && request.getAttribute("groupID") != null) {
 
-		if (request.getAttribute("method") != null && request.getAttribute("groupID") != null) {
+		String method = (String) request.getAttribute("method");
+		int groupID = (int) request.getAttribute("groupID");
+		group = UserGroupOperation.getSpecificGroup(groupID, ud.getID());
 
-			String method = (String) request.getAttribute("method");
-			int groupID = (int) request.getAttribute("groupID");
-			group = UserGroupOperation.getSpecificGroup(groupID, ud.getID());
+		if (method.equals("view")) {
 
-			if (method.equals("view")) {
+			groupsInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
 
-		groupsInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
+		} else {
 
-			} else {
-
-		groupsNotInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
-
-			}
+			groupsNotInContact = UserGroupOperation.getGroupContactList(groupID, ud.getID(), method);
 
 		}
+
+	}
 	%>
 
 
 
 	<nav id="sidebar">
-		
-<section id="creategroup">
-			
-				<h1>Create Group</h1>
+
+		<section id="creategroup">
+
+			<h1>Create Group</h1>
 
 
-		
 
 
-		
-
-				<button id="closecreatemodel">
- X
-
-				</button>
 
 
-		
+
+			<button id="closecreatemodel">X</button>
 
 
 
@@ -111,61 +112,64 @@
 
 
 
-		
-
-          <div style="display: flex;">
-			<input type="text" id="groupNamecreate"
-				placeholder="Enter group name" required /> <input type="hidden"
-				id="groupidcreate" required /> <input type="hidden" value="create"
-				id="methodcreate" />
-			<button id="submitGroup" class="glowgreenbutton">Create Group</button>
-</div>
 
 
 
 
 
-
-<div id="createtablecontainer">
-		
-
-
-
-			<table>
-
-				<thead>
-
-
-					<tr>
-
-						<th>select</th>
-						<th>FirstName</th>
+			<div class="modelcreategroup">
+				<input type="text" id="groupNamecreate"
+					placeholder="Enter group name" required /> <input type="hidden"
+					id="groupidcreate" required /> <input type="hidden" value="create"
+					id="methodcreate" />
+				<button id="submitGroup" class="glowgreenbutton">Create</button>
+			</div>
 
 
 
-						<th>Email</th>
-						<th>Phone</th>
 
 
 
-					</tr>
+			<div id="createtablecontainer">
 
-				</thead>
-				<tbody>
 
-					<%
-					if (userContacts != null) {
 
-						for (ContactDetails uc : userContacts) {
-					%>
-					<tr>
 
-						<td><input type="checkbox" name="contact_ids"
-							value="<%=uc.getID()%>" style="display: block;"
-							class="contact-checkbox" /></td>
-						<td><%=uc.getFirstName()%></td>
+				<table>
+
+					<thead>
+
+
+						<tr>
+
+							<th>select</th>
+							<th>FirstName</th>
+
+
+
+							<th>Email</th>
+							<th>Phone</th>
+
+
+
+						</tr>
+
+					</thead>
+					<tbody>
 
 						<%
+						if (userContacts != null) {
+
+							for (ContactDetails uc : userContacts) {
+						%>
+						<tr>
+
+							<td><input type="checkbox" name="contact_ids"
+								value="<%=uc.getID()%>" style="display: block;"
+								class="contact-checkbox" /></td>
+							<td><%=uc.getFirstName()%></td>
+
+							<%
 							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
 							%>
 							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
@@ -179,8 +183,8 @@
 							<%
 							}
 							%>
-							
-						<%
+
+							<%
 							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
 							%>
 							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
@@ -194,23 +198,23 @@
 							<%
 							}
 							%>
-						
-
-
-					</tr>
-
-					<%
-					}
-					}
-					%>
 
 
 
-				</tbody>
+						</tr>
 
-			</table>
+						<%
+						}
+						}
+						%>
 
-</div>
+
+
+					</tbody>
+
+				</table>
+
+			</div>
 		</section>
 
 
@@ -290,7 +294,7 @@
 
 				<section id="addbutton">
 
-					<button id="groupbutton" class="glowgreenbutton">Create group</button>
+					<button id="groupbutton" class="glowgreenbutton">Create</button>
 				</section>
 
 			</section>
@@ -332,29 +336,41 @@
 
 
 							<td>
-								<form action="/grouplist" method="post">
+								<form action="/group" method="post">
 									<input type="hidden" value="<%=ug.getID()%>" name="groupid"
 										id="categoryID" /> <input type="hidden" value="view"
-										name="method" /> <input type="submit"
-										class="glowyellowbutton" id="viewgroup" value="view Group" />
+										name="method" /> <input type="hidden" value="groupview"
+										name="action" />
+									<button type="submit" class="logobutton">
+										<i class="fa-regular fa-eye"></i>
+									</button>
 								</form>
 
 							</td>
 							<td>
-								<form action="/grouplist" method="post">
-								 <input type="hidden" value="add"
-										name="method" /> 
-									<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
-									<input type="submit" class="glowgreenbutton" value="add" />
+								<form action="/group" method="post">
+									<input type="hidden" value="add" name="method" /> <input
+										type="hidden" value="<%=ug.getID()%>" name="groupid" /> <input
+										type="hidden" value="groupview" name="action" />
+
+									<button type="submit" class="updatelogobutton">
+										<i class="fa-solid fa-pen-to-square"></i>
+									</button>
+
 								</form>
 							</td>
-							
-							
+
+
 							<td>
-								<form action="/deletegroup" method="post">
-								 
-									<input type="hidden" value="<%=ug.getID()%>" name="groupid" />
-									<input type="submit" class="glowredbutton" value="Delete" />
+								<form action="/group" method="post">
+									<input type="hidden" value="deletegroup" name="action" /> <input
+										type="hidden" value="<%=ug.getID()%>" name="groupid" />
+
+
+									<button type="submit" class="deletelogobutton">
+										<i class="fa-regular fa-trash-can"></i>
+									</button>
+
 								</form>
 							</td>
 						</tr>
@@ -389,17 +405,9 @@
 
 
 
+	<script type="text/javascript" src="js/script.js"></script>
 
 
-	<script type="text/javascript" src="js/script.js">
-        <%if (request.getAttribute("errorMessage") != null) {%>
-            alert("<%=request.getAttribute("errorMessage")%>
-		");
-	<%}%>
-		
-	
-		
-	</script>
 
 
 

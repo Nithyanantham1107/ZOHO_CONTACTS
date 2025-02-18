@@ -42,9 +42,7 @@ public class AuditLogOperation {
 		}
 
 		if (opType.getOpType().equals(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType.INSERT.getOpType())) {
-//			pj = new PojoDataContainer();
-//			pj = PojoDataConversion.convertPojoData(currentData);
-			json = JsonConverter.ConvertPojoToJson(currentData, userID);
+json = JsonConverter.ConvertPojoToJson(currentData, userID);
 
 			audit.setChangedState(json.toString());
 
@@ -54,12 +52,8 @@ public class AuditLogOperation {
 
 			String[] table = JsonConverter.comparePojoJson(oldData, currentData, userID);
 
-//			pj = new PojoDataContainer();
-//			pj = PojoDataConversion.convertPojoData(oldData);
-			audit.setPreviousState(table[0]);
+		audit.setPreviousState(table[0]);
 
-//			System.out.println("note here from audit" + pj.getJson());
-//			pj = PojoDataConversion.convertPojoData(currentData);
 
 			audit.setChangedState(table[1]);
 

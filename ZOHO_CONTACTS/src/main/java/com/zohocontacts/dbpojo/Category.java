@@ -55,15 +55,7 @@ public class Category implements TableWithChild {
 
 	}
 
-	public Category(int id, String CategoryName, int CreatedBy, long createdAt, long modifiedAt) {
-		settedData.clear();
-		setID(id);
-		setCategoryName(CategoryName);
-		setCreatedAt(createdAt);
-		setCreatedBY(CreatedBy);
-		setModifiedAt(modifiedAt);
 
-	}
 
 	public Category() {
 

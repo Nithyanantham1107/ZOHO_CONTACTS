@@ -14,15 +14,15 @@ public class GenericPojoMapper {
 
 	ResultSet result;
 
-	ArrayList<String> columnNames;
+	List<String> columnNames;
 
-	public ArrayList<Table> PojoResultSetter(Table selectTable, ArrayList<String> columnNames, ResultSet result)
+	public static List<Table> PojoResultSetter(Table selectTable, List<String> columnNames, ResultSet result)
 			throws SQLException {
-		ArrayList<Table> data = new ArrayList<>();
-		HashMap<Long, Table> uniqueList = new HashMap<Long, Table>();
+		List<Table> data = new ArrayList<>();
+		Map<Long, Table> uniqueList = new HashMap<Long, Table>();
 
-		this.result = result;
-		this.columnNames = columnNames;
+//		this.result = result;
+//		this.columnNames = columnNames;
 		List<Table> childTables = new ArrayList<>();
 
 		if (selectTable instanceof TableWithChild) {
@@ -47,9 +47,9 @@ public class GenericPojoMapper {
 		}
 		Table table;
 		try {
-			while (this.result.next()) {
+			while (result.next()) {
 
-				table = mapTableData(selectTable);
+				table = mapTableData(selectTable, result, columnNames);
 				if (uniqueList.get(table.getID()) != null) {
 					table = uniqueList.get(table.getID());
 
@@ -61,7 +61,7 @@ public class GenericPojoMapper {
 				if (table instanceof TableWithChild) {
 					TableWithChild parentTable = (TableWithChild) table;
 					for (Table childTable : childTables) {
-						parentTable.setChildTable(mapTableData(childTable));
+						parentTable.setChildTable(mapTableData(childTable, result, columnNames));
 					}
 
 				}
@@ -79,21 +79,22 @@ public class GenericPojoMapper {
 		return data;
 	}
 
-	private Table mapTableData(Table table) {
+	private static Table mapTableData(Table table, ResultSet result, List<String> columnNames) {
 		Map<String, Object> row = new HashMap<String, Object>();
 
 		for (String columnName : table.getTableColumnNames()) {
 
-			if (getObject(table.getTableName() + "." + columnName) != null) {
+			if (getObject(table.getTableName() + "." + columnName, result, columnNames) != null) {
 
-				if (getObject(table.getTableName() + "." + columnName) instanceof Integer) {
+				if (getObject(table.getTableName() + "." + columnName, result, columnNames) instanceof Integer) {
 
-					Integer intValue = (Integer) getObject(table.getTableName() + "." + columnName);
+					Integer intValue = (Integer) getObject(table.getTableName() + "." + columnName, result,
+							columnNames);
 					long longValue = intValue.longValue();
 					row.put(columnName, longValue);
 
 				} else {
-					row.put(columnName, getObject(table.getTableName() + "." + columnName));
+					row.put(columnName, getObject(table.getTableName() + "." + columnName, result, columnNames));
 
 				}
 			}
@@ -103,17 +104,17 @@ public class GenericPojoMapper {
 		return table.getNewTable(row);
 	}
 
-	private Object getObject(String column) {
+	private static Object getObject(String column, ResultSet result, List<String> columnNames) {
 		try {
-			if (this.columnNames.contains(column)) {
+			if (columnNames.contains(column)) {
 
 				return result.getObject(column);
 
 			}
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
+
 		}
 		return null;
 	}

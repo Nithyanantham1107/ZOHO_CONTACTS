@@ -106,23 +106,7 @@ public class ContactDetails implements TableWithChild {
 
 	}
 
-	public ContactDetails(int userid, int id, int oauthID, String oauthContactID, String Firstname, String middleName,
-			String LastName, String gender, String Address, long CreatedAt, long modifiedAt) {
-
-		settedData.clear();
-
-		setUserID(userid);
-		setID(id);
-		setOauthContactID(oauthContactID);
-		setFirstName(Firstname);
-		setMiddleName(middleName);
-		setLastName(LastName);
-		setGender(gender);
-		setAddress(Address);
-		setCreatedAt(CreatedAt);
-		setModifiedAt(modifiedAt);
-		setOauthID(oauthID);
-	}
+	
 
 	public void setOauthID(long oauth) {
 		this.oauth = oauth;

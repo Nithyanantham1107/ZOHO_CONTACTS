@@ -44,16 +44,7 @@ public class LoginCredentials implements Table {
 
 	}
 
-	public LoginCredentials(int id, int logId, String userName, long createdAt, long modifiedAt) {
 
-		settedData.clear();
-		setID(id);
-		setUserID(logId);
-		setUserName(userName);
-		setCreatedAt(createdAt);
-		setModifiedAt(modifiedAt);
-
-	}
 
 	public LoginCredentials() {
 

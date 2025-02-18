@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
@@ -13,31 +14,23 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.QueryBuilder;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.AuditLogSchema;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema;
-import com.zohocontacts.dbpojo.Category;
-import com.zohocontacts.dbpojo.CategoryRelation;
-import com.zohocontacts.dbpojo.ContactDetails;
-import com.zohocontacts.dbpojo.ContactMail;
-import com.zohocontacts.dbpojo.ContactPhone;
-import com.zohocontacts.dbpojo.EmailUser;
-import com.zohocontacts.dbpojo.LoginCredentials;
-import com.zohocontacts.dbpojo.Oauth;
-import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.dbpojo.tabledesign.TableWithChild;
+import com.zohocontacts.exception.DBOperationException;
 
 public class DeleteOperation {
 	private static long userId = -1;
 
-	public static Table deleteTable(QueryBuilder qg, Connection con, com.zohocontacts.dbpojo.tabledesign.Table table, StringBuilder query,
-			Queue<Object> parameters) {
+	public static Table deleteTable(QueryBuilder qg, Connection con, com.zohocontacts.dbpojo.tabledesign.Table table,
+			StringBuilder query, Queue<Object> parameters)  {
 
-		ArrayList<Table> data = qg.select(table).executeQuery();
+		List<Table> data = qg.select(table).executeQuery();
 		query.append("DELETE FROM " + table.getTableName() + " ");
 
 		if (data.size() > 0) {
 
 			table = data.getFirst();
-//			WhereQueryGenerater.executeWhereBuilder(table, query, parameters);
+
 			return table;
 
 		} else {
@@ -95,65 +88,9 @@ public class DeleteOperation {
 
 	}
 
-//	public static void deleteChildTable(QueryBuilder qg, Table table, int userID) {
-//		userId = userID;
-//
-//		System.out.println("here delete table name" + table.getTableName());
-//		if (table instanceof Userdata) {
-//			Userdata userData = (Userdata) table;
-//			EmailUser email = new EmailUser();
-//			ContactDetails contact = new ContactDetails();
-//			Category category = new Category();
-//			dbpojo.Session session = new dbpojo.Session();
-//			LoginCredentials login = new LoginCredentials();
-//			Oauth oauth = new Oauth();
-//			email.setEmailID(userID);
-//			login.setUserID(userData.getID());
-//			contact.setUserID(userData.getID());
-//			category.setCreatedBY(userData.getID());
-//			session.setUserId(userData.getID());
-//			oauth.setUserID(userID);
-//			auditall(qg, oauth);
-//			auditOne(qg, login);
-//			auditall(qg, email);
-//			auditall(qg, category);
-//			auditall(qg, contact);
-//			auditall(qg, session);
-//
-//		} else if (table instanceof Category) {
-//			Category category = (Category) table;
-//			CategoryRelation categoryRelation = new CategoryRelation();
-//			categoryRelation.setCategoryID(category.getID());
-//			auditall(qg, categoryRelation);
-//
-//		} else if (table instanceof ContactDetails) {
-//
-//			ContactDetails contactDetail = (ContactDetails) table;
-//			ContactMail contactMail = new ContactMail();
-//			ContactPhone contactPhone = new ContactPhone();
-//			CategoryRelation categoryRelation = new CategoryRelation();
-//			categoryRelation.setContactIDtoJoin(contactDetail.getID());
-//			contactMail.setContactID(contactDetail.getID());
-//			contactPhone.setContactID(contactDetail.getID());
-//			auditOne(qg, contactMail);
-//			auditOne(qg, contactPhone);
-//			auditall(qg, categoryRelation);
-//		}
-//
-//	}
-
-	private static void auditOne(QueryBuilder qg, Table table) {
-
-		ArrayList<Table> tables = qg.select(table).executeQuery();
-		if (tables.size() > 0) {
-			AuditLogOperation.audit(qg, table.getID(), tables.getFirst(), null, OpType.DELETE, userId);
-		}
-
-	}
-
 	private static void auditall(QueryBuilder qg, Table table) {
 
-		ArrayList<Table> tables = qg.select(table).executeQuery();
+		List<Table> tables = qg.select(table).executeQuery();
 		if (tables.size() > 0) {
 
 			for (Table tableData : tables) {

@@ -103,20 +103,6 @@ public class UserData implements TableWithChild {
 
 	}
 
-	public UserData(int userId, String Name, String password, String Phoneno, String address, String timezone,
-			long createdAt, long modifiedAt) {
-		settedData.clear();
-
-		setName(Name);
-		setPassword(password);
-		setAddress(address);
-		setID(userId);
-		setPhoneno(Phoneno);
-		setTimezone(timezone);
-		setCreatedAt(createdAt);
-		setModifiedAt(modifiedAt);
-	}
-
 	public Table getNewTable(Map<String, Object> tableData) {
 
 		return new UserData(tableData);
@@ -338,9 +324,10 @@ public class UserData implements TableWithChild {
 	}
 
 	public void setAllEmails(List<EmailUser> emails) {
-		
-		this.email=emails;
+
+		this.email = emails;
 	}
+
 	public Map<String, Object> getSettedData() {
 
 		return settedData;
