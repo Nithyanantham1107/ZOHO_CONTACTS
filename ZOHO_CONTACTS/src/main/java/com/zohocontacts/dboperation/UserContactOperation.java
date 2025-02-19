@@ -6,11 +6,14 @@ import java.util.List;
 
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.QueryBuilder;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.SqlQueryLayer;
+import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.ContactDetailsSchema;
+import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.Operation;
 import com.zohocontacts.dbpojo.ContactDetails;
 import com.zohocontacts.dbpojo.ContactMail;
 import com.zohocontacts.dbpojo.ContactPhone;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 
 /**
@@ -18,6 +21,8 @@ import com.zohocontacts.loggerfiles.LoggerSet;
  * viewing, updating, and deleting contacts.
  */
 public class UserContactOperation {
+	private static final int LIMIT = 11;
+	private static final int OFFSET = 10;
 
 	public static ContactDetails addUserContact(ContactDetails contactDetails) throws DBOperationException {
 		int[] result = { -1, -1 };
@@ -47,7 +52,13 @@ public class UserContactOperation {
 			LoggerSet.logInfo("UserContactOperation", "addUserContact",
 					"Contact added successfully: " + contactDetails.getFirstName());
 			return contactDetails;
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "addUserContact", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "addUserContact", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -99,7 +110,14 @@ public class UserContactOperation {
 				return null;
 			}
 
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "viewAllUserContacts", "Exception occurred: " + e.getMessage(),
+					e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "viewAllUserContacts", "Exception occurred: " + e.getMessage(),
 					e);
 			throw new DBOperationException(e.getMessage());
@@ -107,48 +125,6 @@ public class UserContactOperation {
 		}
 
 	}
-//
-//	public static ArrayList<ContactDetails> mergeUserContacts(ArrayList<ContactDetails> contacts)
-//			throws DBOperationException {
-//
-//		ArrayList<Table> result = new ArrayList<Table>();
-//		try (QueryBuilder qg = new SqlQueryLayer().createQueryBuilder();) {
-//
-//			qg.openConnection();
-//
-//			ContactDetails contact = new ContactDetails();
-//			ContactMail contactMail = new ContactMail();
-//			ContactPhone contactPhone = new ContactPhone();
-//			contact.setContactMail(contactMail);
-//			contact.setContactPhone(contactPhone);
-////			contact.setUserID(userID);
-//
-//			result = qg.select(contact).executeQuery();
-//
-//			if (result.size() > 0) {
-//
-//				for (Table data : result) {
-//
-//					contacts.add((ContactDetails) data);
-//				}
-//				logger.logInfo("UserContactOperation", "viewAllUserContacts",
-//						"Contacts retrieved for user ID: " + userID);
-//				return contacts;
-//			} else {
-//
-//				logger.logInfo("UserContactOperation", "viewAllUserContacts",
-//						"No Contacts retrieved for user ID: " + userID);
-//
-//				return null;
-//			}
-//
-//		} catch (Exception e) {
-//			logger.logError("UserContactOperation", "viewAllUserContacts", "Exception occurred: " + e.getMessage(), e);
-//			throw new DBOperationException(e.getMessage());
-//
-//		}
-//
-//	}
 
 	public static Boolean addContactPhone(List<ContactPhone> phones, long userID) throws DBOperationException {
 
@@ -174,7 +150,13 @@ public class UserContactOperation {
 
 			return true;
 
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "addContactPhone", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "addContactPhone", "Exception occurred: " + e.getMessage(), e);
 			throw new DBOperationException(e.getMessage());
 
@@ -206,7 +188,15 @@ public class UserContactOperation {
 
 			return true;
 
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "addContactMail", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "addContactMail", "Exception occurred: " + e.getMessage(), e);
 			throw new DBOperationException(e.getMessage());
 
@@ -250,7 +240,15 @@ public class UserContactOperation {
 				return false;
 			}
 
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "deleteContact", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "deleteContact", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -295,7 +293,16 @@ public class UserContactOperation {
 						"No contact data available for user ID: " + userID + ", contact ID: " + contactID);
 				return null;
 			}
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "viewSpecificUserContact",
+					"Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "viewSpecificUserContact",
 					"Exception occurred: " + e.getMessage(), e);
 
@@ -323,7 +330,6 @@ public class UserContactOperation {
 			contactDB.setContactMail(new ContactMail());
 			contactDB.setContactPhone(new ContactPhone());
 
-			List<Table> resultList = query.select(contactDB).executeQuery();
 			result = query.update(contact).execute(userID);
 			if (result[0] == 0) {
 				query.rollBackConnection();
@@ -335,7 +341,16 @@ public class UserContactOperation {
 			LoggerSet.logInfo("UserContactOperation", "updateSpecificUserContact",
 					"Contact updated successfully: " + contact.getID());
 			return true;
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "updateSpecificUserContact",
+					"Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "updateSpecificUserContact",
 					"Exception occurred: " + e.getMessage(), e);
 
@@ -364,7 +379,16 @@ public class UserContactOperation {
 
 			LoggerSet.logInfo("UserContactOperation", "deleteAllContactMail", "Contact Mail deleted  successfully ");
 			return true;
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "deleteAllContactMail", "Exception occurred: " + e.getMessage(),
+					e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "deleteAllContactMail", "Exception occurred: " + e.getMessage(),
 					e);
 
@@ -478,9 +502,8 @@ public class UserContactOperation {
 						}
 
 					}
-					LoggerSet.logInfo("UserContactOperation", "mergeUserContacts",
-							"Contact Merged Successfully");
-					
+					LoggerSet.logInfo("UserContactOperation", "mergeUserContacts", "Contact Merged Successfully");
+
 					return true;
 				} else {
 					LoggerSet.logInfo("UserContactOperation", "mergeUserContacts",
@@ -494,7 +517,15 @@ public class UserContactOperation {
 				return false;
 			}
 
-		} catch (
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "mergeUserContacts", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (
 
 		Exception e) {
 			LoggerSet.logError("UserContactOperation", "mergeUserContacts", "Exception occurred: " + e.getMessage(), e);
@@ -525,6 +556,13 @@ public class UserContactOperation {
 
 			LoggerSet.logInfo("UserContactOperation", "deleteAllContactPhone", "Contact Mail deleted  successfully ");
 			return true;
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "deleteAllContactPhone", "Exception occurred: " + e.getMessage(),
+					e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserContactOperation", "deleteAllContactPhone", "Exception occurred: " + e.getMessage(),
 					e);
@@ -563,9 +601,67 @@ public class UserContactOperation {
 						"No contact data available for user ID: " + userID + ", contact ID: " + contact.getID());
 				return null;
 			}
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
 			LoggerSet.logError("UserContactOperation", "viewOauthSpecificUserContact",
 					"Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
+			LoggerSet.logError("UserContactOperation", "viewOauthSpecificUserContact",
+					"Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException(e.getMessage());
+
+		}
+
+	}
+
+	public static List<ContactDetails> viewUserContactOffset(int offset, long userID) throws DBOperationException {
+
+		List<Table> contacts = new ArrayList<Table>();
+		List<ContactDetails> contactOffset = new ArrayList<ContactDetails>();
+		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder();) {
+			query.openConnection();
+			ContactDetails contact = new ContactDetails();
+			ContactMail contactMail = new ContactMail();
+			ContactPhone contactPhone = new ContactPhone();
+
+			contact.setUserID(userID);
+
+			contacts = query.select(contact).where(ContactDetailsSchema.USERID, Operation.EQUAL, userID).limit(LIMIT)
+					.offset(offset * OFFSET).executeQuery();
+
+			if (contacts != null && contacts.size() > 0) {
+
+				for (Table table : contacts) {
+					ContactDetails contactDB = (ContactDetails) table;
+
+				}
+				LoggerSet.logInfo("UserContactOperation", "viewUserContactOffset",
+						"Contact retrieved successfully for page: " + offset);
+
+				System.out.println(
+						"###################3here the size of contact retrieve for offset is " + contacts.size());
+				return contactOffset;
+			} else {
+				LoggerSet.logWarning("UserContactOperation", "viewUserContactOffset",
+						"No contact data available for user ID: " + userID + ", contact ID: " + contact.getID());
+				return null;
+			}
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "viewUserContactOffset", "Exception occurred: " + e.getMessage(),
+					e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		} catch (Exception e) {
+			LoggerSet.logError("UserContactOperation", "viewUserContactOffset", "Exception occurred: " + e.getMessage(),
+					e);
 
 			throw new DBOperationException(e.getMessage());
 

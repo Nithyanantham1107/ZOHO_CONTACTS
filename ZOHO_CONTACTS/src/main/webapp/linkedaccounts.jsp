@@ -73,7 +73,8 @@
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> More</a></li>
+			<li><a href="emails.jsp"> emails</a></li>
+				<li><a href="changePassword.jsp"> change Password</a></li>
 				<li><a href="/logout"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>

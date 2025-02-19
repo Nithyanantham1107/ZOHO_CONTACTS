@@ -93,7 +93,6 @@ public class SessionCacheHandler {
 				}
 
 			}
-			
 
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {

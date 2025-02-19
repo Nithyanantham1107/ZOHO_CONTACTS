@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zohocontacts.dboperation.SessionOperation;
 import com.zohocontacts.loggerfiles.LoggerSet;
+import com.zohocontacts.sessionstorage.CacheData;
 import com.zohocontacts.sessionstorage.CacheModel;
 import com.zohocontacts.sessionstorage.ThreadLocalStorage;
 
@@ -86,9 +87,7 @@ public class SessionFilter implements Filter {
 
 			}
 
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 
 			System.out.println(e);
 			e.printStackTrace();

@@ -6,52 +6,55 @@ import java.util.Queue;
 
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.Operation;
 import com.zohocontacts.dbpojo.tabledesign.Table;
+import com.zohocontacts.exception.QueryBuilderException;
 
 public class WhereQueryGenerater {
 
-	public static void executeQueryWhereBuilder(Table newData, StringBuilder query, Queue<Object> parameters) {
+	public static void executeQueryWhereBuilder(Table newData, StringBuilder query, Queue<Object> parameters)
+			throws QueryBuilderException {
+		try {
 
-		if (newData.getID() != -1) {
-			query.append(" WHERE");
-			query.append(" " + newData.getTableName() + "." + newData.getPrimaryIDName() + " "
-					+ Operation.EQUAL.getOperation() + "?");
-
-			parameters.offer(newData.getID());
-		} else {
-
-			Queue<String> column = new LinkedList<String>();
-
-			for (Map.Entry<String, Object> data : newData.getSettedData().entrySet()) {
-				column.add(data.getKey());
-				parameters.add(data.getValue());
-
-			}
-
-//			PojoDataContainer pojoDataContainer = PojoDataConversion.convertPojoData(newData);
-
-			if (column.size() != 0) {
+			if (newData.getID() != -1) {
 				query.append(" WHERE");
+				query.append(" " + newData.getTableName() + "." + newData.getPrimaryIDName() + " "
+						+ Operation.EQUAL.getOperation() + "?");
 
-				while (column.size() > 0) {
-
-					query.append(" " + column.poll() + " " + Operation.EQUAL.getOperation() + "?");
-
-					if (column.size() != 0)
-						query.append(" and");
-
-				}
-//				parameters = pojoDataContainer.getPojoValue();
-//				parameters.addAll(pojoDataContainer.getPojoValue());
-
+				parameters.offer(newData.getID());
 			} else {
 
-				System.out.println("throw the Exception for empty value to use in where cluse");
+				Queue<String> column = new LinkedList<String>();
+
+				for (Map.Entry<String, Object> data : newData.getSettedData().entrySet()) {
+					column.add(data.getKey());
+					parameters.add(data.getValue());
+
+				}
+
+				if (column.size() != 0) {
+					query.append(" WHERE");
+
+					while (column.size() > 0) {
+
+						query.append(" " + column.poll() + " " + Operation.EQUAL.getOperation() + "?");
+
+						if (column.size() != 0)
+							query.append(" and");
+
+					}
+
+				} else {
+
+					System.out.println("throw the Exception for empty value to use in where cluse");
+
+				}
 
 			}
 
-		}
+			query.append(";");
 
-		query.append(";");
+		} catch (Exception e) {
+			throw new QueryBuilderException(e);
+		}
 
 	}
 

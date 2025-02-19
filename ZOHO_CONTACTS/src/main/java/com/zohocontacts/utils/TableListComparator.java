@@ -3,6 +3,7 @@ package com.zohocontacts.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zohocontacts.dbpojo.ContactDetails;
 import com.zohocontacts.dbpojo.ContactMail;
 import com.zohocontacts.dbpojo.ContactPhone;
 
@@ -59,6 +60,52 @@ public class TableListComparator {
 		}
 
 		return deleteTableList;
+
+	}
+
+	public static ContactDetails contactComparater(ContactDetails contactDB, ContactDetails userContact) {
+
+		ContactDetails comparedContact = new ContactDetails();
+
+		if (!contactDB.getFirstName().equals(userContact.getFirstName())) {
+			comparedContact.setFirstName(userContact.getFirstName());
+
+		}
+
+		if (!contactDB.getMiddleName().equals(userContact.getMiddleName())) {
+			comparedContact.setMiddleName(userContact.getMiddleName());
+
+		}
+
+		if (!contactDB.getLastName().equals(userContact.getLastName())) {
+			comparedContact.setLastName(userContact.getLastName());
+
+		}
+
+		if (!contactDB.getGender().equals(userContact.getGender())) {
+			comparedContact.setGender(userContact.getGender());
+
+		}
+		if (!contactDB.getAddress().equals(userContact.getAddress())) {
+			comparedContact.setAddress(userContact.getAddress());
+
+		}
+
+		if (!contactDB.getOauthContactID().equals(userContact.getOauthContactID())) {
+			comparedContact.setOauthContactID(userContact.getOauthContactID());
+
+		}
+
+		if (contactDB.getOauthContactModifiedTime() != userContact.getOauthContactModifiedTime()) {
+			comparedContact.setOauthcContactModifiedTime(userContact.getOauthContactModifiedTime());
+
+		}
+
+		comparedContact.setAllContactMail(userContact.getAllContactMail());
+
+		comparedContact.setAllContactPhone(userContact.getAllContactphone());
+
+		return comparedContact;
 
 	}
 }

@@ -296,7 +296,12 @@ public class ContactServletHandler {
 						ContactMail tempContactMail = new ContactMail();
 						tempContactMail.setID(ID);
 						tempContactMail.setContactMailID(mails[i]);
-						tempContactMail.setLabelName(emaillabels[i]);
+
+						if (!emaillabels[i].isBlank()) {
+							tempContactMail.setLabelName(emaillabels[i]);
+
+						}
+
 						tempContactMail.setContactID(contactDetail.getID());
 						tempContactMail.setModifiedAt(contactDetail.getModifiedAt());
 						contactDetail.setContactMail(tempContactMail);
@@ -305,7 +310,10 @@ public class ContactServletHandler {
 						ContactMail tempContactMail = new ContactMail();
 						tempContactMail.setContactMailID(mails[i]);
 						tempContactMail.setContactID(contactDetail.getID());
-						tempContactMail.setLabelName(emaillabels[i]);
+						if (!emaillabels[i].isBlank()) {
+							tempContactMail.setLabelName(emaillabels[i]);
+
+						}
 						tempContactMail.setModifiedAt(contactDetail.getModifiedAt());
 						tempContactMail.setCreatedAt(tempContactMail.getModifiedAt());
 						addContactMailList.add(tempContactMail);
@@ -323,7 +331,11 @@ public class ContactServletHandler {
 						int id = Integer.parseInt(phoneID[i]);
 						ContactPhone tempContactPhone = new ContactPhone();
 						tempContactPhone.setID(id);
-						tempContactPhone.setLabelName(phonelabels[i]);
+						if (!phonelabels[i].isBlank()) {
+							tempContactPhone.setLabelName(phonelabels[i]);
+
+						}
+
 						tempContactPhone.setContactPhone(phones[i]);
 						tempContactPhone.setContactID(contactDetail.getID());
 						tempContactPhone.setModifiedAt(contactDetail.getModifiedAt());
@@ -333,7 +345,10 @@ public class ContactServletHandler {
 
 						ContactPhone tempContactPhone = new ContactPhone();
 						tempContactPhone.setContactPhone(phones[i]);
-						tempContactPhone.setLabelName(phonelabels[i]);
+						if (!phonelabels[i].isBlank()) {
+							tempContactPhone.setLabelName(phonelabels[i]);
+
+						}
 						tempContactPhone.setContactID(contactDetail.getID());
 						tempContactPhone.setModifiedAt(contactDetail.getModifiedAt());
 						tempContactPhone.setCreatedAt(tempContactPhone.getModifiedAt());

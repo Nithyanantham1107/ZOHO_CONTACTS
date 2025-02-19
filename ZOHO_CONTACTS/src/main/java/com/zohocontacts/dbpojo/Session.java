@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema;
-import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.UserDataSchema;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 
 public class Session implements Table {
@@ -16,6 +15,9 @@ public class Session implements Table {
 	private long id = -1;
 	private long createdAt = -1;
 	private long modifiedAt = -1;
+
+	private int pageNumber = -1;
+
 	private Map<String, Object> settedData = new HashMap<String, Object>();
 
 	public Session(Map<String, Object> tableData) {
@@ -38,7 +40,7 @@ public class Session implements Table {
 
 		if (tableData.get(SessionSchema.USERID.getColumnName()) != null) {
 
-			setUserId((long ) tableData.get(SessionSchema.USERID.getColumnName()));
+			setUserId((long) tableData.get(SessionSchema.USERID.getColumnName()));
 		}
 		if (tableData.get(SessionSchema.CREATEDTIME.getColumnName()) != null) {
 
@@ -50,7 +52,6 @@ public class Session implements Table {
 		}
 
 	}
-
 
 	public Session() {
 
@@ -68,7 +69,9 @@ public class Session implements Table {
 
 	public void setID(long id) {
 		this.id = id;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.ID.getColumnName(), getID());
+		settedData.put(
+				com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.ID.getColumnName(),
+				getID());
 
 	}
 
@@ -80,7 +83,8 @@ public class Session implements Table {
 	public void setCreatedAt(long createdAt) {
 
 		this.createdAt = createdAt;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.CREATEDTIME.getColumnName(), getCreatedAt());
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.CREATEDTIME
+				.getColumnName(), getCreatedAt());
 	}
 
 	public long getCreatedAt() {
@@ -91,7 +95,8 @@ public class Session implements Table {
 	public void setModifiedAt(long modifiedAt) {
 
 		this.modifiedAt = modifiedAt;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.MODIFIEDTIME.getColumnName(), getModifiedAt());
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.MODIFIEDTIME
+				.getColumnName(), getModifiedAt());
 	}
 
 	public long getModifiedAt() {
@@ -102,7 +107,9 @@ public class Session implements Table {
 
 	public void setUserId(long UserID) {
 		this.userID = UserID;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.USERID.getColumnName(), getUserId());
+		settedData.put(
+				com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.USERID.getColumnName(),
+				getUserId());
 	}
 
 	public long getUserId() {
@@ -111,7 +118,8 @@ public class Session implements Table {
 
 	public void setSessionID(String SessionID) {
 		this.sessionID = SessionID;
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.SESSIONID.getColumnName(), getSessionId());
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.SESSIONID
+				.getColumnName(), getSessionId());
 	}
 
 	public String getSessionId() {
@@ -121,7 +129,8 @@ public class Session implements Table {
 	public void setLastAccessed(long lastAccessed) {
 		this.lastAccessed = lastAccessed;
 
-		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.LASTACCESSED.getColumnName(), getLastAccessed());
+		settedData.put(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionSchema.LASTACCESSED
+				.getColumnName(), getLastAccessed());
 	}
 
 	public long getLastAccessed() {

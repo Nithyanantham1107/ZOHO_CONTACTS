@@ -6,11 +6,12 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType;
 import com.zohocontacts.dbpojo.AuditLog;
 import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.dbpojo.tabledesign.Table;
+import com.zohocontacts.exception.QueryBuilderException;
 
 public class AuditLogOperation {
 
 	public static AuditLog audit(QueryBuilder qg, long rowKey, Table oldData, Table currentData, OpType opType,
-			long userID) {
+			long userID) throws QueryBuilderException {
 
 		int[] result = { -1, -1 };
 
@@ -41,25 +42,27 @@ public class AuditLogOperation {
 
 		}
 
-		if (opType.getOpType().equals(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType.INSERT.getOpType())) {
-json = JsonConverter.ConvertPojoToJson(currentData, userID);
+		if (opType.getOpType()
+				.equals(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType.INSERT.getOpType())) {
+			json = JsonConverter.ConvertPojoToJson(currentData, userID);
 
 			audit.setChangedState(json.toString());
 
 			result = qg.insert(audit).execute(userID);
 
-		} else if (opType.getOpType().equals(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType.UPDATE.getOpType())) {
+		} else if (opType.getOpType()
+				.equals(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType.UPDATE.getOpType())) {
 
 			String[] table = JsonConverter.comparePojoJson(oldData, currentData, userID);
 
-		audit.setPreviousState(table[0]);
-
+			audit.setPreviousState(table[0]);
 
 			audit.setChangedState(table[1]);
 
 			result = qg.insert(audit).execute(userID);
 
-		} else if (opType.getOpType().equals(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType.DELETE.getOpType())) {
+		} else if (opType.getOpType()
+				.equals(com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType.DELETE.getOpType())) {
 			json = JsonConverter.ConvertPojoToJson(oldData, userID);
 
 			audit.setPreviousState(json.toString());

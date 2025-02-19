@@ -39,7 +39,7 @@
 
 <style type="text/css">
 .form-container {
-	max-width: 600px;
+	width: 600px;
 	margin: auto;
 	padding: 20px;
 	background-color: white;
@@ -167,7 +167,8 @@ if (request.getAttribute("errorMessage") != null) {
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-	<li><a href="emails.jsp"> emails</a></li>
+				
+				<li><a href="emails.jsp"> emails</a></li>
 				<li><a href="changePassword.jsp"> change Password</a></li>
 				<li><a href="/logout"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -194,43 +195,92 @@ if (request.getAttribute("errorMessage") != null) {
 
 
 
-			
+			<form action="/user" method="post" style="background-color: white;">
+				<label for="Addemail">Enter email to Add</label> <input
+					type="hidden" value="addemail" name="action" /> <input type="text"
+					name="newemail" placeholder="Enter Email to add">
+
+				<button type="submit" class="glowgreenbutton">Add email</button>
 
 
-
-			<form action="/user" method="POST" id="registration-form">
-
-
-
-
-
-
-
-
-				<input type="hidden" value="changepassword" name="action" />
-
-
-				<section>
-
-					<label for="password">Password</label> <input type="text"
-						name="password" placeholder="Enter current password" required>
-
-
-				</section>
-
-
-
-				<section>
-
-					<label for="Newpassword">NewPassword</label> <input type="text"
-						name="Newpassword" placeholder="Enter New password" required>
-
-
-				</section>
-
-				<button type="submit" class="glowyellowbutton">change
-					Password</button>
 			</form>
+
+
+
+			<section id="table">
+
+				<%
+				if (ud.getallemail() != null && ud.getallemail().size() > 0) {
+				%>
+
+				<table>
+
+					<thead>
+
+
+						<tr>
+							<th>Email</th>
+
+							<th>Delete</th>
+
+
+						</tr>
+
+					</thead>
+					<tbody>
+
+						<%
+						if (ud.getallemail() != null && ud.getallemail().size() > 0) {
+
+							for (EmailUser data : ud.getallemail()) {
+
+								if (!data.getIsPrimary()) {
+						%>
+
+
+
+
+						<tr>
+
+
+							<td><%=data.getEmail()%></td>
+
+
+
+
+
+							<td>
+								<form action="/user" method="post">
+
+									<input type="hidden" value="deleteemail" name="action" /> <input
+										type="hidden" value="<%=data.getID()%>" name="emailID" /> <input
+										type="submit" class="glowredbutton" value="Delete" />
+								</form>
+							</td>
+						</tr>
+
+						<%
+						}
+
+						}
+						}
+						%>
+
+
+
+					</tbody>
+
+				</table>
+
+
+				<%
+				}
+				%>
+
+
+			</section>
+
+
 
 
 		</div>

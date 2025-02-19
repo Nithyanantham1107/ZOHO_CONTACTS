@@ -17,13 +17,11 @@ import com.zohocontacts.sessionstorage.CacheData;
 public class SessionCacheHandleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public SessionCacheHandleServlet() {
 		super();
-	
 
 	}
 
@@ -48,6 +46,7 @@ public class SessionCacheHandleServlet extends HttpServlet {
 			if (request.getParameter("sessionID") != null && !request.getParameter("sessionID").isBlank()) {
 
 				String sessionID = request.getParameter("sessionID");
+				System.out.println("........here the cache data is deleted  for sesssionID" + sessionID);
 				CacheData.deleteAllCache(sessionID);
 
 			} else {
@@ -58,8 +57,8 @@ public class SessionCacheHandleServlet extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			LoggerSet.logError("SessionCacheHandleServlet", "doPost", "Exception occurred while processing user profile.",
-					e);
+			LoggerSet.logError("SessionCacheHandleServlet", "doPost",
+					"Exception occurred while processing user profile.", e);
 		}
 
 	}

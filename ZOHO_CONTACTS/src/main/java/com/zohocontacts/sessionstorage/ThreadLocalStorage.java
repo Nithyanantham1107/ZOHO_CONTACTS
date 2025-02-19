@@ -2,17 +2,19 @@ package com.zohocontacts.sessionstorage;
 
 public class ThreadLocalStorage {
 
-	private static final ThreadLocal<CacheModel> currentUserCache = ThreadLocal.withInitial(() -> new CacheModel());
+	private static final ThreadLocal<CacheModel> CURRENTUSERCACHE = ThreadLocal.withInitial(() -> new CacheModel());
 
 	public static void setCurrentUserCache(CacheModel userCache) {
-		currentUserCache.set(userCache);
+		CURRENTUSERCACHE.set(userCache);
 	}
 
 	public static CacheModel getCurrentUserCache() {
-		return currentUserCache.get();
+		return CURRENTUSERCACHE.get();
 	}
 
 	public static void remove() {
-		currentUserCache.remove();
+		CURRENTUSERCACHE.remove();
+
 	}
+
 }

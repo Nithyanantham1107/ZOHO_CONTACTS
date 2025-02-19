@@ -10,13 +10,15 @@ import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.loggerfiles.LoggerSet;
 
 public class SessionTableCleaner implements Runnable {
-private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
+	private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
+
+	private static final int DELAY = 5 * 60 * 1000;
+
 	public void run() {
 		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder()) {
 
 			query.openConnection();
 			sessionTableCleaner(query);
-		
 
 		} catch (Exception e) {
 
@@ -27,7 +29,6 @@ private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
 
 	private void sessionTableCleaner(QueryBuilder query) {
 
-		
 		List<Table> result = new ArrayList<>();
 		System.out.println("hello im Session Table cleaner");
 
@@ -35,7 +36,6 @@ private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
 		long currentTime;
 
 		try {
-
 			currentTime = Instant.now().toEpochMilli();
 			com.zohocontacts.dbpojo.Session sessions = new com.zohocontacts.dbpojo.Session();
 
@@ -47,7 +47,7 @@ private static final int SESSIONTIMEOUT = 30 * 60 * 1000;
 
 					com.zohocontacts.dbpojo.Session session = (com.zohocontacts.dbpojo.Session) data;
 
-					sessionExpire = session.getLastAccessed() + SESSIONTIMEOUT;
+					sessionExpire = session.getLastAccessed() + SESSIONTIMEOUT + DELAY;
 
 					if (currentTime - sessionExpire > 0) {
 						long userID = session.getUserId();

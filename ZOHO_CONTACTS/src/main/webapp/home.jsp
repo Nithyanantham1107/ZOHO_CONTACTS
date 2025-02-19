@@ -59,7 +59,6 @@
 	List<ContactDetails> userContacts = null;
 
 	ud = cacheModel.getUserData();
-
 	userContacts = UserContactOperation.viewAllUserContacts(ud.getID());
 	%>
 
@@ -234,7 +233,8 @@
 				<li><a href="home.jsp">Contacts</a></li>
 				<li><a href="groups.jsp">Groups</a></li>
 				<li><a href="profile.jsp">Profile</a></li>
-				<li><a href="changePassword.jsp"> More</a></li>
+				<li><a href="emails.jsp"> emails</a></li>
+				<li><a href="changePassword.jsp"> change Password</a></li>
 				<li><a href="/logout"> <i
 						class="fa-solid fa-arrow-right-from-bracket"></i>
 				</a></li>
@@ -275,8 +275,9 @@
 				</section>
 
 				<section id="addbutton">
-					<button id="groupbutton" class="mergelogobutton">	 <img src="asset/merge.png" class="logo" alt="">
-	</button>
+					<button id="groupbutton" class="mergelogobutton">
+						<img src="asset/merge.png" class="logo" alt="">
+					</button>
 
 
 					<form action="addcontacts.jsp">
@@ -325,7 +326,28 @@
 
 
 							<td><%=uc.getFirstName()%></td>
+
+
+
+							<%
+							if (uc.getMiddleName() == null) {
+							%>
+							<td></td>
+
+
+							<%
+							} else {
+							%>
 							<td><%=uc.getMiddleName()%></td>
+
+							<%
+							}
+							%>
+
+
+
+
+
 							<td><%=uc.getLastName()%></td>
 							<td><%=uc.getGender()%></td>
 
@@ -393,7 +415,7 @@
 
 			</section>
 
-
+		
 		</section>
 
 	</section>

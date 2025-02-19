@@ -8,7 +8,6 @@ public class Outh2Credentials {
 	private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.profile  https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts";
 	private static final String AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 	private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
-
 	public static String getClientID() {
 		return clientID;
 	}

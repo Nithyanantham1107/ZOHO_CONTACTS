@@ -14,6 +14,7 @@ import com.zohocontacts.dbpojo.Oauth;
 import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 
 public class UserOperation {
@@ -49,6 +50,10 @@ public class UserOperation {
 					"User created successfully: " + userData.getLoginCredentials().getUserName());
 			return userData;
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "createUser", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserOperation", "createUser", "Exception occurred: " + e.getMessage(), e);
 
@@ -78,6 +83,10 @@ public class UserOperation {
 
 			return email;
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "addEmail", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserOperation", "addEmail", "Exception occurred: " + e.getMessage(), e);
 
@@ -129,7 +138,8 @@ public class UserOperation {
 
 						userData = (UserData) resultList.getFirst();
 					} else {
-						LoggerSet.logError("UserOperation", "isUser", "Invalid credentials for user: " + userName, null);
+						LoggerSet.logError("UserOperation", "isUser", "Invalid credentials for user: " + userName,
+								null);
 						return null;
 
 					}
@@ -164,7 +174,8 @@ public class UserOperation {
 
 						userData = (UserData) resultList.getFirst();
 					} else {
-						LoggerSet.logError("UserOperation", "isUser", "Invalid credentials for user: " + userName, null);
+						LoggerSet.logError("UserOperation", "isUser", "Invalid credentials for user: " + userName,
+								null);
 						return null;
 
 					}
@@ -186,6 +197,10 @@ public class UserOperation {
 				return null;
 			}
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "isUser", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserOperation", "isUser", "Exception occurred: " + e.getMessage(), e);
 
@@ -290,6 +305,10 @@ public class UserOperation {
 					"User data updated successfully for: " + userData.getLoginCredentials().getUserName());
 			return true;
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "userDataUpdate", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		}
 
 		catch (Exception e) {
@@ -350,6 +369,10 @@ public class UserOperation {
 					"User data updated successfully for: " + userData.getLoginCredentials().getUserName());
 			return true;
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "userprofileUpdate", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		}
 
 		catch (Exception e) {
@@ -386,7 +409,13 @@ public class UserOperation {
 						"Failed to delete user profile for userId: " + userData.getID(), null);
 				return false;
 			}
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "deleteUserProfile", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserOperation", "deleteUserProfile", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -417,6 +446,12 @@ public class UserOperation {
 						"Failed to retrieve user email for userId: " + email.getEmailId(), null);
 				return null;
 			}
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "getAllemail", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserOperation", "getAllemail", "Exception occurred: " + e.getMessage(), e);
 
@@ -434,14 +469,21 @@ public class UserOperation {
 			result = query.delete(email).execute(userID);
 
 			if (result[0] != -1) {
-				LoggerSet.logInfo("UserOperation", "deleteUserEmail", "Email deleted successfully for userId: " + userID);
+				LoggerSet.logInfo("UserOperation", "deleteUserEmail",
+						"Email deleted successfully for userId: " + userID);
 				return true;
 			} else {
 				LoggerSet.logError("UserOperation", "deleteUserEmail", "Failed to delete email for userId: " + userID,
 						null);
 				return false;
 			}
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "deleteUserEmail", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserOperation", "deleteUserEmail", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -480,16 +522,22 @@ public class UserOperation {
 			resultList = query.select(user).executeQuery();
 			if (resultList.size() > 0) {
 				user = (UserData) resultList.getFirst();
-				
-				
-		
+
 				LoggerSet.logInfo("UserOperation", "getUserData",
 						"User data retrieved successfully for userId: " + userId);
 				return user;
 			} else {
 				LoggerSet.logError("UserOperation", "getUserData", "No user found for userId: " + userId, null);
 			}
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "getUserData", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("UserOperation", "getUserData", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -507,7 +555,6 @@ public class UserOperation {
 
 			query.openConnection();
 
-		
 			if (BCrypt.checkpw(oldPassword, oldUser.getPassword())) {
 
 				String password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
@@ -535,6 +582,12 @@ public class UserOperation {
 			LoggerSet.logInfo("UserOperation", "userPasswordChange", "password successfully for userID: " + userID);
 			return true;
 
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("UserOperation", "userPasswordChange", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		}
 
 		catch (Exception e) {

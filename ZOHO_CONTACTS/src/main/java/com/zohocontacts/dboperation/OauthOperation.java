@@ -9,11 +9,10 @@ import com.zohocontacts.dbpojo.Oauth;
 import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 
 public class OauthOperation {
-
-	
 
 	public static Oauth addOauth(Oauth oauth, long userID) throws DBOperationException {
 
@@ -36,6 +35,10 @@ public class OauthOperation {
 			LoggerSet.logInfo("OauthOperation", "addOauth", "Oauth added successfully: " + oauth.getAccessToken());
 			return oauth;
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("OauthOperation", "addOauth", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("OauthOperation", "addOauth", "Exception occurred: " + e.getMessage(), e);
 
@@ -69,15 +72,22 @@ public class OauthOperation {
 			LoggerSet.logInfo("OauthOperation", "isOauthExist", "Oauth data found: " + oauth.getEmail());
 			return oauth;
 
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("OauthOperation", "isOauthExist", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("OauthOperation", "isOauthExist", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
 		}
 
 	}
-	
-	
+
 	public static Oauth getOauth(Oauth oauth) throws DBOperationException {
 
 		List<Table> resultList = new ArrayList<Table>();
@@ -85,7 +95,6 @@ public class OauthOperation {
 		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder();) {
 
 			query.openConnection();
-	
 
 			resultList = query.select(oauth).executeQuery();
 
@@ -100,7 +109,15 @@ public class OauthOperation {
 			LoggerSet.logInfo("OauthOperation", "getOauth", "Oauth data found: " + oauth.getEmail());
 			return oauth;
 
-		} catch (Exception e) {
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("OauthOperation", "getOauth", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("OauthOperation", "getOauth", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -128,7 +145,13 @@ public class OauthOperation {
 			LoggerSet.logInfo("OauthOperation", "updateOauth", "Oauth data Updated successfully: " + oauth.getEmail());
 			return true;
 
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("OauthOperation", "updateOauth", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("OauthOperation", "updateOauth", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -174,8 +197,15 @@ public class OauthOperation {
 			}
 
 			query.commit();
-			LoggerSet.logInfo("OauthOperation", "setOauthSynncOn", "Oauth data Updated successfully: " + oauth.getEmail());
+			LoggerSet.logInfo("OauthOperation", "setOauthSynncOn",
+					"Oauth data Updated successfully: " + oauth.getEmail());
 
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("OauthOperation", "setOauthSynncOn", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (
 
 		Exception e) {
@@ -229,7 +259,13 @@ public class OauthOperation {
 			LoggerSet.logInfo("OauthOperation", "setOauthSynncOff",
 					"Oauth data Updated successfully: " + oauth.getEmail());
 
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("OauthOperation", "setOauthSynncOff", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("OauthOperation", "setOauthSynncOff", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
@@ -262,33 +298,30 @@ public class OauthOperation {
 			List<Oauth> oauths = new ArrayList<>();
 			if (resultList != null && resultList.size() > 0) {
 
-				
-
 				for (Table oauthdata : resultList) {
 
 					oauths.add((Oauth) oauthdata);
 
 				}
 
-			
 			}
-			
-				
-				
-			System.out.println("the ouath size in Db data from Dao is"+oauths.size());
+
+			System.out.println("the ouath size in Db data from Dao is" + oauths.size());
 			user.setAllOauth(oauths);
-			
 
-			System.out.println("the ouath size in Db data cache is"+user.getallOauth().size());
+			System.out.println("the ouath size in Db data cache is" + user.getallOauth().size());
 
-				
-			
-			
 			query.commit();
 			LoggerSet.logInfo("OauthOperation", "deleteOauthSynncOff",
 					"Oauth data deleted successfully: " + oauth.getEmail());
 
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("OauthOperation", "deleteOauthSynncOff", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("OauthOperation", "deleteOauthSynncOff", "Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());

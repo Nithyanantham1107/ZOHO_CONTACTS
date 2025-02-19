@@ -50,23 +50,23 @@ public class UserServletHandler {
 					}
 
 					LoggerSet.logInfo("AddUserEmailServlet", "doPost",
-							"Contact added successfully for user ID: " + userData.getID());
-					response.sendRedirect("changePassword.jsp");
+							"email added successfully for user ID: " + userData.getID());
+					response.sendRedirect("emails.jsp");
 				} else {
 					LoggerSet.logWarning("AddUserEmailServlet", "doPost",
 							"Error in adding contact for user ID: " + userData.getID());
 					request.setAttribute("errorMessage", "Error in adding contact");
-					request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+					request.getRequestDispatcher("emails.jsp").forward(request, response);
 				}
 			} else {
 				LoggerSet.logWarning("AddUserEmailServlet", "doPost", "Parameter Data is empty!");
 				request.setAttribute("errorMessage", "Parameter Data is empty!!");
-				request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+				request.getRequestDispatcher("emails.jsp").forward(request, response);
 			}
 		} catch (DBOperationException e) {
 			LoggerSet.logError("AddUserEmailServlet", "doPost", "Exception occurred", e);
 			request.setAttribute("errorMessage", e);
-			request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+			request.getRequestDispatcher("emails.jsp").forward(request, response);
 		}
 	}
 
@@ -132,21 +132,21 @@ public class UserServletHandler {
 					}
 
 					LoggerSet.logInfo("DeleteUserEmailServlet", "doPost", "email deleted successfully: " + emailID);
-					response.sendRedirect("changePassword.jsp");
+					response.sendRedirect("emails.jsp");
 				} else {
 					LoggerSet.logWarning("DeleteUserEmailServlet", "doPost", "Unable to delete email: " + emailID);
 					request.setAttribute("errorMessage", "Unable to delete email");
-					request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+					request.getRequestDispatcher("emails.jsp").forward(request, response);
 				}
 			} else {
 				LoggerSet.logWarning("DeleteUserEmailServlet", "doPost", "Email ID is null or empty");
 				request.setAttribute("errorMessage", "Unable to delete Email because specified Email ID is null");
-				request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+				request.getRequestDispatcher("emails.jsp").forward(request, response);
 			}
 		} catch (DBOperationException e) {
 			LoggerSet.logError("DeleteUserEmailServlet", "doPost", "Exception occurred while deleting Email", e);
 			request.setAttribute("errorMessage", e);
-			request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+			request.getRequestDispatcher("emails.jsp").forward(request, response);
 		}
 	}
 

@@ -17,89 +17,113 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.SessionS
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.dbpojo.tabledesign.TableWithChild;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 
 public class DeleteOperation {
 	private static long userId = -1;
 
 	public static Table deleteTable(QueryBuilder qg, Connection con, com.zohocontacts.dbpojo.tabledesign.Table table,
-			StringBuilder query, Queue<Object> parameters)  {
+			StringBuilder query, Queue<Object> parameters) throws QueryBuilderException {
 
-		List<Table> data = qg.select(table).executeQuery();
-		query.append("DELETE FROM " + table.getTableName() + " ");
+		try {
+			List<Table> data = qg.select(table).executeQuery();
+			query.append("DELETE FROM " + table.getTableName() + " ");
 
-		if (data.size() > 0) {
+			if (data.size() > 0) {
 
-			table = data.getFirst();
+				table = data.getFirst();
 
-			return table;
+				return table;
 
-		} else {
+			} else {
 
-			System.out.println("no value available for the table" + table.getTableName());
-			return null;
+				System.out.println("no value available for the table" + table.getTableName());
+				return null;
 
+			}
+		} catch (Exception e) {
+
+			throw new QueryBuilderException();
 		}
 
 	}
 
 	public static int[] execute(QueryBuilder qg, Connection con, String query, Queue<Object> parameters, Table oldData,
-			long userID) {
-		Queue<Object> values = new LinkedList<Object>();
-		values.addAll(parameters);
-		parameters.clear();
-		if (oldData instanceof TableWithChild) {
+			long userID) throws QueryBuilderException {
 
-			TableWithChild parentTable = (TableWithChild) oldData;
-			DeleteOperation.deleteChildTable(qg, parentTable, userID);
-		}
+		try {
+			Queue<Object> values = new LinkedList<Object>();
+			values.addAll(parameters);
+			parameters.clear();
+			if (oldData instanceof TableWithChild) {
 
-		System.out.println("here delete is " + query + "  then " + values);
-		int[] data = QueryExecuter.mySqlExecuter(con, query, values, OpType.DELETE);
-
-		if (data[0] == -1) {
-			return null;
-		}
-
-		if (
-
-		oldData != null && (!oldData.getTableName().equals(AuditLogSchema.ID.getTableName())
-				&& !oldData.getTableName().equals(SessionSchema.ID.getTableName()))) {
-
-			if (AuditLogOperation.audit(qg, oldData.getID(), oldData, null, OpType.DELETE, userID) == null) {
-				System.out.println("Table" + oldData.getTableName() + "  is not audited");
+				TableWithChild parentTable = (TableWithChild) oldData;
+				DeleteOperation.deleteChildTable(qg, parentTable, userID);
 			}
 
-		}
+			System.out.println("here delete is " + query + "  then " + values);
+			int[] data = QueryExecuter.mySqlExecuter(con, query, values, OpType.DELETE);
 
-		return data;
-	}
+			if (data[0] == -1) {
+				return null;
+			}
 
-	public static void deleteChildTable(QueryBuilder qg, TableWithChild table, long userID) {
-		userId = userID;
+			if (
 
-		System.out.println("here delete table name" + table.getTableName());
+			oldData != null && (!oldData.getTableName().equals(AuditLogSchema.ID.getTableName())
+					&& !oldData.getTableName().equals(SessionSchema.ID.getTableName()))) {
 
-		for (Table childTable : table.getDeleteChildTable()) {
-			Map<String, Object> tableData = new HashMap<String, Object>();
-			tableData.put(table.getForiegnkey(childTable.getTableName()), table.getID());
-			Table deleteTable = childTable.getNewTable(tableData);
-			auditall(qg, deleteTable);
+				if (AuditLogOperation.audit(qg, oldData.getID(), oldData, null, OpType.DELETE, userID) == null) {
+					System.out.println("Table" + oldData.getTableName() + "  is not audited");
+				}
+
+			}
+
+			return data;
+
+		} catch (Exception e) {
+			throw new QueryBuilderException(e);
 		}
 
 	}
 
-	private static void auditall(QueryBuilder qg, Table table) {
+	public static void deleteChildTable(QueryBuilder qg, TableWithChild table, long userID)
+			throws QueryBuilderException {
 
-		List<Table> tables = qg.select(table).executeQuery();
-		if (tables.size() > 0) {
+		try {
+			userId = userID;
+			System.out.println("here delete table name" + table.getTableName());
 
-			for (Table tableData : tables) {
-				System.out.println("here group ID " + tableData.getTableName() + "  then ID" + tableData.getID());
+			for (Table childTable : table.getDeleteChildTable()) {
+				Map<String, Object> tableData = new HashMap<String, Object>();
+				tableData.put(table.getForiegnkey(childTable.getTableName()), table.getID());
+				Table deleteTable = childTable.getNewTable(tableData);
+				auditall(qg, deleteTable);
+			}
 
-				AuditLogOperation.audit(qg, tableData.getID(), tableData, null, OpType.DELETE, userId);
+		} catch (Exception e) {
+			throw new QueryBuilderException();
+		}
+
+	}
+
+	private static void auditall(QueryBuilder qg, Table table) throws QueryBuilderException {
+		try {
+
+			List<Table> tables = qg.select(table).executeQuery();
+			if (tables.size() > 0) {
+
+				for (Table tableData : tables) {
+					System.out.println("here group ID " + tableData.getTableName() + "  then ID" + tableData.getID());
+
+					AuditLogOperation.audit(qg, tableData.getID(), tableData, null, OpType.DELETE, userId);
+
+				}
 
 			}
 
+		} catch (Exception e) {
+			throw new QueryBuilderException(e);
 		}
 
 	}

@@ -165,7 +165,7 @@ public class ContactDetails implements TableWithChild {
 		contactPhones.add(contactPhone);
 	}
 
-	public void setAllContactPhone(ArrayList<ContactPhone> phone) {
+	public void setAllContactPhone(List<ContactPhone> phone) {
 
 		contactPhones = phone;
 	}
@@ -186,7 +186,7 @@ public class ContactDetails implements TableWithChild {
 		return null;
 	}
 
-	public void setAllContactMail(ArrayList<ContactMail> mail) {
+	public void setAllContactMail(List<ContactMail> mail) {
 
 		contactMails = mail;
 	}

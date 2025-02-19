@@ -20,9 +20,6 @@ public class GenericPojoMapper {
 			throws SQLException {
 		List<Table> data = new ArrayList<>();
 		Map<Long, Table> uniqueList = new HashMap<Long, Table>();
-
-//		this.result = result;
-//		this.columnNames = columnNames;
 		List<Table> childTables = new ArrayList<>();
 
 		if (selectTable instanceof TableWithChild) {

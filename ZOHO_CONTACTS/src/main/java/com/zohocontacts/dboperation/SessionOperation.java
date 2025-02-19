@@ -17,6 +17,7 @@ import com.zohocontacts.dbpojo.Session;
 import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 import com.zohocontacts.sessionstorage.CacheData;
 import com.zohocontacts.sessionstorage.CacheModel;
@@ -78,7 +79,13 @@ public class SessionOperation {
 			addSessionCacheData(session, cachemodel);
 
 			return sessionid;
-		} catch (Exception e) {
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("SessionOperation", "generateSessionId", "Exception occurred", e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
 			LoggerSet.logError("SessionOperation", "generateSessionId", "Exception occurred", e);
 
 			throw new DBOperationException(e.getMessage());
@@ -139,6 +146,12 @@ public class SessionOperation {
 			}
 			CacheData.deleteAllCache(sessionID);
 			return true;
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("SessionOperation", "DeleteSessionData", "Exception occurred", e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("SessionOperation", "DeleteSessionData", "Exception occurred", e);
 
@@ -219,6 +232,10 @@ public class SessionOperation {
 
 			}
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("SessionOperation", "checkSessionAlive", "Exception occurred", e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("SessionOperation", "checkSessionAlive", "Exception occurred", e);
 
@@ -254,6 +271,10 @@ public class SessionOperation {
 
 			CacheData.addUserCache(session, cachemodel);
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("SessionOperation", "addSessionCacheData(", "Exception occurred", e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("SessionOperation", "addSessionCacheData(", "Exception occurred", e);
 

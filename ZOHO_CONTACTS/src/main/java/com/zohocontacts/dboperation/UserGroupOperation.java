@@ -11,6 +11,7 @@ import com.zohocontacts.dbpojo.CategoryRelation;
 import com.zohocontacts.dbpojo.ContactDetails;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 
 public class UserGroupOperation {
@@ -45,6 +46,10 @@ public class UserGroupOperation {
 			LoggerSet.logInfo("UserGroupOperation", "createGroup",
 					"Group created successfully: " + category.getCategoryName());
 			return true;
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "createGroup", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "createGroup", "Exception occurred: " + e.getMessage(), e);
 			throw new DBOperationException(e.getMessage());
@@ -88,6 +93,10 @@ public class UserGroupOperation {
 
 			LoggerSet.logInfo("UserGroupOperation", "viewAllGroup", "Groups retrieved for user ID: " + userid);
 			return usergroups;
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "viewAllGroup", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "viewAllGroup", "Exception occurred: " + e.getMessage(), e);
 
@@ -118,6 +127,10 @@ public class UserGroupOperation {
 			}
 			LoggerSet.logInfo("UserGroupOperation", "deleteUserGroup", "Group deleted successfully: " + category);
 			return true;
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "deleteUserGroup", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "deleteUserGroup", "Exception occurred: " + e.getMessage(), e);
 
@@ -166,6 +179,10 @@ public class UserGroupOperation {
 				return null;
 			}
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(),
+					e);
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(),
 					e);
@@ -216,6 +233,10 @@ public class UserGroupOperation {
 
 			}
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(),
+					e);
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(),
 					e);
@@ -248,6 +269,11 @@ public class UserGroupOperation {
 				return null;
 			}
 
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(),
+					e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "viewUserGroupContact", "Exception occurred: " + e.getMessage(),
 					e);
@@ -305,6 +331,10 @@ public class UserGroupOperation {
 			LoggerSet.logInfo("UserGroupOperation", "updateUserGroup",
 					"Group updated successfully: " + category.getID());
 			return true;
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserContactOperation", "addUserContact", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "updateUserGroup", "Exception occurred: " + e.getMessage(), e);
 
@@ -342,6 +372,11 @@ public class UserGroupOperation {
 			LoggerSet.logInfo("UserGroupOperation", "removeGroupContacts",
 					"Group  contacts removed successfully: " + categoryRelation.getCategoryID());
 			return true;
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "dremoveGroupContacts", "Exception occurred: " + e.getMessage(),
+					e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "dremoveGroupContacts", "Exception occurred: " + e.getMessage(),
 					e);
@@ -369,6 +404,10 @@ public class UserGroupOperation {
 			LoggerSet.logInfo("UserGroupOperation", "addGroupContacts",
 					"Group  contacts added successfully: " + categoryRelation.getCategoryID());
 			return true;
+		} catch (QueryBuilderException e) {
+			LoggerSet.logError("UserGroupOperation", "addGroupContacts", "Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("UserGroupOperation", "addGroupContacts", "Exception occurred: " + e.getMessage(), e);
 

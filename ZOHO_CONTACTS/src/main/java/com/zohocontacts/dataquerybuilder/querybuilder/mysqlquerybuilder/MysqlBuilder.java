@@ -19,6 +19,7 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.OpType;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.Operation;
 import com.zohocontacts.dbconnect.DBconnection;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 
 public class MysqlBuilder implements QueryBuilder {
 	private StringBuilder query = new StringBuilder();
@@ -39,58 +40,60 @@ public class MysqlBuilder implements QueryBuilder {
 	};
 
 	@Override
-	public void close() {
-		closeConnection();
-
-	}
-
-	@Override
-	public void openConnection() {
-		try {
-			this.con.setAutoCommit(false);
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void closeConnection() {
+	public void close() throws QueryBuilderException {
 		try {
 			this.con.commit();
 			this.con.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new QueryBuilderException(e);
+
 		}
 
 	}
 
 	@Override
-	public void rollBackConnection() {
+	public void openConnection() throws QueryBuilderException {
+		try {
+			this.con.setAutoCommit(false);
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+			throw new QueryBuilderException(e);
+		}
+
+	}
+
+	@Override
+	public void rollBackConnection() throws QueryBuilderException {
 		try {
 			this.con.rollback();
 		} catch (SQLException e) {
 
 			e.printStackTrace();
+
+			throw new QueryBuilderException(e);
 		}
 
 	}
 
 	@Override
-	public void commit() {
+	public void commit() throws QueryBuilderException {
 		try {
 			this.con.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
+
+			throw new QueryBuilderException(e);
 		}
 
 	}
 
 	@Override
-	public QueryBuilder select(com.zohocontacts.dbpojo.tabledesign.Table table) {
+	public QueryBuilder select(com.zohocontacts.dbpojo.tabledesign.Table table) throws QueryBuilderException {
 
 		query.setLength(0);
 		newData = table;
@@ -102,7 +105,7 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder delete(com.zohocontacts.dbpojo.tabledesign.Table table) {
+	public QueryBuilder delete(com.zohocontacts.dbpojo.tabledesign.Table table) throws QueryBuilderException {
 		opType = OpType.DELETE;
 
 		query.setLength(0);
@@ -119,7 +122,7 @@ public class MysqlBuilder implements QueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder insert(com.zohocontacts.dbpojo.tabledesign.Table table) {
+	public QueryBuilder insert(com.zohocontacts.dbpojo.tabledesign.Table table) throws QueryBuilderException {
 		opType = OpType.INSERT;
 		isValid = true;
 		query.setLength(0);
@@ -128,7 +131,7 @@ public class MysqlBuilder implements QueryBuilder {
 		return this;
 	}
 
-	public QueryBuilder update(com.zohocontacts.dbpojo.tabledesign.Table table) {
+	public QueryBuilder update(com.zohocontacts.dbpojo.tabledesign.Table table) throws QueryBuilderException {
 
 		opType = OpType.UPDATE;
 		query.setLength(0);
@@ -142,6 +145,18 @@ public class MysqlBuilder implements QueryBuilder {
 			isValid = true;
 		}
 
+		return this;
+	}
+
+	@Override
+	public QueryBuilder offset(int offsetValue) {
+		query.append(" OFFSET " + offsetValue + " ");
+		return this;
+	}
+
+	@Override
+	public QueryBuilder limit(int limit) {
+		query.append(" LIMIT " + limit + " ");
 		return this;
 	}
 
@@ -180,7 +195,7 @@ public class MysqlBuilder implements QueryBuilder {
 		}
 	}
 
-	public List<com.zohocontacts.dbpojo.tabledesign.Table> executeQuery() {
+	public List<com.zohocontacts.dbpojo.tabledesign.Table> executeQuery() throws QueryBuilderException {
 		if (!isWhereAdded) {
 
 			WhereQueryGenerater.executeQueryWhereBuilder(newData, query, parameters);
@@ -189,7 +204,8 @@ public class MysqlBuilder implements QueryBuilder {
 			query.append(";");
 		}
 
-		List<com.zohocontacts.dbpojo.tabledesign.Table> result = SelectJoinerOperation.executeQuery(con, query.toString(), parameters, newData);
+		List<com.zohocontacts.dbpojo.tabledesign.Table> result = SelectJoinerOperation.executeQuery(con,
+				query.toString(), parameters, newData);
 
 		query.setLength(0);
 		isWhereAdded = false;
@@ -197,7 +213,7 @@ public class MysqlBuilder implements QueryBuilder {
 
 	}
 
-	public int[] execute(long userID) {
+	public int[] execute(long userID) throws QueryBuilderException {
 		int[] result = { -1, -1 };
 		if (!isValid) {
 

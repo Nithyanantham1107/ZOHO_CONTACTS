@@ -13,31 +13,36 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.Operatio
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.dbpojo.tabledesign.TableWithChild;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 
 public class SelectJoinerOperation {
 
 	public static QueryBuilder selectTable(Table table, Connection con, QueryBuilder qg, StringBuilder query,
-			Queue<Object> parameters) {
+			Queue<Object> parameters) throws QueryBuilderException {
+		try {
 
-		query.append("SELECT");
+			query.append("SELECT");
 
-		query.append(" * ");
-		query.append("FROM");
+			query.append(" * ");
+			query.append("FROM");
 
-		query.append(" " + table.getTableName());
+			query.append(" " + table.getTableName());
 
-		if (table instanceof TableWithChild) {
+			if (table instanceof TableWithChild) {
 
-			TableWithChild parentTable = (TableWithChild) table;
-			SelectJoinerOperation.joinTable(query, parentTable);
+				TableWithChild parentTable = (TableWithChild) table;
+				SelectJoinerOperation.joinTable(query, parentTable);
+			}
+
+			return qg;
+		} catch (Exception e) {
+			throw new QueryBuilderException(e);
 		}
-
-		return qg;
 
 	}
 
 	public static List<com.zohocontacts.dbpojo.tabledesign.Table> executeQuery(Connection con, String query,
-			Queue<Object> parameters, Table table)  {
+			Queue<Object> parameters, Table table) {
 
 		List<com.zohocontacts.dbpojo.tabledesign.Table> result = QueryExecuter.mySqlExecuteQuery(con, query, parameters,
 				table);
@@ -46,30 +51,34 @@ public class SelectJoinerOperation {
 
 	}
 
-	private static void joinTable(StringBuilder query, TableWithChild table) {
+	private static void joinTable(StringBuilder query, TableWithChild table) throws QueryBuilderException {
 		ArrayList<Table> uniqueChildList = new ArrayList<Table>();
+		try {
+			for (Table child : table.getChildTables()) {
+				Boolean isExist = false;
+				for (Table tables : uniqueChildList) {
 
-		for (Table child : table.getChildTables()) {
-			Boolean isExist = false;
-			for (Table tables : uniqueChildList) {
-
-				if (child.getTableName().equals(tables.getTableName())) {
-					isExist = true;
-					break;
+					if (child.getTableName().equals(tables.getTableName())) {
+						isExist = true;
+						break;
+					}
 				}
+
+				if (!isExist) {
+
+					uniqueChildList.add(child);
+				}
+
 			}
 
-			if (!isExist) {
+			for (Table childTable : uniqueChildList) {
 
-				uniqueChildList.add(child);
+				joinTable(query, JoinType.LEFT, table.getTableName(), table.getPrimaryIDName(), Operation.EQUAL,
+						childTable.getTableName(), table.getForiegnkey(childTable.getTableName()));
 			}
 
-		}
-
-		for (Table childTable : uniqueChildList) {
-
-			joinTable(query, JoinType.LEFT, table.getTableName(), table.getPrimaryIDName(), Operation.EQUAL,
-					childTable.getTableName(), table.getForiegnkey(childTable.getTableName()));
+		} catch (Exception e) {
+			throw new QueryBuilderException(e);
 		}
 
 	}

@@ -11,11 +11,11 @@ import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.ServerRe
 import com.zohocontacts.dbpojo.ServerRegistry;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.QueryBuilderException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 
 public class ServerRegistryOperation {
 
-	
 	public static ServerRegistry insertServerRegistry(String serverIP, long serverPort) throws DBOperationException {
 
 		int[] result = { -1, -1 };
@@ -43,9 +43,18 @@ public class ServerRegistryOperation {
 
 			return server;
 
-		} catch (Exception e) {
-			LoggerSet.logError("ServerRegistryOperation", "insertServerRegistry", "Exception occurred: " + e.getMessage(),
-					e);
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("ServerRegistryOperation", "insertServerRegistry",
+					"Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
+		}
+
+		catch (Exception e) {
+			LoggerSet.logError("ServerRegistryOperation", "insertServerRegistry",
+					"Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
 		}
@@ -75,9 +84,16 @@ public class ServerRegistryOperation {
 
 			return true;
 
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("ServerRegistryOperation", "deleteServerRegistry",
+					"Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
-			LoggerSet.logError("ServerRegistryOperation", "deleteServerRegistry", "Exception occurred: " + e.getMessage(),
-					e);
+			LoggerSet.logError("ServerRegistryOperation", "deleteServerRegistry",
+					"Exception occurred: " + e.getMessage(), e);
 
 			throw new DBOperationException(e.getMessage());
 		}
@@ -111,6 +127,13 @@ public class ServerRegistryOperation {
 
 			return servers;
 
+		}
+
+		catch (QueryBuilderException e) {
+			LoggerSet.logError("ServerRegistryOperation", "getServerRegistryExcept",
+					"Exception occurred: " + e.getMessage(), e);
+
+			throw new DBOperationException("Error proccesing DBOperation", e);
 		} catch (Exception e) {
 			LoggerSet.logError("ServerRegistryOperation", "getServerRegistryExcept",
 					"Exception occurred: " + e.getMessage(), e);
