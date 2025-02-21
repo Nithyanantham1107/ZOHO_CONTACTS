@@ -205,7 +205,8 @@ if (request.getAttribute("errorMessage") != null) {
 							<td><%=uc.getGender()%></td>
 
 							<%
-							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0
+									&& uc.getAllContactMail().getFirst().getContactMailID() != null) {
 							%>
 							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
 
@@ -213,14 +214,15 @@ if (request.getAttribute("errorMessage") != null) {
 							<%
 							} else {
 							%>
-							<td>Mail</td>
+							<td></td>
 
 							<%
 							}
 							%>
 
 							<%
-							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0
+									&& uc.getAllContactphone().getFirst().getContactPhone() != null) {
 							%>
 							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
 
@@ -228,7 +230,7 @@ if (request.getAttribute("errorMessage") != null) {
 							<%
 							} else {
 							%>
-							<td>Phone</td>
+							<td></td>
 
 							<%
 							}
@@ -282,7 +284,16 @@ if (request.getAttribute("errorMessage") != null) {
 
 
 
-
+<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 

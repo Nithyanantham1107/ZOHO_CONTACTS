@@ -136,12 +136,6 @@
     
     
     
-    	<% if (request.getAttribute("errorMessage") != null) { %>
-    <script type="text/javascript">
-        alert("<%= request.getAttribute("errorMessage") %>");
-    </script>
-<% } %>
-
 </head>
 <body>
  <div class="container">
@@ -210,6 +204,15 @@
         </form>
        
     </div>
+    
+    
+    
+    	<% if (request.getAttribute("errorMessage") != null) { %>
+    <script type="text/javascript">
+        alert("<%= request.getAttribute("errorMessage") %>");
+    </script>
+<% } %>
+    
     
     <script>
     

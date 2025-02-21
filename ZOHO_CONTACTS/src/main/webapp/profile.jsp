@@ -118,11 +118,7 @@ button {
 
 </head>
 <body>
-	<% if (request.getAttribute("errorMessage") != null) { %>
-    <script type="text/javascript">
-        alert("<%= request.getAttribute("errorMessage") %>");
-    </script>
-<% } %>
+	
 
 
 
@@ -282,7 +278,11 @@ button {
 
 
 
-
+<% if (request.getAttribute("errorMessage") != null) { %>
+    <script type="text/javascript">
+        alert("<%= request.getAttribute("errorMessage") %>");
+    </script>
+<% } %>
 
 
 

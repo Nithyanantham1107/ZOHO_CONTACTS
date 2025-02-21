@@ -91,11 +91,14 @@ background-color:white;
 	
 		border: none;
 margin-right:15px;
-	
+background-color:#dda853;
+	width: 58px;
+  border-radius: 13px;
 	img{
-	
+	background-color:#dda853;
 	height:40px;
 	width:40px;
+	
 	}
 
 	

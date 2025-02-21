@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zohocontacts.loggerfiles.LoggerSet;
 import com.zohocontacts.servletHandler.GroupServletHandler;
-import com.zohocontacts.servletHandler.UserServletHandler;
 
 /**
  * Servlet implementation class GroupServlet
@@ -17,7 +16,6 @@ import com.zohocontacts.servletHandler.UserServletHandler;
 
 public class GroupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */

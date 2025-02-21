@@ -32,16 +32,7 @@
 
 </head>
 <body>
-	<%
-	if (request.getAttribute("errorMessage") != null) {
-	%>
-	<script type="text/javascript">
-        alert("<%=request.getAttribute("errorMessage")%>
-		");
-	</script>
-	<%
-	}
-	%>
+	
 
 
 
@@ -148,7 +139,8 @@
 							<td><%=uc.getFirstName()%></td>
 
 							<%
-							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0
+									&& uc.getAllContactMail().getFirst().getContactMailID() != null) {
 							%>
 							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
 
@@ -156,14 +148,15 @@
 							<%
 							} else {
 							%>
-							<td>Mail</td>
+							<td></td>
 
 							<%
 							}
 							%>
 
 							<%
-							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0
+									&& uc.getAllContactphone().getFirst().getContactPhone() != null) {
 							%>
 							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
 
@@ -171,7 +164,7 @@
 							<%
 							} else {
 							%>
-							<td>Phone</td>
+							<td></td>
 
 							<%
 							}
@@ -276,7 +269,7 @@
 
 				<section id="addbutton">
 					<button id="groupbutton" class="mergelogobutton">
-						<img src="asset/merge.png" class="logo" alt="">
+						<img src="asset/mergeicon.png" class="logo" alt="">
 					</button>
 
 
@@ -349,11 +342,27 @@
 
 
 							<td><%=uc.getLastName()%></td>
+							<%
+							if (uc.getGender() != null) {
+							%>
+
+
 							<td><%=uc.getGender()%></td>
+
+							<%
+							} else {
+							%><td></td>
 
 
 							<%
-							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0) {
+							}
+							%>
+
+
+
+							<%
+							if (uc.getAllContactMail() != null && uc.getAllContactMail().size() > 0
+									&& uc.getAllContactMail().getFirst().getContactMailID() != null) {
 							%>
 							<td><%=uc.getAllContactMail().getFirst().getContactMailID()%></td>
 
@@ -361,14 +370,15 @@
 							<%
 							} else {
 							%>
-							<td>Mail</td>
+							<td></td>
 
 							<%
 							}
 							%>
 
 							<%
-							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0) {
+							if (uc.getAllContactphone() != null && uc.getAllContactphone().size() > 0
+									&& uc.getAllContactphone().getFirst().getContactPhone() != null) {
 							%>
 							<td><%=uc.getAllContactphone().getFirst().getContactPhone()%></td>
 
@@ -376,7 +386,7 @@
 							<%
 							} else {
 							%>
-							<td>Phone</td>
+							<td></td>
 
 							<%
 							}
@@ -415,14 +425,23 @@
 
 			</section>
 
-		
+
 		</section>
 
 	</section>
 
 
 
-
+<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 

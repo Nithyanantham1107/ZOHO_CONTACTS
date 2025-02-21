@@ -34,16 +34,7 @@
 </head>
 <body>
 
-	<%
-	if (request.getAttribute("errorMessage") != null) {
-	%>
-	<script type="text/javascript">
-        alert("<%=request.getAttribute("errorMessage")%>
-		");
-	</script>
-	<%
-	}
-	%>
+	
 
 
 	<%
@@ -283,7 +274,16 @@
 
 
 
-
+<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 

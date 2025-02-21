@@ -157,16 +157,7 @@ background-color: white;
 
 </head>
 <body>
-	<%
-	if (request.getAttribute("errorMessage") != null) {
-	%>
-	<script type="text/javascript">
-        alert("<%=request.getAttribute("errorMessage")%>
-		");
-	</script>
-	<%
-	}
-	%>
+	
 
 
 	<div class="container">
@@ -358,7 +349,16 @@ background-color: white;
 
 </script>
 
-
+<%
+	if (request.getAttribute("errorMessage") != null) {
+	%>
+	<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>
+		");
+	</script>
+	<%
+	}
+	%>
 
 
 </body>

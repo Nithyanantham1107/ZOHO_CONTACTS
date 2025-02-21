@@ -627,8 +627,6 @@ public class UserContactOperation {
 		try (QueryBuilder query = new SqlQueryLayer().createQueryBuilder();) {
 			query.openConnection();
 			ContactDetails contact = new ContactDetails();
-			ContactMail contactMail = new ContactMail();
-			ContactPhone contactPhone = new ContactPhone();
 
 			contact.setUserID(userID);
 

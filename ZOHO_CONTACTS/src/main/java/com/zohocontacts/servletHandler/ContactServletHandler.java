@@ -15,10 +15,12 @@ import com.zohocontacts.dbpojo.ContactMail;
 import com.zohocontacts.dbpojo.ContactPhone;
 import com.zohocontacts.dbpojo.UserData;
 import com.zohocontacts.exception.DBOperationException;
+import com.zohocontacts.exception.InvalidDataException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 import com.zohocontacts.sessionstorage.CacheModel;
 import com.zohocontacts.sessionstorage.ThreadLocalStorage;
 import com.zohocontacts.utils.TableListComparator;
+import com.zohocontacts.validation.UserValidation;
 
 public class ContactServletHandler {
 
@@ -30,14 +32,9 @@ public class ContactServletHandler {
 			if ((request.getParameter("f_name") != null && !request.getParameter("f_name").isBlank())
 
 					&& (request.getParameter("gender") != null && !request.getParameter("gender").isBlank())
-					&& (request.getParameterValues("phones") != null && request.getParameterValues("phones").length > 0)
 					&& (request.getParameter("Address") != null && !request.getParameter("Address").isBlank())
-					&& (request.getParameterValues("emails") != null && request.getParameterValues("emails").length > 0)
 
-					&& (request.getParameterValues("phonelabels") != null
-							&& request.getParameterValues("phonelabels").length > 0)
-					&& (request.getParameterValues("emaillabels") != null
-							&& request.getParameterValues("emaillabels").length > 0)) {
+			) {
 
 				ContactDetails contact = new ContactDetails();
 
@@ -56,30 +53,46 @@ public class ContactServletHandler {
 				contact.setAddress(request.getParameter("Address"));
 				contact.setGender(request.getParameter("gender"));
 				contact.setUserID(userData.getID());
+				if (mails != null && mails.length > 0) {
+					if (!UserValidation.validateEmail(mails)) {
 
-				for (int i = 0; i < mails.length; i++) {
+						LoggerSet.logWarning("AddContactServlet", "doPost", "Invalid Email!");
+						throw new InvalidDataException("Invalid Email No!");
+					}
 
-					ContactMail tempMail = new ContactMail();
-					tempMail.setContactMailID(mails[i]);
-					tempMail.setLabelName(emaillabels[i]);
-					tempMail.setCreatedAt(contact.getCreatedAt());
-					tempMail.setModifiedAt(contact.getCreatedAt());
-					contact.setContactMail(tempMail);
+					for (int i = 0; i < mails.length; i++) {
+
+						ContactMail tempMail = new ContactMail();
+						tempMail.setContactMailID(mails[i]);
+						tempMail.setLabelName(emaillabels[i]);
+						tempMail.setCreatedAt(contact.getCreatedAt());
+						tempMail.setModifiedAt(contact.getCreatedAt());
+						contact.setContactMail(tempMail);
+
+					}
 
 				}
 
-				for (int i = 0; i < phones.length; i++) {
+				if (phones != null && phones.length > 0) {
 
-					ContactPhone tempPhone = new ContactPhone();
-					tempPhone.setContactPhone(phones[i]);
-					tempPhone.setLabelName(phonelabels[i]);
-					tempPhone.setCreatedAt(contact.getCreatedAt());
-					tempPhone.setModifiedAt(contact.getCreatedAt());
-					contact.setContactPhone(tempPhone);
+					if (!UserValidation.validatePhoneNumber(phones)) {
+
+						LoggerSet.logWarning("AddContactServlet", "doPost", "Invalid Phone No!");
+						throw new InvalidDataException("Invalid Phone No!");
+					}
+
+					for (int i = 0; i < phones.length; i++) {
+
+						ContactPhone tempPhone = new ContactPhone();
+						tempPhone.setContactPhone(phones[i]);
+						tempPhone.setLabelName(phonelabels[i]);
+						tempPhone.setCreatedAt(contact.getCreatedAt());
+						tempPhone.setModifiedAt(contact.getCreatedAt());
+						contact.setContactPhone(tempPhone);
+					}
+
 				}
-
 				contact.setCreatedAt(Instant.now().toEpochMilli());
-				;
 				contact = UserContactOperation.addUserContact(contact);
 				if (contact != null) {
 
@@ -98,9 +111,14 @@ public class ContactServletHandler {
 				request.setAttribute("errorMessage", "Parameter Data is empty!!");
 				request.getRequestDispatcher("addcontacts.jsp").forward(request, response);
 			}
-		} catch (DBOperationException e) {
+		} catch (InvalidDataException e) {
 			LoggerSet.logError("AddContactServlet", "doPost", "Exception occurred", e);
-			request.setAttribute("errorMessage", e);
+			request.setAttribute("errorMessage", e.getMessage());
+			request.getRequestDispatcher("addcontacts.jsp").forward(request, response);
+		}
+		catch (DBOperationException e) {
+			LoggerSet.logError("AddContactServlet", "doPost", "Exception occurred", e);
+			request.setAttribute("errorMessage", e.getMessage());
 			request.getRequestDispatcher("addcontacts.jsp").forward(request, response);
 		}
 
@@ -262,19 +280,10 @@ public class ContactServletHandler {
 
 			if ((request.getParameter("f_name") != null && !request.getParameter("f_name").isBlank())
 					&& (request.getParameter("gender") != null && !request.getParameter("gender").isBlank())
-					&& (request.getParameterValues("phones") != null && request.getParameterValues("phones").length > 0)
 					&& (request.getParameter("Address") != null && !request.getParameter("Address").isBlank())
-					&& (request.getParameterValues("emails") != null && request.getParameterValues("emails").length > 0)
 					&& (request.getParameter("contactid") != null && !request.getParameter("contactid").isBlank())
 
-					&& (request.getParameterValues("emailID") != null
-							&& request.getParameterValues("emailID").length > 0)
-					&& (request.getParameterValues("phoneID") != null
-							&& request.getParameterValues("phoneID").length > 0)
-					&& (request.getParameterValues("phonelabels") != null
-							&& request.getParameterValues("phonelabels").length > 0)
-					&& (request.getParameterValues("emaillabels") != null
-							&& request.getParameterValues("emaillabels").length > 0)) {
+			) {
 
 				contactDetail.setID(Integer.parseInt(request.getParameter("contactid")));
 				contactDetail.setFirstName(request.getParameter("f_name"));
@@ -289,70 +298,89 @@ public class ContactServletHandler {
 				String[] mails = request.getParameterValues("emails");
 				String[] mailID = request.getParameterValues("emailID");
 				List<ContactMail> addContactMailList = new ArrayList<ContactMail>();
+				if (mails != null && mails.length > 0) {
 
-				for (int i = 0; i < mails.length; i++) {
-					if (Integer.parseInt(mailID[i]) != -1) {
-						int ID = Integer.parseInt(mailID[i]);
-						ContactMail tempContactMail = new ContactMail();
-						tempContactMail.setID(ID);
-						tempContactMail.setContactMailID(mails[i]);
+					for (int i = 0; i < mails.length; i++) {
 
-						if (!emaillabels[i].isBlank()) {
-							tempContactMail.setLabelName(emaillabels[i]);
+						if (!UserValidation.validateEmail(mails)) {
+
+							LoggerSet.logWarning("contactUpdateRequestHandler", "doPost", "Invalid Email!");
+							throw new InvalidDataException("Invalid Email No!");
+						}
+						if (Integer.parseInt(mailID[i]) != -1) {
+							int ID = Integer.parseInt(mailID[i]);
+							ContactMail tempContactMail = new ContactMail();
+							tempContactMail.setID(ID);
+							tempContactMail.setContactMailID(mails[i]);
+
+							if (!emaillabels[i].isBlank()) {
+								tempContactMail.setLabelName(emaillabels[i]);
+
+							}
+
+							tempContactMail.setContactID(contactDetail.getID());
+							tempContactMail.setModifiedAt(contactDetail.getModifiedAt());
+							contactDetail.setContactMail(tempContactMail);
+
+						} else {
+							ContactMail tempContactMail = new ContactMail();
+							tempContactMail.setContactMailID(mails[i]);
+							tempContactMail.setContactID(contactDetail.getID());
+							if (!emaillabels[i].isBlank()) {
+								tempContactMail.setLabelName(emaillabels[i]);
+
+							}
+							tempContactMail.setModifiedAt(contactDetail.getModifiedAt());
+							tempContactMail.setCreatedAt(tempContactMail.getModifiedAt());
+							addContactMailList.add(tempContactMail);
 
 						}
-
-						tempContactMail.setContactID(contactDetail.getID());
-						tempContactMail.setModifiedAt(contactDetail.getModifiedAt());
-						contactDetail.setContactMail(tempContactMail);
-
-					} else {
-						ContactMail tempContactMail = new ContactMail();
-						tempContactMail.setContactMailID(mails[i]);
-						tempContactMail.setContactID(contactDetail.getID());
-						if (!emaillabels[i].isBlank()) {
-							tempContactMail.setLabelName(emaillabels[i]);
-
-						}
-						tempContactMail.setModifiedAt(contactDetail.getModifiedAt());
-						tempContactMail.setCreatedAt(tempContactMail.getModifiedAt());
-						addContactMailList.add(tempContactMail);
 
 					}
-
 				}
 
 				String[] phones = request.getParameterValues("phones");
 				String[] phoneID = request.getParameterValues("phoneID");
 				List<ContactPhone> addContactPhoneList = new ArrayList<ContactPhone>();
-				for (int i = 0; i < phones.length; i++) {
 
-					if (Integer.parseInt(phoneID[i]) != -1) {
-						int id = Integer.parseInt(phoneID[i]);
-						ContactPhone tempContactPhone = new ContactPhone();
-						tempContactPhone.setID(id);
-						if (!phonelabels[i].isBlank()) {
-							tempContactPhone.setLabelName(phonelabels[i]);
+				if (phones != null && phones.length > 0) {
+
+					if (!UserValidation.validatePhoneNumber(phones)) {
+
+						LoggerSet.logWarning("contactUpdateRequestHandler", "doPost", "Invalid Phone No!");
+						throw new InvalidDataException("Invalid Phone no!");
+					}
+
+					for (int i = 0; i < phones.length; i++) {
+
+						if (Integer.parseInt(phoneID[i]) != -1) {
+							int id = Integer.parseInt(phoneID[i]);
+							ContactPhone tempContactPhone = new ContactPhone();
+							tempContactPhone.setID(id);
+							if (!phonelabels[i].isBlank()) {
+								tempContactPhone.setLabelName(phonelabels[i]);
+
+							}
+
+							tempContactPhone.setContactPhone(phones[i]);
+							tempContactPhone.setContactID(contactDetail.getID());
+							tempContactPhone.setModifiedAt(contactDetail.getModifiedAt());
+							contactDetail.setContactPhone(tempContactPhone);
+
+						} else {
+
+							ContactPhone tempContactPhone = new ContactPhone();
+							tempContactPhone.setContactPhone(phones[i]);
+							if (!phonelabels[i].isBlank()) {
+								tempContactPhone.setLabelName(phonelabels[i]);
+
+							}
+							tempContactPhone.setContactID(contactDetail.getID());
+							tempContactPhone.setModifiedAt(contactDetail.getModifiedAt());
+							tempContactPhone.setCreatedAt(tempContactPhone.getModifiedAt());
+							addContactPhoneList.add(tempContactPhone);
 
 						}
-
-						tempContactPhone.setContactPhone(phones[i]);
-						tempContactPhone.setContactID(contactDetail.getID());
-						tempContactPhone.setModifiedAt(contactDetail.getModifiedAt());
-						contactDetail.setContactPhone(tempContactPhone);
-
-					} else {
-
-						ContactPhone tempContactPhone = new ContactPhone();
-						tempContactPhone.setContactPhone(phones[i]);
-						if (!phonelabels[i].isBlank()) {
-							tempContactPhone.setLabelName(phonelabels[i]);
-
-						}
-						tempContactPhone.setContactID(contactDetail.getID());
-						tempContactPhone.setModifiedAt(contactDetail.getModifiedAt());
-						tempContactPhone.setCreatedAt(tempContactPhone.getModifiedAt());
-						addContactPhoneList.add(tempContactPhone);
 
 					}
 
@@ -437,7 +465,17 @@ public class ContactServletHandler {
 				request.setAttribute("errorMessage", "Input fields should not be empty!");
 				request.getRequestDispatcher("updatecontact.jsp").forward(request, response);
 			}
-		} catch (DBOperationException e) {
+		}
+
+		catch (InvalidDataException e) {
+			LoggerSet.logError("UpdateUserContactServlet", "doPost", "Exception occurred during contact update", e);
+			request.setAttribute("errorMessage", e.getMessage());
+			System.out.println(".....................................Here  the error message"
+					+ request.getAttribute("errorMessage"));
+			request.getRequestDispatcher("updatecontact.jsp").forward(request, response);
+		}
+
+		catch (DBOperationException e) {
 			LoggerSet.logError("UpdateUserContactServlet", "doPost", "Exception occurred during contact update", e);
 			request.setAttribute("errorMessage", "An error occurred while processing your request.");
 			request.getRequestDispatcher("updatecontact.jsp").forward(request, response);

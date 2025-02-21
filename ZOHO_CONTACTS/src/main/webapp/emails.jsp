@@ -124,15 +124,7 @@ button {
 }
 </style>
 
-<%
-if (request.getAttribute("errorMessage") != null) {
-%>
-<script type="text/javascript">
-        alert("<%=request.getAttribute("errorMessage")%>");
-    </script>
-<%
-}
-%>
+
 </head>
 <body>
 
@@ -295,7 +287,15 @@ if (request.getAttribute("errorMessage") != null) {
 
 
 
-
+<%
+if (request.getAttribute("errorMessage") != null) {
+%>
+<script type="text/javascript">
+        alert("<%=request.getAttribute("errorMessage")%>");
+    </script>
+<%
+}
+%>
 
 
 

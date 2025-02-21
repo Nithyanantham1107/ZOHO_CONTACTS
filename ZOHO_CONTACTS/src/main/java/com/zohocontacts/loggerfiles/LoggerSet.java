@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class LoggerSet {
-
 	private static final Logger applog = Logger.getLogger("AppLogger");
 	private static final Logger accesslog = Logger.getLogger("AccessLogger");
 	private static Properties properties = new Properties();

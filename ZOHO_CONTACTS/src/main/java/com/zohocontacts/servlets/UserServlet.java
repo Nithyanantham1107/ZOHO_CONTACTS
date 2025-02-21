@@ -1,16 +1,13 @@
 package com.zohocontacts.servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.zohocontacts.loggerfiles.LoggerSet;
-import com.zohocontacts.servletHandler.ContactServletHandler;
 import com.zohocontacts.servletHandler.UserServletHandler;
-
 /**
  * Servlet implementation class UserServlet
  */
@@ -35,7 +32,6 @@ public class UserServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -44,12 +40,10 @@ public class UserServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		if (request.getParameter("action") != null && !request.getParameter("action").isBlank()) {
-
 			String action = request.getParameter("action");
 			switch (action) {
 
 			case "addemail":
-
 				UserServletHandler.addUserEmailRequestHandler(request, response);
 
 				break;

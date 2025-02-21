@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.ContactMailSchema;
 import com.zohocontacts.dataquerybuilder.querybuilderconfig.TableSchema.ContactPhoneSchema;
 import com.zohocontacts.dbpojo.tabledesign.Table;
 

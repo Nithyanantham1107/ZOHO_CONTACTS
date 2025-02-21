@@ -2,7 +2,6 @@ package com.zohocontacts.servletHandler;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,7 +14,6 @@ import com.zohocontacts.dboperation.UserOperation;
 import com.zohocontacts.dbpojo.ContactDetails;
 import com.zohocontacts.dbpojo.Oauth;
 import com.zohocontacts.dbpojo.UserData;
-import com.zohocontacts.dbpojo.tabledesign.Table;
 import com.zohocontacts.exception.DBOperationException;
 import com.zohocontacts.loggerfiles.LoggerSet;
 import com.zohocontacts.oauth2helper.Oauth2handler;

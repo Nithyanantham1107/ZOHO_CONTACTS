@@ -3,20 +3,11 @@ package com.zohocontacts.servlets;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zohocontacts.dboperation.SessionOperation;
-import com.zohocontacts.dboperation.UserOperation;
-import com.zohocontacts.dbpojo.UserData;
-import com.zohocontacts.exception.DBOperationException;
-import com.zohocontacts.loggerfiles.LoggerSet;
 import com.zohocontacts.servletHandler.UserServletHandler;
-import com.zohocontacts.sessionstorage.CacheData;
-import com.zohocontacts.sessionstorage.CacheModel;
-import com.zohocontacts.validation.UserValidation;
 
 /**
  * Servlet implementation class LoginSignupServlet

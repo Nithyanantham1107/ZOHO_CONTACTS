@@ -27,37 +27,46 @@ public class UserServletHandler {
 
 	public static void addUserEmailRequestHandler(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-geneAddUserEmailServletrated method stub
-		try {
+	try {
 			if ((request.getParameter("newemail") != null && !request.getParameter("newemail").isBlank())) {
 
-				CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
-				UserData userData = cacheModel.getUserData();
-				EmailUser email = new EmailUser();
-				email.setEmailID(userData.getID());
-				email.setEmail(request.getParameter("newemail"));
-				email.setIsPrimary(false);
-				email.setCreatedAt(Instant.now().toEpochMilli());
-				email.setModifiedAt(email.getCreatedAt());
-				email = UserOperation.addEmail(email, userData.getID());
-				if (email != null) {
-					EmailUser emailDB = new EmailUser();
-					emailDB.setEmailID(userData.getID());
-					List<EmailUser> emails = UserOperation.getAllEmail(emailDB);
-					if (emails != null) {
+				if (UserValidation.isValidEmail(request.getParameter("newemail"))) {
 
-						userData.setAllEmails(emails);
+					CacheModel cacheModel = ThreadLocalStorage.getCurrentUserCache();
+					UserData userData = cacheModel.getUserData();
+					EmailUser email = new EmailUser();
+					email.setEmailID(userData.getID());
+					email.setEmail(request.getParameter("newemail"));
+					email.setIsPrimary(false);
+					email.setCreatedAt(Instant.now().toEpochMilli());
+					email.setModifiedAt(email.getCreatedAt());
+					email = UserOperation.addEmail(email, userData.getID());
+					if (email != null) {
+						EmailUser emailDB = new EmailUser();
+						emailDB.setEmailID(userData.getID());
+						List<EmailUser> emails = UserOperation.getAllEmail(emailDB);
+						if (emails != null) {
+
+							userData.setAllEmails(emails);
+						}
+
+						LoggerSet.logInfo("AddUserEmailServlet", "doPost",
+								"email added successfully for user ID: " + userData.getID());
+						response.sendRedirect("emails.jsp");
+					} else {
+						LoggerSet.logWarning("AddUserEmailServlet", "doPost",
+								"Error in adding contact for user ID: " + userData.getID());
+						request.setAttribute("errorMessage", "Error in adding contact");
+						request.getRequestDispatcher("emails.jsp").forward(request, response);
 					}
 
-					LoggerSet.logInfo("AddUserEmailServlet", "doPost",
-							"email added successfully for user ID: " + userData.getID());
-					response.sendRedirect("emails.jsp");
 				} else {
-					LoggerSet.logWarning("AddUserEmailServlet", "doPost",
-							"Error in adding contact for user ID: " + userData.getID());
-					request.setAttribute("errorMessage", "Error in adding contact");
+					LoggerSet.logWarning("AddUserEmailServlet", "doPost", "Parameter should be valid!");
+					request.setAttribute("errorMessage", "Parameter should be valid!");
 					request.getRequestDispatcher("emails.jsp").forward(request, response);
+
 				}
+
 			} else {
 				LoggerSet.logWarning("AddUserEmailServlet", "doPost", "Parameter Data is empty!");
 				request.setAttribute("errorMessage", "Parameter Data is empty!!");
@@ -80,22 +89,33 @@ public class UserServletHandler {
 					&& (request.getParameter("Newpassword") != null
 							&& !request.getParameter("Newpassword").isBlank()))) {
 
-				UserData oldUser = userData;
+				if (UserValidation.validateUserPassword(request.getParameter("password"))
+						&& UserValidation.validateUserPassword(request.getParameter("Newpassword"))) {
 
-				String oldPassword = request.getParameter("password");
-				String newPassword = request.getParameter("Newpassword");
+					UserData oldUser = userData;
 
-				if (UserOperation.userPasswordChange(oldUser, oldPassword, newPassword, userData.getID())) {
+					String oldPassword = request.getParameter("password");
+					String newPassword = request.getParameter("Newpassword");
 
-					response.sendRedirect("changePassword.jsp");
-					LoggerSet.logInfo(" ChangeUserPasswordServlet", "doPost", "User Password Update successfully.");
+					if (UserOperation.userPasswordChange(oldUser, oldPassword, newPassword, userData.getID())) {
+
+						response.sendRedirect("changePassword.jsp");
+						LoggerSet.logInfo(" ChangeUserPasswordServlet", "doPost", "User Password Update successfully.");
+					} else {
+						LoggerSet.logWarning(" ChangeUserPasswordServlet", "doPost",
+								"Failed to change Password for User ID: " + userData.getID());
+						request.setAttribute("errorMessage",
+								"Error while trying to update the User Password. Please try again.");
+						request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+					}
+
 				} else {
-					LoggerSet.logWarning(" ChangeUserPasswordServlet", "doPost",
-							"Failed to change Password for User ID: " + userData.getID());
-					request.setAttribute("errorMessage",
-							"Error while trying to update the User Password. Please try again.");
+					LoggerSet.logWarning(" ChangeUserPasswordServlet", "doPost", "Invalid Password.");
+					request.setAttribute("errorMessage", "Invalid Password!");
 					request.getRequestDispatcher("changePassword.jsp").forward(request, response);
+
 				}
+
 			} else {
 				LoggerSet.logWarning(" ChangeUserPasswordServlet", "doPost", "Input fields are empty.");
 				request.setAttribute("errorMessage", "Input fields should not be empty!");
@@ -107,7 +127,6 @@ public class UserServletHandler {
 			request.getRequestDispatcher("changePassword.jsp").forward(request, response);
 		}
 	}
-
 	public static void deleteUserEmailRequestHandler(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
@@ -138,6 +157,7 @@ public class UserServletHandler {
 					request.setAttribute("errorMessage", "Unable to delete email");
 					request.getRequestDispatcher("emails.jsp").forward(request, response);
 				}
+
 			} else {
 				LoggerSet.logWarning("DeleteUserEmailServlet", "doPost", "Email ID is null or empty");
 				request.setAttribute("errorMessage", "Unable to delete Email because specified Email ID is null");
@@ -181,7 +201,7 @@ public class UserServletHandler {
 				} else {
 					LoggerSet.logWarning("LoginSignupServlet", "doPost",
 							"Password validation failed for user: " + request.getParameter("username"));
-					request.setAttribute("errorMessage", "Password is too long or missing cases and numbers");
+					request.setAttribute("errorMessage", "Invalid Password credentials");
 					request.getRequestDispatcher("Login.jsp").forward(request, response);
 				}
 			} else {
@@ -232,7 +252,9 @@ public class UserServletHandler {
 					&& (request.getParameter("Address") != null && !request.getParameter("Address").isBlank())
 					&& (request.getParameter("email") != null && !request.getParameter("email").isBlank())) {
 
-				if (UserValidation.validateUserPassword(request.getParameter("password"))) {
+				if (UserValidation.validateUserPassword(request.getParameter("password"))
+						&& UserValidation.isValidEmail(request.getParameter("email"))
+						&& UserValidation.isNumberValid(request.getParameter("phone"))) {
 					UserData userData = new UserData();
 					LoginCredentials loginCredentials = new LoginCredentials();
 					EmailUser emailUser = new EmailUser();
@@ -283,8 +305,7 @@ public class UserServletHandler {
 				} else {
 					LoggerSet.logWarning("SignupServlet", "doPost",
 							"Password validation failed for user: " + request.getParameter("username"));
-					request.setAttribute("errorMessage",
-							"Password should contain at least one lower case, one upper case, and numbers.");
+					request.setAttribute("errorMessage", "Invalidate Credentials");
 					request.getRequestDispatcher("Signup.jsp").forward(request, response);
 				}
 			} else {
@@ -315,41 +336,54 @@ public class UserServletHandler {
 					&& (request.getParameter("timezone") != null) && !request.getParameter("timezone").isBlank()
 					&& (request.getParameter("emailID") != null) && !request.getParameter("emailID").isBlank()
 					&& (request.getParameter("logID") != null) && !request.getParameter("logID").isBlank()) {
-				long userId = userData.getID();
 
-				UserData user = new UserData();
-				LoginCredentials loginCredentials = new LoginCredentials();
-				EmailUser emailUser = new EmailUser();
-				emailUser.setID(Integer.parseInt(request.getParameter("emailID")));
+				if (UserValidation.isNumberValid(request.getParameter("phone"))
 
-				emailUser.setEmail(request.getParameter("primaryemail"));
-				emailUser.setModifiedAt(user.getModifiedAt());
-				emailUser.setIsPrimary(true);
+				) {
 
-				loginCredentials.setID(Integer.parseInt(request.getParameter("logID")));
-				loginCredentials.setUserID(userData.getID());
-				loginCredentials.setUserName(request.getParameter("username"));
-				loginCredentials.setModifiedAt(user.getModifiedAt());
-				user.setLoginCredentials(loginCredentials);
-				user.setModifiedAt(Instant.now().toEpochMilli());
-				user.setID(userData.getID());
-				user.setName(request.getParameter("name"));
-				user.setAddress(request.getParameter("address"));
-				user.setPhoneno(request.getParameter("phone"));
-				user.setTimezone(request.getParameter("timezone"));
-				isSuccess = UserOperation.userprofileUpdate(user, emailUser);
-				if (isSuccess) {
-					cacheModel.setUserData(UserOperation.getUserData(userId));
+					long userId = userData.getID();
 
-					response.sendRedirect("profile.jsp");
-					LoggerSet.logInfo("UserProfileServlet", "doPost",
-							"User profile updated successfully for User ID: " + user.getID());
+					UserData user = new UserData();
+					LoginCredentials loginCredentials = new LoginCredentials();
+					EmailUser emailUser = new EmailUser();
+					emailUser.setID(Integer.parseInt(request.getParameter("emailID")));
+
+					emailUser.setEmail(request.getParameter("primaryemail"));
+					emailUser.setModifiedAt(user.getModifiedAt());
+					emailUser.setIsPrimary(true);
+
+					loginCredentials.setID(Integer.parseInt(request.getParameter("logID")));
+					loginCredentials.setUserID(userData.getID());
+					loginCredentials.setUserName(request.getParameter("username"));
+					loginCredentials.setModifiedAt(user.getModifiedAt());
+					user.setLoginCredentials(loginCredentials);
+					user.setModifiedAt(Instant.now().toEpochMilli());
+					user.setID(userData.getID());
+					user.setName(request.getParameter("name"));
+					user.setAddress(request.getParameter("address"));
+					user.setPhoneno(request.getParameter("phone"));
+					user.setTimezone(request.getParameter("timezone"));
+					isSuccess = UserOperation.userprofileUpdate(user, emailUser);
+					if (isSuccess) {
+						cacheModel.setUserData(UserOperation.getUserData(userId));
+
+						response.sendRedirect("profile.jsp");
+						LoggerSet.logInfo("UserProfileServlet", "doPost",
+								"User profile updated successfully for User ID: " + user.getID());
+					} else {
+						LoggerSet.logWarning("UserProfileServlet", "doPost",
+								"Error in updating profile data for User ID: " + user.getID());
+						request.setAttribute("errorMessage", "Error in updating profile Data");
+						request.getRequestDispatcher("profile.jsp").forward(request, response);
+					}
 				} else {
-					LoggerSet.logWarning("UserProfileServlet", "doPost",
-							"Error in updating profile data for User ID: " + user.getID());
-					request.setAttribute("errorMessage", "Error in updating profile Data");
+
+					LoggerSet.logWarning("UserProfileServlet", "doPost", "Parameter Should be valid.");
+					request.setAttribute("errorMessage", "Parameter should be valid.");
 					request.getRequestDispatcher("profile.jsp").forward(request, response);
+
 				}
+
 			} else {
 				LoggerSet.logWarning("UserProfileServlet", "doPost", "Parameter cannot be empty.");
 				request.setAttribute("errorMessage", "Parameter cannot be empty.");

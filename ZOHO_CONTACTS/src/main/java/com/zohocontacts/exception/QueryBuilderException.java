@@ -5,7 +5,7 @@ public class QueryBuilderException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public QueryBuilderException() {
-		super("Error Occured while Performing DB Operation");
+		super("Error Occured while Performing Query Builder");
 	}
 
 	public QueryBuilderException(String message) {
